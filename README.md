@@ -1,1 +1,1 @@
-# desktop-prefect-system
+# The Development of Prefect Management System for the Office of Student Discipline (RC-OSD)
