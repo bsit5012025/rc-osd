@@ -3,6 +3,6 @@ module org.rocs.osd {
     requires javafx.fxml;
     requires java.sql;
 
-    opens org.rocs.osd to javafx.fxml; // added opens and exports org.rocs.osd to fix javaFX issue
+    opens org.rocs.osd to javafx.fxml;
     exports org.rocs.osd;
 }
