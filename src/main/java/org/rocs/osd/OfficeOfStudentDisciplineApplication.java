@@ -1,5 +1,25 @@
 package org.rocs.osd;
 
-public class OfficeOfStudentDisciplineApplication {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
+public class OfficeOfStudentDisciplineApplication extends Application{
+
+        public OfficeOfStudentDisciplineApplication() {
+        }
+    // this is only for testing
+        @Override
+        public void start(Stage stage) {
+            Label label = new Label("Test JavaFX is running");
+
+            StackPane root = new StackPane(label);
+            Scene scene = new Scene(root, 400, 200);
+
+            stage.setTitle("Test");
+            stage.setScene(scene);
+            stage.show();
+        }
 }
