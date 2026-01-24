@@ -10,7 +10,7 @@ public class OfficeOfStudentDisciplineApplication extends Application{
 
         public OfficeOfStudentDisciplineApplication() {
         }
-    // this is only for testing
+    // TODO: to be removed. for testing purposes only
         @Override
         public void start(Stage stage) {
             Label label = new Label("Test JavaFX is running");
