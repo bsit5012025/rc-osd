@@ -1,56 +1,75 @@
 .root {
-    -fx-font-family: "Georgia";
+-fx-font-family: "Georgia";
+-fx-background-repeat: no-repeat;
+-fx-background-position: center center;
+-fx-background-size: cover;
 }
 
 .loginBox {
-    -fx-background-color: rgba(255, 255, 255, 0.70);
-    -fx-background-radius: 28;
-    -fx-padding: 40 45 45 45;
+-fx-background-color: rgba(255, 255, 255, 0.70);
+-fx-background-radius: 28;
+-fx-padding: 40 45 45 45;
+-fx-spacing: 10;
+-fx-alignment: center;
+-fx-max-width: 420;
+-fx-max-height: 420;
+}
+
+.formBox {
+-fx-spacing: 14;
+-fx-alignment: center;
+}
+
+.usernameBox, .passwordBox {
+-fx-spacing: 6;
+}
+
+.forgotBox {
+-fx-alignment: center-right;
 }
 
 .loginHead {
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-    -fx-text-fill: black;
+-fx-font-size: 26px;
+-fx-font-weight: bold;
+-fx-text-fill: black;
 }
 
 .usernameText, .passwordText {
-    -fx-font-size: 13px;
-    -fx-text-fill: #444444;
+-fx-font-size: 13px;
+-fx-text-fill: #444444;
 }
 
 .text-field, .password-field {
- -fx-pref-height: 46;
- -fx-pref-width: 320;
- -fx-background-radius: 5;
- -fx-border-radius: 5;
- -fx-border-color: #CCCCCC;
- -fx-border-width: 1;
- -fx-background-color: rgba(255,255,255,0.95);
+-fx-pref-height: 46;
+-fx-pref-width: 320;
+-fx-background-radius: 5;
+-fx-border-radius: 5;
+-fx-border-color: #CCCCCC;
+-fx-border-width: 1;
+-fx-background-color: rgba(255,255,255,0.95);
 }
 
 .text-field:focused, .password-field:focused {
- -fx-border-color: #2f5bea;
+-fx-border-color: #2f5bea;
 }
 
 .forgotText {
-    -fx-font-size: 13px;
-    -fx-text-fill: #4169E1;
-    -fx-underline: true;
+-fx-font-size: 13px;
+-fx-text-fill: #4169E1;
+-fx-underline: true;
 }
 
 .loginButton {
-    -fx-background-color: navy;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-pref-height: 36;
-    -fx-pref-width: 320;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
+-fx-background-color: navy;
+-fx-text-fill: white;
+-fx-font-size: 16px;
+-fx-font-weight: bold;
+-fx-pref-height: 36;
+-fx-pref-width: 320;
+-fx-background-radius: 5;
+-fx-cursor: hand;
 }
 
 .loginButton:hover {
-    -fx-background-color: #1f3cff;
+-fx-background-color: #1f3cff;
 }
-
