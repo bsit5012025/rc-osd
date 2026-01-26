@@ -1,25 +1,25 @@
 package org.rocs.osd;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 
-public class OfficeOfStudentDisciplineApplication extends Application{
+public class OfficeOfStudentDisciplineApplication extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/login.fxml"));
 
-        public OfficeOfStudentDisciplineApplication() {
-        }
-    // TODO: to be removed. for testing purposes only
-        @Override
-        public void start(Stage stage) {
-            Label label = new Label("Test JavaFX is running");
+        Parent mainLayout = loader.load();
+        Scene scene = new Scene(mainLayout);
+        stage.setMaximized(true);
+        stage.setScene(scene);
+        stage.setTitle("Office of Student Discipline");
+        stage.show();
+    }
 
-            StackPane root = new StackPane(label);
-            Scene scene = new Scene(root, 400, 200);
-
-            stage.setTitle("Test");
-            stage.setScene(scene);
-            stage.show();
-        }
+    public static void main(String[] args) {
+        launch();
+    }
 }
