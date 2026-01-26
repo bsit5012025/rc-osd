@@ -17,7 +17,7 @@
     <StackPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <VBox styleClass="loginBox">
             <ImageView fitHeight="110" fitWidth="110" preserveRatio="true">
-                <Image url="@assets/RC_LOGO.png"/>
+                <Image url="@../../assets/RC_LOGO.png"/>
             </ImageView>
             <Label text="Login" styleClass="loginHead"/>
             <VBox styleClass="formBox">
