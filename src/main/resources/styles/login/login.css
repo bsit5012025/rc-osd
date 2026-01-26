@@ -1,5 +1,6 @@
 .root {
 -fx-font-family: "Georgia";
+-fx-background-image: url("../../view/login/assets/RC_BG.png");
 -fx-background-repeat: no-repeat;
 -fx-background-position: center center;
 -fx-background-size: cover;
