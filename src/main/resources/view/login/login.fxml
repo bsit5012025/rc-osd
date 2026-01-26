@@ -15,43 +15,29 @@
 <AnchorPane fx:id="root"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@styles/login/login.css">
-
+            stylesheets="@../../styles/login/login.css">
     <ImageView fx:id="backgroundImage" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-
         <Image url="@assets/RC_BG.png"/>
     </ImageView>
-
-
     <StackPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-
-
         <VBox spacing="10" alignment="CENTER" maxWidth="420" maxHeight="420" styleClass="loginBox">
-
             <ImageView fitWidth="110" fitHeight="110" preserveRatio="true">
-
                 <Image url="@assets/RC_LOGO.png"/>
             </ImageView>
-
             <Label text="Login" styleClass="loginHead"/>
-
             <VBox spacing="14" alignment="CENTER_LEFT">
-
                 <VBox spacing="6">
                     <Label text="Username:" styleClass="usernameText"/>
                     <TextField promptText="Enter your username"/>
                 </VBox>
-
                 <VBox spacing="6">
                     <Label text="Password:" styleClass="passwordText"/>
                     <PasswordField promptText="Enter your password"/>
                 </VBox>
-
                 <HBox alignment="CENTER_RIGHT">
                     <Hyperlink text="Forgot Password?" styleClass="forgotText"/>
                 </HBox>
             </VBox>
-
             <Button text="Log in" styleClass="loginButton"/>
         </VBox>
     </StackPane>
