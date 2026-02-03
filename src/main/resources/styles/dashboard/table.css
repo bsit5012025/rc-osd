@@ -1,0 +1,24 @@
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+}
+.table-view .column-header {
+    -fx-background-color: white;
+    -fx-border-color: #1e88ff transparent #1e88ff transparent;
+    -fx-border-width: 2 0 2 0;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+}
+
+.table-row-cell:filled {
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view:focused {
+    -fx-background-insets: 0;
+}

@@ -1,0 +1,32 @@
+.inputTextField {
+    -fx-pref-height: 40;
+    -fx-max-width: 400;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 12;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-padding: 0 12 0 12;
+    -fx-cursor: text;
+    -fx-font-size: 18;
+    -fx-spacing: 10 10 0 20;
+}
+
+.datePicker {
+    -fx-pref-height: 40;
+    -fx-max-width: 300;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 12;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-font-size: 18;
+}
+
+.inputTextArea {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 12;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-font-size: 18;
+    -fx-cursor: text;
+}

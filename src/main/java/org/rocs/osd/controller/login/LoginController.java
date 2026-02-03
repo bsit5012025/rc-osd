@@ -18,6 +18,7 @@ public class LoginController {
 
         if(usernameTField.getText().isBlank() == false && passwordTField.getText().isBlank()){
             System.out.println("Enter unsername and password!");
+            return;
         }
         else{
             System.out.println("Username: " +usernameTField.getText());
