@@ -26,9 +26,4 @@ public class LoginFacadeImpl implements LoginFacade
         return inputPassword.equals(login.getPassword());
     }
 
-    @Override
-    public Login returnUserInfo(String inputedUserName)
-    {
-        return loginDao.findLoginByUsername(inputedUserName);
-    }
 }

@@ -62,5 +62,4 @@ public class LoginDaoImplTest {
         verify(preparedStatement, times(1)).setString(1, "test");
         verify(preparedStatement, times(1)).executeQuery();
     }
-
 }
