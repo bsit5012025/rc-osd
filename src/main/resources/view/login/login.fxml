@@ -46,11 +46,11 @@
                                    visible="false"
                                    managed="false"/>
 
-                            <Button fx:id="togglePasswordButton"
-                                    styleClass="showPassword"/>
+                        <Button fx:id="togglePasswordButton"
+                                styleClass="showPassword"/>
                     </StackPane>
                 </VBox>
-                
+
                 <HBox styleClass="forgotBox">
                     <Hyperlink text="Forgot Password?" styleClass="forgotText"/>
                 </HBox>
