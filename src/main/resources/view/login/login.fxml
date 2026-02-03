@@ -23,19 +23,15 @@
 
         <VBox alignment="CENTER_LEFT"/>
         <VBox styleClass="loginBox">
-<<<<<<< HEAD
             <ImageView fitHeight="110" fitWidth="110" preserveRatio="true">
                 <Image url="@../../assets/RC_LOGO.png" />
-=======
             <ImageView fitHeight="110" fitWidth="110" preserveRatio="true ">
                 <Image url="@../../assets/RC_LOGO.png"/>
->>>>>>> 5391f63 (Improved User Experience (#9))
             </ImageView>
 
             <Label styleClass="loginHead" text="Login" />
             <VBox styleClass="formBox">
                 <VBox styleClass="usernameBox">
-<<<<<<< HEAD
                     <Label styleClass="usernameText" text="Username:" />
                     <TextField fx:id="usernameTField" promptText="Enter your username" />
                 </VBox>
@@ -44,18 +40,13 @@
                     <Label styleClass="passwordText" text="Password:" />
                     <PasswordField fx:id="passwordTField" promptText="Enter your password" />
                 </VBox>
-=======
                     <Label text="Username:" styleClass="usernameText"/>
                     <TextField promptText="Enter username"/>
                 </VBox>
 
-<<<<<<< HEAD
                 <VBox styleClass="passwordBox">
                     <Label text="Password:" styleClass="passwordText"/>
->>>>>>> 5391f63 (Improved User Experience (#9))
 
-=======
->>>>>>> 1da55cc31bf625c28b769320353b34649a7278e6
                     <StackPane styleClass="passwordContainer">
                         <PasswordField fx:id="passwordField" promptText="Enter password"/>
                         <TextField fx:id="passwordTextField"
