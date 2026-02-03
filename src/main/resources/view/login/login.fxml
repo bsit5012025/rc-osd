@@ -49,10 +49,13 @@
                     <TextField promptText="Enter username"/>
                 </VBox>
 
+<<<<<<< HEAD
                 <VBox styleClass="passwordBox">
                     <Label text="Password:" styleClass="passwordText"/>
 >>>>>>> 5391f63 (Improved User Experience (#9))
 
+=======
+>>>>>>> 1da55cc31bf625c28b769320353b34649a7278e6
                     <StackPane styleClass="passwordContainer">
                         <PasswordField fx:id="passwordField" promptText="Enter password"/>
                         <TextField fx:id="passwordTextField"
