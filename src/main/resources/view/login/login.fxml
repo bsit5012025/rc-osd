@@ -1,45 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Button?>
 
 <?import javafx.scene.control.CheckBox?>
 <AnchorPane fx:id="root"
-            stylesheets="@../../styles/login/login.css"
-            xmlns="http://javafx.com/javafx/25"
+            xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.rocs.osd.controller.login.LoginController">
+            stylesheets="@../../styles/login/login.css">
 
-    <StackPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <StackPane AnchorPane.topAnchor="0"
+               AnchorPane.bottomAnchor="0"
+               AnchorPane.leftAnchor="0"
+               AnchorPane.rightAnchor="0">
 
         <VBox alignment="CENTER_LEFT"/>
         <VBox styleClass="loginBox">
-            <ImageView fitHeight="110" fitWidth="110" preserveRatio="true">
-                <Image url="@../../assets/RC_LOGO.png" />
             <ImageView fitHeight="110" fitWidth="110" preserveRatio="true ">
                 <Image url="@../../assets/RC_LOGO.png"/>
             </ImageView>
 
-            <Label styleClass="loginHead" text="Login" />
+            <Label text="Login" styleClass="loginHead"/>
             <VBox styleClass="formBox">
                 <VBox styleClass="usernameBox">
-                    <Label styleClass="usernameText" text="Username:" />
-                    <TextField fx:id="usernameTField" promptText="Enter your username" />
-                </VBox>
-
-                <VBox styleClass="passwordBox">
-                    <Label styleClass="passwordText" text="Password:" />
-                    <PasswordField fx:id="passwordTField" promptText="Enter your password" />
-                </VBox>
                     <Label text="Username:" styleClass="usernameText"/>
                     <TextField promptText="Enter username"/>
                 </VBox>
@@ -54,17 +46,17 @@
                                    visible="false"
                                    managed="false"/>
 
-                            <Button fx:id="togglePasswordButton"
-                                    styleClass="showPassword"/>
+                        <Button fx:id="togglePasswordButton"
+                                styleClass="showPassword"/>
                     </StackPane>
                 </VBox>
-                
+
                 <HBox styleClass="forgotBox">
-                    <Hyperlink styleClass="forgotText" text="Forgot Password?" />
+                    <Hyperlink text="Forgot Password?" styleClass="forgotText"/>
                 </HBox>
 
             </VBox>
-                <Button fx:id="loginBtn" onAction="#toLogin" styleClass="loginButton" text="Log in" />
+            <Button text="Log in" styleClass="loginButton"/>
         </VBox>
     </StackPane>
 </AnchorPane>
