@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.CheckBox?>
 <AnchorPane fx:id="root"
             stylesheets="@../../styles/login/login.css"
             xmlns="http://javafx.com/javafx/25"
@@ -20,6 +21,7 @@
 
     <StackPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
+        <VBox alignment="CENTER_LEFT"/>
         <VBox styleClass="loginBox">
             <ImageView fitHeight="110" fitWidth="110" preserveRatio="true">
                 <Image url="@../../assets/RC_LOGO.png" />
@@ -37,6 +39,18 @@
                     <PasswordField fx:id="passwordTField" promptText="Enter your password" />
                 </VBox>
 
+                    <StackPane styleClass="passwordContainer">
+                        <PasswordField fx:id="passwordField" promptText="Enter password"/>
+                        <TextField fx:id="passwordTextField"
+                                   promptText="Enter Password:"
+                                   visible="false"
+                                   managed="false"/>
+
+                            <Button fx:id="togglePasswordButton"
+                                    styleClass="showPassword"/>
+                    </StackPane>
+                </VBox>
+                
                 <HBox styleClass="forgotBox">
                     <Hyperlink styleClass="forgotText" text="Forgot Password?" />
                 </HBox>
