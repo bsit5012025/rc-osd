@@ -21,12 +21,12 @@ class LoginFacadeImplTest
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this); // initialize @Mock
-        loginFacade = new LoginFacadeImpl(loginDao); // inject mock DAO
+        MockitoAnnotations.openMocks(this);
+        loginFacade = new LoginFacadeImpl(loginDao);
     }
 
     @Test
-    public void testlogin ()
+    public void testLogin ()
     {
         Login login = new Login();
         login.setPassword("123");
