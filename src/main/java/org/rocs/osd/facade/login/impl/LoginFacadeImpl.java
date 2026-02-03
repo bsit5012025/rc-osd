@@ -8,6 +8,11 @@ public class LoginFacadeImpl implements LoginFacade
 {
     private LoginDao loginDao;
 
+    public LoginFacadeImpl (LoginDao loginDao)
+    {
+        this.loginDao = loginDao;
+    }
+
     @Override
     public boolean login(String inputUserName, String inputPassword)
     {
@@ -24,6 +29,6 @@ public class LoginFacadeImpl implements LoginFacade
     @Override
     public Login returnUserInfo(String inputedUserName)
     {
-        return  loginDao.findLoginByUsername(inputedUserName);
+        return loginDao.findLoginByUsername(inputedUserName);
     }
 }
