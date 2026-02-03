@@ -23,6 +23,7 @@
    <stylesheets>
       <URL value="@../../styles/dashboard/buttons.css"/>
       <URL value="@../../styles/dashboard/label.css"/>
+      <URL value="@../../styles/dashboard/table.css"/>
    </stylesheets>
 
    <children>
@@ -167,7 +168,7 @@
                                  <children>
                                     <Label styleClass="dashboardTitleLabel" text="Recent Violations" />
 
-                                    <TableView stylesheets="@../../styles/dashboard/table.css">
+                                    <TableView >
                                       <columns>
                                           <TableColumn prefWidth="75.0" text="Student ID" />
                                           <TableColumn prefWidth="75.0" text="Student Name" />
