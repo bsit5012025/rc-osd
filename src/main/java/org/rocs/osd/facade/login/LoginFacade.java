@@ -1,4 +1,9 @@
 package org.rocs.osd.facade.login;
 
-public interface LoginFacade{
+import org.rocs.osd.model.login.Login;
+
+public interface LoginFacade
+{
+    boolean login(String inputUserName, String inputPassword);
+    Login returnUserInfo(String inputed_UserName);
 }
