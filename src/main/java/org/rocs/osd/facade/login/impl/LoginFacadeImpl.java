@@ -25,5 +25,4 @@ public class LoginFacadeImpl implements LoginFacade
 
         return inputPassword.equals(login.getPassword());
     }
-
 }
