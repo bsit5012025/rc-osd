@@ -10,7 +10,7 @@ import org.rocs.osd.controller.login.LoginController;
 public class OfficeOfStudentDisciplineApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/login.fxml"));
         Parent mainLayout = loader.load();
         Scene scene = new Scene(mainLayout);
         stage.setMaximized(true);
