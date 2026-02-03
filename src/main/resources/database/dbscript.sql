@@ -2,7 +2,6 @@
 DROP USER rcosd CASCADE;
 
 CREATE USER rcosd IDENTIFIED BY Changeme0;
-ALTER USER rcosd QUOTA UNLIMITED ON DATA;
 ALTER USER rcosd QUOTA UNLIMITED ON USERS;
 GRANT CREATE SESSION TO rcosd WITH ADMIN OPTION;
 GRANT CONNECT TO rcosd;
@@ -151,14 +150,14 @@ CREATE TABLE login (
 
 insert into login (username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
 values ('admin', 'admin', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_ADMIN', 'user:read,user:create,user:update,user:delete', 1, 0);
-insert into login (username, password, person_id, join_date, last_login_date, role, authorities, is_active, is_locked)
-values ('prefect', '1234', 2, to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_PREFECT', 'user:read,user:create,user:update,user:delete', 1, 0);
-insert into login (username, password, person_id, join_date, last_login_date, role, authorities, is_active, is_locked)
-values ('staff','1234', 3, to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_STAFF', 'user:read,user:create,user:update', 1, 0);
-insert into login (username, password, person_id, join_date, last_login_date, role, authorities, is_active, is_locked)
-values ('user1','1234', 4, to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_USER', 'user:read,user:create,user:update', 1, 0);
-insert into login (username, password, person_id, join_date, last_login_date, role, authorities, is_active, is_locked)
-values ('user2','1234', 5, to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_USER', 'user:read,user:create,user:update', 1, 0);
+insert into login (username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
+values ('prefect', '1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_PREFECT', 'user:read,user:create,user:update,user:delete', 1, 0);
+insert into login (username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
+values ('staff','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_STAFF', 'user:read,user:create,user:update', 1, 0);
+insert into login (username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
+values ('user1','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_USER', 'user:read,user:create,user:update', 1, 0);
+insert into login (username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
+values ('user2','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_USER', 'user:read,user:create,user:update', 1, 0);
 
 --
 ---- PERSON VALUES
