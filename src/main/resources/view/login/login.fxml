@@ -16,6 +16,7 @@
 <AnchorPane fx:id="root"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.login.LoginController"
             stylesheets="@../../styles/login/login.css">
 
     <StackPane AnchorPane.topAnchor="0"
@@ -33,7 +34,7 @@
             <VBox styleClass="formBox">
                 <VBox styleClass="usernameBox">
                     <Label text="Username:" styleClass="usernameText"/>
-                    <TextField promptText="Enter username"/>
+                    <TextField fx:id="usernameTField" promptText="Enter username"/>
                 </VBox>
 
                 <VBox styleClass="passwordBox">
@@ -56,7 +57,7 @@
                 </HBox>
 
             </VBox>
-            <Button text="Log in" styleClass="loginButton"/>
+            <Button text="Log in" onAction="#toLogin" styleClass="loginButton"/>
         </VBox>
     </StackPane>
 </AnchorPane>
