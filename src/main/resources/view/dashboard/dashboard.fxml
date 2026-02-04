@@ -61,7 +61,7 @@
                   <Button fx:id="studentAppealBtn" styleClass="dashboardButtons" text="Student Appeals" />
                   <Button fx:id="permissionBtn" styleClass="dashboardButtons" text="Permissions" />
                   <Button fx:id="settingBtn" styleClass="dashboardButtons" text="Settings" />
-                  <Button fx:id="logoutBtn" styleClass="dashboardButtons" text="Logout" />
+                  <Button fx:id="logoutBtn" onAction="#onLogout" styleClass="dashboardButtons" text="Logout" />
                </children>
             </VBox>
 
