@@ -34,7 +34,7 @@
             <VBox styleClass="formBox">
                 <VBox styleClass="usernameBox">
                     <Label text="Username:" styleClass="usernameText"/>
-                    <TextField fx:id="usernameTField" promptText="Enter username"/>
+                    <TextField fx:id="usernameTextField" promptText="Enter username"/>
                 </VBox>
 
                 <VBox styleClass="passwordBox">

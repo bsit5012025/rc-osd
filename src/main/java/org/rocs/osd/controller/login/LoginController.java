@@ -19,7 +19,7 @@ import java.io.IOException;
 public class LoginController {
 
     @FXML
-    TextField usernameTField;
+    TextField usernameTextField;
     @FXML
     PasswordField passwordField;
 
@@ -29,9 +29,9 @@ public class LoginController {
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
 
-        boolean loginCheck = loginFacade.login(usernameTField.getText(),passwordField.getText());
+        boolean loginCheck = loginFacade.login(usernameTextField.getText(),passwordField.getText());
 
-        if(usernameTField.getText().isBlank() == false && passwordField.getText().isBlank()){
+        if(usernameTextField.getText().isBlank() == false && passwordField.getText().isBlank()){
             System.out.println("Enter unsername and password!");
             return;
         }
