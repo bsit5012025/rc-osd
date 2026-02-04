@@ -57,7 +57,7 @@
                 </HBox>
 
             </VBox>
-            <Button text="Log in" onAction="#toLogin" styleClass="loginButton"/>
+            <Button text="Log in" onAction="#onLogin" styleClass="loginButton"/>
         </VBox>
     </StackPane>
 </AnchorPane>

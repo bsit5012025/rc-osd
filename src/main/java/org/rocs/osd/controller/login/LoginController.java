@@ -23,7 +23,7 @@ public class LoginController {
     @FXML
     PasswordField passwordField;
 
-    public void toLogin(ActionEvent event){
+    public void onLogin(ActionEvent event){
 
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
