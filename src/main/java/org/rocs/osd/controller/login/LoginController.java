@@ -23,27 +23,23 @@ public class LoginController {
     @FXML
     PasswordField passwordField;
 
-    private LoginFacade loginFacade;
 
     public void toLogin(ActionEvent event){
 
+        LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
-
         boolean loginCheck = loginFacade.login(usernameTField.getText(),passwordField.getText());
 
         if(usernameTField.getText().isBlank() == false && passwordField.getText().isBlank()){
             System.out.println("Enter unsername and password!");
-            System.out.println("Username: " +usernameTField.getText());
-            System.out.println("Password: " +passwordField.getText());
             return;
         }
         if(loginCheck){
             loadDashboard(event);
         }
         else{
-            System.out.println("Username: " +usernameTField.getText());
-            System.out.println("Password: " +passwordField.getText());
+            System.out.println("Invalid username or password!");
         }
     }
 
