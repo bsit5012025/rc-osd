@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.rocs.osd.controller.login.LoginController;
 
 public class OfficeOfStudentDisciplineApplication extends Application {
     @Override

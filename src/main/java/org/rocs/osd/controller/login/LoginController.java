@@ -23,12 +23,12 @@ public class LoginController {
     @FXML
     PasswordField passwordField;
 
-
     public void toLogin(ActionEvent event){
 
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
+
         boolean loginCheck = loginFacade.login(usernameTField.getText(),passwordField.getText());
 
         if(usernameTField.getText().isBlank() == false && passwordField.getText().isBlank()){
