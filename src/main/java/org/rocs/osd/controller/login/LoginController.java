@@ -52,6 +52,22 @@ public class LoginController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ;
+    }
+
+    public void onLogout(ActionEvent event){
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setUserData(null);
+            System.out.println("Session logout!");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
