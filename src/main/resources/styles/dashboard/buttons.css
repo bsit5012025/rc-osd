@@ -1,24 +1,46 @@
-.submitBtn {
+.submitButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
-    -fx-background-color: #0000FF;
+    -fx-background-color: navy;
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
-.submitBtn:hover {
-    -fx-background-color: #003FFF;
+.submitButton:hover {
+    -fx-background-color: #0000FF;
 }
-
+.cancelButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #FF4D4D;
+    -fx-spacing: 5;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+.cancelButton:hover {
+    -fx-background-color: #FF0000;
+}
 .tabButton {
-    -fx-pref-height: 40;
-    -fx-pref-width: 100;
+    -fx-min-height: 40;
+    -fx-min-width: 100;
     -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-border-color: black;
 }
 .tabButton:focused{
+    -fx-text-fill: white;
+    -fx-background-color: #0057ff;
     -fx-border-color: black black transparent black;
+}
+.addButton {
+    -fx-min-width: 120;
+    -fx-min-height: 30;
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+}
+.addButton:hover {
+    -fx-background-color: #0000FF;
 }
 .dashboardButtons{
     -fx-cursor: hand;
@@ -34,4 +56,11 @@
 }
 .dashboardButtons:hover{
     -fx-background-color: rgba(0, 0, 255, 0.22);
+}
+.transparentBackground{
+    -fx-background-color: rgba(0,0,0,0);
+}
+.borderTextField{
+    -fx-border-radius: 100;
+    -fx-border-color: black;
 }
