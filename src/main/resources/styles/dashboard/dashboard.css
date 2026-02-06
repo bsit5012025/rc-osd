@@ -2,7 +2,7 @@
     -fx-font-family: "Verdana";
     -fx-background-color: #F8F8F8;
 }
-.mainBox {
+.mainContainer {
     -fx-pref-width: 1540;
     -fx-pref-height: 1080;
     -fx-alignment: center;
@@ -13,13 +13,13 @@
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
 }
-.logoBox {
+.logoContainer {
     -fx-padding: 5;
     -fx-pref-height: 125;
     -fx-pref-width: 200;
     -fx-spacing: 5;
 }
-.logoTextBox {
+.logoTextContainer {
     -fx-pref-height: 146;
     -fx-pref-width: 261;
     -fx-alignment: center;
@@ -34,14 +34,14 @@
     -fx-spacing: 5;
 }
 
-#headerBox{
+#headerContainer{
     -fx-background-color: white;
     -fx-pref-width: 1538;
     -fx-pref-height: 174;
     -fx-alignment: center-left;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
 }
-#headerBox label {
+#headerContainer label {
     -fx-pref-height: 120;
     -fx-pref-width: 436;
 }
