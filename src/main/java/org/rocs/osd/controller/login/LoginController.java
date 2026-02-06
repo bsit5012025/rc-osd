@@ -81,15 +81,14 @@ public class LoginController {
 
             Stage popUpModal = new Stage();
             popUpModal.initStyle(StageStyle.UNDECORATED);
-            popUpModal.initModality(Modality.APPLICATION_MODAL);
 
-            Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            popUpModal.initOwner(parentStage);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            popUpModal.initOwner(stage);
 
             popUpModal.setScene(new Scene(root));
             popUpModal.setResizable(false);
 
-            popUpModal.showAndWait();
+            popUpModal.show();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
