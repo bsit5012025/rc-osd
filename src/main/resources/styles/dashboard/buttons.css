@@ -1,24 +1,33 @@
-.submitBtn {
+.submitButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
-    -fx-background-color: #0000FF;
+    -fx-background-color: #2090ff;
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
-.submitBtn:hover {
-    -fx-background-color: #003FFF;
+.submitButton:hover {
+    -fx-background-color: #0000FF;
 }
-
-.tabButton {
-    -fx-pref-height: 40;
-    -fx-pref-width: 100;
+.offenseTabButton {
     -fx-font-size: 15;
-    -fx-background-color: transparent;
-    -fx-border-color: black;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
 }
-.tabButton:focused{
-    -fx-border-color: black black transparent black;
+.offenseTabButton:focused{
+    -fx-background-color: #76baff;
+}
+.addButton {
+    -fx-pref-width: 200;
+    -fx-background-color: #0057ae;
+}
+.addButton Button{
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+}
+.addButton:hover {
+    -fx-background-color: #0000FF;
 }
 .dashboardButtons{
     -fx-cursor: hand;
