@@ -45,3 +45,11 @@
     -fx-font-family: "Inter";
     -fx-max-width: 200;
 }
+.lightLabelForTextField {
+    -fx-font-size: 15;
+    -fx-text-fill: rgb(83, 83, 83);
+}
+.subLabelForModal{
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+}
