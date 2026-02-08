@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class OfficeOfStudentDisciplineApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/offenseView/addOffenseModal.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/login.fxml"));
         Parent mainLayout = loader.load();
         Scene scene = new Scene(mainLayout);
         stage.setMaximized(true);

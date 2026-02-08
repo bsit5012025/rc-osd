@@ -140,8 +140,8 @@
                 <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
                     <CheckBox text="Notify Parents" />
                     <Region prefHeight="40.0" prefWidth="391.0" />
-                    <Button fx:id="cancelButton" styleClass="cancelButton" text="Cancel" />
-                    <Button fx:id="submitButton" styleClass="submitOffenseButton" text="Submit" />
+                    <Button fx:id="OffenseCancelButton" styleClass="cancelButton" text="Cancel" />
+                    <Button fx:id="addOffenseSubmitButton" styleClass="submitOffenseButton" text="Submit" />
                     <VBox.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></VBox.margin>
                 </HBox>
             </VBox>

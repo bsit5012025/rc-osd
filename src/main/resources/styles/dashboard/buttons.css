@@ -1,13 +1,32 @@
-.submitBtn {
+.submitOffenseButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
-    -fx-background-color: #0000FF;
+    -fx-background-color: #2090ff;
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
-.submitBtn:hover {
-    -fx-background-color: #003FFF;
+.submitOffenseButton:hover {
+    -fx-background-color: #0000FF;
+}
+.closeButton {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(0,0,0,0);
+}
+.closeButton:hover{
+    -fx-border-color: rgb(255, 0, 0);
+}
+
+.cancelButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #ff5e5e;
+    -fx-spacing: 5;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+.cancelButton:hover {
+    -fx-background-color: #FF0000;
 }
 
 .tabButton {
@@ -35,32 +54,4 @@
 .dashboardButtons:hover{
     -fx-background-color: rgba(0, 0, 255, 0.22);
 }
-.closeButton {
-    -fx-background-color: rgba(0,0,0,0);
-    -fx-border-color: rgba(0,0,0,0);
-}
-.closeButton:hover{
-    -fx-border-color: rgb(255, 0, 0);
-}
-.submitOffenseButton {
-    -fx-pref-width: 120;
-    -fx-pref-height: 80;
-    -fx-background-color: #2090ff;
-    -fx-spacing: 5;
-    -fx-font-size: 18;
-    -fx-text-fill: white;
-}
-.submitOffenseButton:hover {
-    -fx-background-color: #0000FF;
-}
-.cancelButton {
-    -fx-pref-width: 120;
-    -fx-pref-height: 80;
-    -fx-background-color: #ff5e5e;
-    -fx-spacing: 5;
-    -fx-font-size: 18;
-    -fx-text-fill: white;
-}
-.cancelButton:hover {
-    -fx-background-color: #FF0000;
-}
+
