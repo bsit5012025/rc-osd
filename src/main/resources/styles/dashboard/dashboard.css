@@ -1,116 +1,199 @@
-.dashboard {
-    -fx-font-family: "Verdana";
-    -fx-background-color: #F8F8F8;
+.dashboardRoot {
+    -fx-background-color: #f8f9fc;
+    -fx-font-family: "Arial", sans-serif;
 }
-.mainContainer {
-    -fx-pref-width: 1540;
-    -fx-pref-height: 1080;
-    -fx-alignment: center;
-}
-.menuBarContainer{
-    -fx-pref-width: 380;
-    -fx-pref-height: 1080;
+
+.topBar {
+    -fx-pref-height: 70;
     -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: CENTER_LEFT;
 }
+
 .logoContainer {
-    -fx-padding: 5;
-    -fx-pref-height: 125;
+    -fx-alignment: CENTER;
+    -fx-min-width: 60;
+    -fx-pref-width: 60;
+}
+
+.schoolName {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 15;
+}
+
+.sidebar {
+    -fx-min-width: 60;
     -fx-pref-width: 200;
-    -fx-spacing: 5;
-}
-.logoTextContainer {
-    -fx-pref-height: 146;
-    -fx-pref-width: 261;
-    -fx-alignment: center;
-}
-#rcText{
-    -fx-font-size: 35;
-    -fx-text-alignment: justify;
-}
-.buttonContainer {
-    -fx-pref-height: 924;
-    -fx-pref-width: 380;
-    -fx-spacing: 5;
+    -fx-max-width: 260;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 1 0 0;
 }
 
-#headerContainer{
-    -fx-background-color: white;
-    -fx-pref-width: 1538;
-    -fx-pref-height: 174;
-    -fx-alignment: center-left;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
-}
-#headerContainer label {
-    -fx-pref-height: 120;
-    -fx-pref-width: 436;
-}
-.dashboardContentContainer{
-    -fx-alignment: center;
-    -fx-pref-height: 961;
-    -fx-pref-width: 1620;
+.menu-header {
+    -fx-pref-height: 60;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
 }
 
-.dashboardFirstDiv {
-    -fx-padding: 10;
-    -fx-spacing: 30;
-    -fx-alignment: center;
-    -fx-pref-height: 200;
-    -fx-pref-width: 990;
+.navContainer {
+    -fx-spacing: 10;
+    -fx-padding: 10 0 0 0;
 }
-.dashboardMiniContainer {
-    -fx-pref-width: 250;
-    -fx-pref-height: 130;
+
+.sidebarItem {
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 18;
+    -fx-graphic-text-gap: 20;
+    -fx-font-size: 15px;
+    -fx-text-fill: #2c3e50;
+    -fx-background-radius: 0;
+}
+
+.sidebarItem:hover {
+    -fx-background-color: #f0f4ff;
+}
+
+.sidebarItem.logout {
+    -fx-text-fill: #2c3e50;
+    -fx-opacity: 1.0;
+}
+
+.sidebarItem.logout:hover {
+    -fx-background-color: #f0f4ff;
+    -fx-text-fill: #2c3e50;
+}
+
+.contentArea {
+    -fx-padding: 20 25;
+    -fx-spacing: 25;
+}
+
+.statsRow {
+    -fx-alignment: CENTER;
+    -fx-spacing: 25;
+}
+
+.statCard {
     -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-pref-width: 230;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
+}
+
+.statTitle {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 14px;
+}
+
+.statValue {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 0;
+    -fx-text-fill: #2c3e50;
+}
+
+.dateCard {
+    -fx-background-color: #050c8f;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-pref-width: 280;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER;
+}
+
+.dateContent {
+    -fx-alignment: CENTER;
+    -fx-spacing: 20;
+}
+
+.dateVerticalStack {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: -5;
+}
+
+.dateMonth, .dateWeek {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+}
+
+.dateDay {
+    -fx-text-fill: white;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.timeText {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.dateSeparator {
+    -fx-pref-width: 1.5;
+    -fx-pref-height: 60;
+    -fx-background-color: white;
+    -fx-opacity: 0.3;
+}
+
+.panel {
+    -fx-background-color: white;
+    -fx-padding: 20;
     -fx-background-radius: 15;
-    -fx-border-radius: 15;
-    -fx-padding: 10;
-    -fx-alignment: center;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
+    -fx-max-width: Infinity;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 5);
 }
 
-.dashboardSecondDiv {
-    -fx-alignment: center;
+.panelTitle {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 15 0;
 }
-.dashboardSecondDiv VBox{
-    -fx-pref-height: 350;
-    -fx-pref-width: 993;
+
+.offenseList {
     -fx-spacing: 10;
 }
 
-.dashboardContainer2 {
-    -fx-pref-height: 350;
-    -fx-pref-width: 900;
-    -fx-background-color: white;
-    -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+.offenseRow {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 15;
 }
-.dashboardContainer2 HBox {
-    -fx-alignment: center-left;
-    -fx-pref-height: 50;
-    -fx-pref-width: 872;
-    -fx-spacing: 10;
-}
-.dashboardContainer3 {
-    -fx-pref-height: 400;
-    -fx-pref-width: 300;
-    -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
-    -fx-padding: 20;
+
+.offenseName {
+    -fx-pref-width: 180;
 }
 
 .progress-bar {
-    -fx-pref-height: 20;
-    -fx-pref-width: 300;
+    -fx-pref-height: 15px;
+    -fx-min-height: 15px;
 }
-.progress-bar > .track {
+
+.progress-bar .track {
     -fx-background-color: white;
-    -fx-border-color: #1a33ff;
+    -fx-background-insets: 0;
+    -fx-background-radius: 3px;
+    -fx-border-color: #050c8f;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
 }
-.progress-bar > .bar {
-    -fx-background-color: #1a33ff;
+
+.progress-bar .bar {
+    -fx-background-color: #050c8f;
+    -fx-background-insets: 0;
+    -fx-background-radius: 3px;
+    -fx-border-color: #050c8f;
+    -fx-border-width: 1px;
+}
+
+.statCard .progress-bar {
+    -fx-pref-height: 12px;
+    -fx-min-height: 12px;
 }
