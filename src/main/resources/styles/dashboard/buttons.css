@@ -1,7 +1,7 @@
 .submitButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
-    -fx-background-color: navy;
+    -fx-background-color: #2090ff;
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
@@ -12,7 +12,7 @@
 .cancelButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
-    -fx-background-color: #FF4D4D;
+    -fx-background-color: #ff5e5e;
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
@@ -20,24 +20,22 @@
 .cancelButton:hover {
     -fx-background-color: #FF0000;
 }
-.tabButton {
-    -fx-min-height: 40;
-    -fx-min-width: 100;
+.offenseTabButton {
     -fx-font-size: 15;
-    -fx-background-color: transparent;
-    -fx-border-color: black;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
 }
-.tabButton:focused{
-    -fx-text-fill: white;
-    -fx-background-color: #0057ff;
-    -fx-border-color: black black transparent black;
+.offenseTabButton:focused{
+    -fx-background-color: #76baff;
 }
 .addButton {
-    -fx-min-width: 120;
-    -fx-min-height: 30;
-    -fx-background-color: navy;
-    -fx-text-fill: white;
+    -fx-pref-width: 200;
+    -fx-background-color: #0057ae;
+}
+.addButton Button{
+    -fx-background-color: rgba(0,0,0,0);
     -fx-font-size: 15;
+    -fx-text-fill: white;
 }
 .addButton:hover {
     -fx-background-color: #0000FF;
@@ -57,10 +55,10 @@
 .dashboardButtons:hover{
     -fx-background-color: rgba(0, 0, 255, 0.22);
 }
-.transparentBackground{
+.closeButton {
     -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(0,0,0,0);
 }
-.borderTextField{
-    -fx-border-radius: 100;
-    -fx-border-color: black;
+.closeButton:hover{
+    -fx-border-color: rgb(255, 0, 0);
 }

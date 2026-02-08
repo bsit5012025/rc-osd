@@ -4,7 +4,6 @@
     -fx-background-radius: 16;
     -fx-border-radius: 15;
     -fx-border-width: 1;
-    -fx-border-color: black;
     -fx-padding: 10;
     -fx-pref-width: 1400;
     -fx-pref-height: 800;
@@ -14,12 +13,17 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 30, 0.2, 0, 4);
     -fx-background-radius: 16;
     -fx-border-width: 1;
-    -fx-border-color: black;
+    -fx-border-color: rgba(191, 191, 191, 0.62);
     -fx-padding: 10;
     -fx-pref-width: 800;
     -fx-pref-height: 600;
 }
-.offenseContentContainer {
-    -fx-border-color: transparent transparent black black;
+.linePaneColor{
+    -fx-background-color: #0057ae;
 }
-
+.linePaneColorGray{
+    -fx-background-color:  rgba(191, 191, 191, 0.62);
+}
+.borderColorContainer{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+}

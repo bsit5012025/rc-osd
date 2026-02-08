@@ -6,7 +6,7 @@
     -fx-padding: 0;
 }
 .table-view .column-header-background {
-    -fx-background-color: #a6a6a6;
+    -fx-background-color: rgba(191, 191, 191, 0.62);
     -fx-border-color: #e5e7eb;
     -fx-border-width: 0 0 1 0;
 }
@@ -18,7 +18,6 @@
 
 .table-view .column-header .label {
     -fx-font-size: 20;
-    -fx-font-weight: bold;
 }
 .table-row-cell {
     -fx-background-color: white;

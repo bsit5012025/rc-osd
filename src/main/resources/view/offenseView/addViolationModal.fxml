@@ -9,9 +9,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -29,150 +34,120 @@
         <URL value="@../../styles/dashboard/buttons.css" />
     </stylesheets>
 
-        <VBox alignment="TOP_CENTER">
+   <BorderPane prefHeight="200.0" prefWidth="200.0">
+      <center>
+          <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
 
-                <Label styleClass="labelTitle" text="Record Violation" />
+              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" VBox.vgrow="NEVER">
 
-                <GridPane vgap="15.0" VBox.vgrow="SOMETIMES">
+                  <Label styleClass="subLabelForModal" text="Add Violation" />
+                  <Region prefHeight="50.0" prefWidth="557.0" />
+                  <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="25.0" styleClass="closeButton">
+                     <graphic>
+                        <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image><Image url="@../../assets/close-icon.png" /></image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                </HBox>
 
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                    </columnConstraints>
+              <Pane prefHeight="1.0" styleClass="linePaneColorGray">
 
-                    <rowConstraints>
-                        <RowConstraints maxHeight="70.0" minHeight="70.0" />
-                        <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+              <VBox.margin><Insets bottom="10.0" /></VBox.margin></Pane>
 
-                        <VBox>
-                                <Label styleClass="labelForPages" text="Student ID:">
+              <GridPane vgap="15.0" VBox.vgrow="SOMETIMES">
 
-                                <VBox.margin>
-                                    <Insets left="10.0" />
-                                </VBox.margin></Label>
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                      <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                  </columnConstraints>
 
-                                <TextField styleClass="inputTextField">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </TextField>
-                        </VBox>
+                  <rowConstraints>
+                      <RowConstraints maxHeight="70.0" minHeight="70.0" />
+                      <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
 
-                        <VBox prefHeight="200.0"
-                              prefWidth="100.0"
-                              GridPane.halignment="CENTER"
-                              GridPane.hgrow="NEVER"
-                              GridPane.rowIndex="1"
-                              GridPane.valignment="CENTER"
-                              GridPane.vgrow="NEVER">
+                  <VBox>
+                      <Label styleClass="lightLabelForTextField" text="Student ID:">
+                          <VBox.margin><Insets left="10.0" /></VBox.margin>
+                      </Label>
 
-                                <Label prefHeight="21.0" prefWidth="119.0" styleClass="labelForPages" text="Student name:">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <TextField prefHeight="25.0"
-                                           prefWidth="230.0"
-                                           styleClass="inputTextField">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </TextField>
-                        </VBox>
+                      <TextField styleClass="inputTextFieldOffense">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </TextField>
+                  </VBox>
 
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                <Label styleClass="labelForPages" text="Date:">
-                                    <VBox.margin>
-                                        <Insets left="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <DatePicker styleClass="datePicker">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </DatePicker>
-                        </VBox>
+                  <VBox prefHeight="200.0"
+                        prefWidth="100.0"
+                        GridPane.halignment="CENTER"
+                        GridPane.hgrow="NEVER"
+                        GridPane.rowIndex="1"
+                        GridPane.valignment="CENTER"
+                        GridPane.vgrow="NEVER">
 
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
-                                <Label styleClass="labelForPages" text="Offense type:">
-                                    <VBox.margin>
-                                        <Insets left="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <ComboBox prefWidth="150.0" styleClass="inputTextField">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </ComboBox>
-                        </VBox>
+                      <Label prefHeight="21.0" prefWidth="119.0" styleClass="lightLabelForTextField" text="Student name:">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </Label>
+                      <TextField prefHeight="25.0" prefWidth="230.0" styleClass="inputTextFieldOffense">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </TextField>
+                  </VBox>
 
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <Label styleClass="labelForPages" text="Level of offense">
-                                    <VBox.margin>
-                                        <Insets left="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <ComboBox prefWidth="150.0" styleClass="inputTextField">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </ComboBox>
-                        </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                      <Label styleClass="lightLabelForTextField" text="Date:">
+                          <VBox.margin><Insets left="10.0" /></VBox.margin></Label>
+                      <DatePicker styleClass="datePicker">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </DatePicker>
+                  </VBox>
 
-                        <VBox layoutX="399.0" layoutY="95.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                      <Label styleClass="lightLabelForTextField" text="Offense type:">
+                          <VBox.margin><Insets left="10.0" /></VBox.margin></Label>
+                      <ComboBox prefWidth="150.0" styleClass="inputTextFieldOffense">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </ComboBox>
+                  </VBox>
 
-                                <Label styleClass="labelForPages" text="Department">
-                                    <VBox.margin>
-                                        <Insets left="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <ComboBox prefWidth="150.0" styleClass="inputTextField">
-                                    <VBox.margin>
-                                        <Insets left="10.0" right="20.0" />
-                                    </VBox.margin>
-                                </ComboBox>
-                        </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                      <Label styleClass="lightLabelForTextField" text="Level of offense">
+                          <VBox.margin><Insets left="10.0" /></VBox.margin>
+                      </Label>
+                      <ComboBox prefWidth="150.0" styleClass="inputTextFieldOffense">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </ComboBox>
+                  </VBox>
 
-                </GridPane>
+                  <VBox layoutX="399.0" layoutY="95.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
 
-                <VBox prefHeight="200.0" prefWidth="100.0">
-                    <Label styleClass="labelForPages" text="Remarks" />
-                    <TextArea prefHeight="200.0" prefWidth="200.0" styleClass="inputTextArea" />
-                    <padding>
-                        <Insets left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+                      <Label styleClass="lightLabelForTextField" text="Department">
+                          <VBox.margin><Insets left="10.0" /></VBox.margin>
+                      </Label>
+                      <ComboBox prefWidth="150.0" styleClass="inputTextFieldOffense">
+                          <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
+                      </ComboBox>
+                  </VBox>
 
-                <GridPane alignment="TOP_CENTER" VBox.vgrow="NEVER">
+              </GridPane>
 
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
+              <VBox prefHeight="200.0" prefWidth="100.0">
+                  <Label styleClass="lightLabelForTextField" text="Remarks" />
+                  <TextArea prefHeight="200.0" prefWidth="200.0" styleClass="inputTextArea" />
+                  <padding><Insets left="10.0" right="10.0" /></padding>
+              </VBox>
 
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+                  <CheckBox text="Notify Parents" />
+                  <Region prefHeight="40.0" prefWidth="391.0" />
+                  <Button fx:id="cancelButton" styleClass="cancelButton" text="Cancel" />
+                  <Button fx:id="submitButton" styleClass="submitButton" text="Submit" />
+                  <VBox.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></VBox.margin>
+              </HBox>
+          </VBox>
+      </center>
+   </BorderPane>
 
-                        <CheckBox text="Notify Parents" />
-                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
-                            <Button fx:id="cancelButton" onAction="#onCancelAddViolationButton" styleClass="cancelButton" text="Cancel" />
-                            <Button fx:id="submitButton" styleClass="submitButton" text="Submit" />
-                        </HBox>
+    <padding><Insets top="5.0" /></padding>
 
-                    <VBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
-                    </VBox.margin>
-
-                    <padding>
-                        <Insets bottom="5.0" top="5.0" />
-                    </padding>
-
-                </GridPane>
-        </VBox>
-    <padding>
-        <Insets top="5.0" />
-    </padding>
 </StackPane>

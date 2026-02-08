@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
@@ -73,29 +72,4 @@ public class LoginController {
 
     }
 
-    public void onAddViolation(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/offenseView/addViolationModal.fxml"));
-            Parent root = loader.load();
-
-            Stage popUpModal = new Stage();
-            popUpModal.initStyle(StageStyle.UNDECORATED);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            popUpModal.initOwner(stage);
-
-            popUpModal.setScene(new Scene(root));
-            popUpModal.setResizable(false);
-
-            popUpModal.show();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void onCancelAddViolationButton(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
-    }
 }
