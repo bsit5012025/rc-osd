@@ -12,9 +12,8 @@ DROP TABLE person CASCADE CONSTRAINTS;
 DROP TABLE login CASCADE CONSTRAINTS;
 DROP TABLE offense CASCADE CONSTRAINTS;
 DROP TABLE disciplinaryAction CASCADE CONSTRAINTS;
-DROP TABLE department_head CASCADE CONSTRAINTS;
+DROP TABLE employee CASCADE CONSTRAINTS;
 DROP TABLE department CASCADE CONSTRAINTS;
-DROP TABLE prefect CASCADE CONSTRAINTS;
 DROP TABLE student CASCADE CONSTRAINTS;
 DROP TABLE disciplinaryStatus CASCADE CONSTRAINTS;
 DROP TABLE enrollment CASCADE CONSTRAINTS;
@@ -58,30 +57,25 @@ CREATE TABLE offense (
 );
 
 -- DISCIPLINARY ACTION ENTITY
-CREATE TABLE disciplinaryaction (
+CREATE TABLE disciplinaryAction (
    actionID VARCHAR(10) PRIMARY KEY,
    action VARCHAR(100),
    description VARCHAR(500)
 );
 
--- DEPARTMENT HEAD ENTITY
-CREATE TABLE department_head (
-   departmentheadID VARCHAR(10) PRIMARY KEY,
+-- EMPLOYEE ENTITY
+CREATE TABLE employee (
+   employeeID VARCHAR(10) PRIMARY KEY,
    userID NUMBER(20,0),
-   departmentID VARCHAR(10)
+   personID number(20,0),
+   departmentID VARCHAR(10),
+   employeeRole VARCHAR(30)
 );
 
 --DEPARTMENT ENTITY
 CREATE TABLE department (
    departmentID VARCHAR(10) PRIMARY KEY,
-   departmentname VARCHAR(100)
-);
-
--- PREFECT ENTITY
-CREATE TABLE prefect (
-   prefectID VARCHAR(10) PRIMARY KEY,
-   userID NUMBER(20,0),
-   departmentID VARCHAR(10)
+   departmentName VARCHAR(100)
 );
 
 -- STUDENT ENTITY
@@ -115,7 +109,7 @@ CREATE TABLE enrollment (
 CREATE TABLE record (
    recordID VARCHAR(10) PRIMARY KEY,
    enrollmentID VARCHAR(10),
-   prefectID VARCHAR(10),
+   employeeID VARCHAR(10),
    offenseID VARCHAR(10),
    dateOfViolation DATE,
    actionID VARCHAR(10),
@@ -127,16 +121,15 @@ CREATE TABLE record (
 
 -- FOREIGN KEYS
 ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
-ALTER TABLE department_head ADD CONSTRAINT FK_DEPTHEAD_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
-ALTER TABLE department_head ADD CONSTRAINT FK_DEPTHEAD_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
-ALTER TABLE prefect ADD CONSTRAINT FK_PREFECT_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
+ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
+ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_DEPARTMENT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STATUS FOREIGN KEY (disciplinaryStatusID) REFERENCES disciplinaryStatus(disciplinaryStatusID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_ENROLLMENT FOREIGN KEY (enrollmentID) REFERENCES enrollment(enrollmentID);
-ALTER TABLE record ADD CONSTRAINT FK_RECORD_PREFECT FOREIGN KEY (prefectID) REFERENCES prefect(prefectID);
+ALTER TABLE record ADD CONSTRAINT FK_RECORD_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_OFFENSE FOREIGN KEY (offenseID) REFERENCES offense(offenseID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_ACTION FOREIGN KEY (actionID) REFERENCES disciplinaryAction(actionID);
 
@@ -202,9 +195,8 @@ INSERT INTO department (departmentID, departmentName) VALUES ('jhs-3001', 'Junio
 INSERT INTO department (departmentID, departmentName) VALUES ('shs-3002', 'Senior High School Department');
 INSERT INTO department (departmentID, departmentName) VALUES ('ct-3003', 'College Department');
 
-INSERT INTO department_head (departmentHeadID, userID,  departmentID) VALUES ('HD-001', 3, 'jhs-3001');
-
-INSERT INTO prefect (prefectID, userID,  departmentID) VALUES ('DO-001', 2, 'jhs-3001');
+INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-001', 3, 12, 'jhs-3001', 'DEPT_HEAD');
+INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-002', 2, 9, 'jhs-3001', 'PREFECT');
 
 INSERT INTO student (studentID, userID, address, studentType, departmentID) VALUES ('JHS-0001', 4, 'Buho', 'Intern', 'jhs-3001');
 INSERT INTO student (studentID, userID, address, studentType, departmentID) VALUES ('CT23-0001', 5, 'Malabag', 'Extern', 'ct-3003');
@@ -219,9 +211,9 @@ INSERT INTO enrollment (enrollmentID, studentID, schoolYear, studentLevel, secti
 INSERT INTO enrollment (enrollmentID, studentID, schoolYear, studentLevel, section, departmentID, disciplinaryStatusID) VALUES ('E-002', 'JHS-0001', '2025-2026', 'Grade-9', 'St. Anthony', 'jhs-3001', 'STATUS02');
 INSERT INTO enrollment (enrollmentID, studentID, schoolYear, studentLevel, section, departmentID, disciplinaryStatusID) VALUES ('E-003', 'CT23-0001', '2025-2026', '2nd Year', 'IT301', 'ct-3003', 'STATUS04');
 
-INSERT INTO record (recordID, enrollmentID, prefectID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-001', 'E-001', 'DO-001', 'OFF-001', TO_DATE('2024-09-15', 'YYYY-MM-DD'), 'D-001', TO_DATE('2024-09-20', 'YYYY-MM-DD'), 'Student caught vaping in school', 'Pending');
-INSERT INTO record (recordID, enrollmentID, prefectID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-002', 'E-002', 'DO-001', 'OFF-008', TO_DATE('2025-01-12', 'YYYY-MM-DD'), 'D-002', TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Repeatedly late to class', 'Resolved');
-INSERT INTO record (recordID, enrollmentID, prefectID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-003', 'E-003', 'DO-001', 'OFF-007', TO_DATE('2025-02-05', 'YYYY-MM-DD'), 'D-001', TO_DATE('2025-02-10', 'YYYY-MM-DD'), 'Skipped class without permission', 'Resolved');
-INSERT INTO record (recordID, enrollmentID, prefectID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-004', 'E-003', 'DO-001', 'OFF-004', TO_DATE('2025-03-03', 'YYYY-MM-DD'), 'D-002', TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Bullying incident reported', 'Resolved');
+INSERT INTO record (recordID, enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-001', 'E-001', 'EMP-002', 'OFF-001', TO_DATE('2024-09-15', 'YYYY-MM-DD'), 'D-001', TO_DATE('2024-09-20', 'YYYY-MM-DD'), 'Student caught vaping in school', 'Pending');
+INSERT INTO record (recordID, enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-002', 'E-002', 'EMP-002', 'OFF-008', TO_DATE('2025-01-12', 'YYYY-MM-DD'), 'D-002', TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Repeatedly late to class', 'Resolved');
+INSERT INTO record (recordID, enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-003', 'E-003', 'EMP-002', 'OFF-007', TO_DATE('2025-02-05', 'YYYY-MM-DD'), 'D-001', TO_DATE('2025-02-10', 'YYYY-MM-DD'), 'Skipped class without permission', 'Resolved');
+INSERT INTO record (recordID, enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES ('R-004', 'E-003', 'EMP-002', 'OFF-004', TO_DATE('2025-03-03', 'YYYY-MM-DD'), 'D-002', TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Bullying incident reported', 'Resolved');
 
 COMMIT;
