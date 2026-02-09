@@ -1,3 +1,27 @@
+.submitOffenseButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #2090ff;
+    -fx-spacing: 5;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+.submitOffenseButton:hover {
+    -fx-background-color: #0000FF;
+}
+.closeButton {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(0,0,0,0);
+}
+.closeButton:hover{
+    -fx-border-color: rgb(255, 0, 0);
+}
+
+.cancelButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #ff5e5e;
+}
 .submitButton {
     -fx-pref-width: 120;
     -fx-pref-height: 80;
@@ -5,6 +29,9 @@
     -fx-spacing: 5;
     -fx-font-size: 18;
     -fx-text-fill: white;
+}
+.cancelButton:hover {
+    -fx-background-color: #FF0000;
 }
 .submitButton:hover {
     -fx-background-color: #0000FF;
@@ -41,6 +68,6 @@
     -fx-font-size: 20;
     -fx-max-width: infinity;
 }
-.dashboardButtons:hover{
+.dashboardButtons:hover {
     -fx-background-color: rgba(0, 0, 255, 0.22);
 }
