@@ -13,10 +13,9 @@ import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.login.Login;
-import org.rocs.osd.model.student.Student;
+import org.rocs.osd.model.login.Student;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,20 +53,15 @@ class OffenseDaoImplTest
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        when(resultSet.getString("studentID")).thenReturn("CT123");
-        when(resultSet.getString("lastName")).thenReturn("userlast");
-        when(resultSet.getString("firstName")).thenReturn("userfirst");
+        when(resultSet.getString("studentName")).thenReturn("user");;
         when(resultSet.getString("offense_type")).thenReturn("Major Offense");
         when(resultSet.getDate("dateOfViolation")).thenReturn(java.sql.Date.valueOf("2024-09-15"));
 
         OffenseDao dao = new OffenseDaoImpl();
-        ArrayList<Student> studentList = dao.getStudentById("CT123");
-        Student student = studentList.get(0);
+        Student student = dao.getStudentById("CT123");
 
-        assertFalse(studentList.isEmpty());
-        assertEquals("CT123", student.getStudentID());
-        assertEquals("userlast", student.getLastName());
-        assertEquals("userfirst", student.getFirstName());
+        assertNotNull(student);
+        assertEquals("user", student.getStudentName());
         assertEquals("Major Offense", student.getOffenseType());
         assertEquals(java.sql.Date.valueOf("2024-09-15"), student.getDateOfViolation());
 
@@ -82,11 +76,12 @@ class OffenseDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         OffenseDao dao = new OffenseDaoImpl();
-        boolean status = dao.addStudentViolation("R-005", "E-003", "DO-001", "OFF-004",
-                "2025-03-08", "D-002", "Bullying incident reported", "Resolved");
+        dao.addStudentViolation("R-005", "E-003", "DO-001", "OFF-004",
+                "2025-03-08", "D-002", "Bullying incident reported", "Resolved"
+        );
 
-        assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
+
         verify(preparedStatement).setString(1, "R-005");
         verify(preparedStatement).setString(2, "E-003");
         verify(preparedStatement).setString(3, "DO-001");
