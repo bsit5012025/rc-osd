@@ -82,6 +82,7 @@ CREATE TABLE department (
 CREATE TABLE student (
    studentID VARCHAR(10) PRIMARY KEY,
    userID NUMBER(20,0),
+   personID number(20,0),
    address VARCHAR(255),
    studentType VARCHAR(20),
    departmentID VARCHAR(10)
@@ -124,6 +125,7 @@ ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENC
 ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
 ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
+ALTER TABLE student ADD CONSTRAINT FK_STUDENT_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_DEPARTMENT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
@@ -198,8 +200,8 @@ INSERT INTO department (departmentID, departmentName) VALUES ('ct-3003', 'Colleg
 INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-001', 3, 12, 'jhs-3001', 'DEPT_HEAD');
 INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-002', 2, 9, 'jhs-3001', 'PREFECT');
 
-INSERT INTO student (studentID, userID, address, studentType, departmentID) VALUES ('JHS-0001', 4, 'Buho', 'Intern', 'jhs-3001');
-INSERT INTO student (studentID, userID, address, studentType, departmentID) VALUES ('CT23-0001', 5, 'Malabag', 'Extern', 'ct-3003');
+INSERT INTO student (studentID, userID, personID, address, studentType, departmentID) VALUES ('JHS-0001', 4, 2, 'Buho', 'Intern', 'jhs-3001');
+INSERT INTO student (studentID, userID, personID, address, studentType, departmentID) VALUES ('CT23-0001', 5, 3, 'Malabag', 'Extern', 'ct-3003');
 
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES ('STATUS01', 'Good Standing', 'Student has no disciplinary issues and maintains good behavior.');
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES ('STATUS02', 'Conduct Monitoring', 'Student is under observation due to minor conduct issues.');
