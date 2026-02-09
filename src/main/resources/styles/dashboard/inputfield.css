@@ -24,3 +24,15 @@
     -fx-font-size: 14;
     -fx-cursor: text;
 }
+
+.borderSearchTextField{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-radius: 10;
+}
+.searchTextField{
+    -fx-background-color: rgba(0,0,0,0);
+}
+.searchTextField:focused{
+    -fx-background-color: rgba(0,0,0,0);
+}
