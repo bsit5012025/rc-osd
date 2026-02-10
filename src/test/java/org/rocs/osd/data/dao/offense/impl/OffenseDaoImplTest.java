@@ -16,6 +16,7 @@ import org.rocs.osd.model.login.Login;
 import org.rocs.osd.model.login.Student;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -58,8 +59,10 @@ class OffenseDaoImplTest
         when(resultSet.getDate("dateOfViolation")).thenReturn(java.sql.Date.valueOf("2024-09-15"));
 
         OffenseDao dao = new OffenseDaoImpl();
-        Student student = dao.getStudentById("CT123");
+        ArrayList<Student> studentList = dao.getStudentById("CT123");
 
+        assertFalse(studentList.isEmpty());
+        Student student = studentList.get(0);
         assertNotNull(student);
         assertEquals("user", student.getStudentName());
         assertEquals("Major Offense", student.getOffenseType());
