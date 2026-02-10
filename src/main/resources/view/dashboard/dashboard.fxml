@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
+<!--TODO: Replace current xlmns to xmlns="http://javafx.com/javafx/21" to match with our current jdk version which is JDK21-->
 <AnchorPane fx:id="dashboard"
             styleClass="dashboard"
             stylesheets="@../../styles/dashboard/dashboard.css"
