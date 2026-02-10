@@ -66,7 +66,6 @@ CREATE TABLE disciplinaryAction (
 -- EMPLOYEE ENTITY
 CREATE TABLE employee (
    employeeID VARCHAR(10) PRIMARY KEY,
-   userID NUMBER(20,0),
    personID number(20,0),
    departmentID VARCHAR(10),
    employeeRole VARCHAR(30)
@@ -81,7 +80,6 @@ CREATE TABLE department (
 -- STUDENT ENTITY
 CREATE TABLE student (
    studentID VARCHAR(10) PRIMARY KEY,
-   userID NUMBER(20,0),
    personID number(20,0),
    address VARCHAR(255),
    studentType VARCHAR(20),
@@ -122,9 +120,8 @@ CREATE TABLE record (
 
 -- FOREIGN KEYS
 ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
-ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
+ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
 ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
-ALTER TABLE student ADD CONSTRAINT FK_STUDENT_LOGIN FOREIGN KEY (userID) REFERENCES login(id);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_DEPARTMENT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
@@ -197,11 +194,11 @@ INSERT INTO department (departmentID, departmentName) VALUES ('jhs-3001', 'Junio
 INSERT INTO department (departmentID, departmentName) VALUES ('shs-3002', 'Senior High School Department');
 INSERT INTO department (departmentID, departmentName) VALUES ('ct-3003', 'College Department');
 
-INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-001', 3, 12, 'jhs-3001', 'DEPT_HEAD');
-INSERT INTO employee (employeeID, userID, personID, departmentID, employeeRole) VALUES ('EMP-002', 2, 9, 'jhs-3001', 'PREFECT');
+INSERT INTO employee (employeeID, personID, departmentID, employeeRole) VALUES ('EMP-001', 12, 'jhs-3001', 'DEPT_HEAD');
+INSERT INTO employee (employeeID, personID, departmentID, employeeRole) VALUES ('EMP-002', 9, 'jhs-3001', 'PREFECT');
 
-INSERT INTO student (studentID, userID, personID, address, studentType, departmentID) VALUES ('JHS-0001', 4, 2, 'Buho', 'Intern', 'jhs-3001');
-INSERT INTO student (studentID, userID, personID, address, studentType, departmentID) VALUES ('CT23-0001', 5, 3, 'Malabag', 'Extern', 'ct-3003');
+INSERT INTO student (studentID, personID, address, studentType, departmentID) VALUES ('JHS-0001', 2, 'Buho', 'Intern', 'jhs-3001');
+INSERT INTO student (studentID, personID, address, studentType, departmentID) VALUES ('CT23-0001', 3, 'Malabag', 'Extern', 'ct-3003');
 
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES ('STATUS01', 'Good Standing', 'Student has no disciplinary issues and maintains good behavior.');
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES ('STATUS02', 'Conduct Monitoring', 'Student is under observation due to minor conduct issues.');
