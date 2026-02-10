@@ -20,83 +20,83 @@
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1">
 
-    <stylesheets>
-        <URL value="@../../styles/dashboard/label.css" />
-        <URL value="@../../styles/dashboard/inputfield.css" />
-        <URL value="@../../styles/dashboard/buttons.css" />
-        <URL value="@../../styles/dashboard/table.css" />
-    </stylesheets>
-
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+   <stylesheets>
+      <URL value="@../../styles/dashboard/label.css" />
+      <URL value="@../../styles/dashboard/inputfield.css" />
+      <URL value="@../../styles/dashboard/buttons.css" />
+      <URL value="@../../styles/dashboard/table.css" />
+   </stylesheets>
+   
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 
             <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="385.0" spacing="3.0" HBox.hgrow="ALWAYS">
-                <Button mnemonicParsing="false" styleClass="offenseTabButton" text="All" />
-                <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Junior High" />
-                <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Senior High" />
-                <Button mnemonicParsing="false" styleClass="offenseTabButton" text="College" />
+                  <Button mnemonicParsing="false" styleClass="offenseTabButton" text="All" />
+                  <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Junior High" />
+                  <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Senior High" />
+                  <Button mnemonicParsing="false" styleClass="offenseTabButton" text="College" />
             </HBox>
 
             <Region prefHeight="33.0" prefWidth="551.0" HBox.hgrow="ALWAYS" />
 
             <HBox alignment="CENTER" fillHeight="false" prefHeight="33.0" prefWidth="221.0" styleClass="addButton" HBox.hgrow="NEVER">
-                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                    <image><Image url="@../../assets/add-icon.png" /></image>
-                </ImageView>
-                <Button mnemonicParsing="false" text="Add Violation" />
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image><Image url="@../../assets/add-icon.png" /></image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" text="Add Violation" />
             </HBox>
 
-            <padding><Insets bottom="10.0" top="10.0" /></padding>
-            <BorderPane.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></BorderPane.margin>
+         <padding><Insets bottom="10.0" top="10.0" /></padding>
+         <BorderPane.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></BorderPane.margin>
 
-        </HBox>
-    </top>
+      </HBox>
+   </top>
 
-    <center>
-        <VBox styleClass="borderColorContainer" BorderPane.alignment="CENTER">
+   <center>
+      <VBox styleClass="borderColorContainer" BorderPane.alignment="CENTER">
 
-            <padding><Insets left="10.0" right="10.0" /></padding>
+         <padding><Insets left="10.0" right="10.0" /></padding>
 
-            <HBox alignment="CENTER" prefHeight="50.0">
+         <HBox alignment="CENTER" prefHeight="50.0">
 
-                <Label styleClass="labelTitle" text="Violations" />
-                <Region HBox.hgrow="ALWAYS" />
+            <Label styleClass="labelTitle" text="Violations" />
+            <Region HBox.hgrow="ALWAYS" />
 
-                <HBox alignment="CENTER" prefHeight="33.0" prefWidth="188.0" styleClass="borderSearchTextField">
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="188.0" styleClass="borderSearchTextField">
 
-                    <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                        <image><Image url="@../../assets/search-icon.png" /></image>
-                    </ImageView>
-                    <TextField prefHeight="25.0" prefWidth="179.0" promptText="Search..." styleClass="searchTextField" />
+               <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                  <image><Image url="@../../assets/search-icon.png" /></image>
+               </ImageView>
+               <TextField prefHeight="25.0" prefWidth="179.0" promptText="Search..." styleClass="searchTextField" />
 
-                    <HBox.margin><Insets bottom="10.0" top="10.0" /></HBox.margin>
-                </HBox>
-
+               <HBox.margin><Insets bottom="10.0" top="10.0" /></HBox.margin>
             </HBox>
 
-            <Pane prefHeight="3.0" styleClass="linePaneColor">
-                <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
-            </Pane>
+         </HBox>
 
-            <TableView VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn prefWidth="250.0" text="Student ID" />
-                    <TableColumn prefWidth="250.0" text="Student Name" />
-                    <TableColumn prefWidth="250.0" text="Level of Offense" />
-                    <TableColumn prefWidth="250.0" text="Offense Type" />
-                    <TableColumn prefWidth="150.0" text="Date" />
-                    <TableColumn prefWidth="20.0" />
-                </columns>
+         <Pane prefHeight="3.0" styleClass="linePaneColor">
+            <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
+         </Pane>
 
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                </columnResizePolicy>
+         <TableView VBox.vgrow="ALWAYS">
+            <columns>
+               <TableColumn prefWidth="250.0" text="Student ID" />
+               <TableColumn prefWidth="250.0" text="Student Name" />
+               <TableColumn prefWidth="250.0" text="Level of Offense" />
+               <TableColumn prefWidth="250.0" text="Offense Type" />
+               <TableColumn prefWidth="150.0" text="Date" />
+               <TableColumn prefWidth="20.0" />
+            </columns>
 
-                <VBox.margin><Insets bottom="10.0" /></VBox.margin>
-            </TableView>
+            <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
 
-            <BorderPane.margin><Insets bottom="10.0" left="10.0" right="10.0" /></BorderPane.margin>
+            <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+         </TableView>
 
-        </VBox>
-    </center>
+         <BorderPane.margin><Insets bottom="10.0" left="10.0" right="10.0" /></BorderPane.margin>
+
+      </VBox>
+   </center>
 </BorderPane>
