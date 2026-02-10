@@ -1,0 +1,73 @@
+.submitOffenseButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #2090ff;
+    -fx-spacing: 5;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+.submitOffenseButton:hover {
+    -fx-background-color: #0000FF;
+}
+.closeButton {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(0,0,0,0);
+}
+.closeButton:hover{
+    -fx-border-color: rgb(255, 0, 0);
+}
+
+.cancelButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #ff5e5e;
+}
+.submitButton {
+    -fx-pref-width: 120;
+    -fx-pref-height: 80;
+    -fx-background-color: #2090ff;
+    -fx-spacing: 5;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+.cancelButton:hover {
+    -fx-background-color: #FF0000;
+}
+.submitButton:hover {
+    -fx-background-color: #0000FF;
+}
+.offenseTabButton {
+    -fx-font-size: 15;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+}
+.offenseTabButton:focused{
+    -fx-background-color: #76baff;
+}
+.addButton {
+    -fx-pref-width: 200;
+    -fx-background-color: #0057ae;
+}
+.addButton Button{
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+}
+.addButton:hover {
+    -fx-background-color: #0000FF;
+}
+.dashboardButtons{
+    -fx-cursor: hand;
+    -fx-border: none;
+    -fx-pref-width: 200;
+    -fx-background-color: transparent;
+    -fx-padding:10 0 10 40;
+    -fx-spacing:15;
+    -fx-alignment: center-left;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+    -fx-max-width: infinity;
+}
+.dashboardButtons:hover {
+    -fx-background-color: rgba(0, 0, 255, 0.22);
+}

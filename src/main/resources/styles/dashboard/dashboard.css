@@ -6,6 +6,7 @@
 .mainContentWrapper {
     -fx-background-color: #f8f9fc;
     -fx-alignment: TOP_CENTER;
+    -fx-padding: 0;
 }
 
 .topBar {
@@ -66,6 +67,8 @@
 .contentArea {
     -fx-padding: 20 25;
     -fx-spacing: 25;
+    -fx-max-width: 1200;
+    -fx-pref-width: 1200;
 }
 
 .statsRow {
@@ -78,7 +81,7 @@
     -fx-padding: 20;
     -fx-background-radius: 12;
     -fx-pref-width: 230;
-    -fx-max-width: 320;
+    -fx-max-width: 280;
     -fx-alignment: CENTER;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
 }
@@ -100,7 +103,7 @@
     -fx-background-radius: 12;
     -fx-padding: 15;
     -fx-pref-width: 280;
-    -fx-max-width: 380;
+    -fx-max-width: 320;
     -fx-alignment: CENTER;
 }
 

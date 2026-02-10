@@ -103,7 +103,7 @@
 
     <center>
         <StackPane styleClass="mainContentWrapper">
-            <VBox styleClass="contentArea" maxWidth="1200">
+            <VBox styleClass="contentArea">
 
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
