@@ -5,45 +5,46 @@ import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.login.Student;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class OffenseDaoImpl implements OffenseDao
 {
 
     @Override
-    public Student getStudentById(String StudentId)
+    public ArrayList<Student> getStudentById(String StudentId)
     {
-        Student student = new Student();
-
+        ArrayList<Student> studentOffenceList = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "    SELECT" +
-                    "    e.studentID," +
-                    "    p.lastName || ', ' || p.firstName AS studentName," +
-                    "    o.type AS offense_type," +
-                    "    r.dateOfViolation" +
-                    "    FROM person p" +
-                    "    JOIN login l ON p.personID = l.personID" +
-                    "    JOIN student s ON l.id = s.userID" +
-                    "    JOIN enrollment e ON s.studentID = e.studentID" +
-                    "    JOIN record r ON r.enrollmentID = e.enrollmentID" +
-                    "    JOIN offense o ON r.offenseID = o.offenseID" +
-                    "    WHERE e.studentID = ?" +
-                    "    ORDER BY r.dateOfViolation DESC;");
+                    "SELECT " +
+                            "e.studentID, " +
+                            "p.lastName || ', ' || p.firstName AS studentName, " +
+                            "o.type AS offense_type, " +
+                            "r.dateOfViolation " +
+                            "FROM person p " +
+                            "JOIN student s ON p.personID = s.personID " +
+                            "JOIN enrollment e ON s.studentID = e.studentID " +
+                            "JOIN record r ON r.enrollmentID = e.enrollmentID " +
+                            "JOIN offense o ON r.offenseID = o.offenseID " +
+                            "WHERE e.studentID = ? " +
+                            "ORDER BY r.dateOfViolation DESC");
             statement.setString(1, StudentId);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
+                Student student = new Student();
                 student.setStudentID(String.valueOf(rs.getLong("studentID")));
                 student.setStudentName(rs.getString("studentName"));
                 student.setOffenseType(rs.getString("offense_type"));
                 student.setDateOfViolation(rs.getDate("dateOfViolation"));
+                studentOffenceList.add(student);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return student;
+        return studentOffenceList;
     }
 
     @Override
