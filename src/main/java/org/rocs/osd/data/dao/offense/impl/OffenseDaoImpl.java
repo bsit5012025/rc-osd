@@ -2,9 +2,13 @@ package org.rocs.osd.data.dao.offense.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.offense.OffenseDao;
-import org.rocs.osd.model.login.Student;
+import org.rocs.osd.model.student.Student;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 public class OffenseDaoImpl implements OffenseDao
@@ -14,11 +18,13 @@ public class OffenseDaoImpl implements OffenseDao
     public ArrayList<Student> getStudentById(String StudentId)
     {
         ArrayList<Student> studentOffenceList = new ArrayList<>();
-        try (Connection conn = ConnectionHelper.getConnection()) {
+        try (Connection conn = ConnectionHelper.getConnection())
+        {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT " +
+                        "SELECT " +
                             "e.studentID, " +
-                            "p.lastName || ', ' || p.firstName AS studentName, " +
+                            "p.lastName,  " +
+                                "p.firstName, " +
                             "o.type AS offense_type, " +
                             "r.dateOfViolation " +
                             "FROM person p " +
@@ -28,13 +34,15 @@ public class OffenseDaoImpl implements OffenseDao
                             "JOIN offense o ON r.offenseID = o.offenseID " +
                             "WHERE e.studentID = ? " +
                             "ORDER BY r.dateOfViolation DESC");
+
             statement.setString(1, StudentId);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
                 Student student = new Student();
-                student.setStudentID(String.valueOf(rs.getLong("studentID")));
-                student.setStudentName(rs.getString("studentName"));
+                student.setStudentID(rs.getString("studentID"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setLastName(rs.getString("lastName"));
                 student.setOffenseType(rs.getString("offense_type"));
                 student.setDateOfViolation(rs.getDate("dateOfViolation"));
                 studentOffenceList.add(student);
@@ -48,7 +56,7 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public void addStudentViolation(String recordID, String enrollmentID, String prefectID,
+    public boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
                                     String offenseID, String dateOfViolation, String actionID,
                                     String remarks, String status)
     {
@@ -76,10 +84,14 @@ public class OffenseDaoImpl implements OffenseDao
             stmt.setString(7, remarks);
             stmt.setString(8, status);
             stmt.executeUpdate();
+
+            return true;
         }
         catch (SQLException e)
         {
             System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
         }
     }
 }
