@@ -2,7 +2,7 @@ package org.rocs.osd.model.offense;
 
 public class Offense {
 
-    private String offenseId;
+    private long offenseId;
     private String offense;
     private String type;
     private String description;
@@ -10,18 +10,18 @@ public class Offense {
     public Offense() {
     }
 
-    public Offense(String offenseId, String offense, String type, String description) {
+    public Offense(long offenseId, String offense, String type, String description) {
         this.offenseId = offenseId;
         this.offense = offense;
         this.type = type;
         this.description = description;
     }
 
-    public String getOffenseId() {
+    public long getOffenseId() {
         return offenseId;
     }
 
-    public void setOffenseId(String offenseId) {
+    public void setOffenseId(long offenseId) {
         this.offenseId = offenseId;
     }
 

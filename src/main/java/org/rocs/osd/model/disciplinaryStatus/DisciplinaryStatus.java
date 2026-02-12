@@ -2,24 +2,24 @@ package org.rocs.osd.model.disciplinaryStatus;
 
 public class DisciplinaryStatus {
 
-    private String disciplinaryStatusId;
+    private long disciplinaryStatusId;
     private String status;
     private String description;
 
     public DisciplinaryStatus() {
     }
 
-    public DisciplinaryStatus(String disciplinaryStatusId, String status, String description) {
+    public DisciplinaryStatus(long disciplinaryStatusId, String status, String description) {
         this.disciplinaryStatusId = disciplinaryStatusId;
         this.status = status;
         this.description = description;
     }
 
-    public String getDisciplinaryStatusId() {
+    public long getDisciplinaryStatusId() {
         return disciplinaryStatusId;
     }
 
-    public void setDisciplinaryStatusId(String disciplinaryStatusId) {
+    public void setDisciplinaryStatusId(long disciplinaryStatusId) {
         this.disciplinaryStatusId = disciplinaryStatusId;
     }
 

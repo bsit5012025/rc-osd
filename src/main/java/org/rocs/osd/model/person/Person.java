@@ -1,7 +1,7 @@
 package org.rocs.osd.model.person;
 
 public class Person {
-    private Long personID;
+    private long personID;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -9,18 +9,18 @@ public class Person {
     public Person() {
     }
 
-    public Person(Long personID, String lastName, String firstName, String middleName) {
+    public Person(long personID, String lastName, String firstName, String middleName) {
         this.personID = personID;
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
     }
 
-    public Long getPersonID() {
+    public long getPersonID() {
         return personID;
     }
 
-    public void setPersonID(Long personID) {
+    public void setPersonID(long personID) {
         this.personID = personID;
     }
 

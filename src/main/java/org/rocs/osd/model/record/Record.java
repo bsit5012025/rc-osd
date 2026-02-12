@@ -3,7 +3,7 @@ package org.rocs.osd.model.record;
 import java.util.Date;
 
 public class Record {
-    private String recordId;
+    private long recordId;
     private String enrollmentId;
     private String employeeId;
     private String offenseId;
@@ -16,7 +16,7 @@ public class Record {
     public Record() {
     }
 
-    public Record(String recordId, String enrollmentId, String employeeId, String offenseId, Date dateOfViolation, String actionId, Date dateOfResolution, String remarks, String status) {
+    public Record(long recordId, String enrollmentId, String employeeId, String offenseId, Date dateOfViolation, String actionId, Date dateOfResolution, String remarks, String status) {
         this.recordId = recordId;
         this.enrollmentId = enrollmentId;
         this.employeeId = employeeId;
@@ -28,11 +28,11 @@ public class Record {
         this.status = status;
     }
 
-    public String getRecordId() {
+    public long getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(String recordId) {
+    public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 

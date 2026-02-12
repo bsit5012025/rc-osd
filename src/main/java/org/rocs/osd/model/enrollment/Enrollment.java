@@ -1,7 +1,7 @@
 package org.rocs.osd.model.enrollment;
 
 public class Enrollment {
-    private String enrollmentId;
+    private long enrollmentId;
     private String studentId;
     private String schoolYear;
     private String studentLevel;
@@ -12,7 +12,7 @@ public class Enrollment {
     public Enrollment() {
     }
 
-    public Enrollment(String enrollmentId, String studentId, String schoolYear, String studentLevel, String section, String departmentId, String disciplinaryStatusId) {
+    public Enrollment(long enrollmentId, String studentId, String schoolYear, String studentLevel, String section, String departmentId, String disciplinaryStatusId) {
         this.enrollmentId = enrollmentId;
         this.studentId = studentId;
         this.schoolYear = schoolYear;
@@ -22,11 +22,11 @@ public class Enrollment {
         this.disciplinaryStatusId = disciplinaryStatusId;
     }
 
-    public String getEnrollmentId() {
+    public long getEnrollmentId() {
         return enrollmentId;
     }
 
-    public void setEnrollmentId(String enrollmentId) {
+    public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 

@@ -1,24 +1,24 @@
 package org.rocs.osd.model.disciplinaryAction;
 
 public class DisciplinaryAction {
-    private String actionId;
+    private long actionId;
     private String actionName;
     private String description;
 
     public DisciplinaryAction() {
     }
 
-    public DisciplinaryAction(String actionId, String actionName, String description) {
+    public DisciplinaryAction(long actionId, String actionName, String description) {
         this.actionId = actionId;
         this.actionName = actionName;
         this.description = description;
     }
 
-    public String getActionId() {
+    public long getActionId() {
         return actionId;
     }
 
-    public void setActionId(String actionId) {
+    public void setActionId(long actionId) {
         this.actionId = actionId;
     }
 

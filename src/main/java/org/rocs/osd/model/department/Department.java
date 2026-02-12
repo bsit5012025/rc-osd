@@ -1,22 +1,22 @@
 package org.rocs.osd.model.department;
 
 public class Department {
-    private String departmentId;
+    private long departmentId;
     private String departmentName;
 
     public Department() {
     }
 
-    public Department(String departmentId, String departmentName) {
+    public Department(long departmentId, String departmentName) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
     }
 
-    public String getDepartmentId() {
+    public long getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(String departmentId) {
+    public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
 
