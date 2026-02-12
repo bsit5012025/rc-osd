@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="dashboardRoot"
-            fx:controller="org.rocs.osd.controller.login.LoginController"
+<BorderPane fx:controller="org.rocs.osd.controller.login.LoginController"
             stylesheets="@../../styles/dashboard/dashboard.css"
+            styleClass="dashboardRoot"
             xmlns="http://javafx.com/javafx/"
             xmlns:fx="http://javafx.com/fxml/1">
 
@@ -44,57 +44,50 @@
             </HBox>
 
             <VBox styleClass="navContainer" VBox.vgrow="ALWAYS">
-                <Button maxWidth="Infinity" styleClass="sidebarItem" text="Dashboard">
+                <Button styleClass="sidebarItem" text="Dashboard">
                     <graphic>
-                        <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/dashboard.png" />
-                        </ImageView>
+                        <ImageView fitHeight="24"
+                                   fitWidth="24">
+                            <Image url="@../../assets/dashboard.png" /></ImageView>
                     </graphic>
                 </Button>
-
-                <Button maxWidth="Infinity" styleClass="sidebarItem" text="Students">
+                <Button styleClass="sidebarItem" text="Students">
                     <graphic>
                         <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/student.png" />
-                        </ImageView>
+                            <Image url="@../../assets/student.png" /></ImageView>
                     </graphic>
                 </Button>
-
-                <Button maxWidth="Infinity" styleClass="sidebarItem" text="Offenses">
+                <Button styleClass="sidebarItem" text="Offenses">
                     <graphic>
-                        <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/offenses.png" />
-                        </ImageView>
+                        <ImageView fitHeight="24"
+                                   fitWidth="24">
+                            <Image url="@../../assets/offenses.png" /></ImageView>
                     </graphic>
                 </Button>
-
-                <Button maxWidth="Infinity" styleClass="sidebarItem" text="Appeals">
+                <Button styleClass="sidebarItem" text="Appeals">
                     <graphic>
-                        <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/appeal.png" />
-                        </ImageView>
+                        <ImageView fitHeight="24"
+                                   fitWidth="24">
+                            <Image url="@../../assets/appeal.png" /></ImageView>
                     </graphic>
                 </Button>
-
-                <Button maxWidth="Infinity" styleClass="sidebarItem" text="Requests">
+                <Button styleClass="sidebarItem" text="Requests">
                     <graphic>
-                        <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/request.png" />
-                        </ImageView>
+                        <ImageView fitHeight="24"
+                                   fitWidth="24">
+                            <Image url="@../../assets/request.png" /></ImageView>
                     </graphic>
                 </Button>
 
                 <Pane VBox.vgrow="ALWAYS" />
 
-                <Button maxWidth="Infinity"
+                <Button fx:id="logoutButton"
                         styleClass="sidebarItem, logout"
-                        text="Logout"
-                        fx:id="logoutButton"
-                        onAction="#onLogout">
+                        text="Logout" onAction="#onLogout">
                     <graphic>
-                        <ImageView fitHeight="24" fitWidth="24">
-                            <Image url="@../../assets/logout.png" />
-                        </ImageView>
+                        <ImageView fitHeight="24"
+                                   fitWidth="24">
+                            <Image url="@../../assets/logout.png" /></ImageView>
                     </graphic>
                 </Button>
             </VBox>
@@ -104,26 +97,22 @@
     <center>
         <StackPane styleClass="mainContentWrapper">
             <VBox styleClass="contentArea">
-
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Total Violations" />
                         <Label styleClass="statValue" text="200" />
-                        <ProgressBar maxWidth="Infinity" progress="0.85" />
+                        <ProgressBar maxWidth="1200" progress="0.85" />
                     </VBox>
-
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Pending Appeals" />
                         <Label styleClass="statValue" text="5" />
-                        <ProgressBar maxWidth="Infinity" progress="0.25" />
+                        <ProgressBar maxWidth="1200" progress="0.25" />
                     </VBox>
-
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Offenses Today" />
                         <Label styleClass="statValue" text="25" />
-                        <ProgressBar maxWidth="Infinity" progress="0.45" />
+                        <ProgressBar maxWidth="1200" progress="0.45" />
                     </VBox>
-
                     <VBox styleClass="dateCard" HBox.hgrow="ALWAYS">
                         <HBox styleClass="dateContent">
                             <VBox styleClass="dateVerticalStack">
@@ -146,23 +135,23 @@
                     <VBox styleClass="offenseList">
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="Cheating" />
-                            <ProgressBar maxWidth="Infinity" progress="0.75" HBox.hgrow="ALWAYS" />
+                            <ProgressBar maxWidth="1200" progress="0.75" HBox.hgrow="ALWAYS" />
                         </HBox>
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="Punching" />
-                            <ProgressBar maxWidth="Infinity" progress="0.65" HBox.hgrow="ALWAYS" />
+                            <ProgressBar maxWidth="1200" progress="0.65" HBox.hgrow="ALWAYS" />
                         </HBox>
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="Improper Uniform" />
-                            <ProgressBar maxWidth="Infinity" progress="0.55" HBox.hgrow="ALWAYS" />
+                            <ProgressBar maxWidth="1200" progress="0.55" HBox.hgrow="ALWAYS" />
                         </HBox>
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="Vaping" />
-                            <ProgressBar maxWidth="Infinity" progress="0.42" HBox.hgrow="ALWAYS" />
+                            <ProgressBar maxWidth="1200" progress="0.42" HBox.hgrow="ALWAYS" />
                         </HBox>
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="PDA" />
-                            <ProgressBar maxWidth="Infinity" progress="0.82" HBox.hgrow="ALWAYS" />
+                            <ProgressBar maxWidth="1200" progress="0.82" HBox.hgrow="ALWAYS" />
                         </HBox>
                     </VBox>
                 </VBox>
