@@ -12,8 +12,6 @@ public interface OffenseDao
     Student getStudentByName(String lastName, String firstName, String middleName);
     ArrayList<Record> getStudentRecord(String studentID);
     Offense getStudentOffense(String offenseID);
-
-
     boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
                              String offenseID, String dateOfViolation, String actionID,
                              String remarks, String status);

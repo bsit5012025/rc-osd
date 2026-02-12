@@ -46,8 +46,8 @@ public class OffenseDaoImpl implements OffenseDao
                 student.setStudentType(rs.getString("studentType"));
                 student.setDepartmentId(rs.getString("departmentID"));
                 student.setLastName(rs.getString("lastName"));
-                student.setLastName(rs.getString("firstName"));
-                student.setLastName(rs.getString("middleName"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setMiddleName(rs.getString("middleName"));
             }
 
         } catch (SQLException e) {
@@ -92,8 +92,8 @@ public class OffenseDaoImpl implements OffenseDao
                 student.setStudentType(rs.getString("studentType"));
                 student.setDepartmentId(rs.getString("departmentID"));
                 student.setLastName(rs.getString("lastName"));
-                student.setLastName(rs.getString("firstName"));
-                student.setLastName(rs.getString("middleName"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setMiddleName(rs.getString("middleName"));
             }
 
         } catch (SQLException e) {
@@ -131,8 +131,9 @@ public class OffenseDaoImpl implements OffenseDao
             while (rs.next())
             {
                 Record record = new Record();
-                record.setRecordId(rs.getString("studentID"));
-                record.setEnrollmentId(rs.getString("employeeID"));
+                record.setRecordId(rs.getString("recordID"));
+                record.setEnrollmentId(rs.getString("enrollmentID"));
+                record.setEmployeeId(rs.getString("employeeID"));
                 record.setOffenseId(rs.getString("offenseID"));
                 record.setDateOfViolation(rs.getDate("dateOfViolation"));
                 record.setActionId(rs.getString("actionID"));
