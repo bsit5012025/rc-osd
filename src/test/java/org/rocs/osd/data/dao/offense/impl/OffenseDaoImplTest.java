@@ -15,10 +15,7 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -186,7 +183,7 @@ class OffenseDaoImplTest
 
         OffenseDao dao = new OffenseDaoImpl();
         boolean status = dao.addStudentViolation("R-005", "E-003", "DO-001", "OFF-004",
-                "2025-03-08", "D-002", "Bullying incident reported", "Resolved");
+                java.sql.Date.valueOf("2025-03-08"), "D-002", "Bullying incident reported", "Resolved");
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
@@ -194,7 +191,7 @@ class OffenseDaoImplTest
         verify(preparedStatement).setString(2, "E-003");
         verify(preparedStatement).setString(3, "DO-001");
         verify(preparedStatement).setString(4, "OFF-004");
-        verify(preparedStatement).setString(5, "2025-03-08");
+        verify(preparedStatement).setDate(5, java.sql.Date.valueOf("2025-03-08"));
         verify(preparedStatement).setString(6, "D-002");
         verify(preparedStatement).setString(7, "Bullying incident reported");
         verify(preparedStatement).setString(8, "Resolved");
