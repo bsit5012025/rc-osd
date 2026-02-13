@@ -4,6 +4,7 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public interface OffenseDao
@@ -13,6 +14,6 @@ public interface OffenseDao
     ArrayList<Record> getStudentRecord(String studentID);
     Offense getStudentOffense(String offenseID);
     boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
-                             String offenseID, String dateOfViolation, String actionID,
-                             String remarks, String status);
+                                String offenseID, Date dateOfViolation, String actionID,
+                                String remarks, String status);
 }

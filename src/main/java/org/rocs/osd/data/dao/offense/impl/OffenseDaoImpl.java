@@ -6,10 +6,7 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class OffenseDaoImpl implements OffenseDao
@@ -184,8 +181,8 @@ public class OffenseDaoImpl implements OffenseDao
 
     @Override
     public boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
-                                    String offenseID, String dateOfViolation, String actionID,
-                                    String remarks, String status)
+                                       String offenseID, Date dateOfViolation, String actionID,
+                                       String remarks, String status)
     {
 
         try (Connection con = ConnectionHelper.getConnection())
@@ -206,7 +203,7 @@ public class OffenseDaoImpl implements OffenseDao
             stmt.setString(2, enrollmentID);
             stmt.setString(3, prefectID);
             stmt.setString(4, offenseID);
-            stmt.setString(5, dateOfViolation);
+            stmt.setDate(5, dateOfViolation);
             stmt.setString(6, actionID);
             stmt.setString(7, remarks);
             stmt.setString(8, status);
