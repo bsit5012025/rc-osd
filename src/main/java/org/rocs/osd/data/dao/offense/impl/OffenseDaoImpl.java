@@ -14,20 +14,13 @@ import java.util.ArrayList;
 
 public class OffenseDaoImpl implements OffenseDao
 {
-
-
     @Override
-    public boolean editExistingViolationStatus() {
+    public boolean editExistingViolation(String recordID, String status, String OffenseID, String remarks, String DateOfResolution) {
         return false;
     }
 
     @Override
-    public boolean editExistingViolationRemarks() {
-        return false;
-    }
-
-    @Override
-    public boolean editExistingViolationDateOfResolution() {
+    public boolean editExistingDateOfViolation(String recordID, String DateOfResolution) {
         return false;
     }
 }

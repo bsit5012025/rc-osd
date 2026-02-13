@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public interface OffenseDao
 {
-    boolean editExistingViolationStatus();
-    boolean editExistingViolationRemarks();
-    boolean editExistingViolationDateOfResolution();
+    boolean editExistingViolation(String recordID, String status, String OffenseID,
+                                  String remarks, String DateOfResolution);
+
+    boolean editExistingDateOfViolation(String recordID, String DateOfResolution);
 }
