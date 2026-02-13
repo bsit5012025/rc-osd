@@ -77,7 +77,7 @@ public class OffenseDaoImpl implements OffenseDao
                             "JOIN person p ON s.personID = p.personID" +
                             "WHERE p.lastName = ?" +
                             "AND p.firstName = ?" +
-                            "AND p.middleName = ?;");
+                            "AND p.middleName = ?");
 
             statement.setString(1, lastName);
             statement.setString(2, firstName);
@@ -123,7 +123,7 @@ public class OffenseDaoImpl implements OffenseDao
                                 "FROM record r" +
                                 "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
                                 "JOIN student s ON e.studentID = s.studentID " +
-                                "WHERE s.studentID = ?;");
+                                "WHERE s.studentID = ?");
 
             statement.setString(1, studentID);
             ResultSet rs = statement.executeQuery();
@@ -162,7 +162,7 @@ public class OffenseDaoImpl implements OffenseDao
                             "o.offense," +
                             "o.type," +
                             "o.description" +
-                            "FROM offense o where offenseID = ?;");
+                            "FROM offense o where offenseID = ?");
 
             statement.setString(1, offenseID);
             ResultSet rs = statement.executeQuery();
@@ -200,7 +200,7 @@ public class OffenseDaoImpl implements OffenseDao
                     "    actionID," +
                     "    remarks," +
                     "    status" +
-                    "    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+                    "    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
             stmt.setString(1, recordID);
             stmt.setString(2, enrollmentID);
