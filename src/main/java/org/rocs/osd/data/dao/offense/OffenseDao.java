@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public interface OffenseDao
 {
     boolean editExistingViolation(String recordID, String status, String OffenseID,
-                                  String remarks, Date DateOfResolution);
+                                  String remarks);
 
     boolean editExistingDateOfViolation(String recordID, Date dateOfViolation);
+    boolean editExistingDateOfResolution(String recordID, Date dateOfResolution);
 }
