@@ -17,7 +17,7 @@
 <AnchorPane fx:id="dashboard"
             styleClass="dashboard"
             stylesheets="@../../styles/dashboard/dashboard.css"
-            xmlns="http://javafx.com/javafx/25"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.rocs.osd.controller.login.LoginController">
 
