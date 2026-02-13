@@ -20,11 +20,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<!--TODO: Replace current xlmns to xmlns="http://javafx.com/javafx/21" to match with our current jdk version which is JDK21-->
+
 <StackPane fx:id="addViolationModal"
            styleClass="modalContainer"
            stylesheets="@../../styles/dashboard/container.css"
-           xmlns="http://javafx.com/javafx/25"
+           xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.rocs.osd.controller.login.LoginController">
 

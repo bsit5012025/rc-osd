@@ -11,10 +11,10 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Button?>
-<!--TODO: Replace current xlmns to xmlns="http://javafx.com/javafx/21" to match with our current jdk version which is JDK21-->
+
 <?import javafx.scene.control.CheckBox?>
 <AnchorPane fx:id="root"
-            xmlns="http://javafx.com/javafx/17"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.rocs.osd.controller.login.LoginController"
             stylesheets="@../../styles/login/login.css">
