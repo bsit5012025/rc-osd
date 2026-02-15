@@ -16,16 +16,45 @@
 
 <BorderPane fx:controller="org.rocs.osd.controller.login.LoginController"
             stylesheets="@../../styles/dashboard/dashboard.css"
-            styleClass="dashboardRoot"
-            xmlns="http://javafx.com/javafx/"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.login.LoginController">
 
-    <top>
-        <HBox styleClass="topBar">
-            <VBox styleClass="logoContainer">
-                <ImageView fitHeight="45.0" fitWidth="45.0" preserveRatio="true">
-                    <Image url="@../../assets/RC_LOGO.png" />
-                </ImageView>
+    <stylesheets>
+        <URL value="@../../styles/dashboard/buttons.css" />
+        <URL value="@../../styles/dashboard/label.css" />
+        <URL value="@../../styles/dashboard/table.css" />
+    </stylesheets>
+
+    <StackPane AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
+        <HBox>
+            <VBox styleClass="menuBarContainer">
+
+                <HBox styleClass="logoContainer">
+                    <ImageView fitHeight="163.0" fitWidth="146.0" preserveRatio="true">
+                        <Image url="@../../assets/RC_LOGO.png" />
+                    </ImageView>
+
+                    <VBox styleClass="logoTextContainer">
+                        <Label id="rcText" text="Rogationist" />
+                        <Label id="rcText" text="College" />
+                    </VBox>
+                </HBox>
+
+                <VBox styleClass="buttonContainer">
+                    <Button fx:id="dashboardBtn" styleClass="dashboardButtons" text="Dashboard" />
+                    <Button fx:id="recordBtn" styleClass="dashboardButtons" text="Records" />
+                    <Button fx:id="recordViolationBtn" styleClass="dashboardButtons" text="Record Violation" />
+                    <Button fx:id="violationBtn" styleClass="dashboardButtons" text="Violations" />
+                    <Button fx:id="studentAppealBtn" styleClass="dashboardButtons" text="Student Appeals" />
+                    <Button fx:id="permissionBtn" styleClass="dashboardButtons" text="Permissions" />
+                    <Button fx:id="settingBtn" styleClass="dashboardButtons" text="Settings" />
+                    <Button fx:id="logoutBtn" onAction="#onLogout" styleClass="dashboardButtons" text="Logout" />
+                </VBox>
+
             </VBox>
             <Label styleClass="schoolName" text="Rogationist College" />
         </HBox>

@@ -14,7 +14,7 @@
 
 <?import javafx.scene.control.CheckBox?>
 <AnchorPane fx:id="root"
-            xmlns="http://javafx.com/javafx/17"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.rocs.osd.controller.login.LoginController"
             stylesheets="@../../styles/login/login.css">
