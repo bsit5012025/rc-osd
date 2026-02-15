@@ -13,7 +13,7 @@ public interface OffenseDao
     Student getStudentByName(String lastName, String firstName, String middleName);
     ArrayList<Record> getStudentRecord(String studentID);
     Offense getStudentOffense(String offenseID);
-    boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
-                                String offenseID, Date dateOfViolation, String actionID,
+    boolean addStudentViolation(Long enrollmentID, String employeeID,
+                                Long offenseID, Date dateOfViolation, Long actionID,
                                 String remarks, String status);
 }
