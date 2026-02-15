@@ -187,13 +187,13 @@ class OffenseDaoImplTest
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        when(resultSet.getString("recordID")).thenReturn("R-001");;
-        when(resultSet.getString("enrollmentID")).thenReturn("E-001");
+        when(resultSet.getLong("recordID")).thenReturn(Long.valueOf(1));
+        when(resultSet.getLong("enrollmentID")).thenReturn(Long.valueOf(1));
         when(resultSet.getString("employeeID")).thenReturn("EMP-002");
-        when(resultSet.getString("offenseID")).thenReturn("OFF-001");
-        when(resultSet.getDate("dateOfViolation")).thenReturn(java.sql.Date.valueOf("2024-09-15"));
-        when(resultSet.getString("actionID")).thenReturn("D-001");
-        when(resultSet.getDate("dateOfResolution")).thenReturn(java.sql.Date.valueOf("2024-09-20"));
+        when(resultSet.getLong("offenseID")).thenReturn(Long.valueOf(1));
+        when(resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2024-09-15"));
+        when(resultSet.getLong("actionID")).thenReturn(Long.valueOf(1));
+        when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
         when(resultSet.getString("status")).thenReturn("Pending");
 
@@ -203,13 +203,13 @@ class OffenseDaoImplTest
 
         assertFalse(studentRecordList.isEmpty());
         assertNotNull(record);
-        assertEquals("R-001", record.getRecordId());
-        assertEquals("E-001", record.getEnrollmentId());
+        assertEquals(1, record.getRecordId());
+        assertEquals(1, record.getEnrollmentId());
         assertEquals("EMP-002", record.getEmployeeId());
-        assertEquals("OFF-001", record.getOffenseId());
-        assertEquals(java.sql.Date.valueOf("2024-09-15"), record.getDateOfViolation());
-        assertEquals("D-001", record.getActionId());
-        assertEquals(java.sql.Date.valueOf("2024-09-20"), record.getDateOfResolution());
+        assertEquals(1, record.getOffenseId());
+        assertEquals(Date.valueOf("2024-09-15"), record.getDateOfViolation());
+        assertEquals(1, record.getActionId());
+        assertEquals(Date.valueOf("2024-09-20"), record.getDateOfResolution());
         assertEquals("Student caught vaping in school", record.getRemarks());
         assertEquals("Pending", record.getStatus());
 
@@ -224,7 +224,7 @@ class OffenseDaoImplTest
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        when(resultSet.getString("offenseID")).thenReturn("OFF-001");
+        when(resultSet.getLong("offenseID")).thenReturn(Long.valueOf(1));
         when(resultSet.getString("offense")).thenReturn("Vaping");
         when(resultSet.getString("type")).thenReturn("Major Offense");
         when(resultSet.getString("description")).thenReturn("Bringing vape");
@@ -232,7 +232,7 @@ class OffenseDaoImplTest
         OffenseDao dao = new OffenseDaoImpl();
         Offense offense = dao.getStudentOffense("OFF-001");
 
-        assertEquals("OFF-001", offense.getOffenseId());
+        assertEquals(1, offense.getOffenseId());
         assertEquals("Vaping", offense.getOffense());
         assertEquals("Major Offense", offense.getType());
         assertEquals("Bringing vape", offense.getDescription());
@@ -248,19 +248,19 @@ class OffenseDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         OffenseDao dao = new OffenseDaoImpl();
-        boolean status = dao.addStudentViolation("R-005", "E-003", "DO-001", "OFF-004",
-                java.sql.Date.valueOf("2025-03-08"), "D-002", "Bullying incident reported", "Resolved");
+        boolean status = dao.addStudentViolation(Long.valueOf(3), "EMP-002",
+                Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
+                "Bullying incident reported","Resolved");
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setString(1, "R-005");
-        verify(preparedStatement).setString(2, "E-003");
-        verify(preparedStatement).setString(3, "DO-001");
-        verify(preparedStatement).setString(4, "OFF-004");
-        verify(preparedStatement).setDate(5, java.sql.Date.valueOf("2025-03-08"));
-        verify(preparedStatement).setString(6, "D-002");
-        verify(preparedStatement).setString(7, "Bullying incident reported");
-        verify(preparedStatement).setString(8, "Resolved");
+        verify(preparedStatement).setLong(1, Long.valueOf(3));
+        verify(preparedStatement).setString(2, "EMP-002");
+        verify(preparedStatement).setLong(3, Long.valueOf(4));
+        verify(preparedStatement).setDate(4, Date.valueOf("2025-03-08"));
+        verify(preparedStatement).setLong(5, Long.valueOf(2));
+        verify(preparedStatement).setString(6, "Bullying incident reported");
+        verify(preparedStatement).setString(7, "Resolved");
         verify(preparedStatement).executeUpdate();
     }
 }

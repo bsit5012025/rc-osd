@@ -6,11 +6,101 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class OffenseDaoImpl implements OffenseDao
 {
+
+    @Override
+    public ArrayList<Student> getAllStudent() {
+        ArrayList<Student> studentList = new ArrayList<>();
+        try (Connection conn = ConnectionHelper.getConnection())
+        {
+            PreparedStatement statement = conn.prepareStatement(
+                    " SELECT " +
+                            "    s.studentID, " +
+                            "    s.personID, " +
+                            "    s.address, " +
+                            "    s.studentType, " +
+                            "    s.departmentID, " +
+                            "    p.lastName, " +
+                            "    p.firstName, " +
+                            "    p.middleName " +
+                            "FROM student s " +
+                            "JOIN person p ON s.personID = p.personID "
+            );
+            ResultSet rs = statement.executeQuery();
+            while (rs.next())
+            {
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentID"));
+                student.setPersonID(rs.getLong("personID"));
+                student.setAddress(rs.getString("address"));
+                student.setStudentType(rs.getString("studentType"));
+                student.setDepartmentId(rs.getString("departmentID"));
+                student.setLastName(rs.getString("lastName"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setMiddleName(rs.getString("middleName"));
+
+                studentList.add(student);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
+    @Override
+    public ArrayList<Student> getStudentByDepartmentID(long departmentID)
+    {
+        ArrayList<Student> studentList = new ArrayList<>();
+        try (Connection conn = ConnectionHelper.getConnection())
+        {
+            PreparedStatement statement = conn.prepareStatement(
+                    " SELECT " +
+                    "    s.studentID, " +
+                    "    s.personID, " +
+                    "    s.address, " +
+                    "    s.studentType, " +
+                    "    s.departmentID, " +
+                    "    p.lastName, " +
+                    "    p.firstName, " +
+                    "    p.middleName " +
+                    "FROM student s " +
+                    "JOIN person p ON s.personID = p.personID " +
+                    "WHERE departmentID = ?"
+            );
+            statement.setLong(1, departmentID);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next())
+            {
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentID"));
+                student.setPersonID(rs.getLong("personID"));
+                student.setAddress(rs.getString("address"));
+                student.setStudentType(rs.getString("studentType"));
+                student.setDepartmentId(rs.getString("departmentID"));
+                student.setLastName(rs.getString("lastName"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setMiddleName(rs.getString("middleName"));
+
+                studentList.add(student);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
 
     @Override
     public Student getStudentById(String StudentId)
@@ -128,12 +218,12 @@ public class OffenseDaoImpl implements OffenseDao
             while (rs.next())
             {
                 Record record = new Record();
-                record.setRecordId(rs.getString("recordID"));
-                record.setEnrollmentId(rs.getString("enrollmentID"));
+                record.setRecordId(rs.getLong("recordID"));
+                record.setEnrollmentId(rs.getLong("enrollmentID"));
                 record.setEmployeeId(rs.getString("employeeID"));
-                record.setOffenseId(rs.getString("offenseID"));
+                record.setOffenseId(rs.getLong("offenseID"));
                 record.setDateOfViolation(rs.getDate("dateOfViolation"));
-                record.setActionId(rs.getString("actionID"));
+                record.setActionId(rs.getLong("actionID"));
                 record.setDateOfResolution(rs.getDate("dateOfResolution"));
                 record.setRemarks(rs.getString("remarks"));
                 record.setStatus(rs.getString("status"));
@@ -166,7 +256,7 @@ public class OffenseDaoImpl implements OffenseDao
 
             while (rs.next())
             {
-                offense.setOffenseId(rs.getString("offenseID"));
+                offense.setOffenseId(rs.getLong("offenseID"));
                 offense.setOffense(rs.getString("offense"));
                 offense.setType(rs.getString("type"));
                 offense.setDescription(rs.getString("description"));
@@ -180,33 +270,31 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public boolean addStudentViolation(String recordID, String enrollmentID, String prefectID,
-                                       String offenseID, Date dateOfViolation, String actionID,
+    public boolean addStudentViolation(long enrollmentID, String employeeID,
+                                       long offenseID, Date dateOfViolation, long  actionID,
                                        String remarks, String status)
     {
 
         try (Connection con = ConnectionHelper.getConnection())
         {
             PreparedStatement stmt = con.prepareStatement(
-                    " INSERT INTO record (" +
-                    "    recordID," +
-                    "    enrollmentID," +
-                    "    prefectID," +
-                    "    offenseID," +
-                    "    dateOfViolation," +
-                    "    actionID," +
-                    "    remarks," +
-                    "    status" +
-                    "    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                        " INSERT INTO record (" +
+                            "    enrollmentID," +
+                            "    employeeID," +
+                            "    offenseID," +
+                            "    dateOfViolation," +
+                            "    actionID," +
+                            "    remarks," +
+                            "    status" +
+                            "    ) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-            stmt.setString(1, recordID);
-            stmt.setString(2, enrollmentID);
-            stmt.setString(3, prefectID);
-            stmt.setString(4, offenseID);
-            stmt.setDate(5, dateOfViolation);
-            stmt.setString(6, actionID);
-            stmt.setString(7, remarks);
-            stmt.setString(8, status);
+            stmt.setLong(1, enrollmentID);
+            stmt.setString(2, employeeID);
+            stmt.setLong(3, offenseID);
+            stmt.setDate(4, new Date(dateOfViolation.getTime()));
+            stmt.setLong(5, actionID);
+            stmt.setString(6, remarks);
+            stmt.setString(7, status);
             stmt.executeUpdate();
 
             return true;
