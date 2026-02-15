@@ -50,6 +50,72 @@ class OffenseDaoImplTest
     }
 
     @Test
+    void testGetAllStudent() throws SQLException
+    {
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.getString("studentID")).thenReturn("JHS-0001");
+        when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
+        when(resultSet.getString("address")).thenReturn("Buho");
+        when(resultSet.getString("studentType")).thenReturn("Intern");
+        when(resultSet.getString("departmentID")).thenReturn("jhs-3001");
+        when(resultSet.getString("lastName")).thenReturn("userLastName");
+        when(resultSet.getString("middleName")).thenReturn("userMidName");
+        when(resultSet.getString("firstName")).thenReturn("userFirstName");
+
+        OffenseDao dao = new OffenseDaoImpl();
+        ArrayList<Student> studentList  = dao.getAllStudent();
+        Student student = studentList.get(0);
+
+        assertEquals("JHS-0001", student.getStudentId());
+        assertEquals(Long.valueOf(2), student.getPersonID());
+        assertEquals("Buho", student.getAddress());
+        assertEquals("Intern", student.getStudentType());
+        assertEquals("jhs-3001", student.getDepartmentId());
+        assertEquals("userLastName", student.getLastName());
+        assertEquals("userMidName", student.getMiddleName());
+        assertEquals("userFirstName", student.getFirstName());
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        // verify(preparedStatement, times(1)).setString(1, "JHS-0001");
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    void testGetStudentByDepartmentID() throws SQLException
+    {
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.getString("studentID")).thenReturn("JHS-0001");
+        when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
+        when(resultSet.getString("address")).thenReturn("Buho");
+        when(resultSet.getString("studentType")).thenReturn("Intern");
+        when(resultSet.getString("departmentID")).thenReturn("jhs-3001");
+        when(resultSet.getString("lastName")).thenReturn("userLastName");
+        when(resultSet.getString("middleName")).thenReturn("userMidName");
+        when(resultSet.getString("firstName")).thenReturn("userFirstName");
+
+        OffenseDao dao = new OffenseDaoImpl();
+        ArrayList<Student> studentlist  = dao.getStudentByDepartmentID(Long.valueOf(3));
+        Student student = studentlist.get(0);
+
+        assertEquals("JHS-0001", student.getStudentId());
+        assertEquals(Long.valueOf(2), student.getPersonID());
+        assertEquals("Buho", student.getAddress());
+        assertEquals("Intern", student.getStudentType());
+        assertEquals("jhs-3001", student.getDepartmentId());
+        assertEquals("userLastName", student.getLastName());
+        assertEquals("userMidName", student.getMiddleName());
+        assertEquals("userFirstName", student.getFirstName());
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement, times(1)).setLong(1, Long.valueOf(3));
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
     void testGetStudentById() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
