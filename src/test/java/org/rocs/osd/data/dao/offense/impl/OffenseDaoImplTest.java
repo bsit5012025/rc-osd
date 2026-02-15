@@ -54,15 +54,15 @@ class OffenseDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
         OffenseDao dao = new OffenseDaoImpl();
 
-        boolean status = dao.editExistingViolation("R-001","Resolved",
-                "OFF-004", "Bullying incident reported");
+        boolean status = dao.editExistingViolation(Long.valueOf(1),"Resolved",
+                Long.valueOf(3), "Bullying incident reported");
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement).setString(1, "Resolved");
-        verify(preparedStatement).setString(2, "OFF-004");
+        verify(preparedStatement).setLong(2, Long.valueOf(3));
         verify(preparedStatement).setString(3, "Bullying incident reported");
-        verify(preparedStatement).setString(4, "R-001");
+        verify(preparedStatement).setLong(4, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 
@@ -74,12 +74,12 @@ class OffenseDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
         OffenseDao dao = new OffenseDaoImpl();
 
-        boolean status = dao.editExistingDateOfViolation("R-001", java.sql.Date.valueOf("2024-09-15"));
+        boolean status = dao.editExistingDateOfViolation(Long.valueOf(1), java.sql.Date.valueOf("2024-09-15"));
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2024-09-15"));
-        verify(preparedStatement).setString(2, "R-001");
+        verify(preparedStatement).setLong(2, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 
@@ -91,12 +91,12 @@ class OffenseDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
         OffenseDao dao = new OffenseDaoImpl();
 
-        boolean status = dao.editExistingDateOfResolution("R-001", java.sql.Date.valueOf("2025-01-30"));
+        boolean status = dao.editExistingDateOfResolution(Long.valueOf(1), java.sql.Date.valueOf("2025-01-30"));
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2025-01-30"));
-        verify(preparedStatement).setString(2, "R-001");
+        verify(preparedStatement).setLong(2, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 }

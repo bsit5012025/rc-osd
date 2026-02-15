@@ -8,7 +8,7 @@ import java.sql.*;
 public class OffenseDaoImpl implements OffenseDao
 {
     @Override
-    public boolean editExistingViolation(String recordID, String status, String OffenseID,
+    public boolean editExistingViolation(long recordID, String status, long OffenseID,
                                          String remarks)
     {
         try (Connection con = ConnectionHelper.getConnection())
@@ -21,9 +21,9 @@ public class OffenseDaoImpl implements OffenseDao
                             "WHERE recordID = ?");
 
             stmt.setString(1, status);
-            stmt.setString(2, OffenseID);
+            stmt.setLong(2, OffenseID);
             stmt.setString(3, remarks);
-            stmt.setString(4, recordID);
+            stmt.setLong(4, recordID);
             stmt.executeUpdate();
 
             return true;
@@ -37,7 +37,7 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public boolean editExistingDateOfViolation(String recordID, Date dateOfViolation)
+    public boolean editExistingDateOfViolation(long recordID, Date dateOfViolation)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
@@ -47,7 +47,7 @@ public class OffenseDaoImpl implements OffenseDao
                             "WHERE recordID = ?");
 
             stmt.setDate(1, dateOfViolation);
-            stmt.setString(2, recordID);
+            stmt.setLong(2, recordID);
             stmt.executeUpdate();
 
             return true;
@@ -61,7 +61,7 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public boolean editExistingDateOfResolution(String recordID, Date dateOfResolution)
+    public boolean editExistingDateOfResolution(long recordID, Date dateOfResolution)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
@@ -71,7 +71,7 @@ public class OffenseDaoImpl implements OffenseDao
                             "WHERE recordID = ?");
 
             stmt.setDate(1, dateOfResolution);
-            stmt.setString(2, recordID);
+            stmt.setLong(2, recordID);
             stmt.executeUpdate();
 
             return true;
