@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Record {
     private long recordId;
-    private String enrollmentId;
+    private long enrollmentId;
     private String employeeId;
-    private String offenseId;
+    private long offenseId;
     private Date dateOfViolation;
-    private String actionId;
+    private long actionId;
     private Date dateOfResolution;
     private String remarks;
     private String status;
@@ -16,7 +16,7 @@ public class Record {
     public Record() {
     }
 
-    public Record(long recordId, String enrollmentId, String employeeId, String offenseId, Date dateOfViolation, String actionId, Date dateOfResolution, String remarks, String status) {
+    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, String status) {
         this.recordId = recordId;
         this.enrollmentId = enrollmentId;
         this.employeeId = employeeId;
@@ -36,11 +36,11 @@ public class Record {
         this.recordId = recordId;
     }
 
-    public String getEnrollmentId() {
+    public long getEnrollmentId() {
         return enrollmentId;
     }
 
-    public void setEnrollmentId(String enrollmentId) {
+    public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
@@ -52,11 +52,11 @@ public class Record {
         this.employeeId = employeeId;
     }
 
-    public String getOffenseId() {
+    public long getOffenseId() {
         return offenseId;
     }
 
-    public void setOffenseId(String offenseId) {
+    public void setOffenseId(long offenseId) {
         this.offenseId = offenseId;
     }
 
@@ -68,11 +68,11 @@ public class Record {
         this.dateOfViolation = dateOfViolation;
     }
 
-    public String getActionId() {
+    public long getActionId() {
         return actionId;
     }
 
-    public void setActionId(String actionId) {
+    public void setActionId(long actionId) {
         this.actionId = actionId;
     }
 
