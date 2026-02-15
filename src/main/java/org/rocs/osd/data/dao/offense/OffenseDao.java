@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public interface OffenseDao
 {
+    ArrayList<Student>getAllStudent();
+    ArrayList<Student>getStudentByDepartmentID(Long departmentID);
     Student getStudentById(String studentID);
     Student getStudentByName(String lastName, String firstName, String middleName);
     ArrayList<Record> getStudentRecord(String studentID);
