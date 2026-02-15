@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Record {
     private long recordId;
-    private long enrollmentId; //  long
+    private long enrollmentId;
     private String employeeId;
-    private long offenseId; //  long
+    private long offenseId;
     private Date dateOfViolation;
-    private long actionId; // long
+    private long actionId;
     private Date dateOfResolution;
     private String remarks;
     private String status;

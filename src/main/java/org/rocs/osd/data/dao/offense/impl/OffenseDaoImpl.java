@@ -12,12 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OffenseDaoImpl implements OffenseDao
 {
 
     @Override
-    public ArrayList<Student> getAllStudent() {
+    public List<Student> getAllStudent() {
         ArrayList<Student> studentList = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
         {
@@ -58,7 +59,7 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public ArrayList<Student> getStudentByDepartmentID(long departmentID)
+    public List<Student> getStudentByDepartmentID(long departmentID)
     {
         ArrayList<Student> studentList = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
@@ -191,7 +192,7 @@ public class OffenseDaoImpl implements OffenseDao
     }
 
     @Override
-    public ArrayList<Record> getStudentRecord(String studentID)
+    public List<Record> getStudentRecord(String studentID)
     {
         ArrayList<Record> studentRecord = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
