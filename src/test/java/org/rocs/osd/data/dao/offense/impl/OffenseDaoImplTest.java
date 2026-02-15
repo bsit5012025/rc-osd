@@ -15,8 +15,12 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,7 +69,7 @@ class OffenseDaoImplTest
         when(resultSet.getString("firstName")).thenReturn("userFirstName");
 
         OffenseDao dao = new OffenseDaoImpl();
-        ArrayList<Student> studentList  = dao.getAllStudent();
+        List<Student> studentList  = dao.getAllStudent();
         Student student = studentList.get(0);
 
         assertEquals("JHS-0001", student.getStudentId());
@@ -78,7 +82,6 @@ class OffenseDaoImplTest
         assertEquals("userFirstName", student.getFirstName());
 
         verify(connection, times(1)).prepareStatement(anyString());
-        // verify(preparedStatement, times(1)).setString(1, "JHS-0001");
         verify(preparedStatement, times(1)).executeQuery();
     }
 
@@ -98,7 +101,7 @@ class OffenseDaoImplTest
         when(resultSet.getString("firstName")).thenReturn("userFirstName");
 
         OffenseDao dao = new OffenseDaoImpl();
-        ArrayList<Student> studentlist  = dao.getStudentByDepartmentID(Long.valueOf(3));
+        List<Student> studentlist  = dao.getStudentByDepartmentID(Long.valueOf(3));
         Student student = studentlist.get(0);
 
         assertEquals("JHS-0001", student.getStudentId());
@@ -198,7 +201,7 @@ class OffenseDaoImplTest
         when(resultSet.getString("status")).thenReturn("Pending");
 
         OffenseDao dao = new OffenseDaoImpl();
-        ArrayList<Record> studentRecordList = dao.getStudentRecord("CT123");
+        List<Record> studentRecordList = dao.getStudentRecord("CT123");
         Record record = studentRecordList.get(0);
 
         assertFalse(studentRecordList.isEmpty());
