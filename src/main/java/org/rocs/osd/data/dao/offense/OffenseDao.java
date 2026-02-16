@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface OffenseDao
 {
-    Offense findStudentOffense(String offenseID);
+    Offense findOffenseById(String offenseID);
 }

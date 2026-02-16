@@ -13,7 +13,7 @@ public class OffenseDaoImpl implements OffenseDao
 {
 
     @Override
-    public Offense findStudentOffense(String offenseID)
+    public Offense findOffenseById(String offenseID)
     {
         Offense offense = new Offense();
         try (Connection conn = ConnectionHelper.getConnection())

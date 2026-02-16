@@ -54,7 +54,7 @@ class OffenseDaoImplTest
     }
 
     @Test
-    void testFindStudentOffense() throws SQLException
+    void testFindOffenseById() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
@@ -65,7 +65,7 @@ class OffenseDaoImplTest
         when(resultSet.getString("description")).thenReturn("Bringing vape");
 
         OffenseDao dao = new OffenseDaoImpl();
-        Offense offense = dao.findStudentOffense("OFF-001");
+        Offense offense = dao.findOffenseById("OFF-001");
 
         assertEquals(1, offense.getOffenseId());
         assertEquals("Vaping", offense.getOffense());

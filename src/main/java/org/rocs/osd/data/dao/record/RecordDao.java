@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RecordDao
 {
-    List<Record> findStudentRecord(String studentID, String schoolYear, String studentLevel);
+    List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel);
     boolean addStudentRecord(long enrollmentID, String employeeID,
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, String status);

@@ -15,7 +15,7 @@ import java.util.List;
 public class RecordDaoImp implements RecordDao
 {
     @Override
-    public List<Record> findStudentRecord(String studentID, String schoolYear, String studentLevel)
+    public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
     {
         List<Record> studentRecord = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())

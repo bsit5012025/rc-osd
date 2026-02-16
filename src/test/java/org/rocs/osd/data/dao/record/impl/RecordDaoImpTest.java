@@ -47,7 +47,7 @@ class RecordDaoImpTest
     }
 
     @Test
-    void testFindStudentRecord() throws SQLException
+    void testFindStudentByIdAndEnrolment() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
@@ -63,7 +63,7 @@ class RecordDaoImpTest
         when(resultSet.getString("status")).thenReturn("Pending");
 
         RecordDao dao = new RecordDaoImp();
-        List<Record> studentRecordList = dao.findStudentRecord("CT123", "2025-2026", "Grade-8");
+        List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
         Record record = studentRecordList.get(0);
 
         assertFalse(studentRecordList.isEmpty());
