@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="org.rocs.osd.controller.login.LoginController"
+<BorderPane fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
             stylesheets="@../../styles/dashboard/dashboard.css"
             styleClass="dashboardRoot"
             xmlns="http://javafx.com/javafx/"
@@ -57,7 +57,7 @@
                             <Image url="@../../assets/student.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Offenses">
+                <Button styleClass="sidebarItem" text="Offenses" onAction="#onLoadOffense">
                     <graphic>
                         <ImageView fitHeight="24"
                                    fitWidth="24">
@@ -95,7 +95,7 @@
     </left>
 
     <center>
-        <StackPane styleClass="mainContentWrapper">
+        <StackPane styleClass="mainContentWrapper" fx:id="mainContentWrapper">
             <VBox styleClass="contentArea">
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
