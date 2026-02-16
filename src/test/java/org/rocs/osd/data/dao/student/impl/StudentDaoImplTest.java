@@ -48,7 +48,7 @@ class StudentDaoImplTest
     }
 
     @Test
-    void testFindStudentById() throws SQLException
+    void testFindStudentWithRecordById() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
@@ -80,7 +80,7 @@ class StudentDaoImplTest
     }
 
     @Test
-    void testFindStudentByName() throws SQLException
+    void testFindStudentWithRecordByName() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);

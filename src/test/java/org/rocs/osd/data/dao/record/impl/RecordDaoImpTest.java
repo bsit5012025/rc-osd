@@ -47,7 +47,7 @@ class RecordDaoImpTest
     }
 
     @Test
-    void testGetStudentRecord() throws SQLException
+    void testFindStudentRecord() throws SQLException
     {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
@@ -84,7 +84,7 @@ class RecordDaoImpTest
     }
 
     @Test
-    void testAddStudentViolation() throws SQLException
+    void testAddStudentRecord() throws SQLException
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
