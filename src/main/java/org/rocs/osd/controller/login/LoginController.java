@@ -68,7 +68,9 @@ public class LoginController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setUserData(null);
             System.out.println("Session logout!");
-            stage.setScene(new Scene(root));
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+            stage.setScene(new Scene(root,width,height));
             stage.show();
 
         } catch (NullPointerException e) {
