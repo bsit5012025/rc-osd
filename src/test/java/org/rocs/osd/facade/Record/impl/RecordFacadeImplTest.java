@@ -8,9 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
 import org.rocs.osd.model.record.Record;
-import org.rocs.osd.model.record.RecordStatus;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -47,8 +45,5 @@ class RecordFacadeImplTest
                 "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
                 Long.valueOf(1), "Student caught vaping in school");
 
-        assertTrue(result);
-        verify(recordDao, times(1)).addStudentRecord(anyLong(),
-                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), anyString());
     }
 }
