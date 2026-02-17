@@ -11,9 +11,6 @@ public interface RecordDao
     boolean addStudentRecord(long enrollmentID, String employeeID,
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, String status);
-    boolean updateRecord(long recordID, String status, long OffenseID,
-                         String remarks);
+    boolean updateRecord(Record record);
 
-    boolean updateExistingDateOfViolationRecord(long recordID, Date dateOfViolation);
-    boolean updateExistingDateOfResolutionRecord(long recordID, Date dateOfResolution);
 }

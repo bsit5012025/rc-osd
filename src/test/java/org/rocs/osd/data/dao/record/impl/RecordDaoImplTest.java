@@ -112,47 +112,26 @@ class RecordDaoImplTest
         when(preparedStatement.executeUpdate()).thenReturn(1);
         RecordDao dao = new RecordDaoImpl();
 
-        boolean status = dao.updateRecord(Long.valueOf(1),"Resolved",
-                Long.valueOf(3), "Bullying incident reported");
+        Record record = new Record();
+        record.setEnrollmentId(Long.valueOf(1));
+        record.setEmployeeId("EMP-002");
+        record.setOffenseId(Long.valueOf(1));
+        record.setDateOfViolation(java.sql.Date.valueOf("2024-09-15"));
+        record.setActionId(Long.valueOf(1));
+        record.setRemarks("Student caught vaping in school");
+        record.setRecordId(Long.valueOf(1));
+
+        boolean status = dao.updateRecord(record);
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setString(1, "Resolved");
-        verify(preparedStatement).setLong(2, Long.valueOf(3));
-        verify(preparedStatement).setString(3, "Bullying incident reported");
-        verify(preparedStatement).setLong(4, Long.valueOf(1));
-        verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testUpdateExistingDateOfViolationRecord() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-        RecordDao dao = new RecordDaoImpl();
-
-        boolean status = dao.updateExistingDateOfViolationRecord(Long.valueOf(1), java.sql.Date.valueOf("2024-09-15"));
-
-        assertTrue(status);
-        verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2024-09-15"));
-        verify(preparedStatement).setLong(2, Long.valueOf(1));
-        verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testUpdateExistingDateOfResolutionRecord() throws SQLException
-    {
-        // java.sql.Date.valueOf("2023-02-09")
-
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-        RecordDao dao = new RecordDaoImpl();
-
-        boolean status = dao.updateExistingDateOfResolutionRecord(Long.valueOf(1), java.sql.Date.valueOf("2025-01-30"));
-
-        assertTrue(status);
-        verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2025-01-30"));
-        verify(preparedStatement).setLong(2, Long.valueOf(1));
+        verify(preparedStatement).setLong(1, Long.valueOf(1));
+        verify(preparedStatement).setString(2,"EMP-002");
+        verify(preparedStatement).setLong(3, Long.valueOf(1));
+        verify(preparedStatement).setDate(4, java.sql.Date.valueOf("2024-09-15"));
+        verify(preparedStatement).setLong(5, Long.valueOf(1));
+        verify(preparedStatement).setString(6, "Student caught vaping in school");
+        verify(preparedStatement).setLong(7, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 
