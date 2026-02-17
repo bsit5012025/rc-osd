@@ -9,6 +9,7 @@ import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
 import org.rocs.osd.model.record.Record;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -37,14 +38,16 @@ class RecordFacadeImplTest
     @Test
     public void testCreateStudentRecord()
     {
-        when(recordDao.addStudentRecord(Long.valueOf(1), Long.valueOf(1),
-                "EMP-002", Long.valueOf(1), Date.valueOf("2024-09-15"),
-                Long.valueOf(1), Date.valueOf("2025-04-15"),
+        when(recordDao.addStudentRecord(Long.valueOf(1), "EMP-002",
+                Long.valueOf(1), Date.valueOf("2024-09-15"), Long.valueOf(1),
                 "Student caught vaping in school", "Pending")).thenReturn(true);
 
+        boolean result = recordFacade.createStudentRecord(Long.valueOf(1),
+                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
+                Long.valueOf(1), "Student caught vaping in school");
 
-
-        verify(recordDao, times(1)).addStudentRecord(anyLong(), anyLong(),
-                anyString(), anyLong(), anyString(), anyLong(), anyString(),  anyString(),  anyString());
+        assertTrue(result);
+        verify(recordDao, times(1)).addStudentRecord(anyLong(),
+                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), anyString());
     }
 }
