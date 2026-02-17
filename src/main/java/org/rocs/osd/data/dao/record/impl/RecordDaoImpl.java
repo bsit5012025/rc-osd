@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordDaoImp implements RecordDao
+public class RecordDaoImpl implements RecordDao
 {
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
@@ -93,6 +93,81 @@ public class RecordDaoImp implements RecordDao
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
             stmt.setString(7, status);
+            stmt.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateExistingRecord(long recordID, String status, long OffenseID,
+                                        String remarks)
+    {
+        try (Connection con = ConnectionHelper.getConnection())
+        {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "status = ?, " +
+                            "offenseID = ?, " +
+                            "remarks = ? " +
+                            "WHERE recordID = ?");
+            stmt.setString(1, status);
+            stmt.setLong(2, OffenseID);
+            stmt.setString(3, remarks);
+            stmt.setLong(4, recordID);
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateExistingDateOfViolationRecord(long recordID, Date dateOfViolation)
+    {
+        try (Connection con = ConnectionHelper.getConnection())
+        {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "DateOfViolation = ? " +
+                            "WHERE recordID = ?");
+
+            stmt.setDate(1, dateOfViolation);
+            stmt.setLong(2, recordID);
+            stmt.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateExistingDateOfResolutionRecord(long recordID, Date dateOfResolution)
+    {
+        try (Connection con = ConnectionHelper.getConnection())
+        {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "DateOfResolution = ? " +
+                            "WHERE recordID = ?");
+
+            stmt.setDate(1, dateOfResolution);
+            stmt.setLong(2, recordID);
             stmt.executeUpdate();
 
             return true;

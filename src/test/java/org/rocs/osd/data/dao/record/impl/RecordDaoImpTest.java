@@ -19,9 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(MockitoExtension.class)
-class RecordDaoImpTest
+class RecordDaoImplTest
 {
     @Mock
     private Connection connection;
@@ -62,7 +63,7 @@ class RecordDaoImpTest
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
         when(resultSet.getString("status")).thenReturn("Pending");
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
         Record record = studentRecordList.get(0);
 
@@ -88,7 +89,7 @@ class RecordDaoImpTest
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         boolean status = dao.addStudentRecord(Long.valueOf(3), "EMP-002",
                 Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
                 "Bullying incident reported","Resolved");
@@ -102,6 +103,56 @@ class RecordDaoImpTest
         verify(preparedStatement).setLong(5, Long.valueOf(2));
         verify(preparedStatement).setString(6, "Bullying incident reported");
         verify(preparedStatement).setString(7, "Resolved");
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateExistingRecord() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        RecordDao dao = new RecordDaoImpl();
+
+        boolean status = dao.updateExistingRecord(Long.valueOf(1),"Resolved",
+                Long.valueOf(3), "Bullying incident reported");
+
+        assertTrue(status);
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setString(1, "Resolved");
+        verify(preparedStatement).setLong(2, Long.valueOf(3));
+        verify(preparedStatement).setString(3, "Bullying incident reported");
+        verify(preparedStatement).setLong(4, Long.valueOf(1));
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateExistingDateOfViolationRecord() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        RecordDao dao = new RecordDaoImpl();
+
+        boolean status = dao.updateExistingDateOfViolationRecord(Long.valueOf(1), java.sql.Date.valueOf("2024-09-15"));
+
+        assertTrue(status);
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2024-09-15"));
+        verify(preparedStatement).setLong(2, Long.valueOf(1));
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateExistingDateOfResolutionRecord() throws SQLException
+    {
+        // java.sql.Date.valueOf("2023-02-09")
+
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        RecordDao dao = new RecordDaoImpl();
+
+        boolean status = dao.updateExistingDateOfResolutionRecord(Long.valueOf(1), java.sql.Date.valueOf("2025-01-30"));
+
+        assertTrue(status);
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setDate(1, java.sql.Date.valueOf("2025-01-30"));
+        verify(preparedStatement).setLong(2, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 
