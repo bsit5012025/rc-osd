@@ -45,5 +45,8 @@ class RecordFacadeImplTest
                 "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
                 Long.valueOf(1), "Student caught vaping in school");
 
+
+        verify(recordDao, times(1)).addStudentRecord(anyLong(), anyLong(),
+                anyString(), anyLong(), anyString(), anyLong(), anyString(),  anyString(),  anyString());
     }
 }
