@@ -9,16 +9,15 @@
 
 <StackPane styleClass="mainContainer"
            stylesheets="@../../styles/logout/logout.css"
-           xmlns="http://javafx.com/javafx/25"
-           xmlns:fx="http://javafx.com/fxml/1">
+           xmlns="http://javafx.com/javafx/25">
 
       <VBox spacing="10.0">
             <Label text="Are you sure, " />
             <Label text="you want to logout?" />
 
             <HBox spacing="60.0">
-                  <Button mnemonicParsing="false" styleClass="cancelConfirmationButton" text="Cancel" />
-                  <Button mnemonicParsing="false" styleClass="logoutConfirmationButton" text="Logout" />
+                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" text="Logout" />
          <VBox.margin>
             <Insets top="40.0" />
          </VBox.margin>
