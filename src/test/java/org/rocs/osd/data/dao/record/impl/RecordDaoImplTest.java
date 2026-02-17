@@ -107,12 +107,12 @@ class RecordDaoImplTest
     }
 
     @Test
-    void testUpdateExistingRecord() throws SQLException
+    void testUpdateRecord() throws SQLException
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
         RecordDao dao = new RecordDaoImpl();
 
-        boolean status = dao.updateExistingRecord(Long.valueOf(1),"Resolved",
+        boolean status = dao.updateRecord(Long.valueOf(1),"Resolved",
                 Long.valueOf(3), "Bullying incident reported");
 
         assertTrue(status);

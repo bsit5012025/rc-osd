@@ -106,8 +106,8 @@ public class RecordDaoImpl implements RecordDao
     }
 
     @Override
-    public boolean updateExistingRecord(long recordID, String status, long OffenseID,
-                                        String remarks)
+    public boolean updateRecord(long recordID, String status, long OffenseID,
+                                String remarks)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
