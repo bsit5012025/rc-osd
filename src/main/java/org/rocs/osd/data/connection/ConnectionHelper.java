@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class ConnectionHelper {
 
-    public static final String URL = "jdbc:oracle:thin:@localhost:1521:oracleDB";
+    public static final String URL = "jdbc:oracle:thin:@localhost:1521:orclDB";
 
     public static final String ORACLE_DRIVER = "oracle.jdbc.driver.OracleDriver";
 

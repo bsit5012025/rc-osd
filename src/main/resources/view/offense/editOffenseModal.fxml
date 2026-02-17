@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="editViolationModal" styleClass="modalContainer" stylesheets="@../../styles/dashboard/container.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.login.LoginController">
+
+   <stylesheets>
+      <URL value="@../../styles/dashboard/label.css" />
+      <URL value="@../../styles/dashboard/inputfield.css" />
+      <URL value="@../../styles/dashboard/buttons.css" />
+      <URL value="@../../styles/offense/editOffense.css" />
+   </stylesheets>
+
+       <BorderPane prefHeight="139.0" prefWidth="425.0">
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="62.0" prefWidth="741.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="51.0" prefWidth="195.0" text="Edit Violation">
+                           <font>
+                              <Font name="Arial Bold" size="28.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children></HBox>
+                  <Pane prefHeight="9.0" prefWidth="778.0" styleClass="linePaneColorGray" />
+                  <GridPane prefHeight="249.0" prefWidth="778.0" vgap="15.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="106.79999618530273" minHeight="10.0" prefHeight="79.6" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="139.79998474121092" minHeight="2.40000762939453" prefHeight="89.6" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="142.4" minHeight="10.0" prefHeight="69.80000000000001" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox prefHeight="41.0" prefWidth="390.0">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="136.0" text="Student ID:">
+                                 <font>
+                                    <Font name="Arial Bold" size="17.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin></Label>
+                           <TextField prefHeight="68.0" prefWidth="366.0" styleClass="inputTextFieldEditOffense">
+                              <VBox.margin>
+                                 <Insets left="12.0" right="12.0" />
+                              </VBox.margin></TextField>
+                           </children>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="163.0" text="Student Name:">
+                                 <font>
+                                    <Font name="Arial Bold" size="17.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin>
+                              </Label>
+                           <TextField prefHeight="45.0" prefWidth="390.0">
+                              <VBox.margin>
+                                 <Insets left="12.0" right="12.0" />
+                              </VBox.margin>
+                           </TextField>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="163.0" text="Date:">
+                                 <font>
+                                    <Font name="Arial Bold" size="17.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <DatePicker prefHeight="72.0" prefWidth="366.0" styleClass="inputTextFieldEditOffense">
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="163.0" text="Offense Type:">
+                                 <font>
+                                    <Font name="Arial Bold" size="17.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin>
+                              </Label>
+                           <ComboBox editable="true" prefHeight="62.0" prefWidth="367.0" styleClass="inputTextFieldEditOffense">
+                              <VBox.margin>
+                                 <Insets left="12.0" />
+                              </VBox.margin>
+                           </ComboBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="190.0" text="Level Of Offense:">
+                                 <font>
+                                    <Font name="Arial Bold" size="17.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ComboBox editable="true" prefHeight="44.0" prefWidth="367.0" styleClass="inputTextFieldEditOffense">
+                                 <VBox.margin>
+                                    <Insets left="12.0" />
+                                 </VBox.margin></ComboBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="20.0" />
+                     </VBox.margin>
+                  </GridPane>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label prefHeight="30.0" prefWidth="190.0" text="Remarks:">
+                           <font>
+                              <Font name="Arial Bold" size="17.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="12.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextArea prefHeight="158.0" prefWidth="728.0" styleClass="inputTextFieldEditOffense" text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. " wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="12.0" right="15.0" />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                  </VBox>
+               <GridPane prefHeight="63.0" prefWidth="777.0">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="555.8000305175781" minWidth="10.0" prefWidth="494.8" />
+                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.9999694824219" minWidth="10.0" prefWidth="283.2" />
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints maxHeight="52.6" minHeight="7.799999046325684" prefHeight="11.799999046325684" vgrow="SOMETIMES" />
+                 </rowConstraints>
+                  <children>
+                     <CheckBox mnemonicParsing="false" text="Notify Parents">
+                        <GridPane.margin>
+                           <Insets left="24.0" />
+                        </GridPane.margin>
+                     </CheckBox>
+                     <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        <children>
+                           <HBox prefHeight="53.0" prefWidth="283.0">
+                              <children>
+                                 <Button cancelButton="true" mnemonicParsing="false" prefHeight="37.0" prefWidth="90.0" styleClass="cancelButtonEditOffense" text="Cancel" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets left="60.0" top="10.0" />
+                                    </HBox.margin>
+                                 </Button>
+                                 <Button defaultButton="true" mnemonicParsing="false" prefHeight="37.0" prefWidth="90.0" styleClass="saveButtonEditOffense" text="Save" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets left="12.0" top="10.0" />
+                                    </HBox.margin>
+                                 </Button>
+                              </children></HBox>
+                        </children></HBox>
+                  </children>
+               </GridPane>
+               </children></VBox>
+         </center></BorderPane>
+</StackPane>
