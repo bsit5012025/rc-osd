@@ -19,9 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(MockitoExtension.class)
-class RecordDaoImpTest
+class RecordDaoImplTest
 {
     @Mock
     private Connection connection;
@@ -105,4 +106,21 @@ class RecordDaoImpTest
         verify(preparedStatement).executeUpdate();
     }
 
+    @Test
+    void testUpdateRecord() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        RecordDao dao = new RecordDaoImpl();
+
+        boolean status = dao.updateRecord(Long.valueOf(1),"Resolved",
+                Long.valueOf(3), "Bullying incident reported");
+
+        assertTrue(status);
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setString(1, "Resolved");
+        verify(preparedStatement).setLong(2, Long.valueOf(3));
+        verify(preparedStatement).setString(3, "Bullying incident reported");
+        verify(preparedStatement).setLong(4, Long.valueOf(1));
+        verify(preparedStatement).executeUpdate();
+    }
 }
