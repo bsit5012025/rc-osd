@@ -8,3 +8,4 @@ public interface RecordFacade
                                 long offenseID, Date dateOfViolation, long  actionID,
                                 String remarks);
 }
+
