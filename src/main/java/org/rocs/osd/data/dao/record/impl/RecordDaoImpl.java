@@ -104,4 +104,32 @@ public class RecordDaoImpl implements RecordDao
             return false;
         }
     }
+
+    @Override
+    public boolean updateRecord(long recordID, String status, long OffenseID,
+                                String remarks)
+    {
+        try (Connection con = ConnectionHelper.getConnection())
+        {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "status = ?, " +
+                            "offenseID = ?, " +
+                            "remarks = ? " +
+                            "WHERE recordID = ?");
+            stmt.setString(1, status);
+            stmt.setLong(2, OffenseID);
+            stmt.setString(3, remarks);
+            stmt.setLong(4, recordID);
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
+        }
+    }
+
 }

@@ -123,4 +123,5 @@ class RecordDaoImplTest
         verify(preparedStatement).setLong(4, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
+
 }
