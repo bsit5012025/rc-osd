@@ -106,21 +106,26 @@ public class RecordDaoImpl implements RecordDao
     }
 
     @Override
-    public boolean updateRecord(long recordID, String status, long OffenseID,
-                                String remarks)
+    public boolean updateRecord(Record record)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
             PreparedStatement stmt = con.prepareStatement(
                     "UPDATE record SET " +
-                            "status = ?, " +
-                            "offenseID = ?, " +
-                            "remarks = ? " +
+                            "enrollmentID," +
+                            "employeeID," +
+                            "offenseID, " +
+                            "dateOfViolation, " +
+                            "actionID, " +
+                            "remarks, " +
                             "WHERE recordID = ?");
-            stmt.setString(1, status);
-            stmt.setLong(2, OffenseID);
-            stmt.setString(3, remarks);
-            stmt.setLong(4, recordID);
+            stmt.setLong(1, record.getEnrollmentId());
+            stmt.setString(2, record.getEmployeeId());
+            stmt.setLong(3, record.getOffenseId());
+            stmt.setDate(4, (java.sql.Date) record.getDateOfViolation());
+            stmt.setLong(5, record.getActionId());
+            stmt.setString(6, record.getRemarks());
+            stmt.setLong(7, record.getRecordId());
             stmt.executeUpdate();
             return true;
         }
@@ -131,5 +136,4 @@ public class RecordDaoImpl implements RecordDao
             return false;
         }
     }
-
 }
