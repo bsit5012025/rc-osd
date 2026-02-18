@@ -89,7 +89,7 @@ public class RecordDaoImpl implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, new Date(dateOfViolation.getTime()));
+            stmt.setDate(4, dateOfViolation);
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
             stmt.setString(7, status);
@@ -112,12 +112,12 @@ public class RecordDaoImpl implements RecordDao
         {
             PreparedStatement stmt = con.prepareStatement(
                     "UPDATE record SET " +
-                            "enrollmentID," +
-                            "employeeID," +
-                            "offenseID, " +
-                            "dateOfViolation, " +
-                            "actionID, " +
-                            "remarks, " +
+                            "enrollmentID = ?," +
+                            "employeeID = ?," +
+                            "offenseID = ?, " +
+                            "dateOfViolation = ?, " +
+                            "actionID = ?, " +
+                            "remarks = ? " +
                             "WHERE recordID = ?");
             stmt.setLong(1, record.getEnrollmentId());
             stmt.setString(2, record.getEmployeeId());
