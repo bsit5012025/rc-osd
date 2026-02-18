@@ -62,19 +62,4 @@ public class LoginController {
         }
     }
 
-    public void onLogout(ActionEvent event){
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setUserData(null);
-            System.out.println("Session logout!");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (NullPointerException e) {
-            System.err.println("Login screen not found");
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        }
-    }
 }
