@@ -10,6 +10,7 @@ public class Employee extends Person {
     public Employee() {
     }
 
+    // Constructor with all values
     public Employee(Long personID, String lastName, String firstName, String middleName, String employeeId, String departmentId, String employeeRole) {
         super(personID, lastName, firstName, middleName);
         this.employeeId = employeeId;
@@ -17,6 +18,7 @@ public class Employee extends Person {
         this.employeeRole = employeeRole;
     }
 
+    //This will get the Offense ID
     public String getEmployeeId() {
         return employeeId;
     }

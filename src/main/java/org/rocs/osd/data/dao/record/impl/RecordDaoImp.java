@@ -14,6 +14,8 @@ import java.util.List;
 
 public class RecordDaoImp implements RecordDao
 {
+
+    // This class will handle the student record data from the database
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
     {

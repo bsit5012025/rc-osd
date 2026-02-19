@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 public class StudentDaoImpl implements StudendDao
 {
+    // This class will handle the student data from the database
     @Override
     public Student findStudentWithRecordById(String StudentId)
     {
