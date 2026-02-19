@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 public class LoginDaoImpl implements LoginDao  {
 
+    // This class will handle the login data from the database
     @Override
     public Login findLoginByUsername(String username) {
         Login login = new Login();

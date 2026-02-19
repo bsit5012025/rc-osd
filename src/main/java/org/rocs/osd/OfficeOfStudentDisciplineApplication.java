@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+// Main class for the Office of Student Discipline
 public class OfficeOfStudentDisciplineApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {

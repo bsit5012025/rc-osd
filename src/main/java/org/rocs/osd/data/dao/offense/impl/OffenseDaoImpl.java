@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class OffenseDaoImpl implements OffenseDao
 {
 
+    // This class will handle the offense data from the database
     @Override
     public Offense findOffenseById(String offenseID)
     {
