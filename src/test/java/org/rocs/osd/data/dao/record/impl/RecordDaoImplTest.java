@@ -62,7 +62,7 @@ class RecordDaoImpTest
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
         when(resultSet.getString("status")).thenReturn("Pending");
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
         Record record = studentRecordList.get(0);
 
@@ -88,7 +88,7 @@ class RecordDaoImpTest
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         boolean status = dao.addStudentRecord(Long.valueOf(3), "EMP-002",
                 Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
                 "Bullying incident reported","Resolved");
@@ -105,30 +105,4 @@ class RecordDaoImpTest
         verify(preparedStatement).executeUpdate();
     }
 
-    @Test
-    void testUpdateStudentRecordStatusById() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        RecordDao dao = new RecordDaoImp();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
-
-        assertTrue(result);
-
-        verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setString(1, "Resolved");
-        verify(preparedStatement).setLong(2, 5L);
-        verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testUpdateStudentRecordStatusByIdNoRowsUpdated() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        RecordDao dao = new RecordDaoImp();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
-
-        assertFalse(result);
-    }
 }

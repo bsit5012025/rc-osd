@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordDaoImp implements RecordDao
+public class RecordDaoImpl implements RecordDao
 {
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
@@ -72,6 +72,7 @@ public class RecordDaoImp implements RecordDao
                                     long offenseID, Date dateOfViolation, long  actionID,
                                     String remarks, String status)
     {
+
         try (Connection con = ConnectionHelper.getConnection())
         {
             PreparedStatement stmt = con.prepareStatement(
@@ -102,24 +103,5 @@ public class RecordDaoImp implements RecordDao
 
             return false;
         }
-    }
-
-    @Override
-    public boolean updateStudentRecordStatusById(long recordID, String status) {
-        String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
-
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, status);
-            stmt.setLong(2, recordID);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Exception (updateStudentRecordStatusById): " + e.getMessage());
-        }
-
-        return false;
     }
 }
