@@ -46,7 +46,7 @@ public class OffenseDaoImpl implements OffenseDao
         return offense;
     }
     @Override
-    public List<String> findAllOffense() {
+    public List<String> findAllOffenseName() {
         List<String> offense = new ArrayList<>();
 
         try (Connection conn = ConnectionHelper.getConnection()) {

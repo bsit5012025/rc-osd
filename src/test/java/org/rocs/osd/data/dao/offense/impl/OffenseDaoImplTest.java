@@ -79,13 +79,13 @@ class OffenseDaoImplTest
         verify(preparedStatement, times(1)).executeQuery();
     }
     @Test
-    void TestfindAllOffenseName() throws SQLException{
+    void testFindAllOffenseNameReturnsOffenseNames() throws SQLException{
         Mockito.when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
         Mockito.when(this.resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
         Mockito.when(this.resultSet.getString("offense")).thenReturn("Bullying").thenReturn("Tardiness");
 
         OffenseDao dao = new OffenseDaoImpl();
-        List<String> offense = dao.findAllOffense();
+        List<String> offense = dao.findAllOffenseName();
         List<String> expectOffense = new ArrayList<>();
         expectOffense.add("Bullying");
         expectOffense.add("Tardiness");
