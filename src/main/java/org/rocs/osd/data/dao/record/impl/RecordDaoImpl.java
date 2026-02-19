@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordDaoImp implements RecordDao
+public class RecordDaoImpl implements RecordDao
 {
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
@@ -72,6 +72,7 @@ public class RecordDaoImp implements RecordDao
                                     long offenseID, Date dateOfViolation, long  actionID,
                                     String remarks, String status)
     {
+
         try (Connection con = ConnectionHelper.getConnection())
         {
             PreparedStatement stmt = con.prepareStatement(
@@ -94,6 +95,38 @@ public class RecordDaoImp implements RecordDao
             stmt.setString(7, status);
             stmt.executeUpdate();
 
+            return true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("An SQL Exception occurred." + e.getMessage());
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateRecord(Record record)
+    {
+        try (Connection con = ConnectionHelper.getConnection())
+        {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "enrollmentID = ?," +
+                            "employeeID = ?," +
+                            "offenseID = ?, " +
+                            "dateOfViolation = ?, " +
+                            "actionID = ?, " +
+                            "remarks = ? " +
+                            "WHERE recordID = ?");
+            stmt.setLong(1, record.getEnrollmentId());
+            stmt.setString(2, record.getEmployeeId());
+            stmt.setLong(3, record.getOffenseId());
+            stmt.setDate(4, (java.sql.Date) record.getDateOfViolation());
+            stmt.setLong(5, record.getActionId());
+            stmt.setString(6, record.getRemarks());
+            stmt.setLong(7, record.getRecordId());
+            stmt.executeUpdate();
             return true;
         }
         catch (SQLException e)
