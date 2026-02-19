@@ -10,4 +10,5 @@ import java.util.List;
 public interface OffenseDao
 {
     Offense findOffenseById(String offenseID);
+    List<String> findAllOffenseName();
 }
