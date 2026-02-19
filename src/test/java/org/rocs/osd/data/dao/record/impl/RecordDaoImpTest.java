@@ -105,4 +105,30 @@ class RecordDaoImpTest
         verify(preparedStatement).executeUpdate();
     }
 
+    @Test
+    void testUpdateStudentRecordStatusById() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        RecordDao dao = new RecordDaoImp();
+        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
+
+        assertTrue(result);
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setString(1, "Resolved");
+        verify(preparedStatement).setLong(2, 5L);
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateStudentRecordStatusByIdNoRowsUpdated() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(0);
+
+        RecordDao dao = new RecordDaoImp();
+        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
+
+        assertFalse(result);
+    }
 }
