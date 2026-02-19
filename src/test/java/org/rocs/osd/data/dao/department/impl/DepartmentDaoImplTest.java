@@ -62,7 +62,7 @@ class DepartmentDaoImplTest {
     }
 
     @Test
-    void findAllDepartmentName() throws SQLException{
+    void TestfindAllDepartmentName() throws SQLException{
         Mockito.when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
         Mockito.when(this.resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
         Mockito.when(this.resultSet.getString("departmentName")).thenReturn("Junior High School Department")
