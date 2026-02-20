@@ -6,12 +6,12 @@ public class Student extends Person {
     private String studentId;
     private String address;
     private String studentType;
-    private String departmentId;
+    private long departmentId;
 
     public Student() {
     }
 
-    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, String departmentId) {
+    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, long departmentId) {
         super(personID, lastName, firstName, middleName);
         this.studentId = studentId;
         this.address = address;
@@ -43,11 +43,11 @@ public class Student extends Person {
         this.studentType = studentType;
     }
 
-    public String getDepartmentId() {
+    public long getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(String departmentId) {
+    public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
 }

@@ -1,103 +1,108 @@
 package org.rocs.osd.data.dao.student.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.student.StudendDao;
+import org.rocs.osd.data.dao.student.StudentDao;
 import org.rocs.osd.model.person.student.Student;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StudentDaoImpl implements StudendDao
+public class StudentDaoImpl implements StudentDao
 {
+
     @Override
-    public Student findStudentWithRecordById(String StudentId)
-    {
-        Student student = new Student();
-        try (Connection conn = ConnectionHelper.getConnection())
-        {
-            PreparedStatement statement = conn.prepareStatement(
-                        "SELECT " +
-                            "s.studentID, " +
-                            "s.personID, " +
-                            "s.address, " +
-                            "s.studentType, " +
-                            "s.departmentID, " +
-                            "p.lastName, " +
-                            "p.firstName, " +
-                            "p.middleName " +
-                            "FROM student s " +
-                            "JOIN person p ON s.personID = p.personID " +
-                            "JOIN enrollment e ON s.studentID = e.studentID " +
-                            "JOIN record r ON e.enrollmentID = r.enrollmentID " +
-                            "WHERE s.studentID = ?");
+    public List<Student> findAllStudents() {
+        List<Student> students = new ArrayList<>();
 
-            statement.setString(1, StudentId);
-            ResultSet rs = statement.executeQuery();
+        String sql = """
+        SELECT
+            s.studentID,
+            s.address,
+            s.studentType,
+            s.departmentID,
+            p.personID,
+            p.firstName,
+            p.middleName,
+            p.lastName
+        FROM student s
+        JOIN person p ON s.personID = p.personID
+        ORDER BY p.lastName
+        """;
 
-            while (rs.next())
-            {
-                student.setStudentId(rs.getString("studentID"));
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                Student student = new Student();
+
                 student.setPersonID(rs.getLong("personID"));
-                student.setAddress(rs.getString("address"));
-                student.setStudentType(rs.getString("studentType"));
-                student.setDepartmentId(rs.getString("departmentID"));
-                student.setLastName(rs.getString("lastName"));
                 student.setFirstName(rs.getString("firstName"));
                 student.setMiddleName(rs.getString("middleName"));
+                student.setLastName(rs.getString("lastName"));
+                student.setStudentId(rs.getString("studentID"));
+                student.setAddress(rs.getString("address"));
+                student.setStudentType(rs.getString("studentType"));
+                student.setDepartmentId(rs.getLong("departmentID"));
+
+                students.add(student);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("SQL ERROR (findAllStudents): " + e.getMessage());
         }
 
-        return student;
+        return students;
     }
 
     @Override
-    public Student findStudentWithRecordByName(String lastName, String firstName, String middleName)
-    {
-        Student student = new Student();
-        try (Connection conn = ConnectionHelper.getConnection())
-        {
-            PreparedStatement statement = conn.prepareStatement(
-                            "SELECT " +
-                                "s.studentID, " +
-                                "s.personID, " +
-                                "s.address, " +
-                                "s.studentType, " +
-                                "s.departmentID, " +
-                                "p.lastName, " +
-                                "p.firstName, " +
-                                "p.middleName " +
-                                "FROM student s " +
-                                "JOIN person p ON s.personID = p.personID " +
-                                "JOIN enrollment e ON s.studentID = e.studentID " +
-                                "JOIN record r ON e.enrollmentID = r.enrollmentID " +
-                                "WHERE LOWER(p.lastName) = LOWER(?) " +
-                                "AND LOWER(p.firstName) = LOWER(?) " +
-                                "AND LOWER(p.middleName) = LOWER(?)");
+    public Student findStudentByID(String studentID) {
+        Student student = null;
 
-            statement.setString(1, lastName);
-            statement.setString(2, firstName);
-            statement.setString(3, middleName);
-            ResultSet rs = statement.executeQuery();
+        String sql = """
+        SELECT
+            s.studentID,
+            s.address,
+            s.studentType,
+            s.departmentID,
+            p.personID,
+            p.firstName,
+            p.middleName,
+            p.lastName
+        FROM student s
+        JOIN person p ON s.personID = p.personID
+        WHERE s.studentID = ?
+        """;
 
-            while (rs.next())
-            {
-                student.setStudentId(rs.getString("studentID"));
-                student.setPersonID(rs.getLong("personID"));
-                student.setAddress(rs.getString("address"));
-                student.setStudentType(rs.getString("studentType"));
-                student.setDepartmentId(rs.getString("departmentID"));
-                student.setLastName(rs.getString("lastName"));
-                student.setFirstName(rs.getString("firstName"));
-                student.setMiddleName(rs.getString("middleName"));
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, studentID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                if (rs.next()) {
+
+                    student = new Student();
+
+                    student.setPersonID(rs.getLong("personID"));
+                    student.setFirstName(rs.getString("firstName"));
+                    student.setMiddleName(rs.getString("middleName"));
+                    student.setLastName(rs.getString("lastName"));
+                    student.setStudentId(rs.getString("studentID"));
+                    student.setAddress(rs.getString("address"));
+                    student.setStudentType(rs.getString("studentType"));
+                    student.setDepartmentId(rs.getLong("departmentID"));
+                }
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("SQL ERROR (findStudentByID): " + e.getMessage());
         }
 
         return student;
