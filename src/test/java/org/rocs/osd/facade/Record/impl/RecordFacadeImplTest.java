@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
