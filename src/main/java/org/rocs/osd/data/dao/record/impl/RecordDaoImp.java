@@ -3,6 +3,7 @@ package org.rocs.osd.data.dao.record.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ public class RecordDaoImp implements RecordDao
         List<Record> studentRecord = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
         {
-            PreparedStatement statement = conn.prepareStatement(
+            PreparedStatement stmt = conn.prepareStatement(
                         "SELECT " +
                                 "    r.recordID, " +
                                 "    r.enrollmentID, " +
@@ -38,12 +39,12 @@ public class RecordDaoImp implements RecordDao
                                 "  AND (? IS NULL OR e.schoolYear = ? ) " +
                                 "  AND (? IS NULL OR e.studentLevel = ? )");
 
-            statement.setString(1, studentID);
-            statement.setString(2, schoolYear);
-            statement.setString(3, schoolYear);
-            statement.setString(4, studentLevel);
-            statement.setString(5, studentLevel);
-            ResultSet rs = statement.executeQuery();
+            stmt.setString(1, studentID);
+            stmt.setString(2, schoolYear);
+            stmt.setString(3, schoolYear);
+            stmt.setString(4, studentLevel);
+            stmt.setString(5, studentLevel);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next())
             {
@@ -56,7 +57,7 @@ public class RecordDaoImp implements RecordDao
                 record.setActionId(rs.getLong("actionID"));
                 record.setDateOfResolution(rs.getDate("dateOfResolution"));
                 record.setRemarks(rs.getString("remarks"));
-                record.setStatus(rs.getString("status"));
+                record.setStatus(RecordStatus.valueOf(rs.getString("status")));
                 studentRecord.add(record);
             }
 
@@ -70,7 +71,7 @@ public class RecordDaoImp implements RecordDao
     @Override
     public boolean addStudentRecord(long enrollmentID, String employeeID,
                                     long offenseID, Date dateOfViolation, long  actionID,
-                                    String remarks, String status)
+                                    String remarks, RecordStatus status)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
@@ -88,10 +89,10 @@ public class RecordDaoImp implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, new Date(dateOfViolation.getTime()));
+            stmt.setDate(4, dateOfViolation);
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
-            stmt.setString(7, status);
+            stmt.setString(7, status.toString());
             stmt.executeUpdate();
 
             return true;
