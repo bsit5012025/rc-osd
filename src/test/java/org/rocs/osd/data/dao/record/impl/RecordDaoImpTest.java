@@ -61,7 +61,7 @@ class RecordDaoImpTest
         when(resultSet.getLong("actionID")).thenReturn(Long.valueOf(1));
         when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
-        when(resultSet.getString("status")).thenReturn("Pending");
+        when(resultSet.getString("status")).thenReturn(String.valueOf(RecordStatus.PENDING));
 
         RecordDao dao = new RecordDaoImp();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
@@ -77,7 +77,7 @@ class RecordDaoImpTest
         assertEquals(1, record.getActionId());
         assertEquals(Date.valueOf("2024-09-20"), record.getDateOfResolution());
         assertEquals("Student caught vaping in school", record.getRemarks());
-        assertEquals("Pending", record.getStatus());
+        assertEquals(RecordStatus.PENDING, record.getStatus());
 
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "CT123");
