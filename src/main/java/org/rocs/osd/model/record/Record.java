@@ -11,12 +11,12 @@ public class Record {
     private long actionId;
     private Date dateOfResolution;
     private String remarks;
-    private String status;
+    private RecordStatus status;
 
     public Record() {
     }
 
-    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, String status) {
+    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, RecordStatus status) {
         this.recordId = recordId;
         this.enrollmentId = enrollmentId;
         this.employeeId = employeeId;
@@ -28,99 +28,75 @@ public class Record {
         this.status = status;
     }
 
-
     public long getRecordId() {
         return recordId;
     }
-
 
     public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 
-
     public long getEnrollmentId() {
         return enrollmentId;
     }
-
 
     public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
-
     public String getEmployeeId() {
         return employeeId;
     }
-
 
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
-
     public long getOffenseId() {
         return offenseId;
     }
-
 
     public void setOffenseId(long offenseId) {
         this.offenseId = offenseId;
     }
 
-
     public Date getDateOfViolation() {
         return dateOfViolation;
     }
-
-
 
     public void setDateOfViolation(Date dateOfViolation) {
         this.dateOfViolation = dateOfViolation;
     }
 
-
-
     public long getActionId() {
         return actionId;
     }
-
-
 
     public void setActionId(long actionId) {
         this.actionId = actionId;
     }
 
-
-
     public Date getDateOfResolution() {
         return dateOfResolution;
     }
-
-
 
     public void setDateOfResolution(Date dateOfResolution) {
         this.dateOfResolution = dateOfResolution;
     }
 
-
-
     public String getRemarks() {
         return remarks;
     }
-
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return status;
     }
 
-
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 }
