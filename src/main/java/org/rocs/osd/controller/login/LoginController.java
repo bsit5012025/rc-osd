@@ -3,6 +3,7 @@ package org.rocs.osd.controller.login;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +14,6 @@ import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
-
 import java.io.IOException;
 
 public class LoginController {
@@ -23,23 +23,24 @@ public class LoginController {
     @FXML
     PasswordField passwordField;
 
-    public void onLogin(ActionEvent event){
+    public void onLogin(ActionEvent event) {
 
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
-
-        boolean loginCheck = loginFacade.login(usernameTextField.getText(),passwordField.getText());
-
-        if(usernameTextField.getText().isBlank() == false && passwordField.getText().isBlank()){
-            System.out.println("Enter unsername and password!");
-            return;
-        }
-        if(loginCheck){
-            loadDashboard(event);
-        }
-        else{
-            System.out.println("Invalid username or password!");
+        boolean loginCheck = loginFacade.login(usernameTextField.getText(), passwordField.getText());
+        try {
+            if (!usernameTextField.getText().isBlank() && passwordField.getText().isBlank()) {
+                System.out.println("Enter username and password!");
+                return;
+            }
+            if (loginCheck) {
+                loadDashboard(event);
+            } else {
+                System.out.println("Invalid username or password!");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
         }
     }
 
@@ -50,8 +51,14 @@ public class LoginController {
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
             stage.show();
+        } catch (LoadException e){
+            System.err.println("Error loading Dashboard");
+        } catch (NullPointerException e) {
+            System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to load on next screen");
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
         }
     }
 
