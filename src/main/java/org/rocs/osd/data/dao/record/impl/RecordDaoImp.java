@@ -21,7 +21,7 @@ public class RecordDaoImp implements RecordDao
         List<Record> studentRecord = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
         {
-            PreparedStatement statement = conn.prepareStatement(
+            PreparedStatement stmt = conn.prepareStatement(
                         "SELECT " +
                                 "    r.recordID, " +
                                 "    r.enrollmentID, " +
@@ -39,12 +39,12 @@ public class RecordDaoImp implements RecordDao
                                 "  AND (? IS NULL OR e.schoolYear = ? ) " +
                                 "  AND (? IS NULL OR e.studentLevel = ? )");
 
-            statement.setString(1, studentID);
-            statement.setString(2, schoolYear);
-            statement.setString(3, schoolYear);
-            statement.setString(4, studentLevel);
-            statement.setString(5, studentLevel);
-            ResultSet rs = statement.executeQuery();
+            stmt.setString(1, studentID);
+            stmt.setString(2, schoolYear);
+            stmt.setString(3, schoolYear);
+            stmt.setString(4, studentLevel);
+            stmt.setString(5, studentLevel);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next())
             {
