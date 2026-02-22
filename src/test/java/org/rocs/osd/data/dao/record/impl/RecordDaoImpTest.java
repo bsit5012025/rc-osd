@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.*;
 import java.util.List;
@@ -91,7 +92,7 @@ class RecordDaoImpTest
         RecordDao dao = new RecordDaoImp();
         boolean status = dao.addStudentRecord(Long.valueOf(3), "EMP-002",
                 Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
-                "Bullying incident reported","Resolved");
+                "Bullying incident reported", RecordStatus.PENDING);
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
@@ -101,7 +102,7 @@ class RecordDaoImpTest
         verify(preparedStatement).setDate(4, Date.valueOf("2025-03-08"));
         verify(preparedStatement).setLong(5, Long.valueOf(2));
         verify(preparedStatement).setString(6, "Bullying incident reported");
-        verify(preparedStatement).setString(7, "Resolved");
+        verify(preparedStatement).setString(7, String.valueOf(RecordStatus.PENDING));
         verify(preparedStatement).executeUpdate();
     }
 

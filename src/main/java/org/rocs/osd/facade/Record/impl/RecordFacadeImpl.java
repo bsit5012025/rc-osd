@@ -28,7 +28,7 @@ public class RecordFacadeImpl implements RecordFacade
 
         boolean savedSuccessfully =  recordDao.addStudentRecord(enrollmentID,
                 employeeID, offenseID, dateOfViolation, actionID, remarks,
-                RecordStatus.PENDING.getStatus());
+                RecordStatus.PENDING);
 
         return savedSuccessfully;
     }

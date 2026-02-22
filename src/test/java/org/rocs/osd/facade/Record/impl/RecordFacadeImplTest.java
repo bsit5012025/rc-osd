@@ -33,7 +33,7 @@ class RecordFacadeImplTest
         record = new Record(Long.valueOf(1), Long.valueOf(1),
                 "EMP-002", Long.valueOf(1), Date.valueOf("2024-09-15"),
                 Long.valueOf(1), Date.valueOf("2025-04-15"),
-                "Student caught vaping in school", "Pending");
+                "Student caught vaping in school",  RecordStatus.PENDING);
     }
 
     @Test
@@ -41,7 +41,7 @@ class RecordFacadeImplTest
     {
         when(recordDao.addStudentRecord(Long.valueOf(1), "EMP-002",
                 Long.valueOf(1), Date.valueOf("2024-09-15"), Long.valueOf(1),
-                "Student caught vaping in school", RecordStatus.PENDING.getStatus())).thenReturn(true);
+                "Student caught vaping in school", RecordStatus.PENDING)).thenReturn(true);
 
         boolean result = recordFacade.createStudentRecord(Long.valueOf(1),
                 "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
@@ -49,6 +49,6 @@ class RecordFacadeImplTest
 
         assertTrue(result);
         verify(recordDao, times(1)).addStudentRecord(anyLong(),
-                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), anyString());
+                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), any(RecordStatus.class));
     }
 }
