@@ -2,6 +2,7 @@ package org.rocs.osd.facade.Record.impl;
 
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Date;
 
@@ -24,9 +25,11 @@ public class RecordFacadeImpl implements RecordFacade
         {
             return false;
         }
-        String status = "Pending";
 
-        return recordDao.addStudentRecord(enrollmentID, employeeID, offenseID, dateOfViolation,
-                actionID, remarks, status);
+        boolean savedSuccessfully =  recordDao.addStudentRecord(enrollmentID,
+                employeeID, offenseID, dateOfViolation, actionID, remarks,
+                RecordStatus.PENDING.getStatus());
+
+        return savedSuccessfully;
     }
 }
