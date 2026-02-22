@@ -88,7 +88,7 @@ public class RecordDaoImp implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, new Date(dateOfViolation.getTime()));
+            stmt.setDate(4, dateOfViolation);
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
             stmt.setString(7, status);
