@@ -17,8 +17,6 @@ DROP TABLE student CASCADE CONSTRAINTS;
 DROP TABLE disciplinaryStatus CASCADE CONSTRAINTS;
 DROP TABLE enrollment CASCADE CONSTRAINTS;
 DROP TABLE record CASCADE CONSTRAINTS;
-DROP TABLE appeal CASCADE CONSTRAINTS;
-DROP TABLE request CASCADE CONSTRAINTS;
 
 
 -- PERSON ENTITY
@@ -120,32 +118,7 @@ CREATE TABLE record (
    actionID number(20,0),
    dateOfResolution DATE,
    remarks VARCHAR(500),
-   status VARCHAR(30),
-   primary key (recordID)
-);
-
--- APPEAL ENTITY
-CREATE TABLE appeal (
-    appealID number(20,0) generated as identity
-        constraint APPEAL_NOT_NULL not null,
-    recordID number(20,0),
-    enrollmentID number(20,0),
-    message VARCHAR(500),
-    dateFiled DATE,
-    status VARCHAR(20),
-    primary key (appealID)
-);
-
---REQUEST ENTITY
-CREATE TABLE request (
-    requestID number(20,0) generated as identity
-        constraint REQUEST_NOT_NULL not null,
-    employeeID VARCHAR(10),
-    details VARCHAR(100),
-    message VARCHAR(500),
-    type VARCHAR(100),
-    status VARCHAR(10),
-    primary key (requestID)
+   status VARCHAR(30)
 );
 
 
@@ -193,7 +166,7 @@ values (1, 'admin', 'admin', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd 
 insert into login (personID,username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
 values (9, 'prefect', '1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_PREFECT', 'user:read,user:create,user:update,user:delete', 1, 0);
 insert into login (personID, username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
-values (12, 'deptHead','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_STAFF', 'user:read,user:create,user:update', 1, 0);
+values (12, 'staff','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_STAFF', 'user:read,user:create,user:update', 1, 0);
 insert into login (personID, username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
 values (2, 'user1','1234', to_timestamp('2024-01-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), to_timestamp('2024-10-01 00:00:00.00', 'yyyy-mm-dd hh24:mi:ss:ff'), 'ROLE_USER', 'user:read,user:create,user:update', 1, 0);
 insert into login (personID, username, password, join_date, last_login_date, role, authorities, is_active, is_locked)
