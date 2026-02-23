@@ -1,5 +1,7 @@
 package org.rocs.osd.controller.login;
 
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,13 +22,16 @@ public class LoginController {
 
     @FXML
     TextField usernameTextField;
+
     @FXML
     PasswordField passwordField;
+
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("rcosdPersistenceUnit");
 
     public void onLogin(ActionEvent event){
 
         LoginFacade loginFacade;
-        LoginDao loginDao = new LoginDaoImpl();
+        LoginDao loginDao = new LoginDaoImpl(emf.createEntityManager());
         loginFacade = new LoginFacadeImpl(loginDao);
 
         boolean loginCheck = loginFacade.login(usernameTextField.getText(),passwordField.getText());

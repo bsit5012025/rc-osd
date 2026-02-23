@@ -3,5 +3,8 @@ package org.rocs.osd.data.dao.login;
 import org.rocs.osd.model.login.Login;
 
 public interface LoginDao {
-    public Login findLoginByUsername(String username);
+
+    Login findById (long id);
+
+    Login findByUsername (String username);
 }

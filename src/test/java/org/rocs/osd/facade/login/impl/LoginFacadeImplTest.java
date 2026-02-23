@@ -32,11 +32,11 @@ class LoginFacadeImplTest
     @Test
     public void testLogin ()
     {
-        when(loginDao.findLoginByUsername("user")).thenReturn(login);
+        when(loginDao.findByUsername("user")).thenReturn(login);
 
         boolean result = loginFacade.login("user", "1234");
 
         assert(result);
-        verify(loginDao, times(1)).findLoginByUsername(anyString());
+        verify(loginDao, times(1)).findByUsername(anyString());
     }
 }

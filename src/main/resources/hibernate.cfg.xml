@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="connection.url">jdbc:oracle:thin:@localhost:1521:oracleDB</property>
+        <property name="connection.username">rcosd</property>
+        <property name="connection.password">Changeme0</property>
+
+        <property name="dialect">org.hibernate.dialect.OracleDialect</property>
+
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+
+        <mapping class="org.rocs.osd.model.login.Login"/>
+    </session-factory>
+</hibernate-configuration>
