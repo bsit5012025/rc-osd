@@ -16,7 +16,7 @@ public class LoginFacadeImpl implements LoginFacade
     @Override
     public boolean login(String inputUserName, String inputPassword)
     {
-        Login login = loginDao.findLoginByUsername(inputUserName);
+        Login login = loginDao.findByUsername(inputUserName);
 
         if(login == null)
         {
