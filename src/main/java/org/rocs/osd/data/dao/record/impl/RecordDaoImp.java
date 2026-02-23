@@ -13,28 +13,15 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementation of the RecordDao interface.
- * This class handles student record data from the database.
- */
 public class RecordDaoImp implements RecordDao
 {
-
-    /**
-     * Finds student records by student ID, school year, and student level.
-     * Returns an empty list if no records are found.
-     * @param studentID the ID of the student.
-     * @param schoolYear the school year to filter (can be null).
-     * @param studentLevel the student level to filter (can be null).
-     * @return a list of Record objects matching the criteria.
-     */
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
     {
         List<Record> studentRecord = new ArrayList<>();
         try (Connection conn = ConnectionHelper.getConnection())
         {
-            PreparedStatement stmt = conn.prepareStatement(
+            PreparedStatement statement = conn.prepareStatement(
                         "SELECT " +
                                 "    r.recordID, " +
                                 "    r.enrollmentID, " +
@@ -52,12 +39,12 @@ public class RecordDaoImp implements RecordDao
                                 "  AND (? IS NULL OR e.schoolYear = ? ) " +
                                 "  AND (? IS NULL OR e.studentLevel = ? )");
 
-            stmt.setString(1, studentID);
-            stmt.setString(2, schoolYear);
-            stmt.setString(3, schoolYear);
-            stmt.setString(4, studentLevel);
-            stmt.setString(5, studentLevel);
-            ResultSet rs = stmt.executeQuery();
+            statement.setString(1, studentID);
+            statement.setString(2, schoolYear);
+            statement.setString(3, schoolYear);
+            statement.setString(4, studentLevel);
+            statement.setString(5, studentLevel);
+            ResultSet rs = statement.executeQuery();
 
             while (rs.next())
             {
@@ -81,18 +68,6 @@ public class RecordDaoImp implements RecordDao
         return studentRecord;
     }
 
-    /**
-     * Adds a new student record to the database.
-     *
-     * @param enrollmentID the enrollment ID of the student.
-     * @param employeeID the ID of the employee recording the offense.
-     * @param offenseID the ID of the offense.
-     * @param dateOfViolation the date the violation occurred.
-     * @param actionID the ID of the action taken.
-     * @param remarks additional remarks about the record.
-     * @param status the status of the record.
-     * @return true if the record was added successfully, false otherwise.
-     */
     @Override
     public boolean addStudentRecord(long enrollmentID, String employeeID,
                                     long offenseID, Date dateOfViolation, long  actionID,
@@ -130,12 +105,7 @@ public class RecordDaoImp implements RecordDao
         }
     }
 
-    /**
-     * Updates the status of a student record by its record ID.
-     * @param recordID the ID of the record to update.
-     * @param status   the new status to set.
-     * @return true if the update was successful, false otherwise.
-     */
+
     @Override
     public boolean updateStudentRecordStatusById(long recordID, String status) {
         String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
