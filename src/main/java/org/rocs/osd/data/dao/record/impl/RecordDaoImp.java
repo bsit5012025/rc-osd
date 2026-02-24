@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordDaoImpl implements RecordDao
+public class RecordDaoImp implements RecordDao
 {
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
