@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="borderColorContainer" stylesheets="@../../styles/dashboard/container.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane styleClass="borderColorContainer"
+            stylesheets="@../../styles/dashboard/container.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1">
 
    <stylesheets>
       <URL value="@../../styles/dashboard/label.css" />
@@ -66,13 +78,14 @@
             <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
          </Pane>
 
-         <TableView styleClass="table" VBox.vgrow="ALWAYS">
+         <TableView VBox.vgrow="ALWAYS">
             <columns>
-               <TableColumn prefWidth="180.40000361204147" text="Student ID" />
-               <TableColumn prefWidth="257.79994201660156" text="Student Name" />
-               <TableColumn prefWidth="255.60003662109375" text="Level of Offense" />
-               <TableColumn prefWidth="231.4000244140625" text="Offense Type" />
-               <TableColumn prefWidth="164.60009765625" text="Date" />
+               <TableColumn prefWidth="250.0" text="Student ID" />
+               <TableColumn prefWidth="250.0" text="Student Name" />
+               <TableColumn prefWidth="250.0" text="Level of Offense" />
+               <TableColumn prefWidth="250.0" text="Offense Type" />
+               <TableColumn prefWidth="150.0" text="Date" />
+               <TableColumn prefWidth="20.0" />
             </columns>
 
             <columnResizePolicy>
