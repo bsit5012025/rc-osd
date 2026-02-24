@@ -11,12 +11,12 @@ public class Record {
     private long actionId;
     private Date dateOfResolution;
     private String remarks;
-    private String status;
+    private RecordStatus status;
 
     public Record() {
     }
 
-    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, String status) {
+    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, RecordStatus status) {
         this.recordId = recordId;
         this.enrollmentId = enrollmentId;
         this.employeeId = employeeId;
@@ -92,11 +92,11 @@ public class Record {
         this.remarks = remarks;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 }
