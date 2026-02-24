@@ -1,0 +1,35 @@
+.mainContainer {
+    -fx-alignment: center;
+    -fx-pref-width: 350;
+    -fx-pref-height: 250;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+HBox, VBox{
+    -fx-alignment: center;
+}
+
+Label {
+    -fx-font-size: 25;
+}
+
+Button{
+    -fx-font-size: 15;
+    -fx-min-width: 100;
+    -fx-min-height: 40;
+    -fx-max-width: 100;
+    -fx-max-height: 40;
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-background-color: #050c8f;
+    -fx-text-fill: white;
+}
+Button:hover{
+    -fx-background-color: #f0f4ff;
+    -fx-text-fill: black;
+}
+Button:focused{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+

@@ -78,14 +78,13 @@
             <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
          </Pane>
 
-         <TableView VBox.vgrow="ALWAYS">
+         <TableView styleClass="table" VBox.vgrow="ALWAYS">
             <columns>
-               <TableColumn prefWidth="250.0" text="Student ID" />
-               <TableColumn prefWidth="250.0" text="Student Name" />
-               <TableColumn prefWidth="250.0" text="Level of Offense" />
-               <TableColumn prefWidth="250.0" text="Offense Type" />
-               <TableColumn prefWidth="150.0" text="Date" />
-               <TableColumn prefWidth="20.0" />
+               <TableColumn prefWidth="180.40000361204147" text="Student ID" />
+               <TableColumn prefWidth="257.79994201660156" text="Student Name" />
+               <TableColumn prefWidth="255.60003662109375" text="Level of Offense" />
+               <TableColumn prefWidth="231.4000244140625" text="Offense Type" />
+               <TableColumn prefWidth="164.60009765625" text="Date" />
             </columns>
 
             <columnResizePolicy>
