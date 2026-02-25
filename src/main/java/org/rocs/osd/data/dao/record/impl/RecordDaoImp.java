@@ -115,7 +115,7 @@ public class RecordDaoImp implements RecordDao
                             "offenseID = ?, " +
                             "dateOfViolation = ?, " +
                             "actionID = ?, " +
-                            "remarks = ? " +
+                            "remarks = ?, " +
                             "status = ? " +
                             "WHERE recordID = ?");
             stmt.setLong(1, record.getEnrollmentId());
