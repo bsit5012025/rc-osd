@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane styleClass="rootContainer"
+            stylesheets="@../../styles/request/request.css"
+            xmlns="http://javafx.com/javafx/17">
+
+    <center>
+        <VBox styleClass="mainWrapper">
+            <children>
+
+                <HBox styleClass="headerContainer">
+                    <children>
+                        <Label styleClass="headerText" text="REQUESTS" />
+                    </children>
+                </HBox>
+
+                <ScrollPane fitToWidth="true"
+                            hbarPolicy="NEVER"
+                            styleClass="requestsScrollPane"
+                            VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox styleClass="listContainer">
+                            <children>
+
+                                <VBox styleClass="requestCard">
+                                    <children>
+                                        <HBox styleClass="cardHeader">
+                                            <children>
+                                                <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <HBox styleClass="labelRow">
+                                                            <children>
+                                                                <Label styleClass="boldLabel" text="Department: " />
+                                                                <Label styleClass="dataLabel" text="Junior High School" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox styleClass="labelRow">
+                                                            <children>
+                                                                <Label styleClass="boldLabel" text="Name: " />
+                                                                <Label styleClass="dataLabel" text="John Doe" />
+                                                            </children>
+                                                        </HBox>
+
+                                                        <VBox styleClass="expandedSection">
+                                                            <children>
+                                                                <HBox styleClass="labelRow">
+                                                                    <children>
+                                                                        <Label styleClass="boldLabel" text="Type: " />
+                                                                        <Label styleClass="dataLabel" text="Section" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <Label styleClass="boldLabel" text="Reason for request: " />
+                                                                <Label styleClass="reasonText"
+                                                                       text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem..."
+                                                                       wrapText="true" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <Button styleClass="arrowButton">
+                                                    <graphic>
+                                                        <ImageView fitHeight="20.0"
+                                                                   fitWidth="20.0"
+                                                                   pickOnBounds="true"
+                                                                   preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../assets/downButton.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+
+                                        <HBox styleClass="actionBarContainer">
+                                            <children>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <HBox styleClass="actionBar">
+                                                    <children>
+                                                        <Button styleClass="denyButton" text="Deny" />
+                                                        <Button styleClass="approveButton" text="Approve" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+
+                                <VBox styleClass="requestCard">
+                                    <children>
+                                        <HBox styleClass="cardHeader">
+                                            <children>
+                                                <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <HBox styleClass="labelRow">
+                                                            <children>
+                                                                <Label styleClass="boldLabel" text="Department: " />
+                                                                <Label styleClass="dataLabel" text="College" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox styleClass="labelRow">
+                                                            <children>
+                                                                <Label styleClass="boldLabel" text="Name: " />
+                                                                <Label styleClass="dataLabel" text="Jane Smith" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <Button styleClass="arrowButton">
+                                                    <graphic>
+                                                        <ImageView fitHeight="20.0"
+                                                                   fitWidth="20.0"
+                                                                   pickOnBounds="true"
+                                                                   preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../assets/rightButton.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
