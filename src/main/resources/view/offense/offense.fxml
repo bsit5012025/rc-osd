@@ -8,7 +8,7 @@
 
 <BorderPane styleClass="borderColorContainer"
             stylesheets="@../../styles/dashboard/container.css"
-            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.rocs.osd.controller.offense.OffenseController">
 
