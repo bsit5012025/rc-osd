@@ -95,4 +95,24 @@ class OffenseDaoImplTest
         Mockito.verify(this.preparedStatement).executeQuery();
 
     }
+    @Test
+    void testFindOffenseByOffenseName() throws SQLException
+    {
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getString("offense")).thenReturn("Vaping");
+        when(resultSet.getString("type")).thenReturn("Major Offense");
+
+        OffenseDao dao = new OffenseDaoImpl();
+        Offense offense = dao.findByName("Vaping");
+
+        assertEquals("Vaping", offense.getOffense());
+        assertEquals("Major Offense", offense.getType());
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement, times(1)).setString(1, "Vaping");
+        verify(preparedStatement, times(1)).executeQuery();
+    }
 }
