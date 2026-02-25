@@ -9,17 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Implementation of the LoginDao interface
- * This class will handle the login data from the database
- */
 public class LoginDaoImpl implements LoginDao  {
 
-
-    /**
-     * Finds and retrieves a Login object from the database by username
-     * Returns an empty Login object if no match is found
-     */
+    // This class will handle the login data from the database
     @Override
     public Login findLoginByUsername(String username) {
         Login login = new Login();

@@ -11,18 +11,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
-/**
-*The DashboardController manages user interactions on the Dashboard screen.
- */
+// This controller manages the Dashboard screen
 public class DashboardController {
 
     @FXML
     StackPane mainContentWrapper;
 
-    /**
-     *   This method is used for logout button
-     */
+    // This method is used for logout button
     public void onLogout(ActionEvent event){
 
         try{
@@ -42,10 +37,7 @@ public class DashboardController {
 
     }
 
-    /**
-     * This method is used to load Offense view inside the dashboard
-     */
-
+    // This method is used to load Offense view inside the dashboard
     public void onLoadOffense(ActionEvent event) {
         try {
             Parent offenseView = FXMLLoader.load(getClass().getResource("/view/offense/offense.fxml"));
