@@ -9,6 +9,7 @@ public class Person {
     public Person() {
     }
 
+    // Constructor with all values
     public Person(long personID, String lastName, String firstName, String middleName) {
         this.personID = personID;
         this.lastName = lastName;
@@ -16,33 +17,41 @@ public class Person {
         this.middleName = middleName;
     }
 
+
     public long getPersonID() {
         return personID;
     }
+
 
     public void setPersonID(long personID) {
         this.personID = personID;
     }
 
+
     public String getLastName() {
         return lastName;
     }
+
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+
     public String getFirstName() {
         return firstName;
     }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+
     public String getMiddleName() {
         return middleName;
     }
+
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
