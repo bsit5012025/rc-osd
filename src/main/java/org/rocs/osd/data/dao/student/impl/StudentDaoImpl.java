@@ -9,9 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of the StudendDao interface.
+ * This class handles student data from the database, including records.
+ */
 public class StudentDaoImpl implements StudendDao
 {
-    // This class will handle the student data from the database
+
+    /**
+     * Finds a student and their record by student ID.
+     * Returns an empty Student object if no match is found.
+     * @param StudentId the ID of the student to search.
+     * @return a Student object with student and record info.
+     */
     @Override
     public Student findStudentWithRecordById(String StudentId)
     {
@@ -56,6 +66,14 @@ public class StudentDaoImpl implements StudendDao
         return student;
     }
 
+    /**
+     * Finds a student and their record by their full name.
+     * Returns an empty Student object if no match is found.
+     * @param lastName the student's last name.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @return a Student object with student and record info.
+     */
     @Override
     public Student findStudentWithRecordByName(String lastName, String firstName, String middleName)
     {
