@@ -3,7 +3,6 @@ package org.rocs.osd.data.dao.record.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
-import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,7 +58,7 @@ public class RecordDaoImp implements RecordDao
                 record.setActionId(rs.getLong("actionID"));
                 record.setDateOfResolution(rs.getDate("dateOfResolution"));
                 record.setRemarks(rs.getString("remarks"));
-                record.setStatus(RecordStatus.valueOf(rs.getString("status")));
+                record.setStatus(rs.getString("status"));
                 studentRecord.add(record);
             }
 
