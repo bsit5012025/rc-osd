@@ -11,9 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the OffenseDao interface.
+ * This class handles offense data from the database.
+ */
 public class OffenseDaoImpl implements OffenseDao
 {
 
+    /**
+     * Finds and retrieves an Offense object from the database by offense ID.
+     * Returns an empty Offense object if no match is found.
+     * @param offenseID the ID of the offense to find.
+     * @return an Offense object with the offense details.
+     */
     @Override
     public Offense findOffenseById(String offenseID)
     {
@@ -45,6 +55,10 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    /**
+     * Retrieves a list of all offense names from the database.
+     * @return a list of offense names
+     */
     @Override
     public List<String> findAllOffenseName() {
         List<String> offense = new ArrayList<>();
