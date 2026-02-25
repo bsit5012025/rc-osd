@@ -6,7 +6,11 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="borderColorContainer" stylesheets="@../../styles/dashboard/container.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane styleClass="borderColorContainer"
+            stylesheets="@../../styles/dashboard/container.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.offense.OffenseController">
 
    <stylesheets>
       <URL value="@../../styles/dashboard/label.css" />
@@ -14,7 +18,7 @@
       <URL value="@../../styles/dashboard/buttons.css" />
       <URL value="@../../styles/dashboard/table.css" />
    </stylesheets>
-   
+
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 
@@ -31,7 +35,7 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image><Image url="@../../assets/add-icon.png" /></image>
                   </ImageView>
-                  <Button mnemonicParsing="false" text="Add Violation" />
+                  <Button onAction="#onLoadOffenseModal" mnemonicParsing="false" text="Add Violation" />
             </HBox>
 
          <padding><Insets bottom="10.0" top="10.0" /></padding>
