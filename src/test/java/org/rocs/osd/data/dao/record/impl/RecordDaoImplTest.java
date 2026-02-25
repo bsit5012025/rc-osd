@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.*;
 import java.util.List;
@@ -21,7 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RecordDaoImpTest
+class RecordDaoImplTest
 {
     @Mock
     private Connection connection;
@@ -60,7 +61,7 @@ class RecordDaoImpTest
         when(resultSet.getLong("actionID")).thenReturn(Long.valueOf(1));
         when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
-        when(resultSet.getString("status")).thenReturn("Pending");
+        when(resultSet.getString("status")).thenReturn(String.valueOf(RecordStatus.PENDING));
 
         RecordDao dao = new RecordDaoImp();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
@@ -76,7 +77,7 @@ class RecordDaoImpTest
         assertEquals(1, record.getActionId());
         assertEquals(Date.valueOf("2024-09-20"), record.getDateOfResolution());
         assertEquals("Student caught vaping in school", record.getRemarks());
-        assertEquals("Pending", record.getStatus());
+        assertEquals(RecordStatus.PENDING, record.getStatus());
 
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "CT123");
@@ -106,29 +107,34 @@ class RecordDaoImpTest
     }
 
     @Test
-    void testUpdateStudentRecordStatusById() throws SQLException
+    void testUpdateRecord() throws SQLException
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
-
         RecordDao dao = new RecordDaoImp();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
 
-        assertTrue(result);
+        Record record = new Record();
+        record.setEnrollmentId(Long.valueOf(1));
+        record.setEmployeeId("EMP-002");
+        record.setOffenseId(Long.valueOf(1));
+        record.setDateOfViolation(java.sql.Date.valueOf("2024-09-15"));
+        record.setActionId(Long.valueOf(1));
+        record.setRemarks("Student caught vaping in school");
+        record.setStatus(RecordStatus.PENDING);
+        record.setRecordId(Long.valueOf(1));
 
+        boolean status = dao.updateRecord(record);
+
+        assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setString(1, "Resolved");
-        verify(preparedStatement).setLong(2, 5L);
+        verify(preparedStatement).setLong(1, Long.valueOf(1));
+        verify(preparedStatement).setString(2,"EMP-002");
+        verify(preparedStatement).setLong(3, Long.valueOf(1));
+        verify(preparedStatement).setDate(4, java.sql.Date.valueOf("2024-09-15"));
+        verify(preparedStatement).setLong(5, Long.valueOf(1));
+        verify(preparedStatement).setString(6, "Student caught vaping in school");
+        verify(preparedStatement).setString(7, String.valueOf(RecordStatus.PENDING));
+        verify(preparedStatement).setLong(8, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 
-    @Test
-    void testUpdateStudentRecordStatusByIdNoRowsUpdated() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        RecordDao dao = new RecordDaoImp();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
-
-        assertFalse(result);
-    }
 }
