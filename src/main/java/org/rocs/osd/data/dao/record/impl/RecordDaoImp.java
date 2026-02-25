@@ -3,6 +3,7 @@ package org.rocs.osd.data.dao.record.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +15,6 @@ import java.util.List;
 
 public class RecordDaoImp implements RecordDao
 {
-
-    // This class will handle the student record data from the database
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
     {
@@ -58,7 +57,7 @@ public class RecordDaoImp implements RecordDao
                 record.setActionId(rs.getLong("actionID"));
                 record.setDateOfResolution(rs.getDate("dateOfResolution"));
                 record.setRemarks(rs.getString("remarks"));
-                record.setStatus(rs.getString("status"));
+                record.setStatus(RecordStatus.valueOf(rs.getString("status")));
                 studentRecord.add(record);
             }
 
@@ -72,7 +71,7 @@ public class RecordDaoImp implements RecordDao
     @Override
     public boolean addStudentRecord(long enrollmentID, String employeeID,
                                     long offenseID, Date dateOfViolation, long  actionID,
-                                    String remarks, String status)
+                                    String remarks, RecordStatus status)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
@@ -90,10 +89,10 @@ public class RecordDaoImp implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, new Date(dateOfViolation.getTime()));
+            stmt.setDate(4, dateOfViolation);
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
-            stmt.setString(7, status);
+            stmt.setString(7, status.toString());
             stmt.executeUpdate();
 
             return true;
@@ -106,33 +105,23 @@ public class RecordDaoImp implements RecordDao
         }
     }
 
-    @Override
-    public boolean updateRecord(Record record) {
-        try (Connection con = ConnectionHelper.getConnection()) {
-            PreparedStatement stmt = con.prepareStatement(
-                    "UPDATE record SET " +
-                            "enrollmentID = ?," +
-                            "employeeID = ?," +
-                            "offenseID = ?, " +
-                            "dateOfViolation = ?, " +
-                            "actionID = ?, " +
-                            "remarks = ?, " +
-                            "status = ? " +
-                            "WHERE recordID = ?");
-            stmt.setLong(1, record.getEnrollmentId());
-            stmt.setString(2, record.getEmployeeId());
-            stmt.setLong(3, record.getOffenseId());
-            stmt.setDate(4, (java.sql.Date) record.getDateOfViolation());
-            stmt.setLong(5, record.getActionId());
-            stmt.setString(6, record.getRemarks());
-            stmt.setString(7, String.valueOf(record.getStatus()));
-            stmt.setLong(8, record.getRecordId());
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println("An SQL Exception occurred." + e.getMessage());
 
-            return false;
+    @Override
+    public boolean updateStudentRecordStatusById(long recordID, String status) {
+        String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+            stmt.setLong(2, recordID);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("SQL Exception (updateStudentRecordStatusById): " + e.getMessage());
         }
+
+        return false;
     }
 }
