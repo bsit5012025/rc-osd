@@ -11,16 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementation of the DepartmentDao interface
- * This class handles department data from the database
- */
 public class DepartmentDaoImpl implements DepartmentDao {
 
-    /**
-     * Finds and retrieves a Department object from the database by ID.
-     * Returns an empty Department object if no match is found.
-     */
     @Override
     public Department findDepartmentById(long departmentId) {
 
@@ -42,9 +34,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return department;
     }
 
-    /**
-     * Retrieves a list of all department names from the database.
-     */
     @Override
     public List<String> findAllDepartmentName() {
         List<String> departmentNames = new ArrayList<>();
