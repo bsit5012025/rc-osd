@@ -3,7 +3,6 @@ package org.rocs.osd.data.dao.record.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
-import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +12,21 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the RecordDao interface.
+ * This class handles student record data from the database.
+ */
 public class RecordDaoImp implements RecordDao
 {
+
+    /**
+     * Finds student records by student ID, school year, and student level.
+     * Returns an empty list if no records are found.
+     * @param studentID the ID of the student.
+     * @param schoolYear the school year to filter (can be null).
+     * @param studentLevel the student level to filter (can be null).
+     * @return a list of Record objects matching the criteria.
+     */
     @Override
     public List<Record> findStudentByIdAndEnrolment(String studentID, String schoolYear, String studentLevel)
     {
@@ -57,7 +69,7 @@ public class RecordDaoImp implements RecordDao
                 record.setActionId(rs.getLong("actionID"));
                 record.setDateOfResolution(rs.getDate("dateOfResolution"));
                 record.setRemarks(rs.getString("remarks"));
-                record.setStatus(RecordStatus.valueOf(rs.getString("status")));
+                record.setStatus(rs.getString("status"));
                 studentRecord.add(record);
             }
 
@@ -68,10 +80,22 @@ public class RecordDaoImp implements RecordDao
         return studentRecord;
     }
 
+    /**
+     * Adds a new student record to the database.
+     *
+     * @param enrollmentID the enrollment ID of the student.
+     * @param employeeID the ID of the employee recording the offense.
+     * @param offenseID the ID of the offense.
+     * @param dateOfViolation the date the violation occurred.
+     * @param actionID the ID of the action taken.
+     * @param remarks additional remarks about the record.
+     * @param status the status of the record.
+     * @return true if the record was added successfully, false otherwise.
+     */
     @Override
     public boolean addStudentRecord(long enrollmentID, String employeeID,
                                     long offenseID, Date dateOfViolation, long  actionID,
-                                    String remarks, RecordStatus status)
+                                    String remarks, String status)
     {
         try (Connection con = ConnectionHelper.getConnection())
         {
@@ -89,10 +113,10 @@ public class RecordDaoImp implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, dateOfViolation);
+            stmt.setDate(4, new Date(dateOfViolation.getTime()));
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
-            stmt.setString(7, status.toString());
+            stmt.setString(7, status);
             stmt.executeUpdate();
 
             return true;
@@ -105,7 +129,12 @@ public class RecordDaoImp implements RecordDao
         }
     }
 
-
+    /**
+     * Updates the status of a student record by its record ID.
+     * @param recordID the ID of the record to update.
+     * @param status   the new status to set.
+     * @return true if the update was successful, false otherwise.
+     */
     @Override
     public boolean updateStudentRecordStatusById(long recordID, String status) {
         String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
