@@ -1,0 +1,120 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-background-image: url("../../assets/BACKGROUND.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-size: cover;
+}
+
+.loginBox {
+    -fx-background-color: rgba(255, 255, 255, 0.80);
+    -fx-background-radius: 20;
+    -fx-padding: 40 45 45 45;
+    -fx-spacing: 12;
+    -fx-alignment: center;
+    -fx-max-width: 420;
+    -fx-max-height: 420;
+    -fx-border-radius: 20;
+    -fx-border-color: rgba(255, 255, 255, 0.60);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 30, 0.3, 0, 8);
+}
+
+.formBox {
+    -fx-spacing: 14;
+    -fx-alignment: center;
+}
+
+.usernameBox, .passwordBox {
+    -fx-spacing: 6;
+}
+
+.passwordContainer {
+    -fx-pref-width: 320;
+}
+
+.passwordContainer .password-field,
+.passwordContainer .text-field {
+    -fx-pref-width: 320;
+    -fx-pref-height: 46;
+    -fx-padding: 0 45 0 10;
+}
+
+.passwordContainer {
+    -fx-pref-width: 320;
+    -fx-pref-height: 46;
+}
+
+.passwordContainer > .showPassword {
+    -fx-alignment: center-right;
+    -fx-translate-x: 140;
+}
+
+.showPassword {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-background-image: url("../../assets/HIDE_EYE.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20 20;
+    -fx-padding: 0;
+}
+
+.showPassword:hover {
+    -fx-opacity: 0.8;
+}
+.forgotBox {
+    -fx-translate-x: 210;
+    -fx-translate-y: -10;
+
+}
+
+.loginHead {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.usernameText, .passwordText {
+    -fx-font-size: 13px;
+    -fx-text-fill: #444444;
+}
+
+.text-field, .password-field {
+    -fx-pref-width: 320;
+    -fx-pref-height: 30;
+    -fx-min-height:  30;
+    -fx-max-height:  30;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1;
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #AEC6CF;
+}
+
+.forgotText {
+    -fx-font-size: 13px;
+    -fx-text-fill: navy;
+    -fx-underline: true;
+}
+
+.loginButton {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 30;
+    -fx-pref-width: 320;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.loginButton:hover {
+    -fx-background-color: blue;
+}

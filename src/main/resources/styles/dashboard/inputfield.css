@@ -1,0 +1,38 @@
+.inputTextFieldOffense {
+    -fx-pref-height: 40;
+    -fx-max-width: 400;
+    -fx-background-color: rgba(0, 0, 0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-border-width: 1;
+    -fx-cursor: text;
+    -fx-font-size: 14;
+}
+
+.datePicker {
+    -fx-pref-height: 40;
+    -fx-max-width: 300;
+    -fx-background-color: rgba(0, 0, 0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-border-width: 1;
+    -fx-font-size: 14;
+}
+
+.inputTextArea {
+    -fx-background-color: rgba(0, 0, 0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-border-width: 1;
+    -fx-font-size: 14;
+    -fx-cursor: text;
+}
+
+.borderSearchTextField{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-radius: 10;
+}
+.searchTextField{
+    -fx-background-color: rgba(0,0,0,0);
+}
+.searchTextField:focused{
+    -fx-background-color: rgba(0,0,0,0);
+}

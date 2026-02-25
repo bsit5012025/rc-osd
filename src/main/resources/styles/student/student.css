@@ -1,0 +1,84 @@
+.mainBackground {
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Arial";
+}
+
+.searchBar {
+    -fx-background-color: white;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 1;
+    -fx-background-radius: 5 0 0 5;
+    -fx-border-radius: 5 0 0 5;
+    -fx-padding: 0 10 0 10;
+}
+
+.sortButton {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 1 1 1 0;
+    -fx-background-radius: 0 5 5 0;
+    -fx-border-radius: 0 5 5 0;
+    -fx-cursor: hand;
+}
+
+.context-menu {
+    -fx-background-color: white;
+    -fx-padding: 5;
+    -fx-border-color: #ced4da;
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: #000080;
+}
+
+.context-menu .menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #dee2e6;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #e9ecef;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 45;
+    -fx-border-color: transparent #ffffff transparent transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.table-row-cell {
+    -fx-border-color: transparent transparent #f2f2f2 transparent;
+    -fx-cursor: hand;
+    -fx-background-color: white;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #eeeeee;
+}
+
+.table-view:focused .table-row-cell:filled:focused,
+.table-view:focused .table-row-cell:filled:selected {
+   -fx-background-color: white;
+   -fx-background-insets: 0;
+}
+
+.table-view:focused .table-row-cell:filled:selected .text {
+    -fx-fill: #333333;
+}
+
+.table-cell {
+    -fx-padding: 12 15;
+    -fx-alignment: CENTER_LEFT;
+}
