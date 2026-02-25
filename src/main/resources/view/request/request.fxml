@@ -6,7 +6,7 @@
 
 <BorderPane styleClass="rootContainer"
             stylesheets="@../../styles/request/request.css"
-            xmlns="http://javafx.com/javafx/17">
+            xmlns="http://javafx.com/javafx/21">
 
     <center>
         <VBox styleClass="mainWrapper">
