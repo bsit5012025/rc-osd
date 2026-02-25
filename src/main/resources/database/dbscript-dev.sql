@@ -135,7 +135,9 @@ ALTER TABLE record ADD CONSTRAINT FK_RECORD_ENROLLMENT FOREIGN KEY (enrollmentID
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_OFFENSE FOREIGN KEY (offenseID) REFERENCES offense(offenseID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_ACTION FOREIGN KEY (actionID) REFERENCES disciplinaryAction(actionID);
-
+ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_RECORD FOREIGN KEY (recordID) REFERENCES record(recordID);
+ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_ENROLLMENT FOREIGN KEY (enrollmentID) REFERENCES enrollment(enrollmentID);
+ALTER TABLE request ADD CONSTRAINT FK_REQUEST_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
 
 -- TEST DATA
 INSERT INTO person ( lastName, firstName, middleName) VALUES ('Bayona', 'Wilrow', 'Reosa');
@@ -217,6 +219,14 @@ INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (1, 'EMP-002', 1, TO_DATE('2024-09-15', 'YYYY-MM-DD'), 1, TO_DATE('2024-09-20', 'YYYY-MM-DD'), 'Student caught vaping in school', 'Pending');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (2, 'EMP-002', 8, TO_DATE('2025-01-12', 'YYYY-MM-DD'), 2, TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Repeatedly late to class', 'Resolved');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (3, 'EMP-002', 7, TO_DATE('2025-02-05', 'YYYY-MM-DD'), 1, TO_DATE('2025-02-10', 'YYYY-MM-DD'), 'Skipped class without permission', 'Resolved');
-INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (3, 'EMP-002', 4, TO_DATE('2025-03-03', 'YYYY-MM-DD'), 2, TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Bullying incident reported', 'Resolved');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (3, 'EMP-002', 5, TO_DATE('2025-03-03', 'YYYY-MM-DD'), 2, TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Bullying incident reported', 'Resolved');
+
+INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (1, 1, 'I did not bring a vape to school', TO_DATE('2025-07-29','YYYY-MM-DD'), 'PENDING');
+INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (2, 2, 'I have an excuse letter from my parents stating there are not a lot of public vehicles at our are', TO_DATE('2025-10-03','YYYY-MM-DD'), 'DENIED');
+INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (4, 3, 'We were simply holding hands', TO_DATE('2025-10-22','YYYY-MM-DD'), 'PENDING');
+
+INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-001', 'St. Andrew', 'By Section', 'Requesting for the conduct record of all students in St. Andrew', 'APPROVED');
+INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-001', 'Grade 10', 'By Batch', 'Requesting for the conduct record of the graduating class of 2025-2026', 'PENDING');
+INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-001', 'St. Raphael', 'By Section', 'Requesting for the conduct record of all students in St. Raphael', 'DENIED');
 
 COMMIT;
