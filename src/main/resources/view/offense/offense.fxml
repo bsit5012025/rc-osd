@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="borderColorContainer" stylesheets="@../../styles/dashboard/container.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane styleClass="borderColorContainer"
+            stylesheets="@../../styles/dashboard/container.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.offense.OffenseController">
 
    <stylesheets>
       <URL value="@../../styles/dashboard/label.css" />
@@ -14,7 +32,7 @@
       <URL value="@../../styles/dashboard/buttons.css" />
       <URL value="@../../styles/dashboard/table.css" />
    </stylesheets>
-   
+
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 
@@ -31,7 +49,7 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image><Image url="@../../assets/add-icon.png" /></image>
                   </ImageView>
-                  <Button mnemonicParsing="false" text="Add Violation" />
+                  <Button onAction="#onLoadOffenseModal" mnemonicParsing="false" text="Add Violation" />
             </HBox>
 
          <padding><Insets bottom="10.0" top="10.0" /></padding>
