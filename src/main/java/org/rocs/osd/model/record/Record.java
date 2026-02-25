@@ -28,73 +28,97 @@ public class Record {
         this.status = status;
     }
 
+
     public long getRecordId() {
         return recordId;
     }
+
 
     public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 
+
     public long getEnrollmentId() {
         return enrollmentId;
     }
+
 
     public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
+
     public String getEmployeeId() {
         return employeeId;
     }
+
 
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
+
     public long getOffenseId() {
         return offenseId;
     }
+
 
     public void setOffenseId(long offenseId) {
         this.offenseId = offenseId;
     }
 
+
     public Date getDateOfViolation() {
         return dateOfViolation;
     }
+
+
 
     public void setDateOfViolation(Date dateOfViolation) {
         this.dateOfViolation = dateOfViolation;
     }
 
+
+
     public long getActionId() {
         return actionId;
     }
+
+
 
     public void setActionId(long actionId) {
         this.actionId = actionId;
     }
 
+
+
     public Date getDateOfResolution() {
         return dateOfResolution;
     }
+
+
 
     public void setDateOfResolution(Date dateOfResolution) {
         this.dateOfResolution = dateOfResolution;
     }
 
+
+
     public String getRemarks() {
         return remarks;
     }
+
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
+
     public String getStatus() {
         return status;
     }
+
 
     public void setStatus(String status) {
         this.status = status;

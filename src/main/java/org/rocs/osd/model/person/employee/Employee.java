@@ -10,12 +10,14 @@ public class Employee extends Person {
     public Employee() {
     }
 
+
     public Employee(Long personID, String lastName, String firstName, String middleName, String employeeId, String departmentId, String employeeRole) {
         super(personID, lastName, firstName, middleName);
         this.employeeId = employeeId;
         this.departmentId = departmentId;
         this.employeeRole = employeeRole;
     }
+
 
     public String getEmployeeId() {
         return employeeId;
