@@ -14,8 +14,7 @@ public class Appeal {
     public Appeal() {
     }
 
-    public Appeal(Long appealID, Long recordID, Long enrollmentID,
-                  String message, Date dateFiled, String status) {
+    public Appeal(Long appealID, Long recordID, Long enrollmentID, String message, Date dateFiled, String status) {
         this.appealID = appealID;
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
@@ -24,8 +23,7 @@ public class Appeal {
         this.status = status;
     }
 
-    public Appeal(Long recordID, Long enrollmentID,
-                  String message, String status) {
+    public Appeal(Long recordID, Long enrollmentID, String message, String status) {
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
         this.message = message;
@@ -41,12 +39,12 @@ public class Appeal {
     public Long getEnrollmentID() { return enrollmentID; }
     public void setEnrollmentID(Long enrollmentID) { this.enrollmentID = enrollmentID; }
 
-    public String getMessage() { return message; }
+    public String getAppealMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
 
     public Date getDateFiled() { return dateFiled; }
     public void setDateFiled(Date dateFiled) { this.dateFiled = dateFiled; }
 
-    public String getStatus() { return status; }
+    public String getAppealStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
