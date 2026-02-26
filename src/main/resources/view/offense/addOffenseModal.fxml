@@ -9,8 +9,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -20,13 +18,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <StackPane fx:id="addViolationModal"
            styleClass="modalContainer"
            stylesheets="@../../styles/dashboard/container.css"
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.rocs.osd.controller.login.LoginController">
+           fx:controller="org.rocs.osd.controller.offense.AddOffenseModalController">
 
     <stylesheets>
         <URL value="@../../styles/dashboard/label.css" />
@@ -98,7 +97,7 @@
                      <font>
                         <Font name="Arial Black" size="12.0" />
                      </font></Label>
-                        <ComboBox editable="true" prefWidth="150.0" styleClass="inputTextFieldOffense">
+                        <ComboBox fx:id="offenseTypeComboBox" editable="false" prefWidth="150.0" styleClass="inputTextFieldOffense">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </ComboBox>
                     </VBox>
@@ -107,7 +106,7 @@
                         <Label styleClass="lightLabelForTextField" text="Level of offense">
                             <VBox.margin><Insets left="10.0" /></VBox.margin>
                         </Label>
-                        <ComboBox editable="true" prefWidth="150.0" styleClass="inputTextFieldOffense">
+                        <ComboBox fx:id="levelOfOffenseComboBox" editable="false" prefWidth="150.0" styleClass="inputTextFieldOffense">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </ComboBox>
                     </VBox>

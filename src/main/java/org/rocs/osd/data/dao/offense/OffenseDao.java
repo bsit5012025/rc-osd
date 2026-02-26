@@ -11,4 +11,5 @@ public interface OffenseDao
 {
     Offense findOffenseById(String offenseID);
     List<String> findAllOffenseName();
+    Offense findByName(String offenseName);
 }

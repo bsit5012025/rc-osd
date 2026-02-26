@@ -77,4 +77,27 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    @Override
+    public Offense findByName(String offenseName) {
+
+        Offense offense = null;
+
+        try (Connection conn = ConnectionHelper.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement("SELECT offenseID, offense, type FROM offense WHERE offense = ?");
+            statement.setString(1, offenseName);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                offense = new Offense();
+                offense.setOffenseId(rs.getInt("offenseID"));
+                offense.setOffense(rs.getString("offense"));
+                offense.setType(rs.getString("type"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offense;
+    }
 }
