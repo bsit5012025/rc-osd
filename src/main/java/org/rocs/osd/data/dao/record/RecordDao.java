@@ -13,5 +13,4 @@ public interface RecordDao
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, String status);
     boolean updateRecord(Record record);
-
 }
