@@ -23,7 +23,7 @@ import java.io.IOException;
 public class LoginController {
 
     /**
-    This text field is used to enter the username
+     This text field is used to enter the username
      */
     @FXML
     TextField usernameTextField;
@@ -31,11 +31,9 @@ public class LoginController {
      */
     @FXML
     PasswordField passwordField;
-
-    public void onLogin(ActionEvent event) {
     /**
-    This method triggered once the Login button is clicked
-    */
+     This method triggered once the Login button is clicked
+     */
     public void onLogin(ActionEvent event){
 
         /**
@@ -44,19 +42,6 @@ public class LoginController {
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
-        boolean loginCheck = loginFacade.login(usernameTextField.getText(), passwordField.getText());
-        try {
-            if (!usernameTextField.getText().isBlank() && passwordField.getText().isBlank()) {
-                System.out.println("Enter username and password!");
-                return;
-            }
-            if (loginCheck) {
-                loadDashboard(event);
-            } else {
-                System.out.println("Invalid username or password!");
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
 
         /**
          * This will check if the entered username and password are correct
@@ -77,7 +62,7 @@ public class LoginController {
             loadDashboard(event);
         }
         else{
-        // If the login fails, "Invalid username or password! will be displayed
+            // If the login fails, "Invalid username or password! will be displayed
             System.out.println("Invalid username or password!");
         }
     }
@@ -94,15 +79,15 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard/dashboard.fxml"));
             /**
              * This will get the current window from the button click event.
-              */
+             */
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             /**
              * This will display the Dashboard screen in the window.
-              */
+             */
             stage.setScene(new Scene(root));
             /**
              * This will make the window full screen
-              */
+             */
             stage.setMaximized(true);
             stage.show();
         } catch (LoadException e){
@@ -110,12 +95,9 @@ public class LoginController {
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
-            System.err.println("Failed to load on next screen");
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
             /**
              * Throw an exception if the Dashboard screen cannot be loaded
-              */
+             */
             throw new RuntimeException(e);
         }
     }
