@@ -9,7 +9,7 @@
 
 <StackPane styleClass="mainContainer"
            stylesheets="@../../styles/logout/logout.css"
-           xmlns="http://javafx.com/javafx/25">
+           xmlns="http://javafx.com/javafx/21">
 
       <VBox spacing="10.0">
             <Label text="Are you sure, " />
