@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.*;
 import java.util.List;
@@ -60,7 +61,7 @@ class RecordDaoImpTest
         when(resultSet.getLong("actionID")).thenReturn(Long.valueOf(1));
         when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
-        when(resultSet.getString("status")).thenReturn("Pending");
+        when(resultSet.getString("status")).thenReturn(String.valueOf(RecordStatus.PENDING));
 
         RecordDao dao = new RecordDaoImp();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
@@ -76,7 +77,7 @@ class RecordDaoImpTest
         assertEquals(1, record.getActionId());
         assertEquals(Date.valueOf("2024-09-20"), record.getDateOfResolution());
         assertEquals("Student caught vaping in school", record.getRemarks());
-        assertEquals("Pending", record.getStatus());
+        assertEquals(RecordStatus.PENDING, record.getStatus());
 
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "CT123");
@@ -91,7 +92,7 @@ class RecordDaoImpTest
         RecordDao dao = new RecordDaoImp();
         boolean status = dao.addStudentRecord(Long.valueOf(3), "EMP-002",
                 Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
-                "Bullying incident reported","Resolved");
+                "Bullying incident reported", RecordStatus.PENDING);
 
         assertTrue(status);
         verify(connection, times(1)).prepareStatement(anyString());
@@ -101,7 +102,7 @@ class RecordDaoImpTest
         verify(preparedStatement).setDate(4, Date.valueOf("2025-03-08"));
         verify(preparedStatement).setLong(5, Long.valueOf(2));
         verify(preparedStatement).setString(6, "Bullying incident reported");
-        verify(preparedStatement).setString(7, "Resolved");
+        verify(preparedStatement).setString(7, String.valueOf(RecordStatus.PENDING));
         verify(preparedStatement).executeUpdate();
     }
 

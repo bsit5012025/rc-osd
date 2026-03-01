@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane styleClass="rootContainer"
+            stylesheets="@../../styles/request/request.css"
+            xmlns="http://javafx.com/javafx/21">
+
+    <center>
+        <VBox styleClass="mainWrapper">
+            <HBox styleClass="headerContainer">
+                <Label styleClass="headerText" text="APPEALS" />
+            </HBox>
+
+            <ScrollPane fitToWidth="true"
+                        hbarPolicy="NEVER"
+                        styleClass="requestsScrollPane"
+                        VBox.vgrow="ALWAYS">
+                <VBox styleClass="listContainer">
+
+                    <VBox styleClass="requestCard">
+                        <HBox styleClass="cardTopRow">
+                            <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+                                <HBox styleClass="labelRow">
+                                    <Label styleClass="boldLabel" text="Student ID: " />
+                                    <Label styleClass="dataLabel" text="2023-0001" />
+                                </HBox>
+                                <HBox styleClass="labelRow">
+                                    <Label styleClass="boldLabel" text="Student Name: " />
+                                    <Label styleClass="dataLabel" text="John Doe" />
+                                </HBox>
+
+                                <VBox styleClass="expandedSection">
+                                    <HBox styleClass="labelRow">
+                                        <Label styleClass="boldLabel" text="Offense: " />
+                                        <Label styleClass="dataLabel" text="Late Submission" />
+                                    </HBox>
+                                    <Label styleClass="boldLabel" text="Reason for Appeal: " />
+                                    <Label styleClass="reasonText" text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem..." wrapText="true" />
+                                </VBox>
+                            </VBox>
+
+                            <VBox alignment="TOP_RIGHT">
+                                <Button styleClass="arrowButton">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0"
+                                                   fitWidth="20.0"
+                                                   pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <Image url="@../../assets/downButton.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_RIGHT" styleClass="actionRow">
+                            <Button styleClass="denyButton" text="Deny" />
+                            <Button styleClass="approveButton" text="Approve">
+                                <HBox.margin>
+                                    <Insets left="10.0" />
+                                </HBox.margin>
+                            </Button>
+                        </HBox>
+                    </VBox>
+
+                    <VBox styleClass="requestCard">
+                        <HBox alignment="CENTER_LEFT" styleClass="cardTopRow">
+                            <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+                                <HBox styleClass="labelRow">
+                                    <Label styleClass="boldLabel" text="Student ID: " />
+                                    <Label styleClass="dataLabel" text="2023-0002" />
+                                </HBox>
+                                <HBox styleClass="labelRow">
+                                    <Label styleClass="boldLabel" text="Student Name: " />
+                                    <Label styleClass="dataLabel" text="Jane Smith" />
+                                </HBox>
+                            </VBox>
+
+                            <VBox alignment="CENTER_RIGHT">
+                                <Button styleClass="arrowButton">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0"
+                                                   fitWidth="20.0"
+                                                   pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <Image url="@../../assets/rightButton.png" />
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

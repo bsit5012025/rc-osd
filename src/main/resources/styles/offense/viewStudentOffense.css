@@ -1,0 +1,57 @@
+.root {
+    -fx-font-family: Arial;
+}
+.studentOffenseContainer {
+    -fx-padding: 20px;
+}
+
+.viewStudentTextArea {
+    -fx-background-color: white;
+    -fx-border-color: #DCDDE1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
+    -fx-min-width: 235;
+    -fx-max-width: 235px;
+}
+
+.viewStudentGrid {
+    -fx-padding: 0 0 0 5px;
+}
+
+.viewStudentLabel {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.resolveButton {
+    -fx-background-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.editButton {
+    -fx-background-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.buttonBar {
+    -fx-spacing: 15px;
+}
+
+.editButton:hover {
+    -fx-background-color: #0044FF;
+}
+
+.resolveButton:hover {
+    -fx-background-color: #0044FF;
+}
+
