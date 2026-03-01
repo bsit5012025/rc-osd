@@ -1,128 +1,75 @@
 package org.rocs.osd.data.dao.appeal.impl;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.model.appeal.Appeal;
 
-import java.sql.*;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AppealDaoImplTest {
 
-    @Mock
-    private Connection connection;
+    private static AppealDaoImpl appealDao;
 
-    @Mock
-    private PreparedStatement preparedStatement;
-
-    @Mock
-    private ResultSet resultSet;
-
-    private static MockedStatic<ConnectionHelper> connectionHelper;
-
-    @BeforeEach
-    void setUp() throws SQLException {
-
-        connectionHelper = Mockito.mockStatic(ConnectionHelper.class);
-        connectionHelper.when(ConnectionHelper::getConnection).thenReturn(connection);
-
-        lenient().when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        lenient().when(connection.prepareStatement(anyString(), any(String[].class))).thenReturn(preparedStatement);
-        lenient().when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-    }
-
-    @AfterEach
-    void tearDown() {
-        connectionHelper.close();
+    @BeforeAll
+    static void setup() {
+        appealDao = new AppealDaoImpl();
     }
 
     @Test
-    void testSaveAppeal() throws SQLException {
+    @Order(1)
+    void testSaveAppeal() {
+        Appeal appeal = new Appeal();
+        appeal.setRecordID(1L);
+        appeal.setEnrollmentID(1L);
+        appeal.setMessage("Test appeal message");
+        appeal.setDateFiled(new Date());
+        appeal.setStatus("PENDING");
 
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong(1)).thenReturn(10L);
-
-        AppealDaoImpl dao = new AppealDaoImpl();
-        Appeal appeal = new Appeal(1L, 1L, "Test appeal message", "PENDING");
-
-        Appeal saved = dao.saveAppeal(appeal);
-
-        assertNotNull(saved.getAppealID());
-        assertEquals(10L, saved.getAppealID());
-
-        verify(preparedStatement, times(1)).executeUpdate();
+        assertDoesNotThrow(() -> appealDao.saveAppeal(appeal), "Saving appeal should not throw exception");
     }
 
     @Test
-    void testFindById() throws SQLException {
+    @Order(2)
+    void testFindAllAppealDetails() {
+        List<Appeal> appeals = appealDao.findAllAppealDetails();
+        assertNotNull(appeals, "Appeal list should not be null");
+        assertTrue(appeals.size() > 0, "Appeals list should have at least one record");
 
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong("appealID")).thenReturn(1L);
-        when(resultSet.getLong("recordID")).thenReturn(1L);
-        when(resultSet.getLong("enrollmentID")).thenReturn(1L);
-        when(resultSet.getString("message")).thenReturn("Sample");
-        when(resultSet.getDate("dateFiled")).thenReturn(new Date(System.currentTimeMillis()));
-        when(resultSet.getString("status")).thenReturn("PENDING");
-
-        AppealDaoImpl dao = new AppealDaoImpl();
-        Appeal appeal = dao.findByAppealId(1L);
-
-        assertNotNull(appeal);
-        assertEquals("Sample", appeal.getAppealMessage());
-
-        verify(preparedStatement, times(1)).setLong(1, 1L);
-        verify(preparedStatement, times(1)).executeQuery();
-    }
-    @Test
-    void testFindByEnrollmentId() throws SQLException {
-        Long enrollmentId = 1L;
-
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true, false);
-        when(resultSet.getLong("appealID")).thenReturn(1L);
-        when(resultSet.getLong("recordID")).thenReturn(1L);
-        when(resultSet.getLong("enrollmentID")).thenReturn(enrollmentId);
-        when(resultSet.getString("message")).thenReturn("Test appeal");
-        when(resultSet.getDate("dateFiled")).thenReturn(new Date(System.currentTimeMillis()));
-        when(resultSet.getString("status")).thenReturn("PENDING");
-
-        AppealDaoImpl dao = new AppealDaoImpl();
-        List<Appeal> appeals = dao.findByEnrollmentId(enrollmentId);
-
-        assertNotNull(appeals);
-        assertEquals(1, appeals.size());
-
-        Appeal firstAppeal = appeals.get(0);
-        assertEquals(enrollmentId, firstAppeal.getEnrollmentID());
-        assertEquals("Test appeal", firstAppeal.getAppealMessage());
-
-        verify(preparedStatement, times(1)).setLong(1, enrollmentId);
-        verify(preparedStatement, times(1)).executeQuery();
+        for (Appeal a : appeals) {
+            System.out.println("ID: " + a.getAppealID() +
+                    ", Student: " + a.getStudentName() +
+                    ", Offense: " + a.getOffense() +
+                    ", Status: " + a.getStatus());
+        }
     }
 
     @Test
-    void testUpdateStatus() throws SQLException {
+    @Order(3)
+    void testUpdateAppealStatus() {
+        List<Appeal> appeals = appealDao.findAllAppealDetails();
+        assertFalse(appeals.isEmpty(), "Appeals list should not be empty for status update");
 
-        when(preparedStatement.executeUpdate()).thenReturn(1);
+        Long appealId = appeals.get(0).getAppealID();
+        assertDoesNotThrow(() -> appealDao.updateAppealStatus(appealId, "APPROVED"));
 
-        AppealDaoImpl dao = new AppealDaoImpl();
-        dao.updateAppealStatus(1L, "APPROVED");
+        Appeal updatedAppeal = appealDao.findAllAppealDetails()
+                .stream()
+                .filter(a -> a.getAppealID().equals(appealId))
+                .findFirst()
+                .orElse(null);
 
-        verify(preparedStatement, times(1)).setString(1, "APPROVED");
-        verify(preparedStatement, times(1)).setLong(2, 1L);
-        verify(preparedStatement, times(1)).executeUpdate();
+        assertNotNull(updatedAppeal, "Updated appeal should exist");
+        assertEquals("APPROVED", updatedAppeal.getStatus(), "Appeal status should be APPROVED");
+
+        assertDoesNotThrow(() -> appealDao.updateAppealStatus(appealId, "REJECTED"));
+        updatedAppeal = appealDao.findAllAppealDetails()
+                .stream()
+                .filter(a -> a.getAppealID().equals(appealId))
+                .findFirst()
+                .orElse(null);
+        assertEquals("REJECTED", updatedAppeal.getStatus(), "Appeal status should be REJECTED");
     }
 }
