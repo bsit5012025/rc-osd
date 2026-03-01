@@ -35,7 +35,6 @@
                                     <Label styleClass="dataLabel" text="John Doe" />
                                 </HBox>
 
-
                                 <VBox styleClass="expandedSection">
                                     <HBox styleClass="labelRow">
                                         <Label styleClass="boldLabel" text="Offense: " />
