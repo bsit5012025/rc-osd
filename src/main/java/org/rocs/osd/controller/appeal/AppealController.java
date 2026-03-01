@@ -14,28 +14,40 @@ public class AppealController {
 
     @FXML
     private VBox listContainer;
-    private AppealFacade appealFacade = new AppealFacadeImpl();
+
+    private final AppealFacade appealFacade = new AppealFacadeImpl();
 
     @FXML
     public void initialize() {
+
         listContainer.getChildren().clear();
+
         loadAppealsFromDB();
     }
+
     private void loadAppealsFromDB() {
 
         List<Appeal> appeals = appealFacade.getAllAppeals();
-            for (Appeal appeal : appeals) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/appeal/appealModal.fxml")
-                    );
-                        VBox card = loader.load();
-                        AppealModalController controller = loader.getController();
-                        controller.setAppeal(appeal);
-                        controller.setOnActionComplete(() -> listContainer.getChildren().remove(card)
-                    );
-                    listContainer.getChildren().add(card);
-            }
-                catch (IOException e) {
+
+        for (Appeal appeal : appeals) {
+            try {
+
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/appeal/appealModal.fxml")
+                );
+
+                VBox card = loader.load();
+
+                AppealModalController controller = loader.getController();
+                controller.setAppeal(appeal);
+
+                controller.setOnActionComplete(() ->
+                        listContainer.getChildren().remove(card)
+                );
+
+                listContainer.getChildren().add(card);
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
