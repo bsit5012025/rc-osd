@@ -21,7 +21,6 @@ public class AppealController {
     public void initialize() {
 
         listContainer.getChildren().clear();
-
         loadAppealsFromDB();
     }
 
