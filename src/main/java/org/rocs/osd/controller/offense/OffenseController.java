@@ -22,7 +22,10 @@ public class OffenseController {
             modalStage.show();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("UI Error: Could not find or load AddOffenseModal.fxml. Check the file path and Controller names.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected Error while opening modal: " + e.getMessage());
         }
     }
 

@@ -40,8 +40,12 @@ public class DashboardController {
             stage.setScene(new Scene(root,width,height));
             stage.show();
 
+        } catch (NullPointerException e) {
+            System.err.println("Logout Error: login.fxml not found.");
+        } catch (IOException e) {
+            System.err.println("Logout Error: Failed to parse login.fxml. Check your FXML file.");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("Logout Error: An unexpected error occurred: " + e.getMessage());
         }
     }
     /**
@@ -53,8 +57,10 @@ public class DashboardController {
             Parent offenseView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/offense/offense.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(offenseView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
         }
     }
 }
