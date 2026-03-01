@@ -11,113 +11,86 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     @Override
-    public Appeal saveAppeal(Appeal appeal) {
+    public void saveAppeal(Appeal appeal) {
 
-        String sql = "INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) " +
-                "VALUES (?, ?, ?, SYSDATE, ?)";
+        String sql = """
+            INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status)
+            VALUES (?, ?, ?, ?, ?) """;
 
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement =
-                     connection.prepareStatement(sql, new String[]{"appealID"})) {
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            preparedStatement.setLong(1, appeal.getRecordID());
-            preparedStatement.setLong(2, appeal.getEnrollmentID());
-            preparedStatement.setString(3, appeal.getAppealMessage());
-            preparedStatement.setString(4, appeal.getAppealStatus());
-
-            preparedStatement.executeUpdate();
-
-            try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
-                if (rs.next()) {
-                    appeal.setAppealID(rs.getLong(1));
-                }
-            }
-
-            return appeal;
-
+                ps.setLong(1, appeal.getRecordID());
+                ps.setLong(2, appeal.getEnrollmentID());
+                ps.setString(3, appeal.getMessage());
+                ps.setDate(4, new java.sql.Date(appeal.getDateFiled().getTime()));
+                ps.setString(5, appeal.getStatus());
+                ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Appeal findByAppealId(Long appealId) {
+    public List<Appeal> findAllAppealDetails() {
 
-        String sql = "SELECT * FROM appeal WHERE appealID = ?";
+        List<Appeal> list = new ArrayList<>();
+        String sql = """
+            SELECT a.appealID,
+                   a.recordID,
+                   a.enrollmentID,
+                   a.message,
+                   a.dateFiled,
+                   a.status,
+                   s.studentID,
+                   p.firstName || ' ' || p.lastName AS fullName,
+                   o.offense
+                    FROM appeal a
+                    JOIN record r ON a.recordID = r.recordID
+                    JOIN offense o ON r.offenseID = o.offenseID
+                    JOIN enrollment e ON a.enrollmentID = e.enrollmentID
+                    JOIN student s ON e.studentID = s.studentID
+                    JOIN person p ON s.personID = p.personID
+                    ORDER BY a.dateFiled DESC
+        """;
 
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            preparedStatement.setLong(1, appealId);
+            while (rs.next()) {
+                Appeal appeal = new Appeal();
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    appeal.setAppealID(rs.getLong("appealID"));
+                    appeal.setRecordID(rs.getLong("recordID"));
+                    appeal.setEnrollmentID(rs.getLong("enrollmentID"));
+                    appeal.setMessage(rs.getString("message"));
+                    appeal.setDateFiled(rs.getDate("dateFiled"));
+                    appeal.setStatus(rs.getString("status"));
+                    appeal.setStudentId(rs.getString("studentID"));
+                    appeal.setStudentName(rs.getString("fullName"));
+                    appeal.setOffense(rs.getString("offense"));
 
-                if (resultSet.next()) {
-                    return mapRow(resultSet);
-                }
+                list.add(appeal);
             }
-
-            return null;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return list;
     }
-
-    @Override
-    public List<Appeal> findByEnrollmentId(Long enrollmentId) {
-
-        String sql = "SELECT * FROM appeal WHERE enrollmentID = ?";
-
-        List<Appeal> appeals = new ArrayList<>();
-
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setLong(1, enrollmentId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                while (resultSet.next()) {
-                    appeals.add(mapRow(resultSet));
-                }
-            }
-
-            return appeals;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void updateAppealStatus(Long appealId, String status) {
 
         String sql = "UPDATE appeal SET status = ? WHERE appealID = ?";
 
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, status);
-            preparedStatement.setLong(2, appealId);
-
-            preparedStatement.executeUpdate();
-
+                ps.setString(1, status);
+                ps.setLong(2, appealId);
+                ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Appeal mapRow(ResultSet resultSet) throws SQLException {
-
-        Appeal appeal = new Appeal();
-        appeal.setAppealID(resultSet.getLong("appealID"));
-        appeal.setRecordID(resultSet.getLong("recordID"));
-        appeal.setEnrollmentID(resultSet.getLong("enrollmentID"));
-        appeal.setMessage(resultSet.getString("message"));
-        appeal.setDateFiled(resultSet.getDate("dateFiled"));
-        appeal.setStatus(resultSet.getString("status"));
-
-        return appeal;
     }
 }
