@@ -132,4 +132,35 @@ class RecordDaoImpTest
 
         assertFalse(result);
     }
+
+    @Test
+    void testUpdateRecord() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        RecordDao dao = new RecordDaoImp();
+
+        Record record = new Record();
+        record.setEnrollmentId(Long.valueOf(1));
+        record.setEmployeeId("EMP-002");
+        record.setOffenseId(Long.valueOf(1));
+        record.setDateOfViolation(java.sql.Date.valueOf("2024-09-15"));
+        record.setActionId(Long.valueOf(1));
+        record.setRemarks("Student caught vaping in school");
+        record.setStatus(RecordStatus.PENDING);
+        record.setRecordId(Long.valueOf(1));
+
+        boolean status = dao.updateRecord(record);
+
+        assertTrue(status);
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement).setLong(1, Long.valueOf(1));
+        verify(preparedStatement).setString(2,"EMP-002");
+        verify(preparedStatement).setLong(3, Long.valueOf(1));
+        verify(preparedStatement).setDate(4, java.sql.Date.valueOf("2024-09-15"));
+        verify(preparedStatement).setLong(5, Long.valueOf(1));
+        verify(preparedStatement).setString(6, "Student caught vaping in school");
+        verify(preparedStatement).setString(7, String.valueOf(RecordStatus.PENDING));
+        verify(preparedStatement).setLong(8, Long.valueOf(1));
+        verify(preparedStatement).executeUpdate();
+    }
 }
