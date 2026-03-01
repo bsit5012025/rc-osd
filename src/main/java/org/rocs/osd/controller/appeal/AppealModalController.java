@@ -85,6 +85,7 @@ public class AppealModalController {
         delay.setOnFinished(e -> {
             if (onActionComplete != null) onActionComplete.run();
         });
+
         delay.play();
     }
 }
