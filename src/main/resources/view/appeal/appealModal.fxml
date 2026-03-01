@@ -52,7 +52,6 @@
         </Button>
     </HBox>
 
-
     <VBox fx:id="popupBox" alignment="CENTER" spacing="5"
           style="-fx-background-color: #DDE1EB; -fx-padding: 10; -fx-background-radius: 8;"
           visible="false">
