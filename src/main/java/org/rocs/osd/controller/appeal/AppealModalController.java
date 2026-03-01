@@ -17,19 +17,17 @@ public class AppealModalController {
     @FXML private Label studentNameLabel;
     @FXML private Label offenseLabel;
     @FXML private Label reasonLabel;
-
     @FXML private VBox expandedSection;
     @FXML private Button arrowButton;
     @FXML private Button approveButton;
     @FXML private Button denyButton;
-
     @FXML private VBox popupBox;
     @FXML private Label popupLabel;
     @FXML private ImageView arrowIcon;
 
-    private AppealFacade appealFacade = new AppealFacadeImpl();
-
+    private final AppealFacade appealFacade = new AppealFacadeImpl();
     private Appeal appeal;
+
     private Runnable onActionComplete;
 
     public void setAppeal(Appeal appeal) {
@@ -43,48 +41,50 @@ public class AppealModalController {
 
     @FXML
     public void initialize() {
-        expandedSection.setVisible(false);
-        popupBox.setVisible(false);
+        arrowButton.setOnAction(event -> toggleExpandedSection());
+        approveButton.setOnAction(event -> handleApprove());
+        denyButton.setOnAction(event -> handleDeny());
 
-        arrowButton.setOnAction(e -> toggleExpanded());
-        approveButton.setOnAction(e -> handleApprove());
-        denyButton.setOnAction(e -> handleDeny());
+        if (expandedSection != null) expandedSection.setVisible(false);
+        if (popupBox != null) popupBox.setVisible(false);
     }
 
     private void loadAppealData() {
         if (appeal == null) return;
-            studentIdLabel.setText(String.valueOf(appeal.getStudentId()));
-            studentNameLabel.setText(appeal.getStudentName());
-            offenseLabel.setText(appeal.getOffense());
-            reasonLabel.setText(appeal.getMessage());
+
+        studentIdLabel.setText(appeal.getStudentId().toString());
+        studentNameLabel.setText(appeal.getStudentName());
+        offenseLabel.setText(appeal.getOffense());
+        reasonLabel.setText(appeal.getMessage());
+
+        expandedSection.setVisible(false);
+        popupBox.setVisible(false);
     }
 
-    private void toggleExpanded() {
+    private void toggleExpandedSection() {
         boolean expanded = expandedSection.isVisible();
-            expandedSection.setVisible(!expanded);
-            arrowIcon.setRotate(expanded ? 0 : 180);
+        expandedSection.setVisible(!expanded);
+        arrowIcon.setRotate(expanded ? 0 : 180); // rotate down/up
     }
 
     private void handleApprove() {
         appealFacade.approveAppeal(appeal.getEnrollmentID());
-        showPopupAndRemove("Appeal approved!");
+        showPopupAndRemoveCard("Appeal approved!");
     }
 
     private void handleDeny() {
         appealFacade.rejectAppeal(appeal.getEnrollmentID());
-        showPopupAndRemove("Appeal denied!");
+        showPopupAndRemoveCard("Appeal denied!");
     }
 
-    private void showPopupAndRemove(String message) {
+    private void showPopupAndRemoveCard(String message) {
         popupLabel.setText(message);
         popupBox.setVisible(true);
 
-            PauseTransition delay = new PauseTransition(Duration.seconds(1));
-            delay.setOnFinished(e -> {
-                if (onActionComplete != null) {
-                    onActionComplete.run();
-                }
-             });
-            delay.play();
+        PauseTransition delay = new PauseTransition(Duration.seconds(1.0));
+        delay.setOnFinished(e -> {
+            if (onActionComplete != null) onActionComplete.run();
+        });
+        delay.play();
     }
 }
