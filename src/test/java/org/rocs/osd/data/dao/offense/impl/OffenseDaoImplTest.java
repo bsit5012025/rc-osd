@@ -1,6 +1,7 @@
 package org.rocs.osd.data.dao.offense.impl;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,6 +76,43 @@ class OffenseDaoImplTest
 
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "OFF-001");
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+    @Test
+    void testFindAllOffenseNameReturnsOffenseNames() throws SQLException{
+        Mockito.when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        Mockito.when(this.resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+        Mockito.when(this.resultSet.getString("offense")).thenReturn("Bullying").thenReturn("Tardiness");
+
+        OffenseDao dao = new OffenseDaoImpl();
+        List<String> offense = dao.findAllOffenseName();
+        List<String> expectOffense = new ArrayList<>();
+        expectOffense.add("Bullying");
+        expectOffense.add("Tardiness");
+
+        Assertions.assertEquals(expectOffense,offense);
+        Mockito.verify(this.connection).prepareStatement(Mockito.anyString());
+        Mockito.verify(this.preparedStatement).executeQuery();
+
+    }
+    @Test
+    void testFindOffenseByOffenseName() throws SQLException
+    {
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getString("offense")).thenReturn("Vaping");
+        when(resultSet.getString("type")).thenReturn("Major Offense");
+
+        OffenseDao dao = new OffenseDaoImpl();
+        Offense offense = dao.findByName("Vaping");
+
+        assertEquals("Vaping", offense.getOffense());
+        assertEquals("Major Offense", offense.getType());
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement, times(1)).setString(1, "Vaping");
         verify(preparedStatement, times(1)).executeQuery();
     }
 }

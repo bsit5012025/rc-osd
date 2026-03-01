@@ -1,0 +1,119 @@
+.rootContainer {
+    -fx-background-color: #F8F9FB;
+    -fx-padding: 30;
+    -fx-font-family: "Arial";
+}
+
+.mainWrapper {
+    -fx-alignment: TOP_LEFT;
+    -fx-spacing: 20;
+}
+
+.headerText {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.requestsScrollPane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-max-width: 1200;
+}
+
+.requestsScrollPane .viewport {
+    -fx-background-color: transparent;
+}
+
+.listContainer {
+    -fx-padding: 10 20 20 5;
+    -fx-spacing: 25;
+}
+
+.requestCard {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);
+}
+
+.cardTopRow {
+    -fx-alignment: TOP_LEFT;
+}
+
+.infoSection {
+    -fx-spacing: 6;
+}
+
+.labelRow {
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.boldLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.dataLabel {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666666;
+}
+
+.reasonText {
+    -fx-font-size: 15px;
+    -fx-text-fill: #555555;
+    -fx-padding: 5 0 0 0;
+}
+
+.expandedSection {
+    -fx-spacing: 8;
+    -fx-padding: 10 0 0 0;
+}
+
+.arrowButton {
+    -fx-background-color: #DDE1EB;
+    -fx-background-radius: 5;
+    -fx-padding: 4;
+    -fx-cursor: hand;
+}
+
+.arrowButton:hover {
+    -fx-background-color: #CED4E0;
+}
+
+.actionRow {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-padding: 15 0 0 0;
+    -fx-spacing: 12;
+}
+
+.approveButton {
+    -fx-background-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-padding: 8 30;
+    -fx-cursor: hand;
+}
+
+.approveButton:hover {
+    -fx-background-color: #0000FF;
+}
+
+.denyButton {
+    -fx-background-color: white;
+    -fx-border-color: #000080;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-text-fill: #000080;
+    -fx-font-weight: bold;
+    -fx-padding: 8 30;
+    -fx-cursor: hand;
+}
+
+.denyButton:hover {
+    -fx-background-color: #F8F9FA;
+}
