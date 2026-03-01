@@ -2,9 +2,12 @@ package org.rocs.osd.controller.offense;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.data.dao.record.RecordDao;
@@ -25,12 +28,6 @@ public class AddOffenseModalController {
     @FXML private TextField studentNameTextField;
     @FXML private DatePicker datePicker;
     @FXML private TextArea remarksTextArea;
-    @FXML private TableView<Record> recordTableView;
-    @FXML private TableColumn<Record, String> studentIdColumn;
-    @FXML private TableColumn<Record, String> studentNameColumn;
-    @FXML private TableColumn<Record, String> levelOfOffenseColumn;
-    @FXML private TableColumn<Record, String> offenseTypeColumn;
-    @FXML private TableColumn<Record, String> dateColumn;
 
     private StudendDao studentDao;
     private OffenseDao offenseDao;
@@ -43,14 +40,6 @@ public class AddOffenseModalController {
     public void initialize(){
         offenseDao = new OffenseDaoImpl();
         studentDao = new StudentDaoImpl();
-        ObservableList<Record> recordList = FXCollections.observableArrayList();
-
-        studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentID"));
-        studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
-        levelOfOffenseColumn.setCellValueFactory(new PropertyValueFactory<>("levelOfOffense"));
-        offenseTypeColumn.setCellValueFactory(new PropertyValueFactory<>("offenseType"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfViolation"));
-        recordTableView.setItems(recordList);
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
@@ -116,5 +105,8 @@ public class AddOffenseModalController {
             System.out.println("STUDENT NOT FOUND!");
         }
     }
-
+    public void onCancel(ActionEvent event){
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
 }
