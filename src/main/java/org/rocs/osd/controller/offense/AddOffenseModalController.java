@@ -3,10 +3,15 @@ package org.rocs.osd.controller.offense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
+import org.rocs.osd.data.dao.record.RecordDao;
+import org.rocs.osd.data.dao.student.StudendDao;
+import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
 import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.student.Student;
 
 /**
  * Controller for the "Add Offense" modal in the Office of Student Discipline System.
@@ -14,20 +19,42 @@ import org.rocs.osd.model.offense.Offense;
  */
 public class AddOffenseModalController {
 
-    @FXML
-    private ComboBox<String> offenseTypeComboBox;
-    @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
+    @FXML private ComboBox<String> offenseTypeComboBox;
+    @FXML private ComboBox<String> levelOfOffenseComboBox;
+    @FXML private TextField studentIdTextField;
+    @FXML private TextField studentNameTextField;
+    @FXML private DatePicker datePicker;
+    @FXML private TextArea remarksTextArea;
+    @FXML private TableView<Record> recordTableView;
+    @FXML private TableColumn<Record, String> studentIdColumn;
+    @FXML private TableColumn<Record, String> studentNameColumn;
+    @FXML private TableColumn<Record, String> levelOfOffenseColumn;
+    @FXML private TableColumn<Record, String> offenseTypeColumn;
+    @FXML private TableColumn<Record, String> dateColumn;
 
+    private StudendDao studentDao;
     private OffenseDao offenseDao;
+    private RecordDao recordDao;
 
     /**
      * Controller for the "Add Offense" modal.
      * Handles the population of offense type and level ComboBoxes and automatically selects the level of offense based on the selected offense type.
      */
     public void initialize(){
+        offenseDao = new OffenseDaoImpl();
+        studentDao = new StudentDaoImpl();
+        ObservableList<Record> recordList = FXCollections.observableArrayList();
+
+        studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentID"));
+        studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        levelOfOffenseColumn.setCellValueFactory(new PropertyValueFactory<>("levelOfOffense"));
+        offenseTypeColumn.setCellValueFactory(new PropertyValueFactory<>("offenseType"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfViolation"));
+        recordTableView.setItems(recordList);
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
+        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
     }
 
     /**
@@ -36,6 +63,8 @@ public class AddOffenseModalController {
      */
 
     public void loadComboBoxData(){
+        ObservableList<String> offenseList = FXCollections.observableArrayList(offenseDao.findAllOffenseName());
+        offenseTypeComboBox.setItems(offenseList);
         try {
             offenseDao = new OffenseDaoImpl();
             var data = offenseDao.findAllOffenseName();
@@ -67,4 +96,25 @@ public class AddOffenseModalController {
             }
         });
     }
+    @FXML
+    private void autoDisplayStudentName() {
+
+        String studentId = studentIdTextField.getText();
+
+        if (studentId.isEmpty()) return;
+
+        Student student = studentDao.findStudentWithRecordById(studentId);
+
+        if (student.getStudentId() != null) {
+            String fullName = student.getFirstName() + " " +
+                    student.getMiddleName() + " " +
+                    student.getLastName();
+
+            studentNameTextField.setText(fullName);
+        } else {
+            studentNameTextField.clear();
+            System.out.println("STUDENT NOT FOUND!");
+        }
+    }
+
 }
