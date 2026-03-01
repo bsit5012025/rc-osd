@@ -10,6 +10,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.rocs.osd.controller.appeal.AppealModalController">
 
+
     <HBox styleClass="cardTopRow">
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
