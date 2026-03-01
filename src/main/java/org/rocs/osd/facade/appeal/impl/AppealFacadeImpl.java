@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AppealFacadeImpl implements AppealFacade {
 
-    private final AppealDao appealDao = new AppealDaoImpl();
+    private AppealDao appealDao = new AppealDaoImpl();
 
     @Override
     public List<Appeal> getAllAppeals() {
