@@ -14,11 +14,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 
 <BorderPane styleClass="borderColorContainer"
             stylesheets="@../../styles/dashboard/container.css"
@@ -44,13 +39,7 @@
             </HBox>
 
             <Region prefHeight="33.0" prefWidth="551.0" HBox.hgrow="ALWAYS" />
-
-            <HBox alignment="CENTER" fillHeight="false" prefHeight="33.0" prefWidth="221.0" styleClass="addButton" HBox.hgrow="NEVER">
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image><Image url="@../../assets/add-icon.png" /></image>
-                  </ImageView>
-                  <Button onAction="#onLoadOffenseModal" mnemonicParsing="false" text="Add Violation" />
-            </HBox>
+               <Button styleClass="addButton" mnemonicParsing="false" onAction="#onLoadOffenseModal" text="Add Violation" />
 
          <padding><Insets bottom="10.0" top="10.0" /></padding>
          <BorderPane.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></BorderPane.margin>

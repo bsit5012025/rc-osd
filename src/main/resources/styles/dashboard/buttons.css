@@ -45,8 +45,12 @@
     -fx-background-color: #76baff;
 }
 .addButton {
-    -fx-pref-width: 200;
-    -fx-background-color: #0057ae;
+    -fx-background-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+     -fx-padding: 10 25;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
 }
 .addButton Button{
     -fx-background-color: rgba(0,0,0,0);
