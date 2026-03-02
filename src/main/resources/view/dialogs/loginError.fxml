@@ -3,13 +3,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane alignment="BOTTOM_CENTER" prefHeight="65.0" prefWidth="400.0" stylesheets="@../../styles/dialog/loginError.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <VBox alignment="BOTTOM_CENTER" styleClass="lgnErrBox">
-            <children>
-                <Label fx:id="lgnErrText" text="Invalid username or password!">
-                </Label>
-            </children></VBox>
-    </children>
+<StackPane prefHeight="65.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox styleClass="lgnErrBox">
+         <children>
+            <Label fx:id="lgnErrText" text="Invalid username or password!">
+            </Label>
+         </children></VBox>
+   </children>
 </StackPane>
