@@ -5,11 +5,9 @@ import java.util.List;
 
 public interface AppealDao {
 
-    Appeal saveAppeal(Appeal appeal);
+    void saveAppeal(Appeal appeal);
 
-    Appeal findByAppealId(Long appealId);
-
-    List<Appeal> findByEnrollmentId(Long enrollmentId);
+    List<Appeal> findAllAppealDetails();
 
     void updateAppealStatus(Long appealId, String status);
 }

@@ -10,6 +10,7 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.model.appeal.Appeal;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,17 +29,17 @@ class AppealDaoImplTest {
     @Mock
     private ResultSet resultSet;
 
-    private static MockedStatic<ConnectionHelper> connectionHelper;
+    private MockedStatic<ConnectionHelper> connectionHelper;
+
+    private AppealDaoImpl appealDao;
 
     @BeforeEach
     void setUp() throws SQLException {
-
         connectionHelper = Mockito.mockStatic(ConnectionHelper.class);
         connectionHelper.when(ConnectionHelper::getConnection).thenReturn(connection);
 
-        lenient().when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        lenient().when(connection.prepareStatement(anyString(), any(String[].class))).thenReturn(preparedStatement);
-        lenient().when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        appealDao = new AppealDaoImpl();
     }
 
     @AfterEach
@@ -48,81 +49,61 @@ class AppealDaoImplTest {
 
     @Test
     void testSaveAppeal() throws SQLException {
-
         when(preparedStatement.executeUpdate()).thenReturn(1);
-        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong(1)).thenReturn(10L);
 
-        AppealDaoImpl dao = new AppealDaoImpl();
-        Appeal appeal = new Appeal(1L, 1L, "Test appeal message", "PENDING");
+        Appeal appeal = new Appeal();
+        appeal.setRecordID(1L);
+        appeal.setEnrollmentID(100L);
+        appeal.setMessage("Test appeal");
+        appeal.setDateFiled(new Date());
+        appeal.setStatus("PENDING");
 
-        Appeal saved = dao.saveAppeal(appeal);
+        assertDoesNotThrow(() -> appealDao.saveAppeal(appeal));
 
-        assertNotNull(saved.getAppealID());
-        assertEquals(10L, saved.getAppealID());
-
-        verify(preparedStatement, times(1)).executeUpdate();
+        verify(preparedStatement).setLong(1, 1L);
+        verify(preparedStatement).setLong(2, 100L);
+        verify(preparedStatement).setString(3, "Test appeal");
+        verify(preparedStatement).setString(5, "PENDING");
+        verify(preparedStatement).executeUpdate();
     }
 
     @Test
-    void testFindById() throws SQLException {
-
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong("appealID")).thenReturn(1L);
-        when(resultSet.getLong("recordID")).thenReturn(1L);
-        when(resultSet.getLong("enrollmentID")).thenReturn(1L);
-        when(resultSet.getString("message")).thenReturn("Sample");
-        when(resultSet.getDate("dateFiled")).thenReturn(new Date(System.currentTimeMillis()));
-        when(resultSet.getString("status")).thenReturn("PENDING");
-
-        AppealDaoImpl dao = new AppealDaoImpl();
-        Appeal appeal = dao.findByAppealId(1L);
-
-        assertNotNull(appeal);
-        assertEquals("Sample", appeal.getAppealMessage());
-
-        verify(preparedStatement, times(1)).setLong(1, 1L);
-        verify(preparedStatement, times(1)).executeQuery();
-    }
-    @Test
-    void testFindByEnrollmentId() throws SQLException {
-        Long enrollmentId = 1L;
-
+    void testFindAllAppealDetails() throws SQLException {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getLong("appealID")).thenReturn(1L);
         when(resultSet.getLong("recordID")).thenReturn(1L);
-        when(resultSet.getLong("enrollmentID")).thenReturn(enrollmentId);
+        when(resultSet.getLong("enrollmentID")).thenReturn(100L);
         when(resultSet.getString("message")).thenReturn("Test appeal");
-        when(resultSet.getDate("dateFiled")).thenReturn(new Date(System.currentTimeMillis()));
+        when(resultSet.getDate("dateFiled")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
         when(resultSet.getString("status")).thenReturn("PENDING");
+        when(resultSet.getString("studentID")).thenReturn("S001");
+        when(resultSet.getString("fullName")).thenReturn("John Doe");
+        when(resultSet.getString("offense")).thenReturn("Late Submission");
 
-        AppealDaoImpl dao = new AppealDaoImpl();
-        List<Appeal> appeals = dao.findByEnrollmentId(enrollmentId);
+        List<Appeal> appeals = appealDao.findAllAppealDetails();
 
         assertNotNull(appeals);
         assertEquals(1, appeals.size());
 
-        Appeal firstAppeal = appeals.get(0);
-        assertEquals(enrollmentId, firstAppeal.getEnrollmentID());
-        assertEquals("Test appeal", firstAppeal.getAppealMessage());
+        Appeal appeal = appeals.get(0);
+        assertEquals(1L, appeal.getAppealID());
+        assertEquals("Test appeal", appeal.getMessage());
+        assertEquals("PENDING", appeal.getStatus());
+        assertEquals("John Doe", appeal.getStudentName());
+        assertEquals("Late Submission", appeal.getOffense());
 
-        verify(preparedStatement, times(1)).setLong(1, enrollmentId);
-        verify(preparedStatement, times(1)).executeQuery();
+        verify(preparedStatement).executeQuery();
     }
 
     @Test
-    void testUpdateStatus() throws SQLException {
-
+    void testUpdateAppealStatus() throws SQLException {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        AppealDaoImpl dao = new AppealDaoImpl();
-        dao.updateAppealStatus(1L, "APPROVED");
+        assertDoesNotThrow(() -> appealDao.updateAppealStatus(1L, "APPROVED"));
 
-        verify(preparedStatement, times(1)).setString(1, "APPROVED");
-        verify(preparedStatement, times(1)).setLong(2, 1L);
-        verify(preparedStatement, times(1)).executeUpdate();
+        verify(preparedStatement).setString(1, "APPROVED");
+        verify(preparedStatement).setLong(2, 1L);
+        verify(preparedStatement).executeUpdate();
     }
 }

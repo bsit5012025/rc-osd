@@ -5,11 +5,7 @@ import java.util.List;
 
 public interface AppealFacade {
 
-    Appeal fileAppeal(Appeal appeal);
-
-    Appeal getAppealById(Long appealId);
-
-    List<Appeal> getAppealsByEnrollmentId(Long enrollmentId);
+    List<Appeal> getAllAppeals();
 
     void approveAppeal(Long appealId);
 

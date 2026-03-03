@@ -9,30 +9,11 @@ import java.util.List;
 
 public class AppealFacadeImpl implements AppealFacade {
 
-    private final AppealDao appealDao;
-
-    public AppealFacadeImpl() {
-        this.appealDao = new AppealDaoImpl();
-    }
-
-    public AppealFacadeImpl(AppealDao appealDao) {
-        this.appealDao = appealDao;
-    }
+    private AppealDao appealDao = new AppealDaoImpl();
 
     @Override
-    public Appeal fileAppeal(Appeal appeal) {
-        appeal.setStatus("PENDING");
-        return appealDao.saveAppeal(appeal);
-    }
-
-    @Override
-    public Appeal getAppealById(Long appealId) {
-        return appealDao.findByAppealId(appealId);
-    }
-
-    @Override
-    public List<Appeal> getAppealsByEnrollmentId(Long enrollmentId) {
-        return appealDao.findByEnrollmentId(enrollmentId);
+    public List<Appeal> getAllAppeals() {
+        return appealDao.findAllAppealDetails();
     }
 
     @Override
