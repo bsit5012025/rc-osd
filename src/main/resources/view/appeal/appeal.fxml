@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="org.rocs.osd.controller.appeal.AppealController"
-            styleClass="rootContainer"
+<BorderPane styleClass="rootContainer"
             stylesheets="@../../styles/request/request.css"
             xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.dashboard.DashboardController">
 
     <center>
         <VBox styleClass="mainWrapper">
@@ -17,10 +22,7 @@
                 <Label styleClass="headerText" text="APPEALS" />
             </HBox>
 
-            <ScrollPane fitToWidth="true"
-                        hbarPolicy="NEVER"
-                        styleClass="requestsScrollPane"
-                        VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="requestsScrollPane" VBox.vgrow="ALWAYS">
                 <VBox fx:id="listContainer" styleClass="listContainer">
 
                     <VBox styleClass="requestCard">
@@ -48,10 +50,7 @@
                             <VBox alignment="TOP_RIGHT">
                                 <Button styleClass="arrowButton">
                                     <graphic>
-                                        <ImageView fitHeight="20.0"
-                                                   fitWidth="20.0"
-                                                   pickOnBounds="true"
-                                                   preserveRatio="true">
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <Image url="@../../assets/downButton.png" />
                                         </ImageView>
                                     </graphic>
@@ -87,19 +86,14 @@
                                         <Label styleClass="dataLabel" text="Uniform Violation" />
                                     </HBox>
                                     <Label styleClass="boldLabel" text="Reason for Appeal: " />
-                                    <Label styleClass="reasonText"
-                                           text="Nemo enim ipsam voluptatem quia voluptas sit aspernatur..."
-                                           wrapText="true" />
+                                    <Label styleClass="reasonText" text="Nemo enim ipsam voluptatem quia voluptas sit aspernatur..." wrapText="true" />
                                 </VBox>
                             </VBox>
 
                             <VBox alignment="TOP_RIGHT">
                                 <Button styleClass="arrowButton">
                                     <graphic>
-                                        <ImageView fitHeight="20.0"
-                                                   fitWidth="20.0"
-                                                   pickOnBounds="true"
-                                                   preserveRatio="true">
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <Image url="@../../assets/downButton.png" />
                                         </ImageView>
                                     </graphic>
