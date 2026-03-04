@@ -8,6 +8,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
@@ -55,11 +56,13 @@ public class LoginController {
         /**
          * This will check if the username or password fields are empty and informs the user to fill them up
          */
+        String user = usernameTextField.getText();
+        String pass = passwordField.getText();
+        if (user.isBlank() || pass.isBlank()) {
+            showErrorPopup("Enter both username and password!");
+            return;
+        }
         try{
-            if(usernameTextField.getText().isBlank() == false && passwordField.getText().isBlank()){
-                System.out.println("Enter both username and password!");
-                return;
-            }
             /**
              * If the login credentials are correct, Dashboard screen will be loaded
              */
@@ -72,7 +75,9 @@ public class LoginController {
                  */
                 showErrorPopup("Invalid username or password!");
             }
-        } catch(Exception e){}
+        } catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -113,25 +118,36 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
-
             /**
              * Sets the login error banner to the bottom-center of the window on different screen sizes
              * */
             Stage errorStage = new Stage();
-            errorStage.initStyle(StageStyle.UNDECORATED);
+
+            Label label = (Label) root.lookup("#lgnErrText");
+            if (label != null) {
+                label.setText(message);
+            }
+
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            errorStage.setScene(scene);
+
+            errorStage.initStyle(StageStyle.TRANSPARENT);
             errorStage.initModality(Modality.NONE);
             errorStage.setAlwaysOnTop(true);
+
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             double windowWidth = root.prefWidth(-1);
             double windowHeight = root.prefHeight(-1);
-            double x = (screenBounds.getWidth() - windowWidth) / 2;
-            double y = screenBounds.getHeight() - windowHeight;
+
             errorStage.setX((screenBounds.getWidth() - windowWidth) / 2);
             errorStage.setY(screenBounds.getHeight() - windowHeight);
+
+            errorStage.show();
             /**
              * TODO: If the UI/UX Designer decided to improve this, they can add an animation that lets the close after 3 seconds
              * */
-            errorStage.show();
+
         } catch (IOException ioe) {
             System.err.println("Could not load Error Popup: " + ioe.getMessage());
             ioe.printStackTrace();
