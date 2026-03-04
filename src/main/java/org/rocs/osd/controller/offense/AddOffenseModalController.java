@@ -23,9 +23,15 @@ public class AddOffenseModalController {
     }
 
     public void loadComboBoxData(){
-        offenseDao = new OffenseDaoImpl();
-        ObservableList<String> offenseList = FXCollections.observableArrayList(offenseDao.findAllOffenseName());
-        offenseTypeComboBox.setItems(offenseList);
+        try {
+            offenseDao = new OffenseDaoImpl();
+            var data = offenseDao.findAllOffenseName();
+            if (data != null) {
+                offenseTypeComboBox.setItems(FXCollections.observableArrayList(data));
+            }
+        } catch (Exception e) {
+            System.err.println("Database Error: Could not fetch offense names from the database.");
+        }
 
     }
     public void autoSelectLevelOfOffense() {
