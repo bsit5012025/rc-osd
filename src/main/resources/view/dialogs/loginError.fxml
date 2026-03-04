@@ -8,7 +8,7 @@
            prefHeight="65.0"
            prefWidth="400.0"
            stylesheets="@../../styles/dialog/loginError.css"
-           xmlns="http://javafx.com/javafx/25"
+           xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.rocs.osd.controller.login.LoginController">
     <children>
