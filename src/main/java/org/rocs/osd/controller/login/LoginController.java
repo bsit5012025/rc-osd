@@ -26,7 +26,7 @@ import java.io.IOException;
  * It validates user credentials and manages navigation to the Dashboard view.
  */
 public class LoginController {
-
+    private Stage errorStage;
     /**
      This text field is used to enter the username
      */
@@ -39,6 +39,8 @@ public class LoginController {
     /**
      This method triggered once the Login button is clicked
      */
+
+
     public void onLogin(ActionEvent event){
 
         /**
@@ -58,6 +60,7 @@ public class LoginController {
          */
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
+
         if (user.isBlank() || pass.isBlank()) {
             showErrorPopup("Enter both username and password!");
             return;
@@ -83,6 +86,10 @@ public class LoginController {
 
     private void loadDashboard(ActionEvent event) {
         try {
+            if (errorStage != null) {
+                errorStage.close();
+                errorStage = null;
+            }
             /**
              * This will load the Dashboard screen from the FXML file.
              */
@@ -116,12 +123,16 @@ public class LoginController {
     }
     private void showErrorPopup(String message) {
         try {
+
+            if (errorStage != null && errorStage.isShowing()) {
+                errorStage.close();
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
             /**
              * Sets the login error banner to the bottom-center of the window on different screen sizes
              * */
-            Stage errorStage = new Stage();
+            errorStage = new Stage();
 
             Label label = (Label) root.lookup("#lgnErrText");
             if (label != null) {
@@ -134,7 +145,6 @@ public class LoginController {
 
             errorStage.initStyle(StageStyle.TRANSPARENT);
             errorStage.initModality(Modality.NONE);
-            errorStage.setAlwaysOnTop(true);
 
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             double windowWidth = root.prefWidth(-1);
