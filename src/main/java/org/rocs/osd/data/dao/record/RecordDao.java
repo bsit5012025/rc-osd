@@ -14,5 +14,4 @@ public interface RecordDao
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, RecordStatus status);
     boolean updateStudentRecordStatusById(long recordID, String status);
-    boolean updateRecord(Record record);
 }
