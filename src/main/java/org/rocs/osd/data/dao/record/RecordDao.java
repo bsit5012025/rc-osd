@@ -1,6 +1,5 @@
 package org.rocs.osd.data.dao.record;
 
-import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
