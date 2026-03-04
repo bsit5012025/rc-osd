@@ -36,4 +36,13 @@ public class RecordFacadeImpl implements RecordFacade
 
         return savedSuccessfully;
     }
+
+    @Override
+    public boolean updateStudentRecord(long enrollmentID, String employeeID,
+                                       long offenseID, Date dateOfViolation,
+                                       long actionID, String remarks)
+    {
+        return false;
+    }
+
 }
