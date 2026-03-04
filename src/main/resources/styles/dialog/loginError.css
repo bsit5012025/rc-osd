@@ -13,4 +13,5 @@
 #lgnErrText {
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-font-size: 16px;
 }
