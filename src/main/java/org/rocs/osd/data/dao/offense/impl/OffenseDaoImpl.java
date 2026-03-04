@@ -4,10 +4,7 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.offense.Offense;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,4 +97,28 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    @Override
+    public boolean addNewOffense(Offense offense) {
+        String sql = "INSERT INTO offense (offense, type, description) VALUES (?, ?, ?)";
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, offense.getOffense());
+            ps.setString(2, offense.getType());
+            ps.setString(3, offense.getDescription());
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        offense.setOffenseId(generatedKeys.getLong(1));
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+        }
 }
