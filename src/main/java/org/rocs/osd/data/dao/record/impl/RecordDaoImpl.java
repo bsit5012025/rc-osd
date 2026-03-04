@@ -17,7 +17,7 @@ import java.util.List;
  * Implementation of the RecordDao interface.
  * This class handles student record data from the database.
  */
-public class RecordDaoImp implements RecordDao
+public class RecordDaoImpl implements RecordDao
 {
 
     /**

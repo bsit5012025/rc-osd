@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RecordDaoImpTest
+class RecordDaoImplTest
 {
     @Mock
     private Connection connection;
@@ -63,7 +63,7 @@ class RecordDaoImpTest
         when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
         when(resultSet.getString("status")).thenReturn(String.valueOf(RecordStatus.PENDING));
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
         Record record = studentRecordList.get(0);
 
@@ -89,7 +89,7 @@ class RecordDaoImpTest
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         boolean status = dao.addStudentRecord(Long.valueOf(3), "EMP-002",
                 Long.valueOf(4), Date.valueOf("2025-03-08"),Long.valueOf(2),
                 "Bullying incident reported", RecordStatus.PENDING);
@@ -111,7 +111,7 @@ class RecordDaoImpTest
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
 
         assertTrue(result);
@@ -127,7 +127,7 @@ class RecordDaoImpTest
     {
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
         boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
 
         assertFalse(result);
@@ -137,7 +137,7 @@ class RecordDaoImpTest
     void testUpdateRecord() throws SQLException
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
-        RecordDao dao = new RecordDaoImp();
+        RecordDao dao = new RecordDaoImpl();
 
         Record record = new Record();
         record.setEnrollmentId(Long.valueOf(1));
