@@ -42,7 +42,7 @@ public class Record {
     /**
      * Status of record
      */
-    private String status;
+    private RecordStatus status;
 
 
     /**
@@ -62,7 +62,7 @@ public class Record {
      * @param remarks          additional remarks for record
      * @param status           status of the record
      */
-    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, String status) {
+    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, RecordStatus status) {
         this.recordId = recordId;
         this.enrollmentId = enrollmentId;
         this.employeeId = employeeId;
@@ -214,7 +214,7 @@ public class Record {
      * Gets the status of the record
      * @return status
      */
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return status;
     }
 
@@ -222,7 +222,7 @@ public class Record {
      * Sets the status of the record
      * @param status the status to set
      */
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 }
