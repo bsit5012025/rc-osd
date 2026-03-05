@@ -2,6 +2,7 @@ package org.rocs.osd.facade.Record.impl;
 
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Date;
@@ -38,11 +39,31 @@ public class RecordFacadeImpl implements RecordFacade
     }
 
     @Override
-    public boolean updateStudentRecord(long enrollmentID, String employeeID,
-                                       long offenseID, Date dateOfViolation,
-                                       long actionID, String remarks)
+    public boolean updateStudentRecord(long enrollmentId, String employeeId, long offenseId,
+                                       Date dateOfViolation, long actionId,
+                                       String remarks, RecordStatus status)
     {
-        return false;
+        if(remarks == null)
+        {
+            remarks = "";
+        }
+
+        if(employeeId == null || dateOfViolation == null || remarks.length() > 500)
+        {
+            return false;
+        }
+
+        Record record = new Record();
+        record.setEnrollmentId(enrollmentId);
+        record.setEmployeeId(employeeId);
+        record.setOffenseId(offenseId);
+        record.setDateOfViolation(dateOfViolation);
+        record.setActionId(actionId);
+        record.setRemarks(remarks);
+        record.setStatus(status);
+        boolean savedSuccessfully = recordDao.updateRecord(record);
+
+        return savedSuccessfully;
     }
 
 }
