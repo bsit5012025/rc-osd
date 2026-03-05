@@ -3,12 +3,14 @@ package org.rocs.osd.controller.dashboard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
@@ -101,5 +103,30 @@ public class DashboardController {
         }
     }
 
+    public void logout(ActionEvent event) {
+        try {
+            Stage popupStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage mainStage = (Stage) popupStage.getOwner();
+            popupStage.close();
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+            mainStage.setScene(scene);
+            mainStage.setMaximized(true);
+            mainStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closePopup(ActionEvent event) {
+        if (event != null && event.getSource() instanceof Node node) {
+            Scene scene = node.getScene();
+            if (scene != null && scene.getWindow() instanceof Stage stage) {
+                stage.close();
+            }
+        }
+    }
 
 }
