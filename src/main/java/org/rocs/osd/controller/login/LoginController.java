@@ -164,4 +164,26 @@ public class LoginController {
         }
     }
 
+    public void logout(ActionEvent event) {
+        try {
+            Stage popupStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage mainStage = (Stage) popupStage.getOwner();
+            popupStage.close();
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+            mainStage.setScene(scene);
+            mainStage.setMaximized(true);
+            mainStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closePopup(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
 }

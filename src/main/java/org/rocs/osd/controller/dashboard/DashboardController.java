@@ -8,8 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -27,24 +28,22 @@ public class DashboardController {
      *   This method is used for logout button
      */
     @FXML
-    public void onLogout(ActionEvent event){
-
-        try{
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/login/login.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setUserData(null);
-            System.out.println("Session logout!");
-            double width = stage.getWidth();
-            double height = stage.getHeight();
-            stage.setScene(new Scene(root,width,height));
-            stage.show();
-
-        } catch (NullPointerException e) {
-            System.err.println("Logout Error: login.fxml not found.");
-        } catch (IOException e) {
-            System.err.println("Logout Error: Failed to parse login.fxml. Check your FXML file.");
+    public void onLogout(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/dialogs/logoutConfirmation.fxml")
+            );
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.initOwner(currentStage);
+            stage.setResizable(false);
+            stage.showAndWait();
         } catch (Exception e) {
-            System.err.println("Logout Error: An unexpected error occurred: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     /**

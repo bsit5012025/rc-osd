@@ -10,12 +10,14 @@
 
 <StackPane styleClass="mainContainer"
            stylesheets="@../../styles/logout/logout.css"
+           fx:controller="org.rocs.osd.controller.login.LoginController"
+           xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/21">
 
     <VBox maxHeight="-Infinity" maxWidth="-Infinity" styleClass="popup-window">
 
         <HBox styleClass="title-bar">
-            <Button mnemonicParsing="false" styleClass="icon-button">
+            <Button mnemonicParsing="false" onAction="#closePopup" styleClass="icon-button">
                 <graphic>
                     <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -31,8 +33,8 @@
             <Label styleClass="prompt-text" text="log out?" />
 
             <HBox styleClass="button-group">
-                <Button mnemonicParsing="false" styleClass="logout-button" text="Cancel" />
-                <Button mnemonicParsing="false" styleClass="logout-button" text="Logout" />
+                <Button mnemonicParsing="false" onAction="#closePopup" styleClass="logout-button" text="Cancel" />
+                <Button mnemonicParsing="false" onAction="#logout" styleClass="logout-button" text="Logout" />
             </HBox>
         </VBox>
     </VBox>
