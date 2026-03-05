@@ -10,7 +10,7 @@
 
 <StackPane styleClass="mainContainer"
            stylesheets="@../../styles/logout/logout.css"
-           fx:controller="org.rocs.osd.controller.login.LoginController"
+           fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
            xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/21">
 
