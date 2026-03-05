@@ -48,41 +48,62 @@ class RecordDaoImpTest
     }
 
     @Test
-    void testFindStudentByIdAndEnrolment() throws SQLException
-    {
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true).thenReturn(false);
+    void testFindAllBySchoolYear() throws Exception {
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        when(resultSet.getLong("recordID")).thenReturn(Long.valueOf(1));
-        when(resultSet.getLong("enrollmentID")).thenReturn(Long.valueOf(1));
-        when(resultSet.getString("employeeID")).thenReturn("EMP-002");
-        when(resultSet.getLong("offenseID")).thenReturn(Long.valueOf(1));
-        when(resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2024-09-15"));
-        when(resultSet.getLong("actionID")).thenReturn(Long.valueOf(1));
-        when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
-        when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
-        when(resultSet.getString("status")).thenReturn(String.valueOf(RecordStatus.PENDING));
+            when(resultSet.getLong("recordID")).thenReturn(1L);
+            when(resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2024-09-15"));
+            when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2024-09-20"));
+            when(resultSet.getString("remarks")).thenReturn("Student caught vaping in school");
+            when(resultSet.getString("status")).thenReturn("PENDING");
 
-        RecordDao dao = new RecordDaoImp();
-        List<Record> studentRecordList = dao.findStudentByIdAndEnrolment("CT123", "2025-2026", "Grade-8");
-        Record record = studentRecordList.get(0);
+            when(resultSet.getLong("enrollmentID")).thenReturn(1L);
+            when(resultSet.getString("schoolYear")).thenReturn("2025-2026");
+            when(resultSet.getString("studentLevel")).thenReturn("Grade-8");
+            when(resultSet.getString("section")).thenReturn("St. Hannibal");
 
-        assertFalse(studentRecordList.isEmpty());
-        assertNotNull(record);
-        assertEquals(1, record.getRecordId());
-        assertEquals(1, record.getEnrollmentId());
-        assertEquals("EMP-002", record.getEmployeeId());
-        assertEquals(1, record.getOffenseId());
-        assertEquals(Date.valueOf("2024-09-15"), record.getDateOfViolation());
-        assertEquals(1, record.getActionId());
-        assertEquals(Date.valueOf("2024-09-20"), record.getDateOfResolution());
-        assertEquals("Student caught vaping in school", record.getRemarks());
-        assertEquals(RecordStatus.PENDING, record.getStatus());
+            when(resultSet.getLong("studentPersonID")).thenReturn(2L);
+            when(resultSet.getString("studentAddress")).thenReturn("Buho");
+            when(resultSet.getString("studentType")).thenReturn("Intern");
 
-        verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement, times(1)).setString(1, "CT123");
-        verify(preparedStatement, times(1)).executeQuery();
-    }
+            when(resultSet.getString("disciplinaryStatus")).thenReturn("Good Standing");
+            when(resultSet.getString("statusDescription")).thenReturn("No issues");
+
+            when(resultSet.getString("employeeID")).thenReturn("EMP-002");
+            when(resultSet.getLong("empPersonID")).thenReturn(9L);
+            when(resultSet.getString("empDeptID")).thenReturn("1");
+            when(resultSet.getString("employeeRole")).thenReturn("PREFECT");
+
+            when(resultSet.getLong("offenseID")).thenReturn(1L);
+            when(resultSet.getString("offense")).thenReturn("Vaping");
+            when(resultSet.getString("offenseType")).thenReturn("Major Offense");
+            when(resultSet.getString("offenseDescription")).thenReturn("Bringing vape");
+
+            when(resultSet.getLong("actionID")).thenReturn(1L);
+            when(resultSet.getString("action")).thenReturn("Community Service");
+            when(resultSet.getString("actionDescription")).thenReturn("Service work");
+
+            RecordDaoImp dao = new RecordDaoImp();
+            List<Record> records = dao.findAllBySchoolYear("2025-2026");
+
+            assertFalse(records.isEmpty());
+
+            Record record = records.getFirst();
+
+            assertEquals(1L, record.getRecordId());
+            assertEquals("Student caught vaping in school", record.getRemarks());
+            assertEquals(RecordStatus.PENDING, record.getStatus());
+
+            assertEquals(1L, record.getEnrollment().getEnrollmentId());
+            assertEquals("Grade-8", record.getEnrollment().getStudentLevel());
+            assertEquals("EMP-002", record.getEmployee().getEmployeeId());
+            assertEquals("Vaping", record.getOffense().getOffense());
+            assertEquals("Community Service", record.getAction().getActionName());
+
+            verify(preparedStatement).setString(1, "2025-2026");
+            verify(preparedStatement).executeQuery();
+        }
 
     @Test
     void testAddStudentRecord() throws SQLException

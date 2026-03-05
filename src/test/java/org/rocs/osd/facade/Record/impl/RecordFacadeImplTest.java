@@ -17,8 +17,7 @@ import static org.mockito.Mockito.*;
 import java.sql.Date;
 
 @ExtendWith(MockitoExtension.class)
-class RecordFacadeImplTest
-{
+class RecordFacadeImplTest {
     @Mock
     private RecordDao recordDao;
 
@@ -27,28 +26,42 @@ class RecordFacadeImplTest
     private RecordFacade recordFacade;
 
     @BeforeEach
-    public void setUp()
-    {
-        recordFacade = new RecordFacadeImpl(recordDao);
-        record = new Record(Long.valueOf(1), Long.valueOf(1),
-                "EMP-002", Long.valueOf(1), Date.valueOf("2024-09-15"),
-                Long.valueOf(1), Date.valueOf("2025-04-15"),
-                "Student caught vaping in school",  RecordStatus.PENDING);
+    public void setUp() {
+      recordFacade = new RecordFacadeImpl(recordDao);
     }
 
-    @Test
-    public void testCreateStudentRecord()
-    {
-        when(recordDao.addStudentRecord(Long.valueOf(1), "EMP-002",
-                Long.valueOf(1), Date.valueOf("2024-09-15"), Long.valueOf(1),
-                "Student caught vaping in school", RecordStatus.PENDING)).thenReturn(true);
+        @Test
+        void testCreateStudentRecord () {
 
-        boolean result = recordFacade.createStudentRecord(Long.valueOf(1),
-                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
-                Long.valueOf(1), "Student caught vaping in school");
+            when(recordDao.addStudentRecord(
+                    anyLong(),
+                    anyString(),
+                    anyLong(),
+                    any(Date.class),
+                    anyLong(),
+                    anyString(),
+                    eq(RecordStatus.PENDING)
+            )).thenReturn(true);
 
-        assertTrue(result);
-        verify(recordDao, times(1)).addStudentRecord(anyLong(),
-                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), any(RecordStatus.class));
+            boolean result = recordFacade.createStudentRecord(
+                    1L,
+                    "EMP-001",
+                    2L,
+                    Date.valueOf("2025-03-08"),
+                    3L,
+                    "Bullying incident"
+            );
+
+            assertTrue(result);
+
+            verify(recordDao, times(1)).addStudentRecord(
+                    1L,
+                    "EMP-001",
+                    2L,
+                    Date.valueOf("2025-03-08"),
+                    3L,
+                    "Bullying incident",
+                    RecordStatus.PENDING
+            );
+        }
     }
-}
