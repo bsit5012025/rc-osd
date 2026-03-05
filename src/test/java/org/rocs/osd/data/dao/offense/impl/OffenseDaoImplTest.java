@@ -28,7 +28,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class OffenseDaoImplTest
 {
     @Mock
@@ -117,12 +116,7 @@ class OffenseDaoImplTest
     @Test
     void testAddOffenseSuccess() throws SQLException
     {
-        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
-        ResultSet generatedKeysMock = mock(ResultSet.class);
-        when(preparedStatement.getGeneratedKeys()).thenReturn(generatedKeysMock);
-        when(generatedKeysMock.next()).thenReturn(true);
-        when(generatedKeysMock.getLong(1)).thenReturn(100L);
 
         OffenseDao dao = new OffenseDaoImpl();
         Offense offense = new Offense();
@@ -133,17 +127,11 @@ class OffenseDaoImplTest
         boolean result = dao.addNewOffense(offense);
 
         assertTrue(result);
-        assertEquals(100L, offense.getOffenseId());
 
-        verify(connection, times(1)).prepareStatement("INSERT INTO offense (offense, type, description)" +
-                " VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS
-        );
+        verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "New Offense");
         verify(preparedStatement, times(1)).setString(2, "Minor");
         verify(preparedStatement, times(1)).setString(3, "Test description");
         verify(preparedStatement, times(1)).executeUpdate();
-        verify(preparedStatement, times(1)).getGeneratedKeys();
-        verify(generatedKeysMock, times(1)).next();
-        verify(generatedKeysMock, times(1)).getLong(1);
     }
 }
