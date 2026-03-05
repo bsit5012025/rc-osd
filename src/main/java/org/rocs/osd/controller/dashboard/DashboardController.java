@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -19,14 +21,16 @@ public class DashboardController {
 
     @FXML
     StackPane mainContentWrapper;
-
+    @FXML
+    Button logoutButton;
     /**
      *   This method is used for logout button
      */
+    @FXML
     public void onLogout(ActionEvent event){
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/login/login.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setUserData(null);
             System.out.println("Session logout!");
@@ -35,24 +39,68 @@ public class DashboardController {
             stage.setScene(new Scene(root,width,height));
             stage.show();
 
+        } catch (NullPointerException e) {
+            System.err.println("Logout Error: login.fxml not found.");
+        } catch (IOException e) {
+            System.err.println("Logout Error: Failed to parse login.fxml. Check your FXML file.");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("Logout Error: An unexpected error occurred: " + e.getMessage());
         }
-
-
     }
-
     /**
      * This method is used to load Offense view inside the dashboard
      */
-
+    @FXML
     public void onLoadOffense(ActionEvent event) {
         try {
-            Parent offenseView = FXMLLoader.load(getClass().getResource("/view/offense/offense.fxml"));
+            Parent offenseView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/offense/offense.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(offenseView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
         }
     }
+
+    @FXML
+    public void onLoadAppeal(ActionEvent event) {
+        try {
+            Parent appealView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appeal/appeal.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(appealView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+        }
+    }
+
+    @FXML
+    public void onLoadRequest(ActionEvent event) {
+        try {
+            Parent requestView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/request/request.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(requestView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+        }
+    }
+
+    @FXML
+    public void onLoadStudent(ActionEvent event) {
+        try {
+            Parent studentView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/student/student.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(studentView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+        }
+    }
+
+
 }

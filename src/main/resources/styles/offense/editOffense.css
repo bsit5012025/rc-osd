@@ -1,7 +1,14 @@
-.saveButtonEditOffense {
+.root {
     -fx-font-family: Arial;
-    -fx-background-color: navy;
+}
+
+.saveButtonEditOffense {
+    -fx-background-color: #000080;
     -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
 .saveButtonEditOffense:hover {
@@ -10,9 +17,14 @@
 }
 
 .cancelButtonEditOffense {
-   -fx-background-color: white;
-    -fx-border-color: navy;
+    -fx-background-color: white;
     -fx-text-fill: navy;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: navy;
+    -fx-border-radius: 8;
 }
 
 .cancelButtonEditOffense:hover {
@@ -20,9 +32,57 @@
     -fx-text-fill: white;
 }
 
-.inputTextFieldEditOffense {
-    -fx-background-color: rgba(0, 0, 0,0);
-    -fx-border-color: rgba(191, 191, 191, 0.62);
-    -fx-cursor: text;
-    -fx-font-size: 14;
+.editOffenseTextArea {
+    -fx-background-color: white;
+    -fx-border-color: #DCDDE1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
 }
+
+.editOffenseDate {
+    -fx-background-color: white;
+    -fx-border-color: #DCDDE1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
+    -fx-pref-width: 274px;
+}
+
+.titleEditOffense {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+
+.editOffenseContainer {
+    -fx-padding: 20px;
+}
+
+.pane {
+    -fx-background-color: navy;
+}
+
+.viewStudentGrid {
+    -fx-padding: 0 0 0 5px;
+}
+
+.editOffenseLabel {
+    -fx-font-weight: bold;
+}
+
+.editOffenseComboBox {
+    -fx-background-color: white;
+    -fx-border-color: #DCDDE1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
+    -fx-pref-width: 274px;
+}
+
+.editOffenseTextArea:hover, .editOffenseComboBox:hover, .editOffenseDate:hover, .editOffenseRemarks:hover {
+    -fx-border-color: navy;
+}
+

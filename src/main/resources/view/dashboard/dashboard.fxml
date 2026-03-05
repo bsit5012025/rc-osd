@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
+<BorderPane styleClass="dashboardRoot"
             stylesheets="@../../styles/dashboard/dashboard.css"
-            styleClass="dashboardRoot"
-            xmlns="http://javafx.com/javafx/"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.dashboard.DashboardController">
 
     <top>
         <HBox styleClass="topBar">
@@ -46,47 +46,40 @@
             <VBox styleClass="navContainer" VBox.vgrow="ALWAYS">
                 <Button styleClass="sidebarItem" text="Dashboard">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/dashboard.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Students">
+                <Button onAction="#onLoadStudent" styleClass="sidebarItem" text="Students">
                     <graphic>
                         <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/student.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Offenses" onAction="#onLoadOffense">
+                <Button onAction="#onLoadOffense" styleClass="sidebarItem" text="Offenses">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/offenses.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Appeals">
+                <Button onAction="#onLoadAppeal" styleClass="sidebarItem" text="Appeals">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/appeal.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Requests">
+                <Button onAction="#onLoadRequest" styleClass="sidebarItem" text="Requests">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/request.png" /></ImageView>
                     </graphic>
                 </Button>
 
                 <Pane VBox.vgrow="ALWAYS" />
 
-                <Button fx:id="logoutButton"
-                        styleClass="sidebarItem, logout"
-                        text="Logout" onAction="#onLogout">
+                <Button fx:id="logoutButton" onAction="#onLogout" styleClass="sidebarItem, logout" text="Logout">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/logout.png" /></ImageView>
                     </graphic>
                 </Button>
@@ -95,7 +88,7 @@
     </left>
 
     <center>
-        <StackPane styleClass="mainContentWrapper" fx:id="mainContentWrapper">
+        <StackPane fx:id="mainContentWrapper" styleClass="mainContentWrapper">
             <VBox styleClass="contentArea">
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
