@@ -51,4 +51,18 @@ class RecordFacadeImplTest
         verify(recordDao, times(1)).addStudentRecord(anyLong(),
                 anyString(), anyLong(), any(Date.class), anyLong(), anyString(), any(RecordStatus.class));
     }
+
+    @Test
+    public void testUpdateStudentRecord()
+    {
+        when(recordDao.updateRecord(any(Record.class))).thenReturn(true);
+
+        boolean result = recordFacade.updateStudentRecord(Long.valueOf(1),
+                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
+                Long.valueOf(1), "Student caught vaping in school",
+                RecordStatus.PENDING);
+
+        assertTrue(result);
+        verify(recordDao, times(1)).updateRecord(any(Record.class));
+    }
 }

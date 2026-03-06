@@ -53,6 +53,11 @@ public class RecordFacadeImpl implements RecordFacade
             return false;
         }
 
+        if(status == RecordStatus.APPROVED)
+        {
+            return false;
+        }
+
         Record record = new Record();
         record.setEnrollmentId(enrollmentId);
         record.setEmployeeId(employeeId);
@@ -61,9 +66,7 @@ public class RecordFacadeImpl implements RecordFacade
         record.setActionId(actionId);
         record.setRemarks(remarks);
         record.setStatus(status);
-        boolean savedSuccessfully = recordDao.updateRecord(record);
-
-        return savedSuccessfully;
+        return recordDao.updateRecord(record);
     }
 
 }
