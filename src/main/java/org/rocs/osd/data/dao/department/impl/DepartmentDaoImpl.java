@@ -18,7 +18,7 @@ import java.util.List;
 public class DepartmentDaoImpl implements DepartmentDao {
 
     /**
-     * Finds and retrieves a Department object from the database by ID.
+     * Finds and retrieves a Department object from the database by ID
      * Returns an empty Department object if no match is found.
      */
     @Override
