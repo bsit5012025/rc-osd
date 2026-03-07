@@ -107,33 +107,6 @@ class RecordDaoImplTest
     }
 
     @Test
-    void testUpdateStudentRecordStatusById() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        RecordDao dao = new RecordDaoImpl();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
-
-        assertTrue(result);
-
-        verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement).setString(1, "Resolved");
-        verify(preparedStatement).setLong(2, 5L);
-        verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testUpdateStudentRecordStatusByIdNoRowsUpdated() throws SQLException
-    {
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        RecordDao dao = new RecordDaoImpl();
-        boolean result = dao.updateStudentRecordStatusById(5L, "Resolved");
-
-        assertFalse(result);
-    }
-
-    @Test
     void testUpdateRecord() throws SQLException
     {
         when(preparedStatement.executeUpdate()).thenReturn(1);
@@ -144,6 +117,7 @@ class RecordDaoImplTest
         record.setEmployeeId("EMP-002");
         record.setOffenseId(Long.valueOf(1));
         record.setDateOfViolation(java.sql.Date.valueOf("2024-09-15"));
+        record.setDateOfResolution(java.sql.Date.valueOf("2025-06-15"));
         record.setActionId(Long.valueOf(1));
         record.setRemarks("Student caught vaping in school");
         record.setStatus(RecordStatus.PENDING);
@@ -157,10 +131,11 @@ class RecordDaoImplTest
         verify(preparedStatement).setString(2,"EMP-002");
         verify(preparedStatement).setLong(3, Long.valueOf(1));
         verify(preparedStatement).setDate(4, java.sql.Date.valueOf("2024-09-15"));
-        verify(preparedStatement).setLong(5, Long.valueOf(1));
-        verify(preparedStatement).setString(6, "Student caught vaping in school");
-        verify(preparedStatement).setString(7, String.valueOf(RecordStatus.PENDING));
-        verify(preparedStatement).setLong(8, Long.valueOf(1));
+        verify(preparedStatement).setDate(5, java.sql.Date.valueOf("2025-06-15"));
+        verify(preparedStatement).setLong(6, Long.valueOf(1));
+        verify(preparedStatement).setString(7, "Student caught vaping in school");
+        verify(preparedStatement).setString(8, String.valueOf(RecordStatus.PENDING));
+        verify(preparedStatement).setLong(9, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
 }

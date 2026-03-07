@@ -130,31 +130,6 @@ public class RecordDaoImpl implements RecordDao
         }
     }
 
-    /**
-     * Updates the status of a student record by its record ID.
-     * @param recordID the ID of the record to update.
-     * @param status   the new status to set.
-     * @return true if the update was successful, false otherwise.
-     */
-    @Override
-    public boolean updateStudentRecordStatusById(long recordID, String status) {
-        String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
-
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, status);
-            stmt.setLong(2, recordID);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Exception (updateStudentRecordStatusById): " + e.getMessage());
-        }
-
-        return false;
-    }
-
     @Override
     public boolean updateRecord(Record record) {
         try (Connection con = ConnectionHelper.getConnection()) {
@@ -164,6 +139,7 @@ public class RecordDaoImpl implements RecordDao
                             "employeeID = ?," +
                             "offenseID = ?, " +
                             "dateOfViolation = ?, " +
+                            "dateOfResolution = ?, " +
                             "actionID = ?, " +
                             "remarks = ?, " +
                             "status = ? " +
@@ -172,10 +148,11 @@ public class RecordDaoImpl implements RecordDao
             stmt.setString(2, record.getEmployeeId());
             stmt.setLong(3, record.getOffenseId());
             stmt.setDate(4, new java.sql.Date(record.getDateOfViolation().getTime()));
-            stmt.setLong(5, record.getActionId());
-            stmt.setString(6, record.getRemarks());
-            stmt.setString(7, String.valueOf(record.getStatus()));
-            stmt.setLong(8, record.getRecordId());
+            stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+            stmt.setLong(6, record.getActionId());
+            stmt.setString(7, record.getRemarks());
+            stmt.setString(8, String.valueOf(record.getStatus()));
+            stmt.setLong(9, record.getRecordId());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
