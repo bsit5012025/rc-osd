@@ -10,6 +10,8 @@ import javafx.util.Duration;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.student.Student;
 
 public class AppealModalController {
 
@@ -27,11 +29,15 @@ public class AppealModalController {
 
     private AppealFacade appealFacade = new AppealFacadeImpl();
     private Appeal appeal;
+    private Student student;
+    private Offense offense;
 
     private Runnable onActionComplete;
 
-    public void setAppeal(Appeal appeal) {
-        this.appeal = appeal;
+    public void setAppeal(Object[] row) {
+        this.appeal = (Appeal) row[0];
+        this.student = (Student) row[1];
+        this.offense = (Offense) row[2];
         loadAppealData();
     }
 
@@ -50,11 +56,11 @@ public class AppealModalController {
     }
 
     private void loadAppealData() {
-        if (appeal == null) return;
+        if (appeal == null || student == null || offense == null) return;
 
-        studentIdLabel.setText(appeal.getStudentId().toString());
-        studentNameLabel.setText(appeal.getStudentName());
-        offenseLabel.setText(appeal.getOffense());
+        studentIdLabel.setText(student.getStudentId());
+        studentNameLabel.setText(student.getFirstName() + " " + student.getLastName());
+        offenseLabel.setText(offense.getOffense());
         reasonLabel.setText(appeal.getMessage());
 
         expandedSection.setVisible(false);
@@ -64,16 +70,16 @@ public class AppealModalController {
     private void toggleExpandedSection() {
         boolean expanded = expandedSection.isVisible();
         expandedSection.setVisible(!expanded);
-        arrowIcon.setRotate(expanded ? 0 : 180); // rotate down/up
+        arrowIcon.setRotate(expanded ? 0 : 180);
     }
 
     private void handleAppealApprove() {
-        appealFacade.approveAppeal(appeal.getEnrollmentID());
+        appealFacade.approveAppeal(appeal.getAppealID());
         showPopupAndRemoveCard("Appeal approved!");
     }
 
     private void handleAppealDeny() {
-        appealFacade.rejectAppeal(appeal.getEnrollmentID());
+        appealFacade.deniedAppeal(appeal.getAppealID());
         showPopupAndRemoveCard("Appeal denied!");
     }
 
@@ -81,7 +87,7 @@ public class AppealModalController {
         popupLabel.setText(message);
         popupBox.setVisible(true);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.0));
+        PauseTransition delay = new PauseTransition(Duration.seconds(1));
         delay.setOnFinished(e -> {
             if (onActionComplete != null) onActionComplete.run();
         });

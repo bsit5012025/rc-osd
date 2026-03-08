@@ -1,13 +1,12 @@
 package org.rocs.osd.facade.appeal;
 
-import org.rocs.osd.model.appeal.Appeal;
 import java.util.List;
 
 public interface AppealFacade {
 
-    List<Appeal> getAllAppeals();
+    List<Object[]> getPendingAppeals();
 
-    void approveAppeal(Long appealId);
+    void approveAppeal(long appealId);
 
-    void rejectAppeal(Long appealId);
+    void deniedAppeal(long appealId);
 }
