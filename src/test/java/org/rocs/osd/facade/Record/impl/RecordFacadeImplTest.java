@@ -17,7 +17,8 @@ import static org.mockito.Mockito.*;
 import java.sql.Date;
 
 @ExtendWith(MockitoExtension.class)
-class RecordFacadeImplTest {
+class RecordFacadeImplTest
+{
     @Mock
     private RecordDao recordDao;
 
@@ -64,4 +65,18 @@ class RecordFacadeImplTest {
                     RecordStatus.PENDING
             );
         }
+
+    @Test
+    public void testUpdateStudentRecord()
+    {
+        when(recordDao.updateRecord(any(Record.class))).thenReturn(true);
+
+        boolean result = recordFacade.updateStudentRecord(Long.valueOf(1),
+                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
+                Long.valueOf(1), "Student caught vaping in school",
+                RecordStatus.PENDING);
+
+        assertTrue(result);
+        verify(recordDao, times(1)).updateRecord(any(Record.class));
     }
+}
