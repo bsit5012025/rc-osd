@@ -65,7 +65,6 @@ class RecordFacadeImplTest
                     RecordStatus.PENDING
             );
         }
-    }
 
     @Test
     public void testUpdateStudentRecord()

@@ -2,6 +2,10 @@ package org.rocs.osd.facade.Record.impl;
 
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
@@ -58,12 +62,24 @@ public class RecordFacadeImpl implements RecordFacade
             return false;
         }
 
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(enrollmentId);
+
+        Employee employee = new Employee();
+        employee.setEmployeeId(employeeId);
+
+        Offense offense = new Offense();
+        offense.setOffenseId(offenseId);
+
+        DisciplinaryAction action = new DisciplinaryAction();
+        action.setActionId(actionId);
+
         Record record = new Record();
-        record.setEnrollmentId(enrollmentId);
-        record.setEmployeeId(employeeId);
-        record.setOffenseId(offenseId);
+        record.setEnrollment(enrollment);
+        record.setEmployee(employee);
+        record.setOffense(offense);
         record.setDateOfViolation(dateOfViolation);
-        record.setActionId(actionId);
+        record.setAction(action);
         record.setRemarks(remarks);
         record.setStatus(status);
         return recordDao.updateRecord(record);
