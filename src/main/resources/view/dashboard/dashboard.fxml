@@ -14,47 +14,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
+<BorderPane styleClass="dashboardRoot"
             stylesheets="@../../styles/dashboard/dashboard.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.rocs.osd.controller.login.LoginController">
+            fx:controller="org.rocs.osd.controller.dashboard.DashboardController">
 
-    <stylesheets>
-        <URL value="@../../styles/dashboard/buttons.css" />
-        <URL value="@../../styles/dashboard/label.css" />
-        <URL value="@../../styles/dashboard/table.css" />
-    </stylesheets>
-
-    <StackPane AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0"
-               AnchorPane.rightAnchor="0.0"
-               AnchorPane.topAnchor="0.0">
-        <HBox>
-            <VBox styleClass="menuBarContainer">
-
-                <HBox styleClass="logoContainer">
-                    <ImageView fitHeight="163.0" fitWidth="146.0" preserveRatio="true">
-                        <Image url="@../../assets/RC_LOGO.png" />
-                    </ImageView>
-
-                    <VBox styleClass="logoTextContainer">
-                        <Label id="rcText" text="Rogationist" />
-                        <Label id="rcText" text="College" />
-                    </VBox>
-                </HBox>
-
-                <VBox styleClass="buttonContainer">
-                    <Button fx:id="dashboardBtn" styleClass="dashboardButtons" text="Dashboard" />
-                    <Button fx:id="recordBtn" styleClass="dashboardButtons" text="Records" />
-                    <Button fx:id="recordViolationBtn" styleClass="dashboardButtons" text="Record Violation" />
-                    <Button fx:id="violationBtn" styleClass="dashboardButtons" text="Violations" />
-                    <Button fx:id="studentAppealBtn" styleClass="dashboardButtons" text="Student Appeals" />
-                    <Button fx:id="permissionBtn" styleClass="dashboardButtons" text="Permissions" />
-                    <Button fx:id="settingBtn" styleClass="dashboardButtons" text="Settings" />
-                    <Button fx:id="logoutBtn" onAction="#onLogout" styleClass="dashboardButtons" text="Logout" />
-                </VBox>
-
+    <top>
+        <HBox styleClass="topBar">
+            <VBox styleClass="logoContainer">
+                <ImageView fitHeight="45.0" fitWidth="45.0" preserveRatio="true">
+                    <Image url="@../../assets/RC_LOGO.png" />
+                </ImageView>
             </VBox>
             <Label styleClass="schoolName" text="Rogationist College" />
         </HBox>
@@ -75,47 +46,40 @@
             <VBox styleClass="navContainer" VBox.vgrow="ALWAYS">
                 <Button styleClass="sidebarItem" text="Dashboard">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/dashboard.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Students">
+                <Button onAction="#onLoadStudent" styleClass="sidebarItem" text="Students">
                     <graphic>
                         <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/student.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Offenses" onAction="#onLoadOffense">
+                <Button onAction="#onLoadOffense" styleClass="sidebarItem" text="Offenses">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/offenses.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Appeals">
+                <Button onAction="#onLoadAppeal" styleClass="sidebarItem" text="Appeals">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/appeal.png" /></ImageView>
                     </graphic>
                 </Button>
-                <Button styleClass="sidebarItem" text="Requests">
+                <Button onAction="#onLoadRequest" styleClass="sidebarItem" text="Requests">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/request.png" /></ImageView>
                     </graphic>
                 </Button>
 
                 <Pane VBox.vgrow="ALWAYS" />
 
-                <Button fx:id="logoutButton"
-                        styleClass="sidebarItem, logout"
-                        text="Logout" onAction="#onLogout">
+                <Button fx:id="logoutButton" onAction="#onLogout" styleClass="sidebarItem, logout" text="Logout">
                     <graphic>
-                        <ImageView fitHeight="24"
-                                   fitWidth="24">
+                        <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/logout.png" /></ImageView>
                     </graphic>
                 </Button>
@@ -124,7 +88,7 @@
     </left>
 
     <center>
-        <StackPane styleClass="mainContentWrapper" fx:id="mainContentWrapper">
+        <StackPane fx:id="mainContentWrapper" styleClass="mainContentWrapper">
             <VBox styleClass="contentArea">
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">

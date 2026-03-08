@@ -1,14 +1,19 @@
 package org.rocs.osd.model.record;
 
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
+
 import java.util.Date;
 
 public class Record {
     private long recordId;
-    private long enrollmentId;
-    private String employeeId;
-    private long offenseId;
+    private Enrollment enrollment;
+    private Employee employee;
+    private Offense offense;
     private Date dateOfViolation;
-    private long actionId;
+    private DisciplinaryAction action;
     private Date dateOfResolution;
     private String remarks;
     private RecordStatus status;
@@ -16,109 +21,85 @@ public class Record {
     public Record() {
     }
 
-    public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, RecordStatus status) {
+    public Record(long recordId, Enrollment enrollment, Employee employee, Offense offense, Date dateOfViolation, DisciplinaryAction action, Date dateOfResolution, String remarks, RecordStatus status) {
         this.recordId = recordId;
-        this.enrollmentId = enrollmentId;
-        this.employeeId = employeeId;
-        this.offenseId = offenseId;
+        this.enrollment = enrollment;
+        this.employee = employee;
+        this.offense = offense;
         this.dateOfViolation = dateOfViolation;
-        this.actionId = actionId;
+        this.action = action;
         this.dateOfResolution = dateOfResolution;
         this.remarks = remarks;
         this.status = status;
     }
 
-
     public long getRecordId() {
         return recordId;
     }
-
 
     public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 
-
-    public long getEnrollmentId() {
-        return enrollmentId;
+    public Enrollment getEnrollment() {
+        return enrollment;
     }
 
-
-    public void setEnrollmentId(long enrollmentId) {
-        this.enrollmentId = enrollmentId;
+    public void setEnrollment(Enrollment enrollment) {
+        this.enrollment = enrollment;
     }
 
-
-    public String getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
-
-    public long getOffenseId() {
-        return offenseId;
+    public Offense getOffense() {
+        return offense;
     }
 
-
-    public void setOffenseId(long offenseId) {
-        this.offenseId = offenseId;
+    public void setOffense(Offense offense) {
+        this.offense = offense;
     }
-
 
     public Date getDateOfViolation() {
         return dateOfViolation;
     }
 
-
-
     public void setDateOfViolation(Date dateOfViolation) {
         this.dateOfViolation = dateOfViolation;
     }
 
-
-
-    public long getActionId() {
-        return actionId;
+    public DisciplinaryAction getAction() {
+        return action;
     }
 
-
-
-    public void setActionId(long actionId) {
-        this.actionId = actionId;
+    public void setAction(DisciplinaryAction action) {
+        this.action = action;
     }
-
-
 
     public Date getDateOfResolution() {
         return dateOfResolution;
     }
 
-
-
     public void setDateOfResolution(Date dateOfResolution) {
         this.dateOfResolution = dateOfResolution;
     }
-
-
 
     public String getRemarks() {
         return remarks;
     }
 
-
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-
     public RecordStatus getStatus() {
         return status;
     }
-
 
     public void setStatus(RecordStatus status) {
         this.status = status;

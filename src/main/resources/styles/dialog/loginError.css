@@ -1,0 +1,28 @@
+.lgnErrBox {
+    -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b);
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-padding: 10 20 10 20;
+    -fx-min-width: 400px;
+    -fx-max-width: 400px;
+    -fx-min-height: 70px;
+    -fx-max-height: 70px;
+}
+
+StackPane {
+    -fx-background-color: transparent;
+}
+
+.error-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.3), 2, 0, 0, 1);
+}
+
+#errorIcon {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 5, 0, 0, 0);
+}

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane styleClass="rootContainer"
             stylesheets="@../../styles/request/request.css"
-            xmlns="http://javafx.com/javafx/21">
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.dashboard.DashboardController">
 
     <center>
         <VBox styleClass="mainWrapper">
@@ -15,11 +22,8 @@
                 <Label styleClass="headerText" text="APPEALS" />
             </HBox>
 
-            <ScrollPane fitToWidth="true"
-                        hbarPolicy="NEVER"
-                        styleClass="requestsScrollPane"
-                        VBox.vgrow="ALWAYS">
-                <VBox styleClass="listContainer">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="requestsScrollPane" VBox.vgrow="ALWAYS">
+                <VBox fx:id="listContainer" styleClass="listContainer">
 
                     <VBox styleClass="requestCard">
                         <HBox styleClass="cardTopRow">
@@ -46,10 +50,7 @@
                             <VBox alignment="TOP_RIGHT">
                                 <Button styleClass="arrowButton">
                                     <graphic>
-                                        <ImageView fitHeight="20.0"
-                                                   fitWidth="20.0"
-                                                   pickOnBounds="true"
-                                                   preserveRatio="true">
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <Image url="@../../assets/downButton.png" />
                                         </ImageView>
                                     </graphic>
@@ -78,20 +79,35 @@
                                     <Label styleClass="boldLabel" text="Student Name: " />
                                     <Label styleClass="dataLabel" text="Jane Smith" />
                                 </HBox>
+
+                                <VBox styleClass="expandedSection">
+                                    <HBox styleClass="labelRow">
+                                        <Label styleClass="boldLabel" text="Offense: " />
+                                        <Label styleClass="dataLabel" text="Uniform Violation" />
+                                    </HBox>
+                                    <Label styleClass="boldLabel" text="Reason for Appeal: " />
+                                    <Label styleClass="reasonText" text="Nemo enim ipsam voluptatem quia voluptas sit aspernatur..." wrapText="true" />
+                                </VBox>
                             </VBox>
 
-                            <VBox alignment="CENTER_RIGHT">
+                            <VBox alignment="TOP_RIGHT">
                                 <Button styleClass="arrowButton">
                                     <graphic>
-                                        <ImageView fitHeight="20.0"
-                                                   fitWidth="20.0"
-                                                   pickOnBounds="true"
-                                                   preserveRatio="true">
-                                            <Image url="@../../assets/rightButton.png" />
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <Image url="@../../assets/downButton.png" />
                                         </ImageView>
                                     </graphic>
                                 </Button>
                             </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_RIGHT" styleClass="actionRow">
+                            <Button styleClass="denyButton" text="Deny" />
+                            <Button styleClass="approveButton" text="Approve">
+                                <HBox.margin>
+                                    <Insets left="10.0" />
+                                </HBox.margin>
+                            </Button>
                         </HBox>
                     </VBox>
                 </VBox>
