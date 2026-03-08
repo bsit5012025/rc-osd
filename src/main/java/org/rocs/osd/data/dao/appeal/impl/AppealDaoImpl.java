@@ -3,6 +3,8 @@ package org.rocs.osd.data.dao.appeal.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.student.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,30 +13,9 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     @Override
-    public void saveAppeal(Appeal appeal) {
+    public List<Object[]> findPendingAppealsWithDetails() {
 
-        String sql = """
-            INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status)
-            VALUES (?, ?, ?, ?, ?) """;
-
-        try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                ps.setLong(1, appeal.getRecordID());
-                ps.setLong(2, appeal.getEnrollmentID());
-                ps.setString(3, appeal.getMessage());
-                ps.setDate(4, new java.sql.Date(appeal.getDateFiled().getTime()));
-                ps.setString(5, appeal.getStatus());
-                ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Appeal> findAllAppealDetails() {
-
-        List<Appeal> list = new ArrayList<>();
+        List<Object[]> list = new ArrayList<>();
         String sql = """
             SELECT a.appealID,
                    a.recordID,
@@ -43,7 +24,8 @@ public class AppealDaoImpl implements AppealDao {
                    a.dateFiled,
                    a.status,
                    s.studentID,
-                   p.firstName || ' ' || p.lastName AS fullName,
+                   p.firstName,
+                   p.lastName,
                    o.offense
                     FROM appeal a
                     JOIN record r ON a.recordID = r.recordID
@@ -51,6 +33,7 @@ public class AppealDaoImpl implements AppealDao {
                     JOIN enrollment e ON a.enrollmentID = e.enrollmentID
                     JOIN student s ON e.studentID = s.studentID
                     JOIN person p ON s.personID = p.personID
+                    WHERE a.status = 'PENDING'
                     ORDER BY a.dateFiled DESC
         """;
 
@@ -61,17 +44,23 @@ public class AppealDaoImpl implements AppealDao {
             while (rs.next()) {
                 Appeal appeal = new Appeal();
 
-                    appeal.setAppealID(rs.getLong("appealID"));
-                    appeal.setRecordID(rs.getLong("recordID"));
-                    appeal.setEnrollmentID(rs.getLong("enrollmentID"));
-                    appeal.setMessage(rs.getString("message"));
-                    appeal.setDateFiled(rs.getDate("dateFiled"));
-                    appeal.setStatus(rs.getString("status"));
-                    appeal.setStudentId(rs.getString("studentID"));
-                    appeal.setStudentName(rs.getString("fullName"));
-                    appeal.setOffense(rs.getString("offense"));
+                appeal.setAppealID(rs.getLong("appealID"));
+                appeal.setRecordID(rs.getLong("recordID"));
+                appeal.setEnrollmentID(rs.getLong("enrollmentID"));
+                appeal.setMessage(rs.getString("message"));
+                appeal.setDateFiled(rs.getDate("dateFiled"));
+                appeal.setStatus(rs.getString("status"));
 
-                list.add(appeal);
+
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentID"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setLastName(rs.getString("lastName"));
+
+                Offense offense = new Offense();
+                offense.setOffense(rs.getString("offense"));
+
+                list.add(new Object[]{appeal, student, offense});
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,16 +68,16 @@ public class AppealDaoImpl implements AppealDao {
         return list;
     }
     @Override
-    public void updateAppealStatus(Long appealId, String status) {
+    public void updateAppealStatus(long appealId, String status) {
 
         String sql = "UPDATE appeal SET status = ? WHERE appealID = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-                ps.setString(1, status);
-                ps.setLong(2, appealId);
-                ps.executeUpdate();
+            ps.setString(1, status);
+            ps.setLong(2, appealId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

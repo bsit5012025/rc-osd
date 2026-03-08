@@ -8,9 +8,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.student.Student;
 
 import java.sql.*;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,6 @@ class AppealDaoImplTest {
         connectionHelper = Mockito.mockStatic(ConnectionHelper.class);
         connectionHelper.when(ConnectionHelper::getConnection).thenReturn(connection);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         appealDao = new AppealDaoImpl();
     }
 
@@ -48,56 +48,50 @@ class AppealDaoImplTest {
     }
 
     @Test
-    void testSaveAppeal() throws SQLException {
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        Appeal appeal = new Appeal();
-        appeal.setRecordID(1L);
-        appeal.setEnrollmentID(100L);
-        appeal.setMessage("Test appeal");
-        appeal.setDateFiled(new Date());
-        appeal.setStatus("PENDING");
-
-        assertDoesNotThrow(() -> appealDao.saveAppeal(appeal));
-
-        verify(preparedStatement).setLong(1, 1L);
-        verify(preparedStatement).setLong(2, 100L);
-        verify(preparedStatement).setString(3, "Test appeal");
-        verify(preparedStatement).setString(5, "PENDING");
-        verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testFindAllAppealDetails() throws SQLException {
+    void testFindPendingAppealsWithDetails() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getLong("appealID")).thenReturn(1L);
         when(resultSet.getLong("recordID")).thenReturn(1L);
-        when(resultSet.getLong("enrollmentID")).thenReturn(100L);
+        when(resultSet.getLong("enrollmentID")).thenReturn(1L);
         when(resultSet.getString("message")).thenReturn("Test appeal");
         when(resultSet.getDate("dateFiled")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
         when(resultSet.getString("status")).thenReturn("PENDING");
         when(resultSet.getString("studentID")).thenReturn("S001");
-        when(resultSet.getString("fullName")).thenReturn("John Doe");
+        when(resultSet.getString("firstName")).thenReturn("John");
+        when(resultSet.getString("lastName")).thenReturn("Doe");
         when(resultSet.getString("offense")).thenReturn("Late Submission");
 
-        List<Appeal> appeals = appealDao.findAllAppealDetails();
+        List<Object[]> appeals = appealDao.findPendingAppealsWithDetails();
 
         assertNotNull(appeals);
         assertEquals(1, appeals.size());
 
-        Appeal appeal = appeals.get(0);
+        Object[] row = appeals.get(0);
+        assertInstanceOf(Appeal.class, row[0]);
+        assertInstanceOf(Student.class, row[1]);
+        assertInstanceOf(Offense.class, row[2]);
+
+        Appeal appeal = (Appeal) row[0];
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
-        assertEquals("John Doe", appeal.getStudentName());
-        assertEquals("Late Submission", appeal.getOffense());
+
+        Student student = (Student) row[1];
+        assertEquals("S001", student.getStudentId());
+        assertEquals("John", student.getFirstName());
+        assertEquals("Doe", student.getLastName());
+
+        Offense offense = (Offense) row[2];
+        assertEquals("Late Submission", offense.getOffense());
 
         verify(preparedStatement).executeQuery();
     }
 
     @Test
     void testUpdateAppealStatus() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         assertDoesNotThrow(() -> appealDao.updateAppealStatus(1L, "APPROVED"));

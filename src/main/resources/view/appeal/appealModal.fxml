@@ -56,6 +56,6 @@
     <VBox fx:id="popupBox" alignment="CENTER" spacing="5"
           style="-fx-background-color: #DDE1EB; -fx-padding: 10; -fx-background-radius: 8;"
           visible="false">
-        <Label fx:id="popupLabel" style="-fx-font-weight: bold; -fx-text-fill: #000080;"/>
+        <Label fx:id="popupLabel" style="-fx-font-weight: bold; -fx-text-fill: #000000;"/>
     </VBox>
 </VBox>

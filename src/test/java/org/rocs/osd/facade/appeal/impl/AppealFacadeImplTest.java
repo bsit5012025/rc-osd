@@ -7,8 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.student.Student;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,55 +18,39 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AppealFacadeImplTest {
 
-    @Mock
-    private AppealDao mockDao;
-
+    @Mock private AppealDao mockDao;
     private AppealFacadeImpl facade;
 
     @BeforeEach
     void setUp() {
-        facade = new AppealFacadeImpl();
-        try {
-            java.lang.reflect.Field daoField = AppealFacadeImpl.class.getDeclaredField("appealDao");
-            daoField.setAccessible(true);
-            daoField.set(facade, mockDao);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        facade = new AppealFacadeImpl(mockDao);
     }
 
     @Test
-    void testGetAllAppeals() {
-        Appeal appeal1 = new Appeal();
-        appeal1.setAppealID(1L);
-        appeal1.setEnrollmentID(101L);
-        appeal1.setStatus("PENDING");
+    void testGetPendingAppeals() {
+        Appeal appeal = new Appeal();
+        Student student = new Student();
+        Offense offense = new Offense();
+        when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.<Object[]>of(new Object[]{appeal, student, offense}));
 
-        Appeal appeal2 = new Appeal();
-        appeal2.setAppealID(2L);
-        appeal2.setEnrollmentID(102L);
-        appeal2.setStatus("PENDING");
-
-        when(mockDao.findAllAppealDetails()).thenReturn(Arrays.asList(appeal1, appeal2));
-
-        List<Appeal> result = facade.getAllAppeals();
-
+        List<Object[]> result = facade.getPendingAppeals();
         assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(mockDao, times(1)).findAllAppealDetails();
+        assertEquals(1, result.size());
+        assertSame(appeal, result.get(0)[0]);
+        assertSame(student, result.get(0)[1]);
+        assertSame(offense, result.get(0)[2]);
+        verify(mockDao).findPendingAppealsWithDetails();
     }
 
     @Test
     void testApproveAppeal() {
-        Long appealId = 101L;
-        assertDoesNotThrow(() -> facade.approveAppeal(appealId));
-        verify(mockDao, times(1)).updateAppealStatus(appealId, "APPROVED");
+        assertDoesNotThrow(() -> facade.approveAppeal(1L));
+        verify(mockDao).updateAppealStatus(1L, "APPROVED");
     }
 
     @Test
-    void testRejectAppeal() {
-        Long appealId = 102L;
-        assertDoesNotThrow(() -> facade.rejectAppeal(appealId));
-        verify(mockDao, times(1)).updateAppealStatus(appealId, "REJECTED");
+    void testDeniedAppeal() {
+        assertDoesNotThrow(() -> facade.deniedAppeal(1L));
+        verify(mockDao).updateAppealStatus(1L, "DENIED");
     }
 }

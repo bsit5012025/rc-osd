@@ -4,20 +4,17 @@ import java.util.Date;
 
 public class Appeal {
 
-    private Long appealID;
-    private Long recordID;
-    private Long enrollmentID;
+    private long appealID;
+    private long recordID;
+    private long enrollmentID;
     private String message;
     private Date dateFiled;
     private String status;
-    private String studentId;
-    private String studentName;
-    private String offense;
 
     public Appeal() {
     }
 
-    public Appeal(Long appealID, Long recordID, Long enrollmentID, String message, Date dateFiled, String status) {
+    public Appeal(long appealID, long recordID, long enrollmentID, String message, Date dateFiled, String status) {
         this.appealID = appealID;
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
@@ -26,13 +23,13 @@ public class Appeal {
         this.status = status;
     }
 
-    public Appeal(Long recordID, Long enrollmentID, String message, String status) {
+    public Appeal(long recordID, long enrollmentID, String message, String status) {
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
         this.message = message;
         this.status = status;
     }
-    public Long getAppealID() {
+    public long getAppealID() {
         return appealID;
     }
 
@@ -40,7 +37,7 @@ public class Appeal {
         this.appealID = appealID;
     }
 
-    public Long getRecordID() {
+    public long getRecordID() {
         return recordID;
     }
 
@@ -48,7 +45,7 @@ public class Appeal {
         this.recordID = recordID;
     }
 
-    public Long getEnrollmentID() {
+    public long getEnrollmentID() {
         return enrollmentID;
     }
 
@@ -80,27 +77,4 @@ public class Appeal {
         this.status = status;
     }
 
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public String getOffense() {
-        return offense;
-    }
-
-    public void setOffense(String offense) {
-        this.offense = offense;
-    }
 }
