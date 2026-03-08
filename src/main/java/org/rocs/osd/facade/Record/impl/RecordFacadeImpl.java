@@ -47,14 +47,14 @@ public class RecordFacadeImpl implements RecordFacade
                                        Date dateOfViolation, long actionId,
                                        String remarks, RecordStatus status)
     {
-        if(remarks == null)
-        {
-            remarks = "";
-        }
-
-        if(employeeId == null || dateOfViolation == null || remarks.length() > 500)
+        if (employeeId == null || dateOfViolation == null )
         {
             return false;
+        }
+
+        if(remarks != null && remarks.length() > 500)
+        {
+           return false;
         }
 
         Enrollment enrollment = new Enrollment();
