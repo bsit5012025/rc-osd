@@ -131,7 +131,7 @@
                 <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
                     <CheckBox prefHeight="18.0" prefWidth="113.0" text="Notify Parents" />
                     <Region prefHeight="40.0" prefWidth="441.0" />
-                    <Button fx:id="OffenseCancelButton" styleClass="cancelButton" text="Cancel" textFill="NAVY">
+                    <Button fx:id="OffenseCancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" textFill="NAVY">
                   <font>
                      <Font name="Arial" size="12.0" />
                   </font></Button>
