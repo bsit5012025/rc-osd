@@ -23,7 +23,7 @@ import java.util.List;
  * Implementation of the RecordDao interface.
  * This class handles student record data from the database.
  */
-public class RecordDaoImp implements RecordDao
+public class RecordDaoImpl implements RecordDao
 {
 
     /**
@@ -174,28 +174,36 @@ public class RecordDaoImp implements RecordDao
         }
     }
 
-    /**
-     * Updates the status of a student record by its record ID.
-     * @param recordID the ID of the record to update.
-     * @param status   the new status to set.
-     * @return true if the update was successful, false otherwise.
-     */
     @Override
-    public boolean updateStudentRecordStatusById(long recordID, String status) {
-        String sql = "UPDATE RECORD SET status = ? WHERE recordID = ?";
-
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, status);
-            stmt.setLong(2, recordID);
-
-            return stmt.executeUpdate() > 0;
-
+    public boolean updateRecord(Record record) {
+        try (Connection con = ConnectionHelper.getConnection()) {
+            PreparedStatement stmt = con.prepareStatement(
+                    "UPDATE record SET " +
+                            "enrollmentID = ?," +
+                            "employeeID = ?," +
+                            "offenseID = ?, " +
+                            "dateOfViolation = ?, " +
+                            "dateOfResolution = ?, " +
+                            "actionID = ?, " +
+                            "remarks = ?, " +
+                            "status = ? " +
+                            "WHERE recordID = ?");
+            stmt.setLong(1, record.getEnrollment().getEnrollmentId());
+            stmt.setString(2, record.getEmployee().getEmployeeId());
+            stmt.setLong(3, record.getOffense().getOffenseId());
+            stmt.setDate(4, new java.sql.Date(record.getDateOfViolation().getTime()));
+            stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+            stmt.setLong(6, record.getAction().getActionId());
+            stmt.setString(7, record.getRemarks());
+            stmt.setString(8, String.valueOf(record.getStatus()));
+            stmt.setLong(9, record.getRecordId());
+            stmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            System.out.println("SQL Exception (updateStudentRecordStatusById): " + e.getMessage());
-        }
+            System.out.println("An SQL Exception occurred." + e.getMessage());
 
-        return false;
+            return false;
+        }
     }
+
 }
