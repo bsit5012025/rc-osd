@@ -3,8 +3,10 @@ package org.rocs.osd.data.dao.appeal.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.record.Record;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,10 +45,16 @@ public class AppealDaoImpl implements AppealDao {
 
             while (rs.next()) {
                 Appeal appeal = new Appeal();
-
                 appeal.setAppealID(rs.getLong("appealID"));
-                appeal.setRecordID(rs.getLong("recordID"));
-                appeal.setEnrollmentID(rs.getLong("enrollmentID"));
+
+                Record record = new Record();
+                record.setRecordId(rs.getLong("recordID"));
+                appeal.setRecordID(record);
+
+                Enrollment enrollment = new Enrollment();
+                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                appeal.setEnrollmentID(enrollment);
+
                 appeal.setMessage(rs.getString("message"));
                 appeal.setDateFiled(rs.getDate("dateFiled"));
                 appeal.setStatus(rs.getString("status"));

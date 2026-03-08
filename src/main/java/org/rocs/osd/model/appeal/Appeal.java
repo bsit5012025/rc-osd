@@ -1,12 +1,15 @@
 package org.rocs.osd.model.appeal;
 
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.record.Record;
+
 import java.util.Date;
 
 public class Appeal {
 
     private long appealID;
-    private long recordID;
-    private long enrollmentID;
+    private Record recordID;
+    private Enrollment enrollmentID;
     private String message;
     private Date dateFiled;
     private String status;
@@ -14,7 +17,7 @@ public class Appeal {
     public Appeal() {
     }
 
-    public Appeal(long appealID, long recordID, long enrollmentID, String message, Date dateFiled, String status) {
+    public Appeal(long appealID, Record recordID, Enrollment enrollmentID, String message, Date dateFiled, String status) {
         this.appealID = appealID;
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
@@ -23,7 +26,7 @@ public class Appeal {
         this.status = status;
     }
 
-    public Appeal(long recordID, long enrollmentID, String message, String status) {
+    public Appeal(Record recordID, Enrollment enrollmentID, String message, String status) {
         this.recordID = recordID;
         this.enrollmentID = enrollmentID;
         this.message = message;
@@ -37,19 +40,19 @@ public class Appeal {
         this.appealID = appealID;
     }
 
-    public long getRecordID() {
+    public Record getRecordID() {
         return recordID;
     }
 
-    public void setRecordID(Long recordID) {
+    public void setRecordID(Record recordID) {
         this.recordID = recordID;
     }
 
-    public long getEnrollmentID() {
+    public Enrollment getEnrollmentID() {
         return enrollmentID;
     }
 
-    public void setEnrollmentID(Long enrollmentID) {
+    public void setEnrollmentID(Enrollment enrollmentID) {
         this.enrollmentID = enrollmentID;
     }
 
