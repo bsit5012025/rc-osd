@@ -57,11 +57,6 @@ public class RecordFacadeImpl implements RecordFacade
             return false;
         }
 
-        if(status == RecordStatus.APPROVED)
-        {
-            return false;
-        }
-
         Enrollment enrollment = new Enrollment();
         enrollment.setEnrollmentId(enrollmentId);
 
