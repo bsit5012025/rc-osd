@@ -11,15 +11,16 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
-import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 class EnrollmentDaoImplTest {
@@ -49,12 +50,31 @@ class EnrollmentDaoImplTest {
     }
 
     @Test
-    void testFindEnrollmentIdByStudentId() throws SQLException{
-        Mockito.when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
-        Mockito.when(this.resultSet.next()).thenReturn(true).thenReturn(false);
-        Mockito.when(this.resultSet.getLong("departmentId")).thenReturn(3L);
-        Mockito.when(this.resultSet.getString("departmentName")).thenReturn("College Department");
-        Enrollment enrollment = enrollmentDao.findEnrollmentIdByStudentId(1);
+    void testFindListOfEnrollmentsByStudentIdReturnListOfEnrollmentOfStudent() throws SQLException{
+        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        when(this.resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
 
+        when(this.resultSet.getLong("enrollmentID")).thenReturn(1L, 2L);
+        when(this.resultSet.getString("schoolYear")).thenReturn("2024-2025", "2025-2026");
+        when(this.resultSet.getString("studentLevel")).thenReturn("Grade 8", "Grade 9");
+        when(this.resultSet.getString("section")).thenReturn("St. Hannibal", "St. Anthony");
+        when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0002");
+        when(this.resultSet.getLong("departmentID")).thenReturn(1L, 1L);
+        when(this.resultSet.getLong("disciplinaryStatusID")).thenReturn(1L, 2L);
+
+        List<Enrollment> result = enrollmentDao.findEnrollmentsByStudentId("JHS-0001");
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+    }
+    @Test
+    void testFindEnrollmentByStudentIdReturnEnrollment() throws SQLException{
+        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        when(this.resultSet.next()).thenReturn(true);
+        when(this.resultSet.getLong("enrollmentID")).thenReturn(1L);
+
+        long result = enrollmentDao.findEnrollmentIdByStudentId("JHS-0001");
+
+        assertEquals(1L, result);
     }
 }

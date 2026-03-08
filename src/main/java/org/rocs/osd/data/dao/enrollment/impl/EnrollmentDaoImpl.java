@@ -2,7 +2,10 @@ package org.rocs.osd.data.dao.enrollment.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
+import org.rocs.osd.model.department.Department;
+import org.rocs.osd.model.disciplinaryStatus.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.person.student.Student;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,14 +27,21 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
             while (rs.next()){
                 Enrollment enrollment = new Enrollment();
+                Student student = new Student();
+                Department department = new Department();
+                DisciplinaryStatus disciplinaryStatus = new DisciplinaryStatus();
 
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
-                enrollment.setStudentId(rs.getString("studentID"));
                 enrollment.setSchoolYear(rs.getString("schoolYear"));
                 enrollment.setStudentLevel(rs.getString("studentLevel"));
                 enrollment.setSection(rs.getString("section"));
-                enrollment.setDepartmentId(rs.getString("departmentID"));
-                enrollment.setDisciplinaryStatusId(rs.getString("disciplinaryStatusID"));
+
+                student.setStudentId(rs.getString("studentID"));
+                enrollment.setStudent(student);
+                department.setDepartmentId(rs.getLong("departmentID"));
+                enrollment.setDepartment(department);
+                disciplinaryStatus.setDisciplinaryStatusId(rs.getLong("disciplinaryStatusID"));
+                enrollment.setDisciplinaryStatus(disciplinaryStatus);
 
                 enrollmentList.add(enrollment);
             }
