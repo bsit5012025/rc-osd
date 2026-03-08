@@ -28,35 +28,35 @@ import java.io.IOException;
 public class LoginController {
     private Stage errorStage;
     /**
-     This text field is used to enter the username
+     This text field is used to enter the username.
      */
     @FXML
     TextField usernameTextField;
-    /** This text field is used to enter the password
+    /** This text field is used to enter the password.
      */
     @FXML
     PasswordField passwordField;
     /**
-     This method triggered once the Login button is clicked
+     This method triggered once the Login button is clicked.
      */
 
 
     public void onLogin(ActionEvent event){
 
         /**
-         * Initialize DAO and Facade for login process
+         * Initialize DAO and Facade for login process.
          */
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
 
         /**
-         * This will check if the entered username and password are correct
+         * This will check if the entered username and password are correct.
          */
         boolean loginCheck = loginFacade.login(usernameTextField.getText(),passwordField.getText());
 
         /**
-         * This will check if the username or password fields are empty and informs the user to fill them up
+         * This will check if the username or password fields are empty and informs the user to fill them up.
          */
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
@@ -67,14 +67,14 @@ public class LoginController {
         }
         try{
             /**
-             * If the login credentials are correct, Dashboard screen will be loaded
+             * If the login credentials are correct, Dashboard screen will be loaded.
              */
             if(loginCheck){
                 loadDashboard(event);
             }
             else{
                 /**
-                 * If the login fails, "Invalid username or password! will be displayed
+                 * If the login fails, "Invalid username or password! will be displayed".
                  */
                 showErrorPopup("Invalid username or password!");
             }

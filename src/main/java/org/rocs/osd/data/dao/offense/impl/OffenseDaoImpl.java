@@ -56,7 +56,8 @@ public class OffenseDaoImpl implements OffenseDao
         return offense;
     }
     /**
-     * Retrieves a list of all offense names from the database.
+     * Retrieves all offense names from the database.
+     *
      * @return a list of offense names
      */
     @Override
@@ -77,6 +78,12 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    /**
+     * Finds an Offense by its name.
+     *
+     * @param offenseName the name of the offense to find
+     * @return an Offense object with details, or null if not found
+     */
     @Override
     public Offense findByName(String offenseName) {
 

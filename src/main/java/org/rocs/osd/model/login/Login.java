@@ -6,19 +6,9 @@ package org.rocs.osd.model.login;
  */
 public class Login {
 
-    /**
-     * Unique identifier for the login record
-      */
+
     private long id;
-
-    /**
-     * Username for login
-     */
     private String username;
-
-    /**
-     * Password for login
-     */
     private String password;
 
     /**
@@ -29,9 +19,10 @@ public class Login {
 
 
     /**
-     * @param id unique identifier
-     * @param username username of the user
-     * @param password password of the user
+     * Constructor to create a Login with an ID, username, and password.
+     *	@param id unique identifier of the Login record.
+     *	@param username username used by the user to access the system.
+     *	@param password the password associated with the username.
      */
     public Login(long id, String username, String password) {
         this.id = id;
@@ -42,40 +33,45 @@ public class Login {
 
 
     /**
-     * Gets the ID of the login record
-     * @return the ID
+     * Gets the ID of the login record.
+     *
+     *	@return the ID
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Sets the ID of the login record
-     * @param id the new ID
+     * Sets the ID of the login record.
+     *
+     *	@param id the new ID
      */
     public void setId(long id) {
         this.id = id;
     }
 
     /**
-     * Gets the username
-     * @return the username
+     * Gets the username.
+     *
+     *	@return the username
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Sets the username
-     * @param username the new username
+     * Sets the username.
+     *
+     *	@param username the new username
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
-     * Gets the password
-     * @return the password
+     * Gets the password.
+     *
+     *	@return the password
      */
     public String getPassword() {
         return password;
@@ -83,7 +79,8 @@ public class Login {
 
     /**
      * Sets the password.
-     * @param password the new password
+     *
+     *	@param password the new password
      */
     public void setPassword(String password) {
         this.password = password;

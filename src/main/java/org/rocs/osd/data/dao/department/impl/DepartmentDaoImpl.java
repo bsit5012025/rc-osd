@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the DepartmentDao interface
- * This class handles department data from the database
+ * Implementation of the DepartmentDao interface.
+ * This class handles department data from the database.
  */
 public class DepartmentDaoImpl implements DepartmentDao {
 
     /**
-     * Finds and retrieves a Department object from the database by ID
+     * Finds and retrieves a Department object from the database by ID.
      * Returns an empty Department object if no match is found.
      */
     @Override

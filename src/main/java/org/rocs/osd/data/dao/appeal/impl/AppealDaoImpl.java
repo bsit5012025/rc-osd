@@ -8,8 +8,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of AppealDao that handles database operations for Appeal records in the Office of Student Discipline System.
+ */
 public class AppealDaoImpl implements AppealDao {
 
+    /**
+     * Saves a new appeal record to the database.
+     * @param appeal the Appeal object to save.
+     */
     @Override
     public void saveAppeal(Appeal appeal) {
 
@@ -31,6 +38,11 @@ public class AppealDaoImpl implements AppealDao {
         }
     }
 
+    /**
+     * Retrieves all appeal records with student and offense details.
+     *
+     * @return a List of Appeal objects.
+     */
     @Override
     public List<Appeal> findAllAppealDetails() {
 
@@ -78,6 +90,12 @@ public class AppealDaoImpl implements AppealDao {
         }
         return list;
     }
+
+    /**
+     * Updates the status of an existing appeal record.
+     * @param appealId the ID of the appeal to update.
+     * @param status the new status value.
+     */
     @Override
     public void updateAppealStatus(Long appealId, String status) {
 

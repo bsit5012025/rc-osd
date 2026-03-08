@@ -1,25 +1,29 @@
 package org.rocs.osd.model.disciplinaryAction;
 
 /**
- * Represents a Disciplinary Action entity.
+ * Represents a Disciplinary Action entity in the Office of Student Discipline System.
  * Contains the action ID, name, and description.
  */
 public class DisciplinaryAction {
 
-    /** Unique identifier of the disciplinary action */
+
     private long actionId;
-    /** Name of the disciplinary action */
     private String actionName;
-    /** Description of the disciplinary action */
     private String description;
 
-
+    /**
+     * Default constructor.
+     * Initializes an empty DisciplinaryAction object.
+     */
     public DisciplinaryAction() {
     }
 
     /**
-     * Constructor with all values
-      */
+     * Constructor to create a DisciplinaryAction with all values.
+     *	@param actionId   the unique identifier of the disciplinary action
+     *	@param actionName the name of the disciplinary action
+     *	@param description the description of the disciplinary action
+     */
     public DisciplinaryAction(long actionId, String actionName, String description) {
         this.actionId = actionId;
         this.actionName = actionName;
@@ -27,42 +31,42 @@ public class DisciplinaryAction {
     }
 
     /**
-     *This will get the action  ID
+     * @return the unique ID of the disciplinary action
      */
     public long getActionId() {
         return actionId;
     }
 
     /**
-     * This will set the Action ID
-      */
+     *	@param actionId sets the unique ID of the disciplinary action
+     */
     public void setActionId(long actionId) {
         this.actionId = actionId;
     }
 
     /**
-     *    This will get the Action Name
+     * @return the name of the disciplinary action
      */
     public String getActionName() {
         return actionName;
     }
 
     /**
-     *  This will set the Action Name
+     *	@param actionName sets the name of the disciplinary action
      */
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
 
     /**
-     * This will get the Description
+     * @return the description of the disciplinary action
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * This will set the Description
+     *	@param description sets the description of the disciplinary action
      */
     public void setDescription(String description) {
         this.description = description;
