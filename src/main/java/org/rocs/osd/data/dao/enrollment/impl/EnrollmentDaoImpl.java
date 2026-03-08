@@ -45,10 +45,12 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     public long findEnrollmentIdByStudentId(String studentId){
 
         try (Connection conn = ConnectionHelper.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement("SELECT enrollmentID " +
-                    "FROM enrollment WHERE studentID = ?" +
-                    "ORDER BY schoolYear DESC" +
-                    "FETCH FIRST 1 ROW ONLY");
+            PreparedStatement statement = conn.prepareStatement(
+                    "SELECT enrollmentID " +
+                            "FROM enrollment " +
+                            "WHERE studentID = ? " +
+                            "ORDER BY schoolYear DESC " +
+                            "FETCH FIRST 1 ROW ONLY");
             statement.setString(1, studentId);
             ResultSet rs = statement.executeQuery();
 
