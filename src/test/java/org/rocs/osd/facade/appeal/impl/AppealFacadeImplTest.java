@@ -32,6 +32,7 @@ class AppealFacadeImplTest {
         appeal.setAppealID(1L);
         appeal.setMessage("Test appeal");
         appeal.setStatus("PENDING");
+        appeal.setStudentFullName("John Doe");
 
         Record record = new Record();
         record.setRecordId(1L);
@@ -41,7 +42,6 @@ class AppealFacadeImplTest {
         Enrollment enrollment = new Enrollment();
         enrollment.setEnrollmentId(1L);
         enrollment.setStudentId("S001");
-        enrollment.setSection("John Doe");
         appeal.setEnrollment(enrollment);
 
         when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.of(appeal));
@@ -54,6 +54,7 @@ class AppealFacadeImplTest {
         assertEquals(1L, actual.getAppealID());
         assertEquals("Test appeal", actual.getMessage());
         assertEquals("PENDING", actual.getStatus());
+        assertEquals("John Doe", actual.getStudentFullName());
 
         assertNotNull(actual.getRecord());
         assertEquals(1L, actual.getRecord().getRecordId());
@@ -61,7 +62,6 @@ class AppealFacadeImplTest {
 
         assertNotNull(actual.getEnrollment());
         assertEquals(1L, actual.getEnrollment().getEnrollmentId());
-        assertEquals("John Doe", actual.getEnrollment().getSection());
         assertEquals("S001", actual.getEnrollment().getStudentId());
 
         verify(mockDao).findPendingAppealsWithDetails();

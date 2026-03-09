@@ -13,6 +13,7 @@ public class Appeal {
     private String message;
     private Date dateFiled;
     private String status;
+    private String studentFullName;
 
     public Appeal() {
     }
@@ -77,5 +78,9 @@ public class Appeal {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getStudentFullName() { return studentFullName; }
+
+    public void setStudentFullName(String name) { this.studentFullName = name; }
 
 }

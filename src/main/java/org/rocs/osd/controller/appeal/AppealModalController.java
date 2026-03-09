@@ -58,7 +58,7 @@ public class AppealModalController {
         Record record = appeal.getRecord();
 
         studentIdLabel.setText(enrollment.getStudentId());
-        studentNameLabel.setText(enrollment.getSection());
+        studentNameLabel.setText(appeal.getStudentFullName());
         offenseLabel.setText(record.getRemarks());
         reasonLabel.setText(appeal.getMessage());
 

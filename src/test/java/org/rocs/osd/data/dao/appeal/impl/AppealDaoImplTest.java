@@ -72,6 +72,7 @@ class AppealDaoImplTest {
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
+        assertEquals("John Doe", appeal.getStudentFullName());
 
         Record record = appeal.getRecord();
         assertNotNull(record);
@@ -81,7 +82,6 @@ class AppealDaoImplTest {
         Enrollment enrollment = appeal.getEnrollment();
         assertNotNull(enrollment);
         assertEquals(1L, enrollment.getEnrollmentId());
-        assertEquals("John Doe", enrollment.getSection());
         assertEquals("S001", enrollment.getStudentId());
 
         verify(preparedStatement).executeQuery();
