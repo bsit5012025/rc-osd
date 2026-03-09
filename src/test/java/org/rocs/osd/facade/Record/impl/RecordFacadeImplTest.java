@@ -7,6 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
@@ -71,9 +75,21 @@ class RecordFacadeImplTest
     {
         when(recordDao.updateRecord(any(Record.class))).thenReturn(true);
 
-        boolean result = recordFacade.updateStudentRecord(Long.valueOf(1),
-                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
-                Long.valueOf(1), "Student caught vaping in school",
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(Long.valueOf(1));
+
+        Employee employee = new Employee();
+        employee.setEmployeeId("EMP-002");
+
+        Offense offense = new Offense();
+        offense.setOffenseId(Long.valueOf(1));
+
+        DisciplinaryAction action = new DisciplinaryAction();
+        action.setActionId(Long.valueOf(1));
+
+        boolean result = recordFacade.updateStudentRecord(enrollment,
+                employee, offense,  Date.valueOf("2024-09-15"),
+                action, "Student caught vaping in school",
                 RecordStatus.PENDING);
 
         assertTrue(result);

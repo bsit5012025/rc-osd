@@ -44,11 +44,11 @@ public class RecordFacadeImpl implements RecordFacade
     }
 
     @Override
-    public boolean updateStudentRecord(long enrollmentId, String employeeId, long offenseId,
-                                       Date dateOfViolation, long actionId,
+    public boolean updateStudentRecord(Enrollment enrollment, Employee employee, Offense offense,
+                                       Date dateOfViolation, DisciplinaryAction action,
                                        String remarks, RecordStatus status)
     {
-        if (employeeId == null || dateOfViolation == null )
+        if (employee.getEmployeeId() == null || dateOfViolation == null )
         {
             return false;
         }
@@ -57,18 +57,6 @@ public class RecordFacadeImpl implements RecordFacade
         {
            return false;
         }
-
-        Enrollment enrollment = new Enrollment();
-        enrollment.setEnrollmentId(enrollmentId);
-
-        Employee employee = new Employee();
-        employee.setEmployeeId(employeeId);
-
-        Offense offense = new Offense();
-        offense.setOffenseId(offenseId);
-
-        DisciplinaryAction action = new DisciplinaryAction();
-        action.setActionId(actionId);
 
         Record record = new Record();
         record.setEnrollment(enrollment);
