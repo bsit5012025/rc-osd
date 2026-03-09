@@ -25,12 +25,13 @@ public class RecordFacadeImpl implements RecordFacade
                                        long offenseID, Date dateOfViolation, long actionID,
                                        String remarks)
     {
-        if(remarks == null)
+
+        if(employeeID == null || dateOfViolation == null)
         {
-            remarks = "";
+            return false;
         }
 
-        if(employeeID == null || dateOfViolation == null || remarks.length() > 500)
+        if(remarks != null && remarks.length() > 500)
         {
             return false;
         }

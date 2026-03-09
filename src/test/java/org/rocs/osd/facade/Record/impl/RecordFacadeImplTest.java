@@ -40,7 +40,7 @@ class RecordFacadeImplTest
                     anyLong(),
                     any(Date.class),
                     anyLong(),
-                    anyString(),
+                    nullable(String.class),
                     eq(RecordStatus.PENDING)
             )).thenReturn(true);
 
