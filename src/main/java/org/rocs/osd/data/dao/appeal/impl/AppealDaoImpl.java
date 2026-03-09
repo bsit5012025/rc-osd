@@ -56,9 +56,11 @@ public class AppealDaoImpl implements AppealDao {
                 Enrollment enrollment = new Enrollment();
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
                 enrollment.setStudentId(rs.getString("studentID"));
+                appeal.setEnrollment(enrollment);
+
                 String fullName = rs.getString("firstName") + " " + rs.getString("lastName");
                 appeal.setStudentFullName(fullName);
-                appeal.setEnrollment(enrollment);
+
 
                 list.add(appeal);
             }
