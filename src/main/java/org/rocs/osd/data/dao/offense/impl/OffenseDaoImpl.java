@@ -104,6 +104,12 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    /**
+     * Adds a new offense to the database.
+     *
+     * @param offense the Offense object to add.
+     * @return true if the offense was successfully added, false otherwise.
+     */
     @Override
     public boolean addNewOffense(Offense offense) {
         String sql = "INSERT INTO offense (offense, type, description) VALUES (?, ?, ?)";

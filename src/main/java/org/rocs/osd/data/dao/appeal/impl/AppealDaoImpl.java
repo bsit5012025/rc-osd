@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Implementation of AppealDao that handles database operations for Appeal records in the Office of Student Discipline System.
+ * Handles database operations such as saving, retrieving, and updating appeals.
  */
 public class AppealDaoImpl implements AppealDao {
 

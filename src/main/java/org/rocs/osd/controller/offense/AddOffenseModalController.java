@@ -9,7 +9,7 @@ import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.model.offense.Offense;
 
 /**
- * Controller for the "Add Offense" modal.
+ * Controller for the "Add Offense" modal in the Office of Student Discipline System.
  * This class handles the population of offense type and level ComboBoxes and automatically selects the level of offense based on the selected offense type.
  */
 public class AddOffenseModalController {

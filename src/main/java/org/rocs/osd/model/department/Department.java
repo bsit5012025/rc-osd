@@ -27,28 +27,28 @@ public class Department {
     }
 
     /**
-     * @return the unique department ID
+     * @return the unique department ID.
      */
     public long getDepartmentId() {
         return departmentId;
     }
 
     /**
-     *	@param departmentId sets the unique department ID
+     *	@param departmentId sets the unique department ID.
      */
     public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
 
     /**
-     * @return the name of the department
+     * @return the name of the department.
      */
     public String getDepartmentName() {
         return departmentName;
     }
 
     /**
-     *	@param departmentName sets the name of the department
+     *	@param departmentName sets the name of the department.
      */
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;

@@ -74,7 +74,7 @@ public class Employee extends Person {
     }
 
     /**
-     *	@param employeeRole sets the role of the employee
+     *	@param employeeRole sets the role of the employee.
      */
     public void setEmployeeRole(String employeeRole) {
         this.employeeRole = employeeRole;

@@ -22,25 +22,24 @@ import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
 import java.io.IOException;
 
 /**
- * The LoginController class handles user interactions in the Login screen.
+ * Controller responsible for handling user interactions in the Login screen of the Office of Student Discipline.
  * It validates user credentials and manages navigation to the Dashboard view.
  */
 public class LoginController {
     private Stage errorStage;
-    /**
-     This text field is used to enter the username.
-     */
+
     @FXML
     TextField usernameTextField;
-    /** This text field is used to enter the password.
-     */
+
     @FXML
     PasswordField passwordField;
+
+
     /**
-     This method triggered once the Login button is clicked.
+     * Handles the login process when the Login button is clicked.
+     * This method validates the entered username and password and loads the Dashboard if successful.
+     * @param event the action event triggered by clicking the login button.
      */
-
-
     public void onLogin(ActionEvent event){
 
         /**
@@ -105,12 +104,12 @@ public class LoginController {
             double height = stage.getHeight();
             stage.setScene(new Scene(root,width,height));
             /**
-             * This will make the window full screen
+             * This will make the window full screen.
              */
             stage.setMaximized(true);
             stage.show();
             /**
-             * Throw an exception if the Dashboard screen cannot be loaded
+             * Throw an exception if the Dashboard screen cannot be loaded.
              */
         } catch (LoadException e){
             System.err.println("Error loading Dashboard");
@@ -118,7 +117,7 @@ public class LoginController {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
             /**
-             * Throw an exception if the Dashboard screen cannot be loaded
+             * Throw an exception if the Dashboard screen cannot be loaded.
              */
             throw new RuntimeException(e);
         }
@@ -132,7 +131,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
             /**
-             * Sets the login error banner to the bottom-center of the window on different screen sizes
+             * Sets the login error banner to the bottom-center of the window on different screen sizes.
              * */
             errorStage = new Stage();
 

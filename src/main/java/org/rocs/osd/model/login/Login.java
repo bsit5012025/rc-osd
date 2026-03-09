@@ -35,7 +35,7 @@ public class Login {
     /**
      * Gets the ID of the login record.
      *
-     *	@return the ID
+     *	@return the ID.
      */
     public long getId() {
         return id;
@@ -44,7 +44,7 @@ public class Login {
     /**
      * Sets the ID of the login record.
      *
-     *	@param id the new ID
+     *	@param id the new ID.
      */
     public void setId(long id) {
         this.id = id;
@@ -53,7 +53,7 @@ public class Login {
     /**
      * Gets the username.
      *
-     *	@return the username
+     *	@return the username.
      */
     public String getUsername() {
         return username;
@@ -62,7 +62,7 @@ public class Login {
     /**
      * Sets the username.
      *
-     *	@param username the new username
+     *	@param username the new username.
      */
     public void setUsername(String username) {
         this.username = username;
@@ -71,7 +71,7 @@ public class Login {
     /**
      * Gets the password.
      *
-     *	@return the password
+     *	@return the password.
      */
     public String getPassword() {
         return password;
@@ -80,7 +80,7 @@ public class Login {
     /**
      * Sets the password.
      *
-     *	@param password the new password
+     *	@param password the new password.
      */
     public void setPassword(String password) {
         this.password = password;

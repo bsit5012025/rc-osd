@@ -5,7 +5,7 @@ import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.model.login.Login;
 
 /**
- * This class is used to implement the LoginFacade interface to handle login logic.
+ * Facade implementation for managing Appeal records in the Office of Student Discipline System.
   */
 public class LoginFacadeImpl implements LoginFacade
 {

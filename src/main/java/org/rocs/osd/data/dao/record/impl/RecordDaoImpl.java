@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the RecordDao interface.
+ * DAO implementation for managing student records in the Office of Student Discipline System.
  * This class handles student record data from the database.
  */
 public class RecordDaoImpl implements RecordDao

@@ -8,7 +8,7 @@ import org.rocs.osd.model.appeal.Appeal;
 import java.util.List;
 
 /**
- * Implementation of the AppealFacade interface.
+ * Facade implementation for managing Appeal records in the Office of Student Discipline System.
  * Provides a simplified interface for managing appeals, handling database operations via AppealDao.
  */
 public class AppealFacadeImpl implements AppealFacade {
