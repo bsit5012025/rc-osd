@@ -76,7 +76,7 @@ class RecordDaoImplTest
 
             when(resultSet.getString("employeeID")).thenReturn("EMP-002");
             when(resultSet.getLong("empPersonID")).thenReturn(9L);
-            when(resultSet.getString("empDeptID")).thenReturn("1");
+            when(resultSet.getString("empDept")).thenReturn("JHS");
             when(resultSet.getString("employeeRole")).thenReturn("PREFECT");
 
             when(resultSet.getLong("offenseID")).thenReturn(1L);

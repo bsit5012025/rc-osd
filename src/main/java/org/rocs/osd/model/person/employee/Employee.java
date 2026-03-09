@@ -1,5 +1,6 @@
 package org.rocs.osd.model.person.employee;
 
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.Person;
 
 /**
@@ -9,9 +10,7 @@ import org.rocs.osd.model.person.Person;
 public class Employee extends Person {
 
     private String employeeId;
-
-    private String departmentId;
-
+    private Department department;
     private String employeeRole;
 
     /**
@@ -21,20 +20,11 @@ public class Employee extends Person {
     public Employee() {
     }
 
-    /**
-     * Constructor to create an Employee with personal and employee-specific details.
-     * @param personID     unique ID from the Person class.
-     * @param lastName     employee's last name.
-     * @param firstName    employee's first name.
-     * @param middleName   employee's middle name.
-     * @param employeeId   unique employee ID.
-     * @param departmentId department ID of the employee.
-     * @param employeeRole role of the employee.
-     */
-    public Employee(Long personID, String lastName, String firstName, String middleName, String employeeId, String departmentId, String employeeRole) {
+
+    public Employee(Long personID, String lastName, String firstName, String middleName, String employeeId, Department department, String employeeRole) {
         super(personID, lastName, firstName, middleName);
         this.employeeId = employeeId;
-        this.departmentId = departmentId;
+        this.department = department;
         this.employeeRole = employeeRole;
     }
 
@@ -52,18 +42,12 @@ public class Employee extends Person {
         this.employeeId = employeeId;
     }
 
-    /**
-     * @return the department ID of the employee.
-     */
-    public String getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    /**
-     *	@param departmentId sets the department ID of the employee.
-     */
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     /**
@@ -73,9 +57,6 @@ public class Employee extends Person {
         return employeeRole;
     }
 
-    /**
-     *	@param employeeRole sets the role of the employee.
-     */
     public void setEmployeeRole(String employeeRole) {
         this.employeeRole = employeeRole;
     }

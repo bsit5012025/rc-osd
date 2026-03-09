@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.student.StudendDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.student.Student;
 
 import java.sql.Connection;
@@ -57,7 +58,7 @@ class StudentDaoImplTest
         when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
         when(resultSet.getString("address")).thenReturn("Buho");
         when(resultSet.getString("studentType")).thenReturn("Intern");
-        when(resultSet.getString("departmentID")).thenReturn("jhs-3001");
+        when(resultSet.getString("department")).thenReturn("JHS");
         when(resultSet.getString("lastName")).thenReturn("userLastName");
         when(resultSet.getString("middleName")).thenReturn("userMidName");
         when(resultSet.getString("firstName")).thenReturn("userFirstName");
@@ -69,7 +70,7 @@ class StudentDaoImplTest
         assertEquals(Long.valueOf(2), student.getPersonID());
         assertEquals("Buho", student.getAddress());
         assertEquals("Intern", student.getStudentType());
-        assertEquals("jhs-3001", student.getDepartmentId());
+        assertEquals(Department.JHS, student.getDepartment());
         assertEquals("userLastName", student.getLastName());
         assertEquals("userMidName", student.getMiddleName());
         assertEquals("userFirstName", student.getFirstName());
@@ -89,7 +90,7 @@ class StudentDaoImplTest
         when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
         when(resultSet.getString("address")).thenReturn("Buho");
         when(resultSet.getString("studentType")).thenReturn("Intern");
-        when(resultSet.getString("departmentID")).thenReturn("jhs-3001");
+        when(resultSet.getString("department")).thenReturn("JHS");
         when(resultSet.getString("lastName")).thenReturn("userLastName");
         when(resultSet.getString("middleName")).thenReturn("userMidName");
         when(resultSet.getString("firstName")).thenReturn("userFirstName");
@@ -101,7 +102,7 @@ class StudentDaoImplTest
         assertEquals(Long.valueOf(2), student.getPersonID());
         assertEquals("Buho", student.getAddress());
         assertEquals("Intern", student.getStudentType());
-        assertEquals("jhs-3001", student.getDepartmentId());
+        assertEquals(Department.JHS, student.getDepartment());
         assertEquals("userLastName", student.getLastName());
         assertEquals("userMidName", student.getMiddleName());
         assertEquals("userFirstName", student.getFirstName());
