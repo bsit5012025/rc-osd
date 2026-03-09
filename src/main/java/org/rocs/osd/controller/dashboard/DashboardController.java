@@ -65,6 +65,19 @@ public class DashboardController {
     }
 
     @FXML
+    public void onLoadDashboard(ActionEvent event) {
+        try {
+            Parent dashboardView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/dashboard/centerDashboard.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(dashboardView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found at the specified path." + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+        }
+    }
+
+    @FXML
     public void onLoadAppeal(ActionEvent event) {
         try {
             Parent appealView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appeal/appeal.fxml")));
