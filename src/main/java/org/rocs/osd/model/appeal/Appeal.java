@@ -8,8 +8,8 @@ import java.util.Date;
 public class Appeal {
 
     private long appealID;
-    private Record recordID;
-    private Enrollment enrollmentID;
+    private Record record;
+    private Enrollment enrollment;
     private String message;
     private Date dateFiled;
     private String status;
@@ -17,18 +17,18 @@ public class Appeal {
     public Appeal() {
     }
 
-    public Appeal(long appealID, Record recordID, Enrollment enrollmentID, String message, Date dateFiled, String status) {
+    public Appeal(long appealID, Record record, Enrollment enrollment, String message, Date dateFiled, String status) {
         this.appealID = appealID;
-        this.recordID = recordID;
-        this.enrollmentID = enrollmentID;
+        this.record = record;
+        this.enrollment = enrollment;
         this.message = message;
         this.dateFiled = dateFiled;
         this.status = status;
     }
 
-    public Appeal(Record recordID, Enrollment enrollmentID, String message, String status) {
-        this.recordID = recordID;
-        this.enrollmentID = enrollmentID;
+    public Appeal(Record record, Enrollment enrollment, String message, String status) {
+        this.record = record;
+        this.enrollment = enrollment;
         this.message = message;
         this.status = status;
     }
@@ -40,20 +40,18 @@ public class Appeal {
         this.appealID = appealID;
     }
 
-    public Record getRecordID() {
-        return recordID;
+    public Record getRecord() {return record;}
+
+    public void setRecord(Record record) {
+        this.record = record;
     }
 
-    public void setRecordID(Record recordID) {
-        this.recordID = recordID;
+    public Enrollment getEnrollment() {
+        return enrollment;
     }
 
-    public Enrollment getEnrollmentID() {
-        return enrollmentID;
-    }
-
-    public void setEnrollmentID(Enrollment enrollmentID) {
-        this.enrollmentID = enrollmentID;
+    public void setEnrollment(Enrollment enrollment) {
+        this.enrollment = enrollment;
     }
 
     public String getMessage() {

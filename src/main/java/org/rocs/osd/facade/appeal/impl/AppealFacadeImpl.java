@@ -3,6 +3,7 @@ package org.rocs.osd.facade.appeal.impl;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.data.dao.appeal.impl.AppealDaoImpl;
 import org.rocs.osd.facade.appeal.AppealFacade;
+import org.rocs.osd.model.appeal.Appeal;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     @Override
-    public List<Object[]> getPendingAppeals() {
+    public List<Appeal> getPendingAppeals() {
         return appealDao.findPendingAppealsWithDetails();
     }
 

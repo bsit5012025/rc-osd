@@ -10,8 +10,8 @@ import javafx.util.Duration;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
-import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.record.Record;
 
 public class AppealModalController {
 
@@ -29,15 +29,11 @@ public class AppealModalController {
 
     private AppealFacade appealFacade = new AppealFacadeImpl();
     private Appeal appeal;
-    private Student student;
-    private Offense offense;
 
     private Runnable onActionComplete;
 
-    public void setAppeal(Object[] row) {
-        this.appeal = (Appeal) row[0];
-        this.student = (Student) row[1];
-        this.offense = (Offense) row[2];
+    public void setAppeal(Appeal appeal) {
+        this.appeal = appeal;
         loadAppealData();
     }
 
@@ -56,11 +52,14 @@ public class AppealModalController {
     }
 
     private void loadAppealData() {
-        if (appeal == null || student == null || offense == null) return;
+        if (appeal == null) return;
 
-        studentIdLabel.setText(student.getStudentId());
-        studentNameLabel.setText(student.getFirstName() + " " + student.getLastName());
-        offenseLabel.setText(offense.getOffense());
+        Enrollment enrollment = appeal.getEnrollment();
+        Record record = appeal.getRecord();
+
+        studentIdLabel.setText(enrollment.getStudentId());
+        studentNameLabel.setText(enrollment.getSection());
+        offenseLabel.setText(record.getRemarks());
         reasonLabel.setText(appeal.getMessage());
 
         expandedSection.setVisible(false);

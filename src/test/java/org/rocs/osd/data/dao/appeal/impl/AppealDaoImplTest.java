@@ -8,8 +8,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.model.appeal.Appeal;
-import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.sql.*;
 import java.util.List;
@@ -63,28 +63,26 @@ class AppealDaoImplTest {
         when(resultSet.getString("lastName")).thenReturn("Doe");
         when(resultSet.getString("offense")).thenReturn("Late Submission");
 
-        List<Object[]> appeals = appealDao.findPendingAppealsWithDetails();
+        List<Appeal> appeals = appealDao.findPendingAppealsWithDetails();
 
         assertNotNull(appeals);
         assertEquals(1, appeals.size());
 
-        Object[] row = appeals.get(0);
-        assertInstanceOf(Appeal.class, row[0]);
-        assertInstanceOf(Student.class, row[1]);
-        assertInstanceOf(Offense.class, row[2]);
-
-        Appeal appeal = (Appeal) row[0];
+        Appeal appeal = appeals.get(0);
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
 
-        Student student = (Student) row[1];
-        assertEquals("S001", student.getStudentId());
-        assertEquals("John", student.getFirstName());
-        assertEquals("Doe", student.getLastName());
+        Record record = appeal.getRecord();
+        assertNotNull(record);
+        assertEquals(1L, record.getRecordId());
+        assertEquals("Late Submission", record.getRemarks());
 
-        Offense offense = (Offense) row[2];
-        assertEquals("Late Submission", offense.getOffense());
+        Enrollment enrollment = appeal.getEnrollment();
+        assertNotNull(enrollment);
+        assertEquals(1L, enrollment.getEnrollmentId());
+        assertEquals("John Doe", enrollment.getSection());
+        assertEquals("S001", enrollment.getStudentId());
 
         verify(preparedStatement).executeQuery();
     }

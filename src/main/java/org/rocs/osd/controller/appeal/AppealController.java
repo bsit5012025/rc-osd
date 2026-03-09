@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
+import org.rocs.osd.model.appeal.Appeal;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,16 +26,16 @@ public class AppealController {
 
     private void loadAppealsFromDB() {
 
-        List<Object[]> appeals = appealFacade.getPendingAppeals();
+        List<Appeal> appeals = appealFacade.getPendingAppeals();
 
-        for (Object[] row : appeals) {
+        for (Appeal appeal : appeals) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/appeal/appealModal.fxml"));
 
                 VBox card = loader.load();
 
                 AppealModalController controller = loader.getController();
-                controller.setAppeal(row);
+                controller.setAppeal(appeal);
 
                 controller.setOnActionComplete(() -> listContainer.getChildren().remove(card));
                 listContainer.getChildren().add(card);

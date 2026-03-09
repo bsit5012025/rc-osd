@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
-import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.util.List;
 
@@ -29,16 +29,41 @@ class AppealFacadeImplTest {
     @Test
     void testGetPendingAppeals() {
         Appeal appeal = new Appeal();
-        Student student = new Student();
-        Offense offense = new Offense();
-        when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.<Object[]>of(new Object[]{appeal, student, offense}));
+        appeal.setAppealID(1L);
+        appeal.setMessage("Test appeal");
+        appeal.setStatus("PENDING");
 
-        List<Object[]> result = facade.getPendingAppeals();
+        Record record = new Record();
+        record.setRecordId(1L);
+        record.setRemarks("Late Submission");
+        appeal.setRecord(record);
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(1L);
+        enrollment.setStudentId("S001");
+        enrollment.setSection("John Doe");
+        appeal.setEnrollment(enrollment);
+
+        when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.of(appeal));
+
+        List<Appeal> result = facade.getPendingAppeals();
+
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertSame(appeal, result.get(0)[0]);
-        assertSame(student, result.get(0)[1]);
-        assertSame(offense, result.get(0)[2]);
+        Appeal actual = result.get(0);
+        assertEquals(1L, actual.getAppealID());
+        assertEquals("Test appeal", actual.getMessage());
+        assertEquals("PENDING", actual.getStatus());
+
+        assertNotNull(actual.getRecord());
+        assertEquals(1L, actual.getRecord().getRecordId());
+        assertEquals("Late Submission", actual.getRecord().getRemarks());
+
+        assertNotNull(actual.getEnrollment());
+        assertEquals(1L, actual.getEnrollment().getEnrollmentId());
+        assertEquals("John Doe", actual.getEnrollment().getSection());
+        assertEquals("S001", actual.getEnrollment().getStudentId());
+
         verify(mockDao).findPendingAppealsWithDetails();
     }
 

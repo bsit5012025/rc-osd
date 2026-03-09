@@ -4,8 +4,6 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
-import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
 import java.sql.*;
@@ -15,9 +13,9 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     @Override
-    public List<Object[]> findPendingAppealsWithDetails() {
+    public List<Appeal> findPendingAppealsWithDetails() {
 
-        List<Object[]> list = new ArrayList<>();
+        List<Appeal> list = new ArrayList<>();
         String sql = """
             SELECT a.appealID,
                    a.recordID,
@@ -46,29 +44,23 @@ public class AppealDaoImpl implements AppealDao {
             while (rs.next()) {
                 Appeal appeal = new Appeal();
                 appeal.setAppealID(rs.getLong("appealID"));
-
-                Record record = new Record();
-                record.setRecordId(rs.getLong("recordID"));
-                appeal.setRecordID(record);
-
-                Enrollment enrollment = new Enrollment();
-                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
-                appeal.setEnrollmentID(enrollment);
-
                 appeal.setMessage(rs.getString("message"));
                 appeal.setDateFiled(rs.getDate("dateFiled"));
                 appeal.setStatus(rs.getString("status"));
 
+                Record record = new Record();
+                record.setRecordId(rs.getLong("recordID"));
+                record.setRemarks(rs.getString("offense"));
+                appeal.setRecord(record);
 
-                Student student = new Student();
-                student.setStudentId(rs.getString("studentID"));
-                student.setFirstName(rs.getString("firstName"));
-                student.setLastName(rs.getString("lastName"));
+                Enrollment enrollment = new Enrollment();
+                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                enrollment.setStudentId(rs.getString("studentID"));
+                String fullName = rs.getString("firstName") + " " + rs.getString("lastName");
+                enrollment.setSection(fullName);
+                appeal.setEnrollment(enrollment);
 
-                Offense offense = new Offense();
-                offense.setOffense(rs.getString("offense"));
-
-                list.add(new Object[]{appeal, student, offense});
+                list.add(appeal);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
