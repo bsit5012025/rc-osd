@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.enrollment.Enrollment;
 
@@ -72,7 +73,6 @@ class AppealDaoImplTest {
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
-        assertEquals("John Doe", appeal.getStudentFullName());
 
         Record record = appeal.getRecord();
         assertNotNull(record);
@@ -82,7 +82,12 @@ class AppealDaoImplTest {
         Enrollment enrollment = appeal.getEnrollment();
         assertNotNull(enrollment);
         assertEquals(1L, enrollment.getEnrollmentId());
-        assertEquals("S001", enrollment.getStudentId());
+
+        Student student = enrollment.getStudent();
+        assertNotNull(student);
+        assertEquals("S001", student.getStudentId());
+        assertEquals("John", student.getFirstName());
+        assertEquals("Doe", student.getLastName());
 
         verify(preparedStatement).executeQuery();
     }

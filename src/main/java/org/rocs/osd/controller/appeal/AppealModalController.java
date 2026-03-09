@@ -11,6 +11,7 @@ import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
 public class AppealModalController {
@@ -56,9 +57,10 @@ public class AppealModalController {
 
         Enrollment enrollment = appeal.getEnrollment();
         Record record = appeal.getRecord();
+        Student student = enrollment.getStudent();
 
-        studentIdLabel.setText(enrollment.getStudentId());
-        studentNameLabel.setText(appeal.getStudentFullName());
+        studentIdLabel.setText(enrollment.getStudent().getStudentId());
+        studentNameLabel.setText(student.getFirstName() + " " + student.getLastName());
         offenseLabel.setText(record.getRemarks());
         reasonLabel.setText(appeal.getMessage());
 

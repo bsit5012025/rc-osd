@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.enrollment.Enrollment;
 
@@ -32,16 +33,20 @@ class AppealFacadeImplTest {
         appeal.setAppealID(1L);
         appeal.setMessage("Test appeal");
         appeal.setStatus("PENDING");
-        appeal.setStudentFullName("John Doe");
 
         Record record = new Record();
         record.setRecordId(1L);
         record.setRemarks("Late Submission");
         appeal.setRecord(record);
 
+        Student student = new Student();
+        student.setStudentId("S001");
+        student.setFirstName("John");
+        student.setLastName("Doe");
+
         Enrollment enrollment = new Enrollment();
         enrollment.setEnrollmentId(1L);
-        enrollment.setStudentId("S001");
+        enrollment.setStudent(student);
         appeal.setEnrollment(enrollment);
 
         when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.of(appeal));
@@ -54,7 +59,6 @@ class AppealFacadeImplTest {
         assertEquals(1L, actual.getAppealID());
         assertEquals("Test appeal", actual.getMessage());
         assertEquals("PENDING", actual.getStatus());
-        assertEquals("John Doe", actual.getStudentFullName());
 
         assertNotNull(actual.getRecord());
         assertEquals(1L, actual.getRecord().getRecordId());
@@ -62,7 +66,12 @@ class AppealFacadeImplTest {
 
         assertNotNull(actual.getEnrollment());
         assertEquals(1L, actual.getEnrollment().getEnrollmentId());
-        assertEquals("S001", actual.getEnrollment().getStudentId());
+
+        Student actualStudent = actual.getEnrollment().getStudent();
+        assertNotNull(actualStudent);
+        assertEquals("S001", actualStudent.getStudentId());
+        assertEquals("John", actualStudent.getFirstName());
+        assertEquals("Doe", actualStudent.getLastName());
 
         verify(mockDao).findPendingAppealsWithDetails();
     }

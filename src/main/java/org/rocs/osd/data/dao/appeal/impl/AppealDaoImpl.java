@@ -4,6 +4,7 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.appeal.AppealDao;
 import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
 import java.sql.*;
@@ -55,12 +56,14 @@ public class AppealDaoImpl implements AppealDao {
 
                 Enrollment enrollment = new Enrollment();
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
-                enrollment.setStudentId(rs.getString("studentID"));
+
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentID"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setLastName(rs.getString("lastName"));
+
+                enrollment.setStudent(student);
                 appeal.setEnrollment(enrollment);
-
-                String fullName = rs.getString("firstName") + " " + rs.getString("lastName");
-                appeal.setStudentFullName(fullName);
-
 
                 list.add(appeal);
             }
