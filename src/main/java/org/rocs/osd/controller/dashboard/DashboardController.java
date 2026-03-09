@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Labeled;
 
 
 /**
@@ -26,6 +28,11 @@ public class DashboardController {
     StackPane mainContentWrapper;
     @FXML
     Button logoutButton;
+
+    @FXML
+    private VBox sidebar;
+
+    private boolean sidebarCollapsed = false;
     /**
      *   This method is used for logout button
      */
@@ -48,6 +55,35 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void toggleSidebar() {
+        if (sidebarCollapsed) {
+            sidebar.setPrefWidth(200);
+            sidebar.setMinWidth(200);
+            sidebar.setMaxWidth(200);
+            for (Node node : sidebar.lookupAll(".sidebarItem")) {
+                if (node instanceof Labeled button) {
+                    button.setText(button.getUserData() != null ? button.getUserData().toString() : button.getText());
+                }
+            }
+            sidebarCollapsed = false;
+        } else {
+            sidebar.setPrefWidth(70);
+            sidebar.setMinWidth(70);
+            sidebar.setMaxWidth(70);
+            for (Node node : sidebar.lookupAll(".sidebarItem")) {
+                if (node instanceof Labeled button) {
+                    if (button.getUserData() == null) {
+                        button.setUserData(button.getText());
+                    }
+                    button.setText("");
+                }
+            }
+            sidebarCollapsed = true;
+        }
+    }
+
     /**
      * This method is used to load Offense view inside the dashboard
      */
