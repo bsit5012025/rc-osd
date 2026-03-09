@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.rocs.osd.data.connection.ConnectionHelper;
 
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -16,11 +18,7 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,5 +112,26 @@ class OffenseDaoImplTest
         verify(connection, times(1)).prepareStatement(anyString());
         verify(preparedStatement, times(1)).setString(1, "Vaping");
         verify(preparedStatement, times(1)).executeQuery();
+    }
+    @Test
+    void testAddOffenseSuccess() throws SQLException
+    {
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        OffenseDao dao = new OffenseDaoImpl();
+        Offense offense = new Offense();
+        offense.setOffense("New Offense");
+        offense.setType("Minor");
+        offense.setDescription("Test description");
+
+        boolean result = dao.addNewOffense(offense);
+
+        assertTrue(result);
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement, times(1)).setString(1, "New Offense");
+        verify(preparedStatement, times(1)).setString(2, "Minor");
+        verify(preparedStatement, times(1)).setString(3, "Test description");
+        verify(preparedStatement, times(1)).executeUpdate();
     }
 }

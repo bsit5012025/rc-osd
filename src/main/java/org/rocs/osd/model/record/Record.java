@@ -1,39 +1,26 @@
 package org.rocs.osd.model.record;
 
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
+
 import java.util.Date;
 
 /**
- * Represents a disciplinary record in the Office of Student Discipline System
- * Stores information about the offense, responsible employee, action taken, and status
+ * Represents a disciplinary record in the Office of Student Discipline System.
+ * Stores information about the offense, responsible employee, action taken, and status.
  */
 public class Record {
     /**
      * Unique identifier for the record
       */
     private long recordId;
-    /**
-     * Enrollment ID of the student
-     */
-    private long enrollmentId;
-    /**
-     * Employee ID of the staff
-     */
-    private String employeeId;
-    /**
-     * Offense ID associated with this record
-     */
-    private long offenseId;
-    /**
-     * Date when the violation happened
-     */
+    private Enrollment enrollment;
+    private Employee employee;
+    private Offense offense;
     private Date dateOfViolation;
-    /**
-     * Action ID taken for the offense
-     */
-    private long actionId;
-    /**
-     * Date when the violation was resolved
-     */
+    private DisciplinaryAction action;
     private Date dateOfResolution;
     /**
      * Additional remarks for record
@@ -51,24 +38,27 @@ public class Record {
     public Record() {
     }
 
+   
     /**
-     * @param recordId         unique record ID
-     * @param enrollmentId     ID of the student enrollment
-     * @param employeeId       ID of the employee
-     * @param offenseId        ID of the offense
-     * @param dateOfViolation  date of the violation
-     * @param actionId         ID of the action taken
-     * @param dateOfResolution date of resolution
-     * @param remarks          additional remarks for record
-     * @param status           status of the record
+     * Constructor to create a Record with all fields.
+     * This constructor initializes a disciplinary record with all required details including student enrollment, employee, offense, action, and status information.
+     * @param recordId unique record ID.
+     * @param enrollmentId ID of the student enrollment.
+     * @param employeeId ID of the employee.
+     * @param offenseId ID of the offense.
+     * @param dateOfViolation date of the violation.
+     * @param actionId ID of the action taken.
+     * @param dateOfResolution date of resolution.
+     * @param remarks additional remarks for record.
+     * @param status status of the record.
      */
     public Record(long recordId, long enrollmentId, String employeeId, long offenseId, Date dateOfViolation, long actionId, Date dateOfResolution, String remarks, RecordStatus status) {
         this.recordId = recordId;
-        this.enrollmentId = enrollmentId;
-        this.employeeId = employeeId;
-        this.offenseId = offenseId;
+        this.enrollment = enrollment;
+        this.employee = employee;
+        this.offense = offense;
         this.dateOfViolation = dateOfViolation;
-        this.actionId = actionId;
+        this.action = action;
         this.dateOfResolution = dateOfResolution;
         this.remarks = remarks;
         this.status = status;
@@ -76,8 +66,9 @@ public class Record {
 
 
     /**
-     * Gets the unique record ID
-     * @return recordId
+     * Gets the unique record ID.
+     *
+     * @return  recordId.
      */
     public long getRecordId() {
         return recordId;
@@ -85,90 +76,101 @@ public class Record {
 
     /**
      * Sets the unique record ID.
-     * @param recordId the recordId to set
+     *
+     * @param recordId  the recordId to set.
      */
     public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
 
-    /**
-     * Gets the student enrollment ID associated with this record
-     * @return enrollmentId
+   /**
+     * Gets the student enrollment ID associated with this record.
+     *
+     * @return  enrollmentId.
      */
     public long getEnrollmentId() {
         return enrollmentId;
     }
 
     /**
-     * Sets the student enrollment ID associated with this record
-     * @param enrollmentId the enrollmentId to set
+     * Sets the student enrollment ID associated with this record.
+     *
+     * @param enrollmentId  the enrollmentId to set.
      */
     public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
-    /**
-     * Gets the employee ID of the staff who recorded the offense
-     * @return employeeId
+   /**
+     * Gets the employee ID of the staff who recorded the offense.
+     *
+     * @return  employeeId.
      */
     public String getEmployeeId() {
         return employeeId;
     }
 
     /**
-     * Sets the employee ID of the staff who recorded the offense
-     * @param employeeId the employeeId to set
+     * Sets the employee ID of the staff who recorded the offense.
+     *
+     * @param employeeId  the employeeId to set.
      */
     public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
-    /**
-     * Gets the offense ID associated with this record
-     * @return offenseId
+   /**
+     * Gets the offense ID associated with this record.
+     *
+     * @return  offenseId.
      */
     public long getOffenseId() {
         return offenseId;
     }
 
     /**
-     * Sets the offense ID associated with this record
-     * @param offenseId the offenseId to set
+     * Sets the offense ID associated with this record.
+     *
+     * @param offenseId  the offenseId to set.
      */
     public void setOffenseId(long offenseId) {
         this.offenseId = offenseId;
     }
 
     /**
-     * Gets the date of the violation
-     * @return dateOfViolation
+     * Gets the date of the violation.
+     *
+     * @return  dateOfViolation.
      */
     public Date getDateOfViolation() {
         return dateOfViolation;
     }
 
 
-    /**
-     * Sets the date of the violation
-     * @param dateOfViolation the dateOfViolation to set
+     /**
+     * Sets the date of the violation.
+     *
+     * @param dateOfViolation  the dateOfViolation to set.
      */
     public void setDateOfViolation(Date dateOfViolation) {
         this.dateOfViolation = dateOfViolation;
     }
 
 
-    /**
-     * Gets the action ID taken for this record
-     * @return actionId
+ /**
+     * Gets the action ID taken for this record.
+     *
+     * @return  actionId.
      */
     public long getActionId() {
         return actionId;
     }
 
 
-    /**
-     * Sets the action ID taken for this record
-     * @param actionId the actionId to set
+     /**
+     * Sets the action ID taken for this record.
+     *
+     * @param actionId  the actionId to set.
      */
     public void setActionId(long actionId) {
         this.actionId = actionId;
@@ -176,30 +178,36 @@ public class Record {
 
 
     /**
-     * Gets the date when the violation was resolved
-     * @return dateOfResolution
+     * Gets the date when the violation was resolved.
+     *
+     * @return  dateOfResolution.
      */
     public Date getDateOfResolution() {
         return dateOfResolution;
     }
 
 
+    
     /**
-     * Sets the date when the violation was resolved
-     * @param dateOfResolution the dateOfResolution to set
+     * Sets the date when the violation was resolved.
+     *
+     * @param dateOfResolution  the dateOfResolution to set.
      */
     public void setDateOfResolution(Date dateOfResolution) {
         this.dateOfResolution = dateOfResolution;
     }
 
 
+
     /**
-     * Gets additional remarks for the record
-     * @return remarks
+     * Gets additional remarks for the record.
+     *
+     * @return  remarks.
      */
     public String getRemarks() {
         return remarks;
     }
+
 
     /**
      * Sets additional remarks for the record
@@ -210,17 +218,19 @@ public class Record {
     }
 
 
-    /**
-     * Gets the status of the record
-     * @return status
+   /**
+     * Gets the status of the record.
+     *
+     * @return  status.
      */
     public RecordStatus getStatus() {
         return status;
     }
 
     /**
-     * Sets the status of the record
-     * @param status the status to set
+     * Sets the status of the record.
+     *
+     * @param status  the status to set.
      */
     public void setStatus(RecordStatus status) {
         this.status = status;
