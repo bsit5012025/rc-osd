@@ -21,7 +21,14 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         List<Enrollment> enrollmentList = new ArrayList<>();
 
         try(Connection conn = ConnectionHelper.getConnection()){
-            PreparedStatement statement = conn.prepareStatement("SELECT * FROM enrollment WHERE studentID = ? ORDER BY schoolYear DESC");
+            PreparedStatement statement = conn.prepareStatement(
+                    "SELECT e.*, " +
+                            "s.personID, " +
+                            "s.address, " +
+                            "s.departmentID AS studentDepartmentID " +
+                            "FROM enrollment e " +
+                            "JOIN student s ON e.studentID = s.studentID " +
+                            "WHERE studentID = ? ORDER BY schoolYear DESC");
             statement.setString(1, studentId);
             ResultSet rs = statement.executeQuery();
 
@@ -37,7 +44,11 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 enrollment.setSection(rs.getString("section"));
 
                 student.setStudentId(rs.getString("studentID"));
+                student.setPersonID(rs.getLong("personID"));
+                student.setAddress(rs.getString("address"));
+                student.setDepartmentId(rs.getString("studentDepartmentID"));
                 enrollment.setStudent(student);
+
                 department.setDepartmentId(rs.getLong("departmentID"));
                 enrollment.setDepartment(department);
                 disciplinaryStatus.setDisciplinaryStatusId(rs.getLong("disciplinaryStatusID"));

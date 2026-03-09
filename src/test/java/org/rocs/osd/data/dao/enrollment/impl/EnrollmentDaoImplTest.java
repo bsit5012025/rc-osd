@@ -58,9 +58,12 @@ class EnrollmentDaoImplTest {
         when(this.resultSet.getString("schoolYear")).thenReturn("2024-2025", "2025-2026");
         when(this.resultSet.getString("studentLevel")).thenReturn("Grade 8", "Grade 9");
         when(this.resultSet.getString("section")).thenReturn("St. Hannibal", "St. Anthony");
-        when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0002");
+        when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0001");
         when(this.resultSet.getLong("departmentID")).thenReturn(1L, 1L);
         when(this.resultSet.getLong("disciplinaryStatusID")).thenReturn(1L, 2L);
+        when(this.resultSet.getLong("personID")).thenReturn(1L,1L);
+        when(this.resultSet.getString("address")).thenReturn("Buho","Buho");
+        when(this.resultSet.getString("studentDepartmentID")).thenReturn("1","1");
 
         List<Enrollment> result = enrollmentDao.findEnrollmentsByStudentId("JHS-0001");
 
