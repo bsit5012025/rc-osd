@@ -101,7 +101,9 @@ public class LoginController {
             /**
              * This will display the Dashboard screen in the window.
              */
-            stage.setScene(new Scene(root));
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+            stage.setScene(new Scene(root,width,height));
             /**
              * This will make the window full screen
              */

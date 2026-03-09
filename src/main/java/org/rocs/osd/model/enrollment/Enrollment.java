@@ -1,142 +1,84 @@
 package org.rocs.osd.model.enrollment;
 
-/**
- * Represents a student's Enrollment record in the system.
- * Stores information such as student ID, school year, level, section, department, and disciplinary status.
- */
+import org.rocs.osd.model.department.Department;
+import org.rocs.osd.model.disciplinaryStatus.DisciplinaryStatus;
+import org.rocs.osd.model.person.student.Student;
 
 public class Enrollment {
     private long enrollmentId;
-    private String studentId;
+    private Student student;
     private String schoolYear;
     private String studentLevel;
     private String section;
-    private String departmentId;
-    private String disciplinaryStatusId;
-
-    /**
-     * Default constructor.
-     * Initializes an empty Enrollment object.
-     */
+    private Department department;
+    private DisciplinaryStatus disciplinaryStatus;
 
     public Enrollment() {
     }
 
-    /**
-     * Constructor to create an Enrollment with all required fields.
-     * @param enrollmentId the unique enrollment ID.
-     * @param studentId the student ID.
-     * @param schoolYear the school year.
-     * @param studentLevel the student level.
-     * @param section the assigned section.
-     * @param departmentId the department ID.
-     * @param disciplinaryStatusId  the disciplinary status ID.
-     */
-    public Enrollment(long enrollmentId, String studentId, String schoolYear, String studentLevel, String section, String departmentId, String disciplinaryStatusId) {
+    public Enrollment(long enrollmentId, Student student, String schoolYear, String studentLevel, String section, Department department, DisciplinaryStatus disciplinaryStatus) {
         this.enrollmentId = enrollmentId;
-        this.studentId = studentId;
+        this.student = student;
         this.schoolYear = schoolYear;
         this.studentLevel = studentLevel;
         this.section = section;
-        this.departmentId = departmentId;
-        this.disciplinaryStatusId = disciplinaryStatusId;
+        this.department = department;
+        this.disciplinaryStatus = disciplinaryStatus;
     }
 
-    /**
-     * @return the unique enrollment ID.
-     */
     public long getEnrollmentId() {
         return enrollmentId;
     }
 
-    /**
-     *	@param enrollmentId sets the unique enrollment ID.
-     */
     public void setEnrollmentId(long enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
-    /**
-     * @return the student ID.
-     */
-    public String getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    /**
-     *	@param studentId sets the student ID.
-     */
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    /**
-     * @return the school year.
-     */
     public String getSchoolYear() {
         return schoolYear;
     }
 
-    /**
-     *	@param schoolYear sets the school year.
-     */
     public void setSchoolYear(String schoolYear) {
         this.schoolYear = schoolYear;
     }
 
-    /**
-     * @return the student level.
-     */
     public String getStudentLevel() {
         return studentLevel;
     }
 
-    /**
-     *	@param studentLevel sets the student level.
-     */
     public void setStudentLevel(String studentLevel) {
         this.studentLevel = studentLevel;
     }
 
-    /**
-     * @return the section.
-     */
     public String getSection() {
         return section;
     }
 
-    /**
-     *	@param section sets the section.
-     */
     public void setSection(String section) {
         this.section = section;
     }
 
-    /**
-     * @return the department ID.
-     */
-    public String getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    /**
-     *	@param departmentId sets the department ID.
-     */
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    /**
-     * @return the disciplinary status ID.
-     */
-    public String getDisciplinaryStatusId() {
-        return disciplinaryStatusId;
+    public DisciplinaryStatus getDisciplinaryStatus() {
+        return disciplinaryStatus;
     }
 
-    /**
-     *	@param disciplinaryStatusId sets the disciplinary status ID.
-     */
-    public void setDisciplinaryStatusId(String disciplinaryStatusId) {
-        this.disciplinaryStatusId = disciplinaryStatusId;
+    public void setDisciplinaryStatus(DisciplinaryStatus disciplinaryStatus) {
+        this.disciplinaryStatus = disciplinaryStatus;
     }
 }
