@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
+import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.data.dao.record.RecordDao;
@@ -17,7 +19,6 @@ import org.rocs.osd.data.dao.student.StudendDao;
 import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
 import org.rocs.osd.facade.Record.RecordFacade;
 import org.rocs.osd.facade.Record.impl.RecordFacadeImpl;
-import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 
@@ -41,6 +42,7 @@ public class AddOffenseModalController {
     private OffenseDao offenseDao;
     private RecordFacade recordFacade;
     private DisciplinaryActionDao disciplinaryActionDao;
+    private EnrollmentDao enrollmentDao;
 
     /**
      * Controller for the "Add Offense" modal.
@@ -51,8 +53,9 @@ public class AddOffenseModalController {
         studentDao = new StudentDaoImpl();
         RecordDao dao = new RecordDaoImpl();
         disciplinaryActionDao = new DisciplinaryActionImpl();
-        RecordDao dao = new RecordDaoImpl();
         recordFacade = new RecordFacadeImpl(dao);
+        enrollmentDao = new EnrollmentDaoImpl();
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
@@ -125,20 +128,36 @@ public class AddOffenseModalController {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseType = offenseTypeComboBox.getValue();
-            String offenseLevel = levelOfOffenseComboBox.getValue();
             String actionName = actionComboBox.getValue();
             String remarks = remarksTextArea.getText();
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
-            String employeeId = "";
 
+
+            if(studentId.isEmpty() || studentName.isEmpty() || offenseType == null || actionName == null || datePicker.getValue() == null){
+                System.out.println("Fill out missing fields!");
+                return;
+            }
+
+            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
-
             long actionID = disciplinaryActionDao.findActionIdByName(actionName);
+            long enrollmentId = enrollmentDao.findEnrollmentIdByStudentId(studentId);
 
-            Student student = studentDao.findStudentWithRecordById(studentId);
+            boolean record = recordFacade.createStudentRecord(
+                    enrollmentId,
+                    employeeId,
+                    offenseId,
+                    dateOfViolation,
+                    actionID,
+                    remarks
+            );
+            if(record){
+                System.out.println("Violation recorded!");
 
-
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+            }
         }catch (Exception e) {
             e.printStackTrace();
         }
