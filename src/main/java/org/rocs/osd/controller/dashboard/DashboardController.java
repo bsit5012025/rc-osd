@@ -127,10 +127,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Loads the Appeal module view into the dashboard content area.
-     * @param event the action event triggered by the Appeal navigation button
-     */
     @FXML
     public void onLoadAppeal(ActionEvent event) {
         try {
