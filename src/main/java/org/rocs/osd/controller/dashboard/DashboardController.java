@@ -20,10 +20,16 @@ import javafx.scene.control.Labeled;
 
 
 /**
+ * Controller responsible for handling user interactions on the Dashboard screen of the Office of Student Discipline (OSD) System.
+ * The dashboard acts as the main navigation interface of the OSD.
+ * It allows users to load different modules such as Offense, Appeal, Request, and Student records into the main content area.
  *The DashboardController manages user interactions on the Dashboard screen.
  */
 public class DashboardController {
 
+    /**
+     * Container used to dynamically load different module views (Offense, Appeal, Request, Student) inside the dashboard.
+     */
     @FXML
     StackPane mainContentWrapper;
     @FXML
@@ -35,6 +41,9 @@ public class DashboardController {
     @FXML
     private boolean sidebarCollapsed = false;
     /**
+     * Opens the logout confirmation dialog when the logout button is clicked.
+     * This dialog asks the user to confirm whether they want to exit the system or remain logged in.
+     * @param event the action event triggered by clicking the logout button.
      *   This method is used for logout button
      */
     @FXML
@@ -86,8 +95,12 @@ public class DashboardController {
     }
 
     /**
+     * Loads the Offense module view into the dashboard content area.
+     *
+     * @param event the action event triggered by the Offense navigation button.
      * This method is used to load Offense view inside the dashboard
      */
+
     @FXML
     public void onLoadOffense(ActionEvent event) {
         try {
@@ -114,6 +127,10 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Loads the Appeal module view into the dashboard content area.
+     * @param event the action event triggered by the Appeal navigation button
+     */
     @FXML
     public void onLoadAppeal(ActionEvent event) {
         try {
@@ -127,6 +144,10 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Loads the Request module view into the dashboard content area.
+     * @param event the action event triggered by the Request navigation button.
+     */
     @FXML
     public void onLoadRequest(ActionEvent event) {
         try {
@@ -140,6 +161,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Loads the Student module view into the dashboard content area.
+     *
+     * @param event the action event triggered by the Student navigation button.
+     */
     @FXML
     public void onLoadStudent(ActionEvent event) {
         try {
@@ -153,6 +179,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Logs the user out of the system and redirects them to the login screen.
+     * This method closes the logout confirmation dialog and loads the login interface in the main application window.
+     * @param event the action event triggered when the user confirms logout.
+     */
     public void logout(ActionEvent event) {
         try {
             Stage popupStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -170,6 +201,10 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Closes the currently opened popup window.
+     * @param event the action event triggered by the close button.
+     */
     public void closePopup(ActionEvent event) {
         if (event != null && event.getSource() instanceof Node node) {
             Scene scene = node.getScene();
