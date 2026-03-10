@@ -48,7 +48,10 @@ public class AppealModalController {
         approveButton.setOnAction(event -> handleAppealApprove());
         denyButton.setOnAction(event -> handleAppealDeny());
 
-        if (expandedSection != null) expandedSection.setVisible(false);
+        if (expandedSection != null) {
+            expandedSection.setVisible(false);
+            expandedSection.setManaged(false);
+        }
         if (popupBox != null) popupBox.setVisible(false);
     }
 
@@ -65,13 +68,16 @@ public class AppealModalController {
         reasonLabel.setText(appeal.getMessage());
 
         expandedSection.setVisible(false);
+        expandedSection.setManaged(false);
         popupBox.setVisible(false);
     }
 
     private void toggleExpandedSection() {
         boolean expanded = expandedSection.isVisible();
         expandedSection.setVisible(!expanded);
-        arrowIcon.setRotate(expanded ? 0 : 180);
+        expandedSection.setManaged(!expanded);
+
+        arrowIcon.setRotate(expanded ? 0 : 90);
     }
 
     private void handleAppealApprove() {
