@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the DepartmentDao interface
- * This class handles department data from the database
+ * DAO implementation for managing Department records in the Office of Student Discipline System.
+ * Handles database operations such as finding a department by ID and retrieving all department names.
  */
 public class DepartmentDaoImpl implements DepartmentDao {
 
     /**
      * Finds and retrieves a Department object from the database by ID.
-     * Returns an empty Department object if no match is found.
+     * @param departmentId the unique ID of the department.
+     * @return an Optional containing the Department if found, or Optional.empty() if not.
      */
+
     @Override
     public Department findDepartmentById(long departmentId) {
 
@@ -43,7 +45,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     /**
-     * Retrieves a list of all department names from the database.
+     * Retrieves a list of all department names from the database, sorted alphabetically.
+     *
+     * @return a List of department names.
      */
     @Override
     public List<String> findAllDepartmentName() {

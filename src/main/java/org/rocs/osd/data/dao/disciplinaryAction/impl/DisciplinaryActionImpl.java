@@ -10,8 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * DAO implementation for managing Disciplinary Action records in the Office of Student Discipline (OSD) System.
+ * Provides methods to find actions by ID or name, and to retrieve all disciplinary actions.
+ */
 public class DisciplinaryActionImpl implements DisciplinaryActionDao {
 
+    /**
+     * Finds a disciplinary action name by its ID.
+     * @param actionId the unique ID of the disciplinary action.
+     * @return an Optional containing the action name if found, or Optional.empty() if not.
+     */
     @Override
     public String findActionById (long actionId) {
 
@@ -32,6 +42,11 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
         return null;
     }
 
+    /**
+     * Retrieves a list of all disciplinary action names, sorted alphabetically.
+     *
+     * @return a List of action names.
+     */
     @Override
     public List<String> findAllAction() {
 
@@ -52,6 +67,11 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
         return actions;
     }
 
+    /**
+     * Finds the ID of a disciplinary action by its name.
+     * @param action the name of the disciplinary action.
+     * @return an Optional containing the action ID if found, or Optional.empty() if not.
+     */
     @Override
     public long findActionIdByName(String action) {
         try (Connection conn = ConnectionHelper.getConnection()) {
