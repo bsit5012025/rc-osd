@@ -76,8 +76,9 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
     public long findActionIdByName(String action) {
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement("SELECT actionId FROM disciplinaryAction WHERE action = ?");
-            ResultSet rs = statement.executeQuery();
             statement.setString(1, action);
+            ResultSet rs = statement.executeQuery();
+
 
             if (rs.next()) {
                 return rs.getLong("actionId");

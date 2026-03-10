@@ -68,7 +68,7 @@
                      </font>
                         </Label>
 
-                        <TextField prefWidth="354.0" styleClass="inputTextFieldOffense">
+                        <TextField fx:id="studentIdTextField" prefWidth="354.0" styleClass="inputTextFieldOffense">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </TextField>
                     </VBox>
@@ -78,7 +78,7 @@
                         <Label prefHeight="21.0" prefWidth="119.0" styleClass="lightLabelForTextField" text="Student name:">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="230.0" styleClass="inputTextFieldOffense">
+                        <TextField fx:id="studentNameTextField" onAction="#autoDisplayStudentName" prefHeight="25.0" prefWidth="230.0" styleClass="inputTextFieldOffense">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </TextField>
                     </VBox>
@@ -86,7 +86,7 @@
                     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                         <Label styleClass="lightLabelForTextField" text="Date:">
                             <VBox.margin><Insets left="10.0" /></VBox.margin></Label>
-                        <DatePicker styleClass="datePicker">
+                        <DatePicker fx:id="datePicker" styleClass="datePicker">
                             <VBox.margin><Insets left="10.0" right="20.0" /></VBox.margin>
                         </DatePicker>
                     </VBox>
@@ -124,18 +124,18 @@
 
                 <VBox prefHeight="200.0" prefWidth="100.0">
                     <Label styleClass="lightLabelForTextField" text="Remarks" />
-                    <TextArea prefHeight="200.0" prefWidth="200.0" styleClass="inputTextArea" />
+                    <TextArea fx:id="remarksTextArea" prefHeight="200.0" prefWidth="200.0" styleClass="inputTextArea" />
                     <padding><Insets left="10.0" right="10.0" /></padding>
                 </VBox>
 
                 <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
                     <CheckBox prefHeight="18.0" prefWidth="113.0" text="Notify Parents" />
                     <Region prefHeight="40.0" prefWidth="441.0" />
-                    <Button fx:id="OffenseCancelButton" styleClass="cancelButton" text="Cancel" textFill="NAVY">
+                    <Button fx:id="OffenseCancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" textFill="NAVY">
                   <font>
                      <Font name="Arial" size="12.0" />
                   </font></Button>
-                    <Button fx:id="addOffenseSubmitButton" styleClass="submitOffenseButton" text="Submit">
+                    <Button fx:id="addOffenseSubmitButton" onAction="#onSubmit" styleClass="submitOffenseButton" text="Submit">
                   <font>
                      <Font name="Arial" size="12.0" />
                   </font></Button>
