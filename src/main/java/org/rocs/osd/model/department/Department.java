@@ -1,15 +1,17 @@
 package org.rocs.osd.model.department;
 
 /**
- * Represents a Department entity.
- * This class contains the department ID and department name.
+ * Represents a Department entity in the Office of Student Discipline System.
+ * Contains the department ID and department name.
  */
+
 public class Department {
     private long departmentId;
     private String departmentName;
 
     /**
      * Default constructor.
+     * Initializes an empty Department object.
      */
     public Department() {
     }
@@ -20,40 +22,34 @@ public class Department {
      * @param departmentName the name of the department.
      */
     public Department(long departmentId, String departmentName) {
-
-        // Department ID
         this.departmentId = departmentId;
-        // Department Name
         this.departmentName = departmentName;
     }
 
     /**
-     *  This will get the Department ID
-     *  return the department ID
+     * @return the unique department ID.
      */
-
     public long getDepartmentId() {
         return departmentId;
     }
 
     /**
-     *   This will set the Department ID
+     *	@param departmentId sets the unique department ID.
      */
     public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
 
     /**
-     * This will get the Department Name
-     * return the department ID
-      */
+     * @return the name of the department.
+     */
     public String getDepartmentName() {
         return departmentName;
     }
 
     /**
-     * This will set the Department Name
-      */
+     *	@param departmentName sets the name of the department.
+     */
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
