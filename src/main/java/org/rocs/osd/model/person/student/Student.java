@@ -1,5 +1,6 @@
 package org.rocs.osd.model.person.student;
 
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.Person;
 
 /**
@@ -11,7 +12,7 @@ import org.rocs.osd.model.person.Person;
     private String studentId;
     private String address;
     private String studentType;
-    private String departmentId;
+    private Department department;
 
 
     /**
@@ -20,23 +21,12 @@ import org.rocs.osd.model.person.Person;
     public Student() {
     }
 
-    /**
-     * Constructor to create a Student with personal details and student-specific information.
-     * @param personID unique ID from the Person class
-     * @param lastName student's last name
-     * @param firstName student's first name
-     * @param middleName student's middle name
-     * @param studentId unique student ID/enrollment number
-     * @param address student's address
-     * @param studentType type of student
-     * @param departmentId department ID of the student
-     */
-    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, String departmentId) {
+    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, Department department) {
         super(personID, lastName, firstName, middleName);
         this.studentId = studentId;
         this.address = address;
         this.studentType = studentType;
-        this.departmentId = departmentId;
+        this.department = department;
     }
 
 
@@ -94,21 +84,11 @@ import org.rocs.osd.model.person.Person;
         this.studentType = studentType;
     }
 
-    /**
-     * Gets the department ID of the student.
-     *
-     * @return  the departmentId.
-     */
-    public String getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    /**
-     * Sets the department ID of the student.
-     *
-     * @param departmentId  the departmentId to set.
-     */
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

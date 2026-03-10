@@ -35,7 +35,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
             while (rs.next()){
                 Enrollment enrollment = new Enrollment();
                 Student student = new Student();
-                Department department = new Department();
                 DisciplinaryStatus disciplinaryStatus = new DisciplinaryStatus();
 
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
@@ -46,11 +45,10 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 student.setStudentId(rs.getString("studentID"));
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
-                student.setDepartmentId(rs.getString("studentDepartmentID"));
+                student.setDepartment(Department.valueOf(rs.getString("studentDepartmentID")));
                 enrollment.setStudent(student);
 
-                department.setDepartmentId(rs.getLong("departmentID"));
-                enrollment.setDepartment(department);
+                enrollment.setDepartment(Department.valueOf(rs.getString("studentDepartmentID")));
                 disciplinaryStatus.setDisciplinaryStatusId(rs.getLong("disciplinaryStatusID"));
                 enrollment.setDisciplinaryStatus(disciplinaryStatus);
 
