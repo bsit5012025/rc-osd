@@ -32,9 +32,9 @@
     </top>
 
     <left>
-        <VBox styleClass="sidebar">
+        <VBox fx:id="sidebar" styleClass="sidebar">
             <HBox styleClass="menu-header">
-                <Button styleClass="sidebarItem">
+                <Button onAction="#toggleSidebar" styleClass="sidebarItem">
                     <graphic>
                         <ImageView fitHeight="24" fitWidth="24">
                             <Image url="@../../assets/menu.png" />

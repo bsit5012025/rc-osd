@@ -10,15 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of the LoginDao interface
- * This class will handle the login data from the database
+ * DAO implementation for managing Login records in the Office of Student Discipline System.
  */
 public class LoginDaoImpl implements LoginDao  {
 
 
     /**
-     * Finds and retrieves a Login object from the database by username
-     * Returns an empty Login object if no match is found
+     * Finds and retrieves a Login object from the database by username.
+     *
+     * @param username the username to search for.
+     *
+     * @return an Optional containing the Login object if found, or Optional.empty() if not.
      */
     @Override
     public Login findLoginByUsername(String username) {

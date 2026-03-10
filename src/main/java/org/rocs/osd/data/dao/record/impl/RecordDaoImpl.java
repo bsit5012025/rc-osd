@@ -2,6 +2,7 @@ package org.rocs.osd.data.dao.record.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.disciplinaryStatus.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the RecordDao interface.
+ * DAO implementation for managing student records in the Office of Student Discipline System.
  * This class handles student record data from the database.
  */
 public class RecordDaoImpl implements RecordDao
@@ -40,13 +41,13 @@ public class RecordDaoImpl implements RecordDao
                     r.recordID, r.dateOfViolation, r.dateOfResolution, r.remarks, r.status,
 
                     e.enrollmentID, e.studentID AS enrollStudentID, e.schoolYear, e.studentLevel, e.section,
-                    e.departmentID AS enrollDeptID, e.disciplinaryStatusID AS enrollStatusID,
+                    e.department AS enrollDept, e.disciplinaryStatusID AS enrollStatusID,
 
                     s.personID AS studentPersonID, s.address AS studentAddress, s.studentType,
 
                     ds.status AS disciplinaryStatus, ds.description AS statusDescription,
 
-                    emp.employeeID, emp.personID AS empPersonID, emp.departmentID AS empDeptID, emp.employeeRole,
+                    emp.employeeID, emp.personID AS empPersonID, emp.department AS empDept, emp.employeeRole,
 
                     o.offenseID, o.offense, o.type AS offenseType, o.description AS offenseDescription,
 
@@ -91,7 +92,7 @@ public class RecordDaoImpl implements RecordDao
                 Employee employee = new Employee();
                 employee.setEmployeeId(rs.getString("employeeID"));
                 employee.setPersonID(rs.getLong("empPersonID"));
-                employee.setDepartmentId(rs.getString("empDeptID"));
+                employee.setDepartment(Department.valueOf(rs.getString("empDept")));
                 employee.setEmployeeRole(rs.getString("employeeRole"));
 
                 Offense offense = new Offense();

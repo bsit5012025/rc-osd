@@ -12,7 +12,6 @@ DROP TABLE login CASCADE CONSTRAINTS;
 DROP TABLE offense CASCADE CONSTRAINTS;
 DROP TABLE disciplinaryAction CASCADE CONSTRAINTS;
 DROP TABLE employee CASCADE CONSTRAINTS;
-DROP TABLE department CASCADE CONSTRAINTS;
 DROP TABLE student CASCADE CONSTRAINTS;
 DROP TABLE disciplinaryStatus CASCADE CONSTRAINTS;
 DROP TABLE enrollment CASCADE CONSTRAINTS;
@@ -70,14 +69,8 @@ CREATE TABLE disciplinaryAction (
 CREATE TABLE employee (
    employeeID VARCHAR(10) PRIMARY KEY,
    personID number(20,0),
-   departmentID number(20,0),
+   department varchar(20),
    employeeRole VARCHAR(30)
-);
-
---DEPARTMENT ENTITY
-CREATE TABLE department (
-   departmentID number(20,0) PRIMARY KEY,
-   departmentName VARCHAR(100)
 );
 
 -- STUDENT ENTITY
@@ -86,7 +79,7 @@ CREATE TABLE student (
    personID number(20,0),
    address VARCHAR(255),
    studentType VARCHAR(20),
-   departmentID number(20,0)
+   department VARCHAR(20)
 );
 
 -- DISCIPLINARY STATUS ENTITY
@@ -104,7 +97,7 @@ CREATE TABLE enrollment (
    schoolYear VARCHAR(9),
    studentLevel VARCHAR(30),
    section VARCHAR(50),
-   departmentID number(20,0),
+   department VARCHAR(20),
    disciplinaryStatusID number(20,0),
    primary key (enrollmentID)
 );
@@ -152,11 +145,8 @@ CREATE TABLE request (
 -- FOREIGN KEYS
 ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
 ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
-ALTER TABLE employee ADD CONSTRAINT FK_EMPLOYEE_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE student ADD CONSTRAINT FK_STUDENT_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
-ALTER TABLE student ADD CONSTRAINT FK_STUDENT_DEPARTMENT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
-ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_DEPT FOREIGN KEY (departmentID) REFERENCES department(departmentID);
 ALTER TABLE enrollment ADD CONSTRAINT FK_ENROLL_STATUS FOREIGN KEY (disciplinaryStatusID) REFERENCES disciplinaryStatus(disciplinaryStatusID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_ENROLLMENT FOREIGN KEY (enrollmentID) REFERENCES enrollment(enrollmentID);
 ALTER TABLE record ADD CONSTRAINT FK_RECORD_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
@@ -166,6 +156,9 @@ ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_RECORD FOREIGN KEY (recordID) REFERE
 ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_ENROLLMENT FOREIGN KEY (enrollmentID) REFERENCES enrollment(enrollmentID);
 ALTER TABLE request ADD CONSTRAINT FK_REQUEST_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
 ALTER TABLE record ADD CONSTRAINT CHK_RECORD_STATUS CHECK (status IN ('PENDING', 'RESOLVED', 'APPEALED'));
+ALTER TABLE employee ADD CONSTRAINT CHK_EMPLOYEE_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
+ALTER TABLE student ADD CONSTRAINT CHK_STUDENT_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
+ALTER TABLE enrollment ADD CONSTRAINT CHK_ENROLL_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
 
 -- TEST DATA
 INSERT INTO person ( lastName, firstName, middleName) VALUES ('Bayona', 'Wilrow', 'Reosa');
@@ -224,15 +217,11 @@ INSERT INTO offense (offense, type, description) VALUES ('Dress Code', 'Minor Of
 INSERT INTO disciplinaryAction (actionID, action, description) VALUES (1, 'Community Service', 'A service component where the student spends time serving in the community meeting actual needs');
 INSERT INTO disciplinaryAction (actionID, action, description) VALUES (2, 'Probation', 'a warning status given to a student whose academic performance or behavior falls below the institutions standards');
 
-INSERT INTO department (departmentID, departmentName) VALUES (1, 'Junior High School Department');
-INSERT INTO department (departmentID, departmentName) VALUES (2, 'Senior High School Department');
-INSERT INTO department (departmentID, departmentName) VALUES (3, 'College Department');
+INSERT INTO employee (employeeID, personID, department, employeeRole) VALUES ('EMP-001', 12, 'JHS', 'DEPT_HEAD');
+INSERT INTO employee (employeeID, personID, department, employeeRole) VALUES ('EMP-002', 9, 'JHS', 'PREFECT');
 
-INSERT INTO employee (employeeID, personID, departmentID, employeeRole) VALUES ('EMP-001', 12, 1, 'DEPT_HEAD');
-INSERT INTO employee (employeeID, personID, departmentID, employeeRole) VALUES ('EMP-002', 9, 1, 'PREFECT');
-
-INSERT INTO student (studentID, personID, address, studentType, departmentID) VALUES ('JHS-0001', 2, 'Buho', 'Intern', 1);
-INSERT INTO student (studentID, personID, address, studentType, departmentID) VALUES ('CT23-0001', 3, 'Malabag', 'Extern', 3);
+INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('JHS-0001', 2, 'Buho', 'Intern', 'JHS');
+INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('CT23-0001', 3, 'Malabag', 'Extern', 'COLLEGE');
 
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (1, 'Good Standing', 'Student has no disciplinary issues and maintains good behavior.');
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (2, 'Conduct Monitoring', 'Student is under observation due to minor conduct issues.');
@@ -240,9 +229,9 @@ INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUE
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (4, 'Attendance Monitoring', 'Student is under observation due to attendance issues.');
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (5, 'Attendance Probation', 'Student is on probation due to repeated attendance violations.');
 
-INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, departmentID, disciplinaryStatusID) VALUES ('JHS-0001', '2024-2025', 'Grade-8', 'St. Hannibal', 1, 1);
-INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, departmentID, disciplinaryStatusID) VALUES ('JHS-0001', '2025-2026', 'Grade-9', 'St. Anthony', 1, 2);
-INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, departmentID, disciplinaryStatusID) VALUES ('CT23-0001', '2025-2026', '2nd Year', 'IT301', 3, 4);
+INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department, disciplinaryStatusID) VALUES ('JHS-0001', '2024-2025', 'Grade-8', 'St. Hannibal', 'JHS', 1);
+INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department, disciplinaryStatusID) VALUES ('JHS-0001', '2025-2026', 'Grade-9', 'St. Anthony', 'JHS', 2);
+INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department, disciplinaryStatusID) VALUES ('CT23-0001', '2025-2026', '2nd Year', 'IT301', 'COLLEGE', 4);
 
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (1, 'EMP-002', 1, TO_DATE('2024-09-15', 'YYYY-MM-DD'), 1, TO_DATE('2024-09-20', 'YYYY-MM-DD'), 'Student caught vaping in school', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (2, 'EMP-002', 8, TO_DATE('2025-01-12', 'YYYY-MM-DD'), 2, TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Repeatedly late to class', 'RESOLVED');

@@ -10,6 +10,10 @@ import org.rocs.osd.model.appeal.Appeal;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controller for managing and displaying appeal records in the Office of Student Discipline System.
+ * It loads appeals from the database and displays them in the UI.
+ */
 public class AppealController {
 
     @FXML
@@ -17,6 +21,10 @@ public class AppealController {
 
     private AppealFacade appealFacade = new AppealFacadeImpl();
 
+    /**
+     * Initializes the controller.
+     * Clears the list and loads appeals from the database.
+     */
     @FXML
     public void initialize() {
 
