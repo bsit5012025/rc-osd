@@ -14,6 +14,10 @@ import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
+/**
+ * Controller for a single appeal modal in the Office of Student Discipline System.
+ * This class displays appeal details and handles user actions such as approve or deny.
+ */
 public class AppealModalController {
 
     @FXML private Label studentIdLabel;
@@ -33,15 +37,30 @@ public class AppealModalController {
 
     private Runnable onActionComplete;
 
+
+    /**
+     * Sets the appeal data to display in the modal.
+     *
+     * @param appeal the Appeal object containing details to display.
+     */
     public void setAppeal(Appeal appeal) {
         this.appeal = appeal;
         loadAppealData();
     }
 
+    /**
+     * Sets a callback to be executed after an action (approve/deny) is completed.
+     *
+     * @param callback a Runnable to run when the action is complete.
+     */
     public void setOnActionComplete(Runnable callback) {
         this.onActionComplete = callback;
     }
 
+    /**
+     * Initializes the modal controller.
+     * Sets button actions and hides expandable and popup sections by default.
+     */
     @FXML
     public void initialize() {
         arrowButton.setOnAction(event -> toggleExpandedSection());

@@ -8,6 +8,10 @@ import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.model.offense.Offense;
 
+/**
+ * Controller for the "Add Offense" modal in the Office of Student Discipline System.
+ * This class handles the population of offense type and level ComboBoxes and automatically selects the level of offense based on the selected offense type.
+ */
 public class AddOffenseModalController {
 
     @FXML
@@ -17,10 +21,19 @@ public class AddOffenseModalController {
 
     private OffenseDao offenseDao;
 
+    /**
+     * Controller for the "Add Offense" modal.
+     * Handles the population of offense type and level ComboBoxes and automatically selects the level of offense based on the selected offense type.
+     */
     public void initialize(){
         loadComboBoxData();
         autoSelectLevelOfOffense();
     }
+
+    /**
+     * Loads all offense names from the database into the offense type ComboBox.
+     * Prints an error message if the database fetch fails.
+     */
 
     public void loadComboBoxData(){
         try {
@@ -34,6 +47,10 @@ public class AddOffenseModalController {
         }
 
     }
+    /**
+     * Automatically selects the level of offense based on the offense type chosen by the user.
+     * When a user selects an offense type, the corresponding level is displayed in the level ComboBox.
+     */
     public void autoSelectLevelOfOffense() {
 
         offenseTypeComboBox.setOnAction(event -> {

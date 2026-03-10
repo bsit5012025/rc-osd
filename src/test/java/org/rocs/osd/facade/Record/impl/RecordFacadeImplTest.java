@@ -7,6 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
@@ -27,28 +31,68 @@ class RecordFacadeImplTest
     private RecordFacade recordFacade;
 
     @BeforeEach
-    public void setUp()
-    {
-        recordFacade = new RecordFacadeImpl(recordDao);
-        record = new Record(Long.valueOf(1), Long.valueOf(1),
-                "EMP-002", Long.valueOf(1), Date.valueOf("2024-09-15"),
-                Long.valueOf(1), Date.valueOf("2025-04-15"),
-                "Student caught vaping in school",  RecordStatus.PENDING);
+    public void setUp() {
+      recordFacade = new RecordFacadeImpl(recordDao);
     }
 
-    @Test
-    public void testCreateStudentRecord()
-    {
-        when(recordDao.addStudentRecord(Long.valueOf(1), "EMP-002",
-                Long.valueOf(1), Date.valueOf("2024-09-15"), Long.valueOf(1),
-                "Student caught vaping in school", RecordStatus.PENDING)).thenReturn(true);
+        @Test
+        void testCreateStudentRecord () {
 
-        boolean result = recordFacade.createStudentRecord(Long.valueOf(1),
-                "EMP-002", Long.valueOf(1),  Date.valueOf("2024-09-15"),
-                Long.valueOf(1), "Student caught vaping in school");
+            when(recordDao.addStudentRecord(
+                    anyLong(),
+                    anyString(),
+                    anyLong(),
+                    any(Date.class),
+                    anyLong(),
+                    nullable(String.class),
+                    eq(RecordStatus.PENDING)
+            )).thenReturn(true);
+
+            boolean result = recordFacade.createStudentRecord(
+                    1L,
+                    "EMP-001",
+                    2L,
+                    Date.valueOf("2025-03-08"),
+                    3L,
+                    "Bullying incident"
+            );
+
+            assertTrue(result);
+
+            verify(recordDao, times(1)).addStudentRecord(
+                    1L,
+                    "EMP-001",
+                    2L,
+                    Date.valueOf("2025-03-08"),
+                    3L,
+                    "Bullying incident",
+                    RecordStatus.PENDING
+            );
+        }
+
+    @Test
+    public void testUpdateStudentRecord()
+    {
+        when(recordDao.updateRecord(any(Record.class))).thenReturn(true);
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(Long.valueOf(1));
+
+        Employee employee = new Employee();
+        employee.setEmployeeId("EMP-002");
+
+        Offense offense = new Offense();
+        offense.setOffenseId(Long.valueOf(1));
+
+        DisciplinaryAction action = new DisciplinaryAction();
+        action.setActionId(Long.valueOf(1));
+
+        boolean result = recordFacade.updateStudentRecord(enrollment,
+                employee, offense,  Date.valueOf("2024-09-15"),
+                action, "Student caught vaping in school",
+                RecordStatus.PENDING);
 
         assertTrue(result);
-        verify(recordDao, times(1)).addStudentRecord(anyLong(),
-                anyString(), anyLong(), any(Date.class), anyLong(), anyString(), any(RecordStatus.class));
+        verify(recordDao, times(1)).updateRecord(any(Record.class));
     }
 }

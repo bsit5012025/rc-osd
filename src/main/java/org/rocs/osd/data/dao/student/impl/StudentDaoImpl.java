@@ -2,6 +2,7 @@ package org.rocs.osd.data.dao.student.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.student.StudendDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.student.Student;
 
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class StudentDaoImpl implements StudendDao
                             "s.personID, " +
                             "s.address, " +
                             "s.studentType, " +
-                            "s.departmentID, " +
+                            "s.department, " +
                             "p.lastName, " +
                             "p.firstName, " +
                             "p.middleName " +
@@ -53,7 +54,7 @@ public class StudentDaoImpl implements StudendDao
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
                 student.setStudentType(rs.getString("studentType"));
-                student.setDepartmentId(rs.getString("departmentID"));
+                student.setDepartment(Department.valueOf(rs.getString("department")));
                 student.setLastName(rs.getString("lastName"));
                 student.setFirstName(rs.getString("firstName"));
                 student.setMiddleName(rs.getString("middleName"));
@@ -109,7 +110,7 @@ public class StudentDaoImpl implements StudendDao
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
                 student.setStudentType(rs.getString("studentType"));
-                student.setDepartmentId(rs.getString("departmentID"));
+                student.setDepartment(Department.valueOf(rs.getString("department")));
                 student.setLastName(rs.getString("lastName"));
                 student.setFirstName(rs.getString("firstName"));
                 student.setMiddleName(rs.getString("middleName"));

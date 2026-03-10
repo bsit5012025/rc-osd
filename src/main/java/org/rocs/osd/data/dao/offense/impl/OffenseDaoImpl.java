@@ -4,10 +4,7 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.offense.Offense;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +53,8 @@ public class OffenseDaoImpl implements OffenseDao
         return offense;
     }
     /**
-     * Retrieves a list of all offense names from the database.
+     * Retrieves all offense names from the database.
+     *
      * @return a list of offense names
      */
     @Override
@@ -77,6 +75,12 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    /**
+     * Finds an Offense by its name.
+     *
+     * @param offenseName the name of the offense to find
+     * @return an Offense object with details, or null if not found
+     */
     @Override
     public Offense findByName(String offenseName) {
 
@@ -100,4 +104,27 @@ public class OffenseDaoImpl implements OffenseDao
 
         return offense;
     }
+    /**
+     * Adds a new offense to the database.
+     *
+     * @param offense the Offense object to add.
+     * @return true if the offense was successfully added, false otherwise.
+     */
+    @Override
+    public boolean addNewOffense(Offense offense) {
+        String sql = "INSERT INTO offense (offense, type, description) VALUES (?, ?, ?)";
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, offense.getOffense());
+            ps.setString(2, offense.getType());
+            ps.setString(3, offense.getDescription());
+
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+        }
 }
