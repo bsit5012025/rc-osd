@@ -51,7 +51,7 @@ class RequestDaoImplTest {
     }
 
     @Test
-    void testGetAllRequests() throws Exception {
+    void testFindAllRequests() throws Exception {
 
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
@@ -65,7 +65,7 @@ class RequestDaoImplTest {
         when(resultSet.getString("status")).thenReturn("APPROVED");
 
         RequestDao dao = new RequestDaoImpl();
-        List<Request> requests = dao.getAllRequests();
+        List<Request> requests = dao.findAllRequests();
 
         assertFalse(requests.isEmpty());
 
@@ -86,7 +86,7 @@ class RequestDaoImplTest {
     }
 
     @Test
-    void testSetRequest() throws Exception {
+    void testAddRequest() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         RequestDao dao = new RequestDaoImpl();
@@ -94,7 +94,7 @@ class RequestDaoImplTest {
         Employee emp = new Employee();
         emp.setEmployeeId("EMP-001");
 
-        dao.setRequest(
+        dao.addRequest(
                 emp,
                 "St. Andrew",
                 "Requesting for the conduct record of all students in St. Andrew",

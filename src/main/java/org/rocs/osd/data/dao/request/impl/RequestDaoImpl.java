@@ -15,7 +15,7 @@ import java.util.List;
 public class RequestDaoImpl implements RequestDao {
 
     @Override
-    public void setRequest(Employee employee, String details, String message, String type) {
+    public void addRequest(Employee employee, String details, String message, String type) {
         try (Connection con = ConnectionHelper.getConnection()) {
             String sql = "INSERT INTO request (employeeID, details, type, message, status) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -33,7 +33,7 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public List<Request> getAllRequests() {
+    public List<Request> findAllRequests() {
         List<Request> requestList = new ArrayList<>();
 
         String sql = "SELECT * FROM REQUEST";
