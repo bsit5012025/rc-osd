@@ -1,7 +1,3 @@
-.root {
--fx-font-family: "Arial";
-}
-
 .borderColorContainer{
     -fx-border-color: rgba(191, 191, 191, 0.62);
 }
@@ -9,6 +5,7 @@
 .labelTitle{
     -fx-font-size: 35   ;
     -fx-font-weight: bold;
+    -fx-font-family: "Arial";
 }
 
 .offenseTabButton {

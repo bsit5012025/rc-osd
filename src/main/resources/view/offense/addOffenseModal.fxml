@@ -25,7 +25,7 @@
                     <Label styleClass="subLabelForModal" text="Add Violation" />
                 </HBox>
 
-                <Pane minHeight="1.0" styleClass="linePaneColorGray" />
+                <Pane minHeight="2.0" styleClass="linePaneColorGray" />
 
                 <GridPane hgap="20.0" vgap="15.0">
                     <columnConstraints>
