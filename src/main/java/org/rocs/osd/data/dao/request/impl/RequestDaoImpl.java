@@ -2,7 +2,6 @@ package org.rocs.osd.data.dao.request.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.request.RequestDao;
-import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.request.Request;
 import org.rocs.osd.model.request.RequestStatus;
 import java.sql.Connection;
@@ -15,12 +14,12 @@ import java.util.List;
 public class RequestDaoImpl implements RequestDao {
 
     @Override
-    public void addRequest(Employee employee, String details, String message, String type) {
+    public void addRequest(String employeeID, String details, String message, String type) {
         try (Connection con = ConnectionHelper.getConnection()) {
             String sql = "INSERT INTO request (employeeID, details, type, message, status) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setString(1, employee.getEmployeeId());
+            stmt.setString(1, employeeID);
             stmt.setString(2, details);
             stmt.setString(3, type);
             stmt.setString(4, message);
@@ -44,11 +43,8 @@ public class RequestDaoImpl implements RequestDao {
 
             while (rs.next()) {
                 Request r = new Request();
-                Employee emp = new Employee();
                 r.setRequestID(rs.getLong("requestID"));
-                emp.setEmployeeId(rs.getString("employeeID"));
-                r.setEmployee(emp);
-
+                r.setEmployeeID(rs.getString("employeeID"));
                 r.setDetails(rs.getString("details"));
                 r.setType(rs.getString("type"));
                 r.setMessage(rs.getString("message"));

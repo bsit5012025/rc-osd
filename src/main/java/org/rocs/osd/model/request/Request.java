@@ -1,11 +1,10 @@
 package org.rocs.osd.model.request;
 
-import org.rocs.osd.model.person.employee.Employee;
 
 public class Request {
 
         private long requestID;
-        private Employee employee ;
+        private String employeeID;
         private String details;
         private String message;
         private String type;
@@ -15,9 +14,9 @@ public class Request {
 
     }
 
-    public Request(long requestID, Employee employee, String details, String message, String type, RequestStatus status) {
+    public Request(long requestID, String employeeID, String details, String message, String type, RequestStatus status) {
         this.requestID = requestID;
-        this.employee = employee;
+        this.employeeID = employeeID;
         this.details = details;
         this.message = message;
         this.type = type;
@@ -32,14 +31,12 @@ public class Request {
         this.requestID = requestID;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public String getEmployeeID() {
+        return employeeID;
     }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
     }
-
     public String getDetails() {
         return details;
     }

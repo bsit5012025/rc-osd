@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.request.RequestDao;
-import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.request.Request;
 import org.rocs.osd.model.request.RequestStatus;
 
@@ -72,8 +71,7 @@ class RequestDaoImplTest {
         Request r = requests.getFirst();
 
         assertEquals(1, r.getRequestID());
-        assertNotNull(r.getEmployee());
-        assertEquals("EMP-001", r.getEmployee().getEmployeeId());
+        assertEquals("EMP-001", r.getEmployeeID());
         assertEquals("St. Andrew", r.getDetails());
         assertEquals("By Section", r.getType());
         assertEquals(
@@ -91,11 +89,9 @@ class RequestDaoImplTest {
 
         RequestDao dao = new RequestDaoImpl();
 
-        Employee emp = new Employee();
-        emp.setEmployeeId("EMP-001");
 
         dao.addRequest(
-                emp,
+                "EMP-001",
                 "St. Andrew",
                 "Requesting for the conduct record of all students in St. Andrew",
                 "By Section"
