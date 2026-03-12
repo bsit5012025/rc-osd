@@ -1,5 +1,7 @@
 package org.rocs.osd.model.login;
 
+import org.rocs.osd.model.person.Person;
+
 /**
  * Represents a user's login credentials in the Office of Student Discipline System.
  * Stores the unique ID, username, and password of a user.
@@ -10,6 +12,7 @@ public class Login {
     private long id;
     private String username;
     private String password;
+    private Person person;
 
     /**
      * Default constructor.
@@ -24,10 +27,11 @@ public class Login {
      *	@param username username used by the user to access the system.
      *	@param password the password associated with the username.
      */
-    public Login(long id, String username, String password) {
+    public Login(long id, String username, String password, Person person) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.person = person;
     }
 
 
@@ -84,5 +88,15 @@ public class Login {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Person getPerson()
+    {
+        return person;
+    }
+
+    public void setPerson(Person person)
+    {
+        this.person = person;
     }
 }
