@@ -39,6 +39,7 @@ public class LoginDaoImpl implements LoginDao  {
                             "from Login l " +
                             "JOIN person p on l.personID = p.personID " +
                             "WHERE l.username = ?");
+
             statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
 
