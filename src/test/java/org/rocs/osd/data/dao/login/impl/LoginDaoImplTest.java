@@ -57,6 +57,7 @@ public class LoginDaoImplTest {
         when(resultSet.getLong("id")).thenReturn(Long.valueOf(1));
         when(resultSet.getString("username")).thenReturn("test");
         when(resultSet.getString("password")).thenReturn("1234");
+        when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
         when(resultSet.getString("lastname")).thenReturn("LName");
         when(resultSet.getString("firstname")).thenReturn("FName");
         when(resultSet.getString("middleName")).thenReturn("MName");
@@ -69,6 +70,7 @@ public class LoginDaoImplTest {
         assertEquals(Long.valueOf(1), login.getId());
         assertEquals("test", login.getUsername());
         assertEquals("1234", login.getPassword());
+        assertEquals(Long.valueOf(2), person.getPersonID());
         assertEquals("LName", person.getLastName());
         assertEquals("FName", person.getFirstName());
         assertEquals("MName", person.getMiddleName());

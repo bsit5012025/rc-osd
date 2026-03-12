@@ -33,6 +33,7 @@ public class LoginDaoImpl implements LoginDao  {
                             "l.id, " +
                             "l.username, " +
                             "l.password, " +
+                            "l.personID, "+
                             "p.lastname, " +
                             "p.firstname, " +
                             "p.middleName " +
@@ -45,7 +46,7 @@ public class LoginDaoImpl implements LoginDao  {
 
             if(rs.next()) {
                 Person person = new Person();
-                person.setPersonID(rs.getLong("id"));
+                person.setPersonID(rs.getLong("personID"));
                 person.setLastName(rs.getString("lastname"));
                 person.setFirstName(rs.getString("firstname"));
                 person.setMiddleName(rs.getString("middleName"));
