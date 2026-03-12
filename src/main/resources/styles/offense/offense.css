@@ -1,0 +1,122 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-background-color: #f4f4f4;
+}
+
+.offenseTabButton, .addButton {
+    -fx-background-color: white;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 1 1 0 1;
+    -fx-background-radius: 5 5 0 0;
+    -fx-border-radius: 5 5 0 0;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-text-fill: #333333;
+    -fx-cursor: hand;
+    -fx-translate-y: 1;
+}
+
+.offenseTabButton:focused {
+    -fx-background-color: #CCCCFF;
+}
+
+.addButton {
+    -fx-background-color: #000080;
+    -fx-border-color: #000080;
+    -fx-text-fill: white;
+}
+
+.addButton:hover {
+    -fx-background-color: #0000FF;
+    -fx-border-color: #0000FF;
+}
+
+.contentCard {
+    -fx-background-color: white;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.labelTitle {
+    -fx-font-size: 28;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.staticSearchContainer {
+    -fx-background-color: white;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.staticSearchContainer:hover, .staticSearchContainer:focused-within {
+    -fx-border-color: #BFBFBF;
+    -fx-effect: null;
+}
+
+.searchIconBtn {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-padding: 5 8 5 8;
+}
+
+.searchIconBtn:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 4 0 0 4;
+}
+
+.searchTextField {
+    -fx-background-color: transparent;
+    -fx-prompt-text-fill: #767676;
+    -fx-padding: 5 10 5 0;
+}
+
+.searchTextField:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: navy;
+}
+
+.custom-table {
+    -fx-background-color: white;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 1 0 0 0;
+}
+
+.custom-table .column-header-background {
+    -fx-background-color: #E5E5E5;
+    -fx-background-insets: 0;
+}
+
+.custom-table .column-header-background .filler {
+    -fx-background-color: #E5E5E5;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 0 0 1 0;
+}
+
+.custom-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: #BFBFBF;
+    -fx-border-width: 0 1 1 0;
+    -fx-padding: 10;
+}
+
+.custom-table .column-header:last-visible {
+    -fx-border-width: 0 0 1 0;
+}
+
+.custom-table .column-header .label {
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.custom-table .table-cell {
+    -fx-alignment: CENTER;
+    -fx-padding: 12;
+    -fx-border-color: transparent transparent #E5E5E5 transparent;
+}
