@@ -16,17 +16,10 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane styleClass="borderColorContainer"
-            stylesheets="@../../styles/dashboard/container.css"
+            stylesheets="@../../styles/offense/offense.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.rocs.osd.controller.offense.OffenseController">
-
-   <stylesheets>
-      <URL value="@../../styles/dashboard/label.css" />
-      <URL value="@../../styles/dashboard/inputfield.css" />
-      <URL value="@../../styles/dashboard/buttons.css" />
-      <URL value="@../../styles/dashboard/table.css" />
-   </stylesheets>
 
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">

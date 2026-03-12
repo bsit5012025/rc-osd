@@ -1,0 +1,101 @@
+.root {
+-fx-font-family: "Arial";
+}
+
+.borderColorContainer{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+}
+
+.labelTitle{
+    -fx-font-size: 35   ;
+    -fx-font-weight: bold;
+}
+
+.offenseTabButton {
+    -fx-font-size: 15;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+}
+
+.offenseTabButton:focused{
+    -fx-background-color: #76baff;
+}
+
+.addButton {
+    -fx-background-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+     -fx-padding: 10 25;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+}
+
+.addButton Button{
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+}
+
+.addButton:hover {
+    -fx-background-color: #0000FF;
+}
+
+.borderSearchTextField{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-radius: 10;
+}
+
+.searchTextField{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.searchTextField:focused{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.linePaneColorGray{
+    -fx-background-color:  rgba(191, 191, 191, 0.62);
+}
+
+.linePaneColor{
+    -fx-background-color: #0057ae;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 0;
+}
+.table-view .column-header-background {
+    -fx-background-color:rgba(0, 0, 255, 0.22);
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 12 10 12 10;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 0 8 0;
+}
+.table-row-cell:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.table-cell {
+    -fx-text-fill: #111827;
+    -fx-font-size: 13;
+    -fx-padding: 10 10 10 10;
+    -fx-alignment: CENTER_LEFT;
+}
