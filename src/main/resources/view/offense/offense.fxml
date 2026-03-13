@@ -13,11 +13,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="borderColorContainer"
-            stylesheets="@../../styles/offense/offense.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.rocs.osd.controller.offense.OffenseController">
+<BorderPane styleClass="mainContainer" stylesheets="@../../styles/offense/offense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.OffenseController">
 
    <top>
       <HBox alignment="BOTTOM_LEFT" prefHeight="70.0" spacing="0.0">
@@ -72,8 +68,8 @@
             <columns>
                <TableColumn text="Student_ID" />
                <TableColumn text="Student Name" />
-               <TableColumn text="Level of Offence" />
-               <TableColumn text="Offence Type" />
+               <TableColumn text="Level of Offense" />
+               <TableColumn text="Offense Type" />
                <TableColumn text="Date" />
             </columns>
             <columnResizePolicy>
@@ -86,4 +82,3 @@
       </VBox>
    </center>
 </BorderPane>
-
