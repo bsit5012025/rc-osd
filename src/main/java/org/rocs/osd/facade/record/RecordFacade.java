@@ -1,12 +1,13 @@
-package org.rocs.osd.facade.Record;
+package org.rocs.osd.facade.record;
 
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;
+import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
-import java.sql.Date;
+import java.util.Date;
 
 public interface RecordFacade
 {
@@ -16,5 +17,6 @@ public interface RecordFacade
     boolean updateStudentRecord(Enrollment enrollment, Employee employee, Offense offense,
                                 Date dateOfViolation, DisciplinaryAction action,
                                 String remarks, RecordStatus status);
+    boolean resolveRecord(Record record);
 }
 

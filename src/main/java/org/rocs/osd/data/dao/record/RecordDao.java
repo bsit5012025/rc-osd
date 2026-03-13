@@ -3,7 +3,7 @@ package org.rocs.osd.data.dao.record;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public interface RecordDao

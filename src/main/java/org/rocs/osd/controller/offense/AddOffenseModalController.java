@@ -17,8 +17,8 @@ import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.data.dao.student.StudendDao;
 import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
-import org.rocs.osd.facade.Record.RecordFacade;
-import org.rocs.osd.facade.Record.impl.RecordFacadeImpl;
+import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.student.Student;
 
