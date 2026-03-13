@@ -13,7 +13,11 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="mainContainer" stylesheets="@../../styles/offense/offense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.OffenseController">
+<BorderPane styleClass="borderColorContainer"
+            stylesheets="@../../styles/offense/offense.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.offense.OffenseController">
 
    <top>
       <HBox alignment="BOTTOM_LEFT" prefHeight="70.0" spacing="0.0">

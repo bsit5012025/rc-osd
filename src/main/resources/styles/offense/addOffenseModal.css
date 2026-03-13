@@ -1,0 +1,106 @@
+.root {
+-fx-font-family: "Arial";
+}
+
+.modalContainer {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 15, 0, 0, 4);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-border-color: #BFBFBF;
+    -fx-padding: 25;
+}
+
+.subLabelForModal {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+.linePaneColorGray {
+    -fx-background-color: navy;
+}
+
+.lightLabelForTextField {
+    -fx-font-size: 16;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+
+.inputTextFieldOffense, .datePicker {
+    -fx-pref-height: 35;
+    -fx-background-color: white;
+    -fx-border-color: #767676;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-font-size: 14;
+}
+
+.inputTextFieldOffense:hover, .datePicker:hover {
+    -fx-border-color: navy;
+}
+
+.inputTextFieldOffense:focused, .datePicker:focused {
+    -fx-border-color: navy;
+}
+
+.datePicker > .text-field {
+    -fx-background-color: transparent;
+}
+
+.inputTextArea {
+    -fx-background-color: white;
+    -fx-border-color: #767676;
+    -fx-border-width: 1;
+    -fx-font-size: 14;
+}
+
+.inputTextArea:hover {
+    -fx-border-color: navy;
+}
+
+.inputTextArea:focused {
+    -fx-border-color: navy;
+}
+
+.cancelButton {
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
+    -fx-background-color: white;
+    -fx-border-color: navy;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-text-fill: navy;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.submitOffenseButton {
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
+    -fx-background-color: navy;
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.submitOffenseButton:hover {
+    -fx-background-color: #0000CC;
+}
+
+.cancelButton:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+.check-box:selected .box {
+    -fx-background-color: navy;
+    -fx-border-color: navy;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}

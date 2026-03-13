@@ -1,122 +1,98 @@
-.root {
-    -fx-font-family: "Arial";
-    -fx-background-color: #f4f4f4;
+.borderColorContainer{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
 }
 
-.offenseTabButton, .addButton {
-    -fx-background-color: white;
-    -fx-border-color: #BFBFBF;
-    -fx-border-width: 1 1 0 1;
-    -fx-background-radius: 5 5 0 0;
-    -fx-border-radius: 5 5 0 0;
-    -fx-padding: 10 25;
+.labelTitle{
+    -fx-font-size: 35   ;
     -fx-font-weight: bold;
-    -fx-font-size: 14;
-    -fx-text-fill: #333333;
-    -fx-cursor: hand;
-    -fx-translate-y: 1;
+    -fx-font-family: "Arial";
 }
 
-.offenseTabButton:focused {
-    -fx-background-color: #CCCCFF;
+.offenseTabButton {
+    -fx-font-size: 15;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+}
+
+.offenseTabButton:focused{
+    -fx-background-color: #76baff;
 }
 
 .addButton {
     -fx-background-color: #000080;
-    -fx-border-color: #000080;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+     -fx-padding: 10 25;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+}
+
+.addButton Button{
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-font-size: 15;
     -fx-text-fill: white;
 }
 
 .addButton:hover {
     -fx-background-color: #0000FF;
-    -fx-border-color: #0000FF;
 }
 
-.contentCard {
+.borderSearchTextField{
+    -fx-border-color: rgba(191, 191, 191, 0.62);
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-radius: 10;
+}
+
+.searchTextField{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.searchTextField:focused{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.linePaneColorGray{
+    -fx-background-color:  rgba(191, 191, 191, 0.62);
+}
+
+.linePaneColor{
+    -fx-background-color: #0057ae;
+}
+
+.table-view {
     -fx-background-color: white;
-    -fx-border-color: #BFBFBF;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 0;
 }
-
-.labelTitle {
-    -fx-font-size: 28;
-    -fx-font-weight: bold;
-    -fx-text-fill: black;
-}
-
-.staticSearchContainer {
-    -fx-background-color: white;
-    -fx-border-color: #BFBFBF;
-    -fx-border-width: 1;
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
-}
-
-.staticSearchContainer:hover, .staticSearchContainer:focused-within {
-    -fx-border-color: #BFBFBF;
-    -fx-effect: null;
-}
-
-.searchIconBtn {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-border-width: 0;
-    -fx-cursor: hand;
-    -fx-padding: 5 8 5 8;
-}
-
-.searchIconBtn:hover {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 4 0 0 4;
-}
-
-.searchTextField {
-    -fx-background-color: transparent;
-    -fx-prompt-text-fill: #767676;
-    -fx-padding: 5 10 5 0;
-}
-
-.searchTextField:focused {
-    -fx-background-color: transparent;
-    -fx-border-color: navy;
-}
-
-.custom-table {
-    -fx-background-color: white;
-    -fx-border-color: #BFBFBF;
-    -fx-border-width: 1 0 0 0;
-}
-
-.custom-table .column-header-background {
-    -fx-background-color: #E5E5E5;
-    -fx-background-insets: 0;
-}
-
-.custom-table .column-header-background .filler {
-    -fx-background-color: #E5E5E5;
-    -fx-border-color: #BFBFBF;
+.table-view .column-header-background {
+    -fx-background-color:rgba(0, 0, 255, 0.22);
+    -fx-border-color: #e5e7eb;
     -fx-border-width: 0 0 1 0;
 }
 
-.custom-table .column-header {
+.table-view .column-header {
     -fx-background-color: transparent;
-    -fx-border-color: #BFBFBF;
-    -fx-border-width: 0 1 1 0;
-    -fx-padding: 10;
+    -fx-padding: 12 10 12 10;
 }
 
-.custom-table .column-header:last-visible {
+.table-view .column-header .label {
+    -fx-font-size: 20;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
     -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 0 8 0;
+}
+.table-row-cell:hover {
+    -fx-background-color: #f3f4f6;
 }
 
-.custom-table .column-header .label {
-    -fx-font-weight: bold;
-    -fx-alignment: CENTER;
-}
-
-.custom-table .table-cell {
-    -fx-alignment: CENTER;
-    -fx-padding: 12;
-    -fx-border-color: transparent transparent #E5E5E5 transparent;
+.table-cell {
+    -fx-text-fill: #111827;
+    -fx-font-size: 13;
+    -fx-padding: 10 10 10 10;
+    -fx-alignment: CENTER_LEFT;
 }
