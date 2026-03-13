@@ -13,7 +13,15 @@ import java.util.List;
  */
 public class AppealFacadeImpl implements AppealFacade {
 
-    private AppealDao appealDao = new AppealDaoImpl();
+    private AppealDao appealDao;
+
+    public AppealFacadeImpl(AppealDao appealDao) {
+        this.appealDao = appealDao;
+    }
+
+    public AppealFacadeImpl() {
+        this.appealDao = new AppealDaoImpl();
+    }
 
     /**
      * Retrieves all appeal records with associated student and offense details.
@@ -21,8 +29,8 @@ public class AppealFacadeImpl implements AppealFacade {
      * @return a List of Appeal objects
      */
     @Override
-    public List<Appeal> getAllAppeals() {
-        return appealDao.findAllAppealDetails();
+    public List<Appeal> getPendingAppeals() {
+        return appealDao.findPendingAppealsWithDetails();
     }
 
     /**
@@ -31,7 +39,7 @@ public class AppealFacadeImpl implements AppealFacade {
      * @param appealId the ID of the appeal to approve.
      */
     @Override
-    public void approveAppeal(Long appealId) {
+    public void approveAppeal(long appealId) {
         appealDao.updateAppealStatus(appealId, "APPROVED");
     }
 
@@ -41,7 +49,7 @@ public class AppealFacadeImpl implements AppealFacade {
      * @param appealId the ID of the appeal to reject.
      */
     @Override
-    public void rejectAppeal(Long appealId) {
-        appealDao.updateAppealStatus(appealId, "REJECTED");
+    public void deniedAppeal(long appealId) {
+        appealDao.updateAppealStatus(appealId, "DENIED");
     }
 }

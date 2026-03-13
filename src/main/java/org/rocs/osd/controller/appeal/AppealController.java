@@ -34,7 +34,7 @@ public class AppealController {
 
     private void loadAppealsFromDB() {
 
-        List<Appeal> appeals = appealFacade.getAllAppeals();
+        List<Appeal> appeals = appealFacade.getPendingAppeals();
 
         for (Appeal appeal : appeals) {
             try {
@@ -45,8 +45,7 @@ public class AppealController {
                 AppealModalController controller = loader.getController();
                 controller.setAppeal(appeal);
 
-                controller.setOnActionComplete(() -> listContainer.getChildren().remove(card)
-                );
+                controller.setOnActionComplete(() -> listContainer.getChildren().remove(card));
                 listContainer.getChildren().add(card);
             } catch (IOException e) {
                 e.printStackTrace();

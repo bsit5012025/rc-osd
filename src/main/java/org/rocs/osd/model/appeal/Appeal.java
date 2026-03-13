@@ -1,5 +1,8 @@
 package org.rocs.osd.model.appeal;
 
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.record.Record;
+
 import java.util.Date;
 
 
@@ -9,15 +12,12 @@ import java.util.Date;
  */
 public class Appeal {
 
-    private Long appealID;
-    private Long recordID;
-    private Long enrollmentID;
+    private long appealID;
+    private Record record;
+    private Enrollment enrollment;
     private String message;
     private Date dateFiled;
     private String status;
-    private String studentId;
-    private String studentName;
-    private String offense;
 
     /**
      * Default constructor for Appeal.
@@ -26,41 +26,22 @@ public class Appeal {
     public Appeal() {
     }
 
-    /**
-     * Constructor to create an Appeal with full details including ID and date filed.
-     * @param appealID     unique identifier of the appeal.
-     * @param recordID     ID of the related record.
-     * @param enrollmentID ID of the student's enrollment.
-     * @param message      message or reason for the appeal.
-     * @param dateFiled    date when the appeal was filed.
-     * @param status       current status of the appeal.
-     */
-    public Appeal(Long appealID, Long recordID, Long enrollmentID, String message, Date dateFiled, String status) {
+    public Appeal(long appealID, Record record, Enrollment enrollment, String message, Date dateFiled, String status) {
         this.appealID = appealID;
-        this.recordID = recordID;
-        this.enrollmentID = enrollmentID;
+        this.record = record;
+        this.enrollment = enrollment;
         this.message = message;
         this.dateFiled = dateFiled;
         this.status = status;
     }
 
-    /**
-     * Constructor to create an Appeal without appeal ID or date filed.
-     * @param recordID     ID of the related record.
-     * @param enrollmentID ID of the student's enrollment.
-     * @param message      message or reason for the appeal.
-     * @param status       current status of the appeal.
-     */
-    public Appeal(Long recordID, Long enrollmentID, String message, String status) {
-        this.recordID = recordID;
-        this.enrollmentID = enrollmentID;
+    public Appeal(Record record, Enrollment enrollment, String message, String status) {
+        this.record = record;
+        this.enrollment = enrollment;
         this.message = message;
         this.status = status;
     }
-    /**
-     * @return the unique appeal ID.
-     */
-    public Long getAppealID() {
+    public long getAppealID() {
         return appealID;
     }
 
@@ -71,32 +52,18 @@ public class Appeal {
         this.appealID = appealID;
     }
 
-    /**
-     * @return the related record ID.
-     */
-    public Long getRecordID() {
-        return recordID;
+    public Record getRecord() {return record;}
+
+    public void setRecord(Record record) {
+        this.record = record;
     }
 
-    /**
-     *	@param recordID sets the related record ID
-     */
-    public void setRecordID(Long recordID) {
-        this.recordID = recordID;
+    public Enrollment getEnrollment() {
+        return enrollment;
     }
 
-    /**
-     * @return the enrollment ID of the student.
-     */
-    public Long getEnrollmentID() {
-        return enrollmentID;
-    }
-
-    /**
-     *	@param enrollmentID sets the enrollment ID of the student.
-     */
-    public void setEnrollmentID(Long enrollmentID) {
-        this.enrollmentID = enrollmentID;
+    public void setEnrollment(Enrollment enrollment) {
+        this.enrollment = enrollment;
     }
 
     /**
@@ -139,47 +106,5 @@ public class Appeal {
      */
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    /**
-     * @return the student's ID.
-     */
-    public String getStudentId() {
-        return studentId;
-    }
-
-    /**
-     *	@param studentId sets the student's ID.
-     */
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    /**
-     * @return the student's full name.
-     */
-    public String getStudentName() {
-        return studentName;
-    }
-
-    /**
-     *	@param studentName sets the student's full name.
-     */
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    /**
-     * @return the offense associated with this appeal.
-     */
-    public String getOffense() {
-        return offense;
-    }
-
-    /**
-     *	@param offense sets the offense associated with this appeal.
-     */
-    public void setOffense(String offense) {
-        this.offense = offense;
     }
 }
