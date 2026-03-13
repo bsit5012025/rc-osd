@@ -1,7 +1,7 @@
-package org.rocs.osd.facade.Record.impl;
+package org.rocs.osd.facade.record.impl;
 
 import org.rocs.osd.data.dao.record.RecordDao;
-import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -9,7 +9,7 @@ import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Facade implementation for managing student records in the Office of Student Discipline System.
@@ -66,11 +66,6 @@ public class RecordFacadeImpl implements RecordFacade
     /**
      * Updates an existing student record.
      *
-     * @param enrollmentId the enrollment ID of the student.
-     * @param employeeId the ID of the employee recording the offense.
-     * @param offenseId the ID of the offense.
-     * @param dateOfViolation the date of violation.
-     * @param actionId the ID of the disciplinary action.
      * @param remarks additional remarks (optional, max 500 characters).
      * @param status the current status of the record.
      * @return true if the record was successfully updated, false otherwise.
@@ -100,5 +95,13 @@ public class RecordFacadeImpl implements RecordFacade
         record.setStatus(status);
         return recordDao.updateRecord(record);
     }
+
+    @Override
+    public boolean resolveRecord(Record record) {
+        record.setStatus(RecordStatus.RESOLVED);
+        record.setDateOfResolution(new Date());
+        return recordDao.updateRecord(record);
+    }
+
 
 }
