@@ -1,4 +1,4 @@
-package org.rocs.osd.facade.Record.impl;
+package org.rocs.osd.facade.record.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
-import org.rocs.osd.facade.Record.RecordFacade;
+import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -94,5 +94,17 @@ class RecordFacadeImplTest
 
         assertTrue(result);
         verify(recordDao, times(1)).updateRecord(any(Record.class));
+    }
+    @Test
+    void testResolveRecord() {
+
+        Record record = new Record();
+
+        when(recordDao.updateRecord(record)).thenReturn(true);
+
+        boolean result = recordFacade.resolveRecord(record);
+
+        assertTrue(result);
+        verify(recordDao).updateRecord(record);
     }
 }

@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,7 +159,7 @@ public class RecordDaoImpl implements RecordDao
             stmt.setLong(1, enrollmentID);
             stmt.setString(2, employeeID);
             stmt.setLong(3, offenseID);
-            stmt.setDate(4, dateOfViolation);
+            stmt.setDate(4, (java.sql.Date) dateOfViolation);
             stmt.setLong(5, actionID);
             stmt.setString(6, remarks);
             stmt.setString(7, String.valueOf(status));
