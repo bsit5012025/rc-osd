@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.model.login.Login;
+import org.rocs.osd.model.person.Person;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -25,8 +26,10 @@ class LoginFacadeImplTest
     @BeforeEach
     public void setUp()
     {
+        Person person = new Person();
+
         loginFacade = new LoginFacadeImpl(loginDao);
-        login = new Login(1, "user","1234");
+        login = new Login(1, "user","1234", person);
     }
 
     @Test
