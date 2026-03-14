@@ -48,6 +48,7 @@
                                    managed="false"/>
 
                         <Button fx:id="togglePasswordButton"
+                                onAction="#togglePasswordVisibility"
                                 styleClass="showPassword"/>
                     </StackPane>
                 </VBox>
@@ -57,7 +58,7 @@
                 </HBox>
 
             </VBox>
-            <Button text="Log in" onAction="#onLogin" styleClass="loginButton"/>
+            <Button text="Log in" onAction="#onLogin" defaultButton="true" styleClass="loginButton"/>
         </VBox>
     </StackPane>
 </AnchorPane>

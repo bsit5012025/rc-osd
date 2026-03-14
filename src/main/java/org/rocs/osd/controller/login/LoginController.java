@@ -34,7 +34,33 @@ public class LoginController {
     @FXML
     PasswordField passwordField;
 
+    @FXML
+    private TextField passwordTextField;
 
+    @FXML
+    private javafx.scene.control.Button togglePasswordButton;
+
+    @FXML
+    private void togglePasswordVisibility() {
+        if (passwordField == null || passwordTextField == null || togglePasswordButton == null) {
+            return;
+        }
+        if (passwordField.isVisible()) {
+            passwordTextField.setText(passwordField.getText());
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            passwordTextField.setVisible(true);
+            passwordTextField.setManaged(true);
+            togglePasswordButton.getStyleClass().add("show-icon");
+        } else {
+            passwordField.setText(passwordTextField.getText());
+            passwordTextField.setVisible(false);
+            passwordTextField.setManaged(false);
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            togglePasswordButton.getStyleClass().remove("show-icon");
+        }
+    }
     /**
      * Handles the login process when the Login button is clicked.
      * This method validates the entered username and password and loads the Dashboard if successful.
