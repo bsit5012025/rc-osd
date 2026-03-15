@@ -11,7 +11,7 @@ public class RequestFacadeImpl implements RequestFacade
 {
     private RequestDao requestDao;
 
-    private RequestFacadeImpl(RequestDao requestDao)
+    public RequestFacadeImpl(RequestDao requestDao)
     {
         this.requestDao = requestDao;
     }

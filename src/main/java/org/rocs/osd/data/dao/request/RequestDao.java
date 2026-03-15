@@ -6,7 +6,7 @@ import org.rocs.osd.model.request.RequestStatus;
 import java.util.List;
 
 public interface RequestDao {
-    void addRequest(String employeeID, String details, String message, String type);
+    boolean addRequest(String employeeID, String details, String message, String type);
     List<Request> findAllRequests();
     boolean updateRequestStatus(long requestID, RequestStatus status);
 }
