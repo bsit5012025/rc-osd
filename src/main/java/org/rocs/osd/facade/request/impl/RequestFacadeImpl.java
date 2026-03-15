@@ -22,16 +22,15 @@ public class RequestFacadeImpl implements RecordFacade
         {
             return false;
         }
-        if(details != null && details.length() > 100 )
+        if(details == null || details.trim().isEmpty() || details.length() > 100 )
         {
             return false;
         }
-        if(type != null && type.length() > 100)
+        if(type == null || type.trim().isEmpty() || type.length() > 100)
         {
             return false;
         }
-
-        if(employeeID == null ||employeeID.length() > 10)
+        if(employeeID == null || employeeID.trim().isEmpty() || employeeID.length() > 10)
         {
             return false;
         }
