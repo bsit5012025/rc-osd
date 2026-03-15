@@ -1,5 +1,6 @@
 package org.rocs.osd.data.dao.record;
 
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
@@ -13,4 +14,5 @@ public interface RecordDao
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, RecordStatus status);
     boolean updateRecord(Record record);
+    List<Record> findRecordListByDepartment(Department department);
 }

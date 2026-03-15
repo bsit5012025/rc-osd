@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -175,5 +176,27 @@ class RecordDaoImplTest
         verify(preparedStatement).setLong(9, Long.valueOf(1));
         verify(preparedStatement).executeUpdate();
     }
+    @Test
+    void testFindRecordListByDepartmentReturnListOfRecords() throws SQLException{
+        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        when(this.resultSet.next()).thenReturn(true, false);
+        when(this.resultSet.getLong("recordID")).thenReturn(1L);
+        when(this.resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2025-01-12"));
+        when(this.resultSet.getString("remarks")).thenReturn("Repeatedly late to class");
 
+        RecordDaoImpl recordDaoImpl = new RecordDaoImpl();
+
+        List<Record> records = recordDaoImpl.findRecordListByDepartment(Department.JHS);
+
+        assertNotNull(records);
+        assertEquals(1, records.size());
+
+        Record record = records.get(0);
+
+        assertEquals(1L, record.getRecordId());
+        assertEquals("Repeatedly late to class", record.getRemarks());
+
+        verify(this.preparedStatement).setString(1, Department.JHS.name());
+        verify(this.preparedStatement).executeQuery();
+    }
 }

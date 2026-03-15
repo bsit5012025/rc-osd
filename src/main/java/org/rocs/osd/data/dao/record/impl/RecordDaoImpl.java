@@ -206,5 +206,36 @@ public class RecordDaoImpl implements RecordDao
             return false;
         }
     }
+    @Override
+    public List<Record> findRecordListByDepartment(Department department) {
 
+        List<Record> records = new ArrayList<>();
+        try (Connection con = ConnectionHelper.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT " +
+                            "r.recordID, r.dateOfViolation, r.dateOfResolution, r.remarks, r.status, " +
+                            "e.enrollmentID, e.studentID, e.schoolYear, e.studentLevel, e.section, e.department, " +
+                            "o.offense, o.type, " +
+                            "da.action " +
+                            "FROM record r " +
+                            "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
+                            "JOIN offense o ON r.offenseID = o.offenseID " +
+                            "JOIN disciplinaryAction da ON r.actionID = da.actionID " +
+                            "WHERE e.department = ? " +
+                            "ORDER BY r.dateOfViolation DESC");
+            statement.setString(1, department.name());
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Record record = new Record();
+                record.setRecordId(rs.getLong("recordID"));
+                record.setDateOfViolation(rs.getDate("dateOfViolation"));
+                record.setRemarks(rs.getString("remarks"));
+                records.add(record);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return records;
+    }
 }
