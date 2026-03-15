@@ -1,12 +1,13 @@
 package org.rocs.osd.facade.request.impl;
 
 import org.rocs.osd.data.dao.request.RequestDao;
-import org.rocs.osd.facade.request.RecordFacade;
+import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.model.request.Request;
+import org.rocs.osd.model.request.RequestStatus;
 
 import java.util.List;
 
-public class RequestFacadeImpl implements RecordFacade
+public class RequestFacadeImpl implements RequestFacade
 {
     private RequestDao requestDao;
 
@@ -40,12 +41,19 @@ public class RequestFacadeImpl implements RecordFacade
     }
 
     @Override
-    public List<Request> getAllRequest() {
-        return List.of();
+    public List<Request> getAllRequest()
+    {
+        return requestDao.findAllRequests();
     }
 
     @Override
-    public boolean updateRequestStatus() {
-        return false;
+    public boolean updateRequestStatus(long requestID, RequestStatus status)
+    {
+        if(status == null)
+        {
+            return false;
+        }
+
+        return requestDao.updateRequestStatus(requestID, status);
     }
 }
