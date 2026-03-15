@@ -55,7 +55,7 @@
     -fx-cursor: hand;
     -fx-min-width: 36;
     -fx-min-height: 36;
-    -fx-background-image: url("../../assets/hide_password.png");
+    -fx-background-image: url("../../assets/show_password.png");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: 20 20;
@@ -67,7 +67,7 @@
 }
 
 .show-icon {
-    -fx-background-image: url("../../assets/show_password.png");
+    -fx-background-image: url("../../assets/hide_password.png");
 }
 
 
