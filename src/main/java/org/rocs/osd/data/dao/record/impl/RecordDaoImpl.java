@@ -305,18 +305,13 @@ public class RecordDaoImpl implements RecordDao
         return total;
     }
     @Override
-    public int findTodayViolations(String schoolYear) {
+    public int findTodayViolations() {
 
         int total = 0;
 
         try (Connection con = ConnectionHelper.getConnection()) {
 
-            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) " +
-                    "FROM record r " +
-                    "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
-                    "WHERE TRUNC(r.dateOfViolation) = TRUNC(SYSDATE) " +
-                    "AND e.schoolYear = ?");
-            stmt.setString(1, schoolYear);
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {

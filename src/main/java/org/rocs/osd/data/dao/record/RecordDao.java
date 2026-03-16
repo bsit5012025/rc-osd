@@ -17,6 +17,6 @@ public interface RecordDao
     boolean updateRecord(Record record);
     List<Record> findRecordListByDepartment(Department department, String schoolYear);
     int findTotalViolations(String schoolYear);
-    int findTodayViolations(String schoolYear);
+    int findTodayViolations();
     Map<String, Integer> findMostFrequentOffenses(String schoolYear);
 }
