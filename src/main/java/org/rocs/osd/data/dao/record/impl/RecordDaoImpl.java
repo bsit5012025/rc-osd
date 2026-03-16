@@ -281,13 +281,17 @@ public class RecordDaoImpl implements RecordDao
         return records;
     }
     @Override
-    public int findTotalViolations() {
+    public int findTotalViolations(String schoolYear) {
 
         int total = 0;
 
         try (Connection con = ConnectionHelper.getConnection())  {
 
-            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record");
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) " +
+                    "FROM record r " +
+                    "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
+                    "WHERE e.schoolYear = ?");
+            stmt.setString(1, schoolYear);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -301,14 +305,18 @@ public class RecordDaoImpl implements RecordDao
         return total;
     }
     @Override
-    public int findTodayViolations() {
+    public int findTodayViolations(String schoolYear) {
 
         int total = 0;
 
         try (Connection con = ConnectionHelper.getConnection()) {
 
-            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
-
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) " +
+                    "FROM record r " +
+                    "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
+                    "WHERE TRUNC(r.dateOfViolation) = TRUNC(SYSDATE) " +
+                    "AND e.schoolYear = ?");
+            stmt.setString(1, schoolYear);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -322,7 +330,7 @@ public class RecordDaoImpl implements RecordDao
         return total;
     }
     @Override
-    public Map<String, Integer> findMostFrequentOffenses() {
+    public Map<String, Integer> findMostFrequentOffenses(String schoolYear) {
 
         Map<String, Integer> offenses = new LinkedHashMap<>();
 
@@ -332,10 +340,12 @@ public class RecordDaoImpl implements RecordDao
                     "SELECT o.offense, COUNT(*) AS total " +
                             "FROM record r " +
                             "JOIN offense o ON r.offenseID = o.offenseID " +
+                            "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
+                            "WHERE e.schoolYear = ? " +
                             "GROUP BY o.offense " +
                             "ORDER BY total DESC"
             );
-
+            stmt.setString(1, schoolYear);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

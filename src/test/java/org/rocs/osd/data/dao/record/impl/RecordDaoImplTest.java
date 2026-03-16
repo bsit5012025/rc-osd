@@ -236,7 +236,7 @@ class RecordDaoImplTest
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt(1)).thenReturn(10);
 
-        int result = recordDao.findTotalViolations();
+        int result = recordDao.findTotalViolations("2024-2025");
 
         assertEquals(10, result);
 
@@ -251,7 +251,7 @@ class RecordDaoImplTest
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt(1)).thenReturn(3);
 
-        int result = recordDao.findTodayViolations();
+        int result = recordDao.findTodayViolations("2024-2025");
 
         assertEquals(3, result);
 
@@ -270,7 +270,7 @@ class RecordDaoImplTest
         when(resultSet.getInt("total"))
                 .thenReturn(5, 3);
 
-        Map<String, Integer> result = recordDao.findMostFrequentOffenses();
+        Map<String, Integer> result = recordDao.findMostFrequentOffenses("2024-2025");
 
         assertEquals(2, result.size());
         assertEquals(5, result.get("Cheating"));
