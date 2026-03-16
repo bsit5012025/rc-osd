@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -25,6 +26,7 @@ public class OffenseController {
             Parent root = FXMLLoader.load(getClass().getResource("/view/offense/addOffenseModal.fxml"));
             Stage modalStage = new Stage();
             modalStage.initStyle(StageStyle.UNDECORATED);
+            modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setResizable(false);
             modalStage.setScene(new Scene(root));
             modalStage.show();
