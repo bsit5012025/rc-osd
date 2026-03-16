@@ -251,7 +251,7 @@ class RecordDaoImplTest
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt(1)).thenReturn(3);
 
-        int result = recordDao.findTodayViolations("2024-2025");
+        int result = recordDao.findTodayViolations();
 
         assertEquals(3, result);
 
