@@ -7,6 +7,7 @@ import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.disciplinaryStatus.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.Person;
 import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
@@ -16,9 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * DAO implementation for managing student records in the Office of Student Discipline System.
@@ -206,5 +205,148 @@ public class RecordDaoImpl implements RecordDao
             return false;
         }
     }
+    @Override
+    public List<Record> findRecordListByDepartment(Department department, String schoolYear) {
 
+        List<Record> records = new ArrayList<>();
+        try (Connection con = ConnectionHelper.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT " +
+                                "r.recordID, r.dateOfViolation, r.dateOfResolution, r.remarks, r.status, " +
+                                "e.enrollmentID, e.studentID, e.schoolYear, e.studentLevel, e.section, e.department, " +
+                                "sp.firstName, sp.middleName, sp.lastName, " +
+                                "o.offense, o.type, " +
+                                "emp.employeeID, ep.firstName AS empFirstName, ep.lastName AS empLastName, " +
+                                "da.action " +
+                                "FROM record r " +
+                                "JOIN enrollment e ON r.enrollmentID = e.enrollmentID " +
+                                "JOIN offense o ON r.offenseID = o.offenseID " +
+                                "JOIN disciplinaryAction da ON r.actionID = da.actionID " +
+                                "JOIN student s ON e.studentID = s.studentID " +
+                                "JOIN person sp ON s.personID = sp.personID " +
+                                "JOIN employee emp ON r.employeeID = emp.employeeID " +
+                                "JOIN person ep ON emp.personID = ep.personID " +
+                                "WHERE e.department = ? " +
+                                "AND e.schoolYear = ? " +
+                                "ORDER BY r.dateOfViolation DESC");
+
+                statement.setString(1, department.name());
+                statement.setString(2, schoolYear);
+                ResultSet rs = statement.executeQuery();
+
+                while (rs.next()) {
+                    Record record = new Record();
+                    record.setRecordId(rs.getLong("recordID"));
+                    record.setDateOfViolation(rs.getDate("dateOfViolation"));
+                    record.setDateOfResolution(rs.getDate("dateOfResolution"));
+                    record.setRemarks(rs.getString("remarks"));
+                    record.setStatus(RecordStatus.valueOf(rs.getString("status")));
+
+                    Student student = new Student();
+                    student.setStudentId(rs.getString("studentID"));
+                    student.setFirstName(rs.getString("firstName"));
+                    student.setMiddleName(rs.getString("middleName"));
+                    student.setLastName(rs.getString("lastName"));
+
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                    enrollment.setStudent(student);
+                    enrollment.setSchoolYear(rs.getString("schoolYear"));
+                    enrollment.setStudentLevel(rs.getString("studentLevel"));
+                    enrollment.setSection(rs.getString("section"));
+                    enrollment.setDepartment(Department.valueOf(rs.getString("department")));
+
+                    record.setEnrollment(enrollment);
+
+                    Offense offense = new Offense();
+                    offense.setOffense(rs.getString("offense"));
+                    offense.setType(rs.getString("type"));
+                    record.setOffense(offense);
+
+                    Employee employee = new Employee();
+                    employee.setEmployeeId(rs.getString("employeeID"));
+                    employee.setFirstName(rs.getString("empFirstName"));
+                    employee.setLastName(rs.getString("empLastName"));
+                    record.setEmployee(employee);
+
+                    DisciplinaryAction action = new DisciplinaryAction();
+                    action.setActionName(rs.getString("action"));
+                    record.setAction(action);
+
+                    records.add(record);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+        }
+        return records;
+    }
+    @Override
+    public int findTotalViolations() {
+
+        int total = 0;
+
+        try (Connection con = ConnectionHelper.getConnection())  {
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return total;
+    }
+    @Override
+    public int findTodayViolations() {
+
+        int total = 0;
+
+        try (Connection con = ConnectionHelper.getConnection()) {
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return total;
+    }
+    @Override
+    public Map<String, Integer> findMostFrequentOffenses() {
+
+        Map<String, Integer> offenses = new LinkedHashMap<>();
+
+        try (Connection con = ConnectionHelper.getConnection()) {
+
+            PreparedStatement stmt = con.prepareStatement(
+                    "SELECT o.offense, COUNT(*) AS total " +
+                            "FROM record r " +
+                            "JOIN offense o ON r.offenseID = o.offenseID " +
+                            "GROUP BY o.offense " +
+                            "ORDER BY total DESC"
+            );
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                offenses.put(rs.getString("offense"), rs.getInt("total")
+                );
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return offenses;
+    }
 }
