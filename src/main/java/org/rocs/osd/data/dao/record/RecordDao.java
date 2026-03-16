@@ -14,5 +14,8 @@ public interface RecordDao
                              long offenseID, Date dateOfViolation, long actionID,
                              String remarks, RecordStatus status);
     boolean updateRecord(Record record);
-    List<Record> findRecordListByDepartment(Department department);
+    List<Record> findRecordListByDepartment(Department department, String schoolYear);
+    int findTotalViolations();
+    int findTodayViolations();
+    List<Object[]> findMostFrequentOffenses();
 }

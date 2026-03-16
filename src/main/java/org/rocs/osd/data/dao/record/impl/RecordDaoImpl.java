@@ -208,7 +208,7 @@ public class RecordDaoImpl implements RecordDao
         }
     }
     @Override
-    public List<Record> findRecordListByDepartment(Department department) {
+    public List<Record> findRecordListByDepartment(Department department, String schoolYear) {
 
         List<Record> records = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection()) {
@@ -229,9 +229,11 @@ public class RecordDaoImpl implements RecordDao
                                 "JOIN employee emp ON r.employeeID = emp.employeeID " +
                                 "JOIN person ep ON emp.personID = ep.personID " +
                                 "WHERE e.department = ? " +
+                                "AND e.schoolYear = ? " +
                                 "ORDER BY r.dateOfViolation DESC");
 
                 statement.setString(1, department.name());
+                statement.setString(2, schoolYear);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
@@ -279,5 +281,71 @@ public class RecordDaoImpl implements RecordDao
                 throw new RuntimeException(e);
         }
         return records;
+    }
+    @Override
+    public int findTotalViolations() {
+
+        int total = 0;
+
+        try (Connection con = ConnectionHelper.getConnection())  {
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return total;
+    }
+    @Override
+    public int findTodayViolations() {
+
+        int total = 0;
+
+        try (Connection con = ConnectionHelper.getConnection()) {
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM record WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return total;
+    }
+    @Override
+    public List<Object[]> findMostFrequentOffenses() {
+
+        List<Object[]> list = new ArrayList<>();
+
+        try (Connection con = ConnectionHelper.getConnection()) {
+            PreparedStatement stmt = con.prepareStatement(
+                    "SELECT o.offense, COUNT(*) AS total " +
+                            "FROM record r " +
+                            "JOIN offense o ON r.offenseID = o.offenseID " +
+                            "GROUP BY o.offense " +
+                            "ORDER BY total DESC"
+            );
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Object[]{rs.getString("offense"), rs.getInt("total")});
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 }
