@@ -1,7 +1,7 @@
-package org.rocs.osd.data.dao.guardianNumber.impl;
+package org.rocs.osd.data.dao.guardian.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.guardianNumber.GuardianNumberDao;
+import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
 
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuardianNumberDaoImpl implements GuardianNumberDao {
+public class GuardianDaoImpl implements GuardianDao {
 
     @Override
     public List<Guardian> getGuardiansByStudentID(String studentID) {

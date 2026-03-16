@@ -1,4 +1,4 @@
-package org.rocs.osd.data.dao.guardianNumber.impl;
+package org.rocs.osd.data.dao.guardian.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
@@ -10,7 +10,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.guardianNumber.GuardianNumberDao;
+import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
 
 import java.sql.Connection;
@@ -74,7 +74,7 @@ class GuardianDaoImplTest {
                 .thenReturn("JHS-0001")
                 .thenReturn("JHS-0001");
 
-        GuardianNumberDao dao = new GuardianNumberDaoImpl();
+        GuardianDao dao = new GuardianDaoImpl();
 
         List<Guardian> guardians = dao.getGuardiansByStudentID("JHS-0001");
 
