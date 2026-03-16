@@ -35,8 +35,7 @@ public class RequestFacadeImpl implements RequestFacade
         }
     }
 
-    @Override
-    public boolean validateString(String s, int maxLength, boolean allowsNull)
+    private boolean validateString(String s, int maxLength, boolean allowsNull)
     {
         if(allowsNull)
             return (s != null && s.length() > maxLength)? false:true;

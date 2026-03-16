@@ -8,7 +8,6 @@ import java.util.List;
 public interface RequestFacade
 {
     boolean addRequest(String employeeID, String details, String message, String type);
-    boolean validateString(String s, int maxLength, boolean allowsNull);
     List<Request> getAllRequest();
     boolean updateRequestStatus(long requestID, RequestStatus status);
 }
