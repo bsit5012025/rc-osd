@@ -17,9 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * DAO implementation for managing student records in the Office of Student Discipline System.
@@ -324,11 +322,12 @@ public class RecordDaoImpl implements RecordDao
         return total;
     }
     @Override
-    public List<Object[]> findMostFrequentOffenses() {
+    public Map<String, Integer> findMostFrequentOffenses() {
 
-        List<Object[]> list = new ArrayList<>();
+        Map<String, Integer> offenses = new LinkedHashMap<>();
 
         try (Connection con = ConnectionHelper.getConnection()) {
+
             PreparedStatement stmt = con.prepareStatement(
                     "SELECT o.offense, COUNT(*) AS total " +
                             "FROM record r " +
@@ -340,12 +339,14 @@ public class RecordDaoImpl implements RecordDao
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                list.add(new Object[]{rs.getString("offense"), rs.getInt("total")});
+                offenses.put(rs.getString("offense"), rs.getInt("total")
+                );
             }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return list;
+
+        return offenses;
     }
 }

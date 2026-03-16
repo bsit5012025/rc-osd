@@ -20,6 +20,7 @@ import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -269,15 +270,11 @@ class RecordDaoImplTest
         when(resultSet.getInt("total"))
                 .thenReturn(5, 3);
 
-        List<Object[]> result = recordDao.findMostFrequentOffenses();
+        Map<String, Integer> result = recordDao.findMostFrequentOffenses();
 
         assertEquals(2, result.size());
-
-        assertEquals("Cheating", result.get(0)[0]);
-        assertEquals(5, result.get(0)[1]);
-
-        assertEquals("Punching", result.get(1)[0]);
-        assertEquals(3, result.get(1)[1]);
+        assertEquals(5, result.get("Cheating"));
+        assertEquals(3, result.get("Punching"));
 
         verify(preparedStatement).executeQuery();
     }

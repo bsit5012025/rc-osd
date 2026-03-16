@@ -6,6 +6,7 @@ import org.rocs.osd.model.record.RecordStatus;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface RecordDao
 {
@@ -17,5 +18,5 @@ public interface RecordDao
     List<Record> findRecordListByDepartment(Department department, String schoolYear);
     int findTotalViolations();
     int findTodayViolations();
-    List<Object[]> findMostFrequentOffenses();
+    Map<String, Integer> findMostFrequentOffenses();
 }
