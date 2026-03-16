@@ -19,25 +19,29 @@ public class RequestFacadeImpl implements RequestFacade
     @Override
     public boolean addRequest(String employeeID, String details, String message, String type)
     {
-        if(message != null && message.length() > 500)
-        {
-            return false;
-        }
-        if(details == null || details.trim().isEmpty() || details.length() > 100 )
-        {
-            return false;
-        }
-        if(type == null || type.trim().isEmpty() || type.length() > 100)
-        {
-            return false;
-        }
-        if(employeeID == null || employeeID.trim().isEmpty() || employeeID.length() > 10)
-        {
-            return false;
-        }
+        boolean status = validateString(employeeID,10,false) &&
+                validateString(details, 100, false) &&
+                validateString(message, 500, true) &&
+                validateString(type, 100, false );
 
-        requestDao.addRequest(employeeID, details, message, type);
-        return true;
+        if(status)
+        {
+            requestDao.addRequest(employeeID, details, message, type);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean validateString(String s, int maxLength, boolean allowsNull)
+    {
+        if(allowsNull)
+            return (s != null && s.length() > maxLength)? false:true;
+        else
+            return (s == null || s.isBlank() || s.isEmpty() || s.length() > maxLength)? false:true;
     }
 
     @Override
