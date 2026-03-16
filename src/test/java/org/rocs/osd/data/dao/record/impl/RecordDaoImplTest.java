@@ -177,26 +177,52 @@ class RecordDaoImplTest
         verify(preparedStatement).executeUpdate();
     }
     @Test
-    void testFindRecordListByDepartmentReturnListOfRecords() throws SQLException{
-        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
-        when(this.resultSet.next()).thenReturn(true, false);
-        when(this.resultSet.getLong("recordID")).thenReturn(1L);
-        when(this.resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2025-01-12"));
-        when(this.resultSet.getString("remarks")).thenReturn("Repeatedly late to class");
+    void testFindRecordListByDepartmentReturnListOfRecords() throws SQLException {
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, false);
 
-        RecordDaoImpl recordDaoImpl = new RecordDaoImpl();
+        when(resultSet.getLong("recordID")).thenReturn(1L);
+        when(resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2025-01-12"));
+        when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2025-01-20"));
+        when(resultSet.getString("remarks")).thenReturn("Repeatedly late to class");
+        when(resultSet.getString("status")).thenReturn("RESOLVED");
 
-        List<Record> records = recordDaoImpl.findRecordListByDepartment(Department.JHS);
+        when(resultSet.getLong("enrollmentID")).thenReturn(2L);
+        when(resultSet.getString("studentID")).thenReturn("JHS-0001");
+        when(resultSet.getString("schoolYear")).thenReturn("2025-2026");
+        when(resultSet.getString("studentLevel")).thenReturn("Grade-9");
+        when(resultSet.getString("section")).thenReturn("St. Anthony");
+        when(resultSet.getString("department")).thenReturn("JHS");
 
-        assertNotNull(records);
+        when(resultSet.getString("firstName")).thenReturn("Carl");
+        when(resultSet.getString("middleName")).thenReturn("D");
+        when(resultSet.getString("lastName")).thenReturn("Cain");
+
+        when(resultSet.getString("offense")).thenReturn("Tardiness");
+        when(resultSet.getString("type")).thenReturn("Major Offense");
+
+        when(resultSet.getString("employeeID")).thenReturn("EMP-002");
+        when(resultSet.getString("empFirstName")).thenReturn("Jun");
+        when(resultSet.getString("empLastName")).thenReturn("Cadorna");
+
+        when(resultSet.getString("action")).thenReturn("Probation");
+
+        RecordDaoImpl dao = new RecordDaoImpl();
+
+        List<Record> records = dao.findRecordListByDepartment(Department.JHS);
+
         assertEquals(1, records.size());
 
-        Record record = records.get(0);
+        Record record = records.getFirst();
 
         assertEquals(1L, record.getRecordId());
         assertEquals("Repeatedly late to class", record.getRemarks());
+        assertEquals(RecordStatus.RESOLVED, record.getStatus());
+        assertEquals("Tardiness", record.getOffense().getOffense());
+        assertEquals("EMP-002", record.getEmployee().getEmployeeId());
+        assertEquals("Probation", record.getAction().getActionName());
 
-        verify(this.preparedStatement).setString(1, Department.JHS.name());
-        verify(this.preparedStatement).executeQuery();
+        verify(preparedStatement).setString(1, Department.JHS.name());
+        verify(preparedStatement).executeQuery();
     }
 }
