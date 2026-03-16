@@ -171,6 +171,7 @@ ALTER TABLE record ADD CONSTRAINT CHK_RECORD_STATUS CHECK (status IN ('PENDING',
 ALTER TABLE employee ADD CONSTRAINT CHK_EMPLOYEE_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
 ALTER TABLE student ADD CONSTRAINT CHK_STUDENT_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
 ALTER TABLE enrollment ADD CONSTRAINT CHK_ENROLL_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
+ALTER TABLE guardian ADD CONSTRAINT CHK_GUARDIAN_RELATIONSHIP CHECK (relationship IN ('Father', 'Mother', 'Guardian'));
 
 -- TEST DATA
 INSERT INTO person ( lastName, firstName, middleName) VALUES ('Bayona', 'Wilrow', 'Reosa');
