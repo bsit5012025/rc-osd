@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -14,11 +15,16 @@ import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 class RecordFacadeImplTest
@@ -106,5 +112,57 @@ class RecordFacadeImplTest
 
         assertTrue(result);
         verify(recordDao).updateRecord(record);
+    }
+    @Test
+    void testGetMostFrequentOffense(){
+
+        Map<String, Integer> offenses = new LinkedHashMap<>();
+        offenses.put("Bullying", 10);
+        offenses.put("Vaping", 5);
+        offenses.put("Cheating", 5);
+
+        when(recordDao.findMostFrequentOffenses("2024-2025")).thenReturn(offenses);
+        when(recordDao.findTotalViolations("2024-2025")).thenReturn(20);
+
+        Map<String, Double> result = recordFacade.getMostFrequentOffense("2024-2025");
+
+        assertTrue(result.containsKey("Bullying"));
+        assertTrue(result.containsKey("Vaping"));
+        assertTrue(result.containsKey("Cheating"));
+        verify(recordDao).findMostFrequentOffenses("2024-2025");
+        verify(recordDao).findTotalViolations("2024-2025");
+    }
+    @Test
+    void testGetTodayViolations(){
+        when(recordDao.findTodayViolations()).thenReturn(7);
+
+        int result = recordFacade.getTodayViolations();
+
+        assertEquals(7, result);
+        verify(recordDao, times(1)).findTodayViolations();
+    }
+    @Test
+    void testGetTotalViolations(){
+        when(recordDao.findTotalViolations("2024-2025")).thenReturn(25);
+
+        int result = recordFacade.getTotalViolations("2024-2025");
+
+        assertEquals(25, result);
+
+        verify(recordDao).findTotalViolations("2024-2025");
+    }
+    @Test
+    void testGetViolationsByDepartment(){
+        Department department = Department.COLLEGE;
+
+        List<Record> records = new ArrayList<>();
+        records.add(new Record());
+        records.add(new Record());
+
+        when(recordDao.findRecordListByDepartment(department, "2024-2025")).thenReturn(records);
+        List<Record> result = recordFacade.getViolationsByDepartment(department, "2024-2025");
+
+        assertEquals(2, result.size());
+        verify(recordDao).findRecordListByDepartment(department, "2024-2025");
     }
 }
