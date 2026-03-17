@@ -86,6 +86,6 @@ class GuardianDaoImplTest {
 
         assertEquals(1L, g1.getGuardianID());
         assertEquals("09171234567", g1.getContactNumber());
-        assertEquals(Relationship.Father, g1.getRelationship());
+        assertEquals(Relationship.FATHER, g1.getRelationship());
     }
 }

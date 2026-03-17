@@ -41,7 +41,6 @@ public class GuardianDaoImpl implements GuardianDao {
                 guardian.setRelationship(
                         Relationship.valueOf(rs.getString("relationship"))
                 );
-                guardian.setStudentID(studentId);
 
                 guardians.add(guardian);
             }
