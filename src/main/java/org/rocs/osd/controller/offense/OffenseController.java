@@ -13,8 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.rocs.osd.model.enrollment.Enrollment;
-import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
@@ -61,10 +59,15 @@ public class OffenseController {
         }
     }
 
-    public void onLoadEditOffenseModal()
+    public void onLoadEditOffenseModal(Record record)
     {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/offense/editOffenseModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/offense/editOffenseModal.fxml"));
+            Parent root = loader.load();
+
+            EditOffenseModalController editOffenseModalController = loader.getController();
+            editOffenseModalController.setRecordData(record);
+
             Stage modalStage = new Stage();
             modalStage.initStyle(StageStyle.UNDECORATED);
             modalStage.initModality(Modality.APPLICATION_MODAL);
@@ -125,12 +128,11 @@ public class OffenseController {
     private void selectStudentRecord()
     {
         violationsTable.setOnMouseClicked(event -> {
-                Record selected = violationsTable.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    onLoadEditOffenseModal();
+                Record record = violationsTable.getSelectionModel().getSelectedItem();
+                if (record != null) {
+                    onLoadEditOffenseModal(record);
                 }
         });
-
     }
 
     @FXML

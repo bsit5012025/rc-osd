@@ -1,10 +1,33 @@
 package org.rocs.osd.controller.offense;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
+import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
+import org.rocs.osd.data.dao.offense.OffenseDao;
+import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
+import org.rocs.osd.data.dao.record.RecordDao;
+import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
+import org.rocs.osd.data.dao.student.StudendDao;
+import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
+import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.record.Record;
+import org.rocs.osd.model.person.student.Student;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class EditOffenseModalController
 {
@@ -15,15 +38,99 @@ public class EditOffenseModalController
     @FXML private DatePicker datePicker;
     @FXML private TextField remarksTextArea;
 
+    private StudendDao studentDao;
+    private OffenseDao offenseDao;
+    private RecordFacade recordFacade;
+    private DisciplinaryActionDao disciplinaryActionDao;
+    private EnrollmentDao enrollmentDao;
+    private Record record;
+
     public void initialize()
     {
+        offenseDao = new OffenseDaoImpl();
+        studentDao = new StudentDaoImpl();
+        RecordDao dao = new RecordDaoImpl();
+        disciplinaryActionDao = new DisciplinaryActionImpl();
+        recordFacade = new RecordFacadeImpl(dao);
+        enrollmentDao = new EnrollmentDaoImpl();
 
+        loadComboBoxData();
+        autoSelectLevelOfOffense();
+        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+    }
+
+    public void setRecordData(Record record)
+    {
+        studentIdTextField.setText(
+                record.getEnrollment().getStudent().getStudentId()
+        );
+
+        studentNameTextField.setText(
+                        record.getEnrollment().getStudent().getFirstName() + " " +
+                        record.getEnrollment().getStudent().getMiddleName() + " " +
+                        record.getEnrollment().getStudent().getLastName()
+        );
+
+        datePicker.setValue(LocalDate.parse(String.valueOf(record.getDateOfViolation())));
+        offenseTypeComboBox.setValue(record.getOffense().getOffense());
+        levelOfOffenseComboBox.setValue(record.getOffense().getType());
+        remarksTextArea.setText(record.getRemarks());
+    }
+
+    private void loadComboBoxData(){
+
+        try {
+            ObservableList<String> offenseList = FXCollections.observableArrayList(offenseDao.findAllOffenseName());
+            ObservableList<String> actionList = FXCollections.observableArrayList(disciplinaryActionDao.findAllAction());
+            offenseTypeComboBox.setItems(offenseList);
+        } catch (Exception e) {
+            System.err.println("Database Error: Could not fetch offense names from the database.");
+        }
+    }
+
+    private void autoSelectLevelOfOffense() {
+
+        offenseTypeComboBox.setOnAction(event -> {
+
+            String selected = offenseTypeComboBox.getValue();
+
+            if (selected != null) {
+
+                Offense offense = offenseDao.findByName(selected);
+
+                if (offense != null) {
+                    levelOfOffenseComboBox.setValue(offense.getType());
+                }
+            }
+        });
     }
 
     @FXML
-    private void onCancel()
-    {
+    private void autoDisplayStudentName() {
 
+        String studentId = studentIdTextField.getText();
+
+        if (studentId.isEmpty()) return;
+
+        Student student = studentDao.findStudentWithRecordById(studentId);
+
+        if (student.getStudentId() != null) {
+            String fullName = student.getFirstName() + " " +
+                    student.getMiddleName() + " " +
+                    student.getLastName();
+
+            studentNameTextField.setText(fullName);
+        } else {
+            studentNameTextField.clear();
+            System.out.println("STUDENT NOT FOUND!");
+        }
+    }
+
+    @FXML
+    private void onCancel(ActionEvent event)
+    {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     @FXML
