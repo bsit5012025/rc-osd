@@ -7,4 +7,5 @@ import java.util.List;
 public interface EnrollmentDao {
     long findEnrollmentIdByStudentId(String studentId);
     List<Enrollment> findEnrollmentsByStudentId(String studentId);
+    List<Enrollment> findAllLatestEnrollments();
 }

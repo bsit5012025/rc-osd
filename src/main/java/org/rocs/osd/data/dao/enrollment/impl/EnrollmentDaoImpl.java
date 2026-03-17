@@ -82,4 +82,47 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         }
         return -1;
     }
+    public List<Enrollment> findAllLatestEnrollments() {
+        List<Enrollment> studentList = new ArrayList<>();
+
+        try (Connection conn = ConnectionHelper.getConnection()) {
+
+            PreparedStatement statement = conn.prepareStatement(
+                    "SELECT e.enrollmentID, e.studentID, e.studentLevel, e.section, e.department, " +
+                            "s.personID, s.address, " +
+                            "p.firstName, p.lastName, p.middleName " +
+                            "FROM enrollment e " +
+                            "JOIN student s ON e.studentID = s.studentID " +
+                            "JOIN person p ON s.personID = p.personID " +
+                            "WHERE e.schoolYear = (SELECT MAX(e2.schoolYear) FROM enrollment e2 WHERE e2.studentID = e.studentID )");
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                Enrollment enrollment = new Enrollment();
+                Student student = new Student();
+
+                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                enrollment.setStudentLevel(rs.getString("studentLevel"));
+                enrollment.setSection(rs.getString("section"));
+                enrollment.setDepartment(Department.valueOf(rs.getString("department")));
+
+                student.setStudentId(rs.getString("studentID"));
+                student.setPersonID(rs.getLong("personID"));
+                student.setAddress(rs.getString("address"));
+
+                student.setFirstName(rs.getString("firstName"));
+                student.setLastName(rs.getString("lastName"));
+                student.setMiddleName(rs.getString("middleName"));
+
+                enrollment.setStudent(student);
+                studentList.add(enrollment);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
 }
