@@ -2,6 +2,7 @@ package org.rocs.osd.facade.record.impl;
 
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -10,6 +11,9 @@ import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Facade implementation for managing student records in the Office of Student Discipline System.
@@ -102,6 +106,46 @@ public class RecordFacadeImpl implements RecordFacade
         record.setDateOfResolution(new Date());
         return recordDao.updateRecord(record);
     }
+    @Override
+    public Map<String, Double> getMostFrequentOffense(String schoolYear) {
 
+        Map<String, Integer> offenses = recordDao.findMostFrequentOffenses(schoolYear);
+        int totalViolations = recordDao.findTotalViolations(schoolYear);
+
+        Map<String, Double> result = new LinkedHashMap<>();
+
+        if (totalViolations == 0) {
+            return result;
+        }
+
+        int count = 0;
+
+        for (Map.Entry<String, Integer> entry : offenses.entrySet()) {
+
+            if (count == 5)
+                break;
+
+            String offense = entry.getKey();
+            int offenseCount = entry.getValue();
+            double percentage = (offenseCount * 100.0) / totalViolations;
+            result.put(offense, percentage);
+            count++;
+        }
+
+        return result;
+    }
+    @Override
+    public int getTodayViolations() {
+        return recordDao.findTodayViolations();
+    }
+
+    @Override
+    public int getTotalViolations(String schoolYear) {
+        return recordDao.findTotalViolations(schoolYear);
+    }
+    @Override
+    public List<Record> getViolationsByDepartment(Department department, String schoolYear) {
+        return recordDao.findRecordListByDepartment(department, schoolYear);
+    }
 
 }
