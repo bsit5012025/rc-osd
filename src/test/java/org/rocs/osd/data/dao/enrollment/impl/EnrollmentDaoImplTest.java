@@ -89,7 +89,6 @@ class EnrollmentDaoImplTest {
         when(this.resultSet.getString("section")).thenReturn("St. Hannibal", "St. Anthony");
         when(this.resultSet.getString("departmentID")).thenReturn("JHS", "JHS");
 
-        // Student fields
         when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0002");
         when(this.resultSet.getLong("personID")).thenReturn(1L, 2L);
         when(this.resultSet.getString("address")).thenReturn("Address1", "Address2");
