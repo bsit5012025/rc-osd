@@ -89,12 +89,12 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
             PreparedStatement statement = conn.prepareStatement(
                     "SELECT e.enrollmentID, e.studentID, e.studentLevel, e.section, e.department, " +
-                            "s.personID, s.address, " +
-                            "p.firstName, p.lastName, p.middleName " +
-                            "FROM enrollment e " +
-                            "JOIN student s ON e.studentID = s.studentID " +
-                            "JOIN person p ON s.personID = p.personID " +
-                            "WHERE e.schoolYear = (SELECT MAX(e2.schoolYear) FROM enrollment e2 WHERE e2.studentID = e.studentID )");
+                        "s.personID, s.address, " +
+                        "p.firstName, p.lastName, p.middleName " +
+                        "FROM enrollment e " +
+                        "JOIN student s ON e.studentID = s.studentID " +
+                        "JOIN person p ON s.personID = p.personID " +
+                        "WHERE e.schoolYear = (SELECT MAX(e2.schoolYear) FROM enrollment e2 WHERE e2.studentID = e.studentID )");
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
