@@ -72,8 +72,8 @@ class GuardianDaoImplTest {
                 .thenReturn("09181234567");
 
         when(resultSet.getString("relationship"))
-                .thenReturn("Father")
-                .thenReturn("Mother");
+                .thenReturn("FATHER")
+                .thenReturn("MOTHER");
 
         GuardianDao guardianDao = new GuardianDaoImpl();
 
