@@ -1,55 +1,52 @@
 .rootContainer {
-    -fx-background-color: #F8F9FB;
-    -fx-padding: 30;
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 25;
 }
 
 .mainWrapper {
-    -fx-alignment: TOP_CENTER;
-    -fx-spacing: 20;
+    -fx-spacing: 15;
 }
 
 .listContainer {
     -fx-background-color: transparent;
-    -fx-padding: 10 20 20 10;
-    -fx-spacing: 25;
+    -fx-spacing: 5;
+    -fx-padding: 5;
 }
 
 .requestCard {
     -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-padding: 25;
-    -fx-spacing: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);
-}
-
-.cardHeader {
-    -fx-alignment: CENTER_LEFT;
-}
-
-.infoSection {
+    -fx-border-color: #DCDCDC;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 10 15;
     -fx-spacing: 5;
 }
 
+.infoSection {
+    -fx-spacing: 4;
+}
+
 .labelRow {
-    -fx-spacing: 8;
+    -fx-spacing: 5;
+    -fx-alignment: CENTER_LEFT;
 }
 
 .expandedSection {
-    -fx-spacing: 8;
-    -fx-padding: 10 0 0 0;
+    -fx-spacing: 4;
+    -fx-padding: 0;
 }
 
 .actionBarContainer {
-    -fx-alignment: CENTER_RIGHT;
-    -fx-padding: 5 0 0 0;
+    -fx-padding: -25 0 0 0;
 }
 
 .actionBar {
-    -fx-spacing: 12;
+    -fx-spacing: 8;
 }
 
 .headerText {
-    -fx-font-size: 26px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
@@ -62,13 +59,43 @@
 
 .dataLabel {
     -fx-font-size: 15px;
-    -fx-text-fill: #666666;
+    -fx-text-fill: #333333;
 }
 
 .reasonText {
-    -fx-font-size: 14px;
-    -fx-text-fill: #555555;
-    -fx-padding: 5 0 10 0;
+    -fx-font-size: 15px;
+    -fx-text-fill: black;
+}
+
+.approveButton {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 12;
+    -fx-cursor: hand;
+
+}
+
+.approveButton:hover {
+    -fx-background-color: blue;
+}
+
+.denyButton {
+    -fx-background-color: white;
+    -fx-border-color: navy;
+    -fx-border-radius: 5;
+    -fx-text-fill: navy;
+    -fx-background-radius: 5;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 12;
+    -fx-cursor: hand;
+}
+
+.denyButton:hover {
+    -fx-background-color: #f2f2f2 ;
 }
 
 .arrowButton {
@@ -77,38 +104,9 @@
     -fx-cursor: hand;
 }
 
-.approveButton {
-    -fx-background-color: #000080;
-    -fx-text-fill: white;
-    -fx-background-radius: 6;
-    -fx-font-weight: bold;
-    -fx-padding: 8 25;
-    -fx-cursor: hand;
-}
-
-.approveButton:hover {
-    -fx-background-color: #0000FF;
-}
-
-.denyButton {
-    -fx-background-color: white;
-    -fx-border-color: #000080;
-    -fx-border-radius: 6;
-    -fx-text-fill: #000080;
-    -fx-background-radius: 6;
-    -fx-font-weight: bold;
-    -fx-padding: 8 25;
-    -fx-cursor: hand;
-}
-
-.denyButton:hover {
-    -fx-background-color: #F8F9FA;
-}
-
 .requestsScrollPane {
     -fx-background-color: transparent;
     -fx-background: transparent;
-    -fx-max-width: 1200;
 }
 
 .requestsScrollPane .viewport {
