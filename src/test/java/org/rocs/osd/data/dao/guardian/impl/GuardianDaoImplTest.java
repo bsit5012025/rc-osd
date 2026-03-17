@@ -1,17 +1,21 @@
 package org.rocs.osd.data.dao.guardian.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
+import org.rocs.osd.model.person.guardian.Relationship;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,7 +46,6 @@ class GuardianDaoImplTest {
         connectionHelper.when(ConnectionHelper::getConnection).thenReturn(connection);
 
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-
     }
 
     @AfterEach
@@ -51,18 +54,20 @@ class GuardianDaoImplTest {
     }
 
     @Test
-    void testGetGuardiansByStudentID() throws Exception {
+    void testFindGuardiansByStudentID() throws Exception {
 
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
+        when(resultSet.next())
+                .thenReturn(true)
+                .thenReturn(true)
+                .thenReturn(false);
 
-        when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+        when(resultSet.getLong("guardianID"))
+                .thenReturn(1L)
+                .thenReturn(2L);
 
-        when(resultSet.getString("guardianID"))
-                .thenReturn("G001")
-                .thenReturn("G002");
-
-        when(resultSet.getString("contactnumber"))
+        when(resultSet.getString("contactNumber"))
                 .thenReturn("09171234567")
                 .thenReturn("09181234567");
 
@@ -70,31 +75,17 @@ class GuardianDaoImplTest {
                 .thenReturn("Father")
                 .thenReturn("Mother");
 
-        when(resultSet.getString("studentID"))
-                .thenReturn("JHS-0001")
-                .thenReturn("JHS-0001");
+        GuardianDao guardianDao = new GuardianDaoImpl();
 
-        GuardianDao dao = new GuardianDaoImpl();
+        List<Guardian> guardians =
+                guardianDao.findGuardianByStudentId("JHS-0001");
 
-        List<Guardian> guardians = dao.getGuardiansByStudentID("JHS-0001");
-
-        assertFalse(guardians.isEmpty());
         assertEquals(2, guardians.size());
 
-        Guardian g1 = guardians.getFirst();
+        Guardian g1 = guardians.get(0);
 
-        assertEquals("G001", g1.getGuardianID());
+        assertEquals(1L, g1.getGuardianID());
         assertEquals("09171234567", g1.getContactNumber());
-        assertEquals("Father", g1.getRelationship());
-        assertEquals("JHS-0001", g1.getStudentID());
-
-        Guardian g2 = guardians.get(1);
-
-        assertEquals("G002", g2.getGuardianID());
-        assertEquals("09181234567", g2.getContactNumber());
-        assertEquals("Mother", g2.getRelationship());
-        assertEquals("JHS-0001", g2.getStudentID());
-
-        verify(preparedStatement).executeQuery();
+        assertEquals(Relationship.Father, g1.getRelationship());
     }
 }

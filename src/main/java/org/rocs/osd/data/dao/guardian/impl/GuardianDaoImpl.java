@@ -3,6 +3,7 @@ package org.rocs.osd.data.dao.guardian.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
+import org.rocs.osd.model.person.guardian.Relationship;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,39 +14,43 @@ import java.util.List;
 
 public class GuardianDaoImpl implements GuardianDao {
 
-    @Override
-    public List<Guardian> getGuardiansByStudentID(String studentID) {
+    public List<Guardian> findGuardianByStudentId(String studentId) {
 
-        List<Guardian> guardianList = new ArrayList<>();
+        List<Guardian> guardians = new ArrayList<>();
 
-        String sql = "SELECT guardianID, contactNumber, relationship, studentID FROM guardian WHERE studentID = ?";
+        String sql = """
+                SELECT g.*
+                FROM guardian g
+                JOIN studentGuardian sg ON g.guardianID = sg.guardianID
+                WHERE sg.studentID = ?
+            """;
 
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, studentID);
+            ps.setString(1, studentId);
 
-            try (ResultSet rs = stmt.executeQuery()) {
+            ResultSet rs = ps.executeQuery();
 
-                while (rs.next()) {
+            while (rs.next()) {
 
-                    Guardian guardian = new Guardian();
+                Guardian guardian = new Guardian();
 
-                    guardian.setGuardianID(rs.getString("guardianID"));
-                    guardian.setContactNumber(rs.getString("contactnumber"));
-                    guardian.setRelationship(rs.getString("relationship"));
-                    guardian.setStudentID(rs.getString("studentID"));
+                guardian.setGuardianID(rs.getLong("guardianID"));
+                guardian.setContactNumber(rs.getString("contactNumber"));
+                guardian.setRelationship(
+                        Relationship.valueOf(rs.getString("relationship"))
+                );
+                guardian.setStudentID(studentId);
 
-                    guardianList.add(guardian);
-                }
-
+                guardians.add(guardian);
             }
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception (getGuardiansByStudentID): " + e.getMessage());
+            System.out.println("SQL Exception: " + e.getMessage());
         }
 
-        return guardianList;
+        return guardians;
     }
 }
 

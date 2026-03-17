@@ -3,26 +3,26 @@ package org.rocs.osd.model.person.guardian;
 import org.rocs.osd.model.person.Person;
 
 public class Guardian extends Person {
-    private String guardianID;
+    private long guardianID;
     private String contactNumber;
-    private String relationship;
+    private Relationship relationship;
     private String studentID;
 
     public Guardian() {
 
     }
-    public Guardian(String guardianID, String contactNumber, String relationship, String studentID) {
+    public Guardian(long guardianID, String contactNumber, Relationship relationship, String studentID) {
         this.guardianID = guardianID;
         this.contactNumber = contactNumber;
         this.relationship = relationship;
         this.studentID = studentID;
     }
 
-    public String getGuardianID() {
+    public long getGuardianID() {
         return guardianID;
     }
 
-    public void setGuardianID(String guardianID) {
+    public void setGuardianID(long guardianID) {
         this.guardianID = guardianID;
     }
 
@@ -34,11 +34,11 @@ public class Guardian extends Person {
         this.contactNumber = contactNumber;
     }
 
-    public String getRelationship() {
+    public Relationship getRelationship() {
         return relationship;
     }
 
-    public void setRelationship(String relationship) {
+    public void setRelationship(Relationship relationship) {
         this.relationship = relationship;
     }
 
