@@ -19,6 +19,7 @@ DROP TABLE record CASCADE CONSTRAINTS;
 DROP TABLE appeal CASCADE CONSTRAINTS;
 DROP TABLE request CASCADE CONSTRAINTS;
 DROP TABLE guardian CASCADE CONSTRAINTS;
+DROP TABLE studentGuardian CASCADE CONSTRAINTS;
 
 -- PERSON ENTITY
 CREATE TABLE person(
@@ -148,8 +149,13 @@ CREATE TABLE guardian (
    personID number(20,0),
    contactNumber VARCHAR2(20),
    relationship VARCHAR2(50),
-   studentID VARCHAR2(10),
    primary key (guardianID)
+);
+
+CREATE TABLE studentGuardian (
+   studentID VARCHAR2(10),
+   guardianID NUMBER(20,0),
+   primary key (studentID, guardianID)
 );
 
 -- CONSTRAINTS
@@ -166,7 +172,8 @@ ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_RECORD FOREIGN KEY (recordID) REFERE
 ALTER TABLE appeal ADD CONSTRAINT FK_APPEAL_ENROLLMENT FOREIGN KEY (enrollmentID) REFERENCES enrollment(enrollmentID);
 ALTER TABLE request ADD CONSTRAINT FK_REQUEST_EMPLOYEE FOREIGN KEY (employeeID) REFERENCES employee(employeeID);
 ALTER TABLE guardian ADD CONSTRAINT FK_GUARDIAN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
-ALTER TABLE guardian ADD CONSTRAINT FK_GUARDIAN_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
+ALTER TABLE studentGuardian ADD CONSTRAINT FK_SG_STUDENT FOREIGN KEY (studentID) REFERENCES student(studentID);
+ALTER TABLE studentGuardian ADD CONSTRAINT FK_SG_GUARDIAN FOREIGN KEY (guardianID) REFERENCES guardian(guardianID);
 ALTER TABLE record ADD CONSTRAINT CHK_RECORD_STATUS CHECK (status IN ('PENDING', 'RESOLVED', 'APPEALED'));
 ALTER TABLE employee ADD CONSTRAINT CHK_EMPLOYEE_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
 ALTER TABLE student ADD CONSTRAINT CHK_STUDENT_DEPT CHECK (department IN ('JHS', 'SHS', 'COLLEGE'));
@@ -259,9 +266,14 @@ INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-00
 INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-001', 'Grade 10', 'By Batch', 'Requesting for the conduct record of the graduating class of 2025-2026', 'PENDING');
 INSERT INTO request (employeeID, details, type, message, status) VALUES ('EMP-001', 'St. Raphael', 'By Section', 'Requesting for the conduct record of all students in St. Raphael', 'DENIED');
 
-INSERT INTO guardian (personID, contactNumber, relationship, studentID) VALUES (15, '09171234567', 'Father', 'JHS-0001');
-INSERT INTO guardian (personID, contactNumber, relationship, studentID) VALUES (16, '09181234567', 'Mother', 'JHS-0001');
-INSERT INTO guardian (personID, contactNumber, relationship, studentID) VALUES (17, '09201234567', 'Mother', 'CT23-0001');
-INSERT INTO guardian (personID, contactNumber, relationship, studentID) VALUES (18, '09211234567', 'Father', 'CT23-0001');
+INSERT INTO guardian (personID, contactNumber, relationship) VALUES (15, '09171234567', 'Father');
+INSERT INTO guardian (personID, contactNumber, relationship) VALUES (16, '09181234567', 'Mother');
+INSERT INTO guardian (personID, contactNumber, relationship) VALUES (17, '09201234567', 'Mother');
+INSERT INTO guardian (personID, contactNumber, relationship) VALUES (18, '09211234567', 'Father');
+
+INSERT INTO studentGuardian VALUES ('JHS-0001', 1);
+INSERT INTO studentGuardian VALUES ('JHS-0001', 2);
+INSERT INTO studentGuardian VALUES ('CT23-0001', 3);
+INSERT INTO studentGuardian VALUES ('CT23-0001', 4);
 
 COMMIT;
