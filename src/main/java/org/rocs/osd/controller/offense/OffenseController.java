@@ -13,6 +13,8 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
@@ -58,11 +60,32 @@ public class OffenseController {
             System.err.println("Unexpected Error while opening modal: " + e.getMessage());
         }
     }
+
+    public void onLoadEditOffenseModal()
+    {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/offense/editOffenseModal.fxml"));
+            Stage modalStage = new Stage();
+            modalStage.initStyle(StageStyle.UNDECORATED);
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setResizable(false);
+            modalStage.setScene(new Scene(root));
+            modalStage.show();
+
+        } catch (IOException e) {
+            System.err.println("UI Error: Could not find or load editOffenseModal.fxml. Check the file path and Controller names.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected Error while opening modal: " + e.getMessage());
+        }
+    }
+
     @FXML
     public void initialize() {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
 
         loadDataToTable();
+        selectStudentRecord();
         loadRecordsOfViolation(Department.JHS);
     }
 
@@ -97,6 +120,17 @@ public class OffenseController {
             currentSchoolYear = (year - 1) + "-" + year;
         }
         violationsTable.setItems(FXCollections.observableArrayList(recordFacade.getViolationsByDepartment(department, currentSchoolYear)));
+    }
+
+    private void selectStudentRecord()
+    {
+        violationsTable.setOnMouseClicked(event -> {
+                Record selected = violationsTable.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    onLoadEditOffenseModal();
+                }
+        });
+
     }
 
     @FXML
