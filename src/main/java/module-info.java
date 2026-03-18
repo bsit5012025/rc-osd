@@ -9,6 +9,7 @@ module org.rocs.osd {
     opens org.rocs.osd.controller.offense to javafx.fxml;
     opens org.rocs.osd.controller.appeal to javafx.fxml;
     opens org.rocs.osd.controller.student to javafx.fxml;
+    opens org.rocs.osd.controller.request to javafx.fxml;
 
     exports org.rocs.osd;
 }
