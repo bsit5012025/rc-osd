@@ -10,7 +10,7 @@ public class Guardian extends Person {
     public Guardian() {
 
     }
-    public Guardian(long guardianID, String contactNumber, Relationship relationship, String studentID) {
+    public Guardian(long guardianID, String contactNumber, Relationship relationship) {
         this.guardianID = guardianID;
         this.contactNumber = contactNumber;
         this.relationship = relationship;
