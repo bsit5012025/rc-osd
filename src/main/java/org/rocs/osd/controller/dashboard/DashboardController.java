@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Objects;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Labeled;
+import org.rocs.osd.controller.request.RequestCardController;
 
 
 /**
@@ -40,6 +41,39 @@ public class DashboardController {
 
     @FXML
     private boolean sidebarCollapsed = false;
+
+    @FXML
+    private VBox listContainer;
+
+    @FXML
+    public void initialize() {
+        if (listContainer != null) {
+            loadRequestData();
+        }
+    }
+
+    private void loadRequestData() {
+        if (listContainer == null) return;
+        listContainer.getChildren().clear();
+        addRequestCard("Junior High School", "John Doe", "Individual", "Penge records ni bogart para matransfer na sha.");
+        addRequestCard("College", "Jane Smith", "Section", "Penge records ng IT601 para sa good moral pls");
+        addRequestCard("College", "Leeane Reyes", "Batch", "Penge lang, gusto kolang.");
+    }
+
+    private void addRequestCard(String dept, String name, String type, String reason) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/request/RequestCard.fxml"));
+            VBox card = loader.load();
+            RequestCardController controller = loader.getController();
+            if (controller != null) {
+                controller.setData(dept, name, type, reason);
+                listContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading Request Tab");
+            e.printStackTrace();
+        }
+    }
     /**
      * Opens the logout confirmation dialog when the logout button is clicked.
      * This dialog asks the user to confirm whether they want to exit the system or remain logged in.
