@@ -17,7 +17,7 @@ public interface RecordFacade
     boolean createStudentRecord(long enrollmentID, String employeeID,
                                 long offenseID, Date dateOfViolation, long  actionID,
                                 String remarks);
-    boolean updateStudentRecord(Enrollment enrollment, Employee employee, Offense offense,
+    boolean updateStudentRecord(Long recordID, Enrollment enrollment, Employee employee, Offense offense,
                                 Date dateOfViolation, DisciplinaryAction action,
                                 String remarks, RecordStatus status);
     boolean resolveRecord(Record record);

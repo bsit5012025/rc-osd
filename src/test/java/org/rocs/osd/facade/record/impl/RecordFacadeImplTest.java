@@ -93,7 +93,7 @@ class RecordFacadeImplTest
         DisciplinaryAction action = new DisciplinaryAction();
         action.setActionId(Long.valueOf(1));
 
-        boolean result = recordFacade.updateStudentRecord(enrollment,
+        boolean result = recordFacade.updateStudentRecord(1L, enrollment,
                 employee, offense,  Date.valueOf("2024-09-15"),
                 action, "Student caught vaping in school",
                 RecordStatus.PENDING);

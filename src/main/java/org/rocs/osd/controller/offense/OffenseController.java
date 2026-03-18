@@ -87,9 +87,16 @@ public class OffenseController {
     public void initialize() {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
 
+        violationsTable.getItems().clear();
         loadDataToTable();
         selectStudentRecord();
         loadRecordsOfViolation(Department.JHS);
+    }
+
+    private void refreshTableView()
+    {
+        violationsTable.getItems().clear();
+        loadDataToTable();
     }
 
     private void loadDataToTable() {

@@ -21,10 +21,13 @@ import org.rocs.osd.data.dao.student.StudendDao;
 import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
+import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.record.RecordStatus;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -42,7 +45,6 @@ public class EditOffenseModalController
     private OffenseDao offenseDao;
     private RecordFacade recordFacade;
     private DisciplinaryActionDao disciplinaryActionDao;
-    private EnrollmentDao enrollmentDao;
     private Record record;
 
     public void initialize()
@@ -52,7 +54,6 @@ public class EditOffenseModalController
         RecordDao dao = new RecordDaoImpl();
         disciplinaryActionDao = new DisciplinaryActionImpl();
         recordFacade = new RecordFacadeImpl(dao);
-        enrollmentDao = new EnrollmentDaoImpl();
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
@@ -61,12 +62,19 @@ public class EditOffenseModalController
 
     public void setRecordData(Record record)
     {
+        this.record = record;
+        System.out.println(record.getDateOfResolution());
+        loadStudentRecordInfo();
+    }
+
+    private void loadStudentRecordInfo()
+    {
         studentIdTextField.setText(
                 record.getEnrollment().getStudent().getStudentId()
         );
 
         studentNameTextField.setText(
-                        record.getEnrollment().getStudent().getFirstName() + " " +
+                record.getEnrollment().getStudent().getFirstName() + " " +
                         record.getEnrollment().getStudent().getMiddleName() + " " +
                         record.getEnrollment().getStudent().getLastName()
         );
@@ -134,8 +142,62 @@ public class EditOffenseModalController
     }
 
     @FXML
-    private void onSubmit()
+    private void onSubmit(ActionEvent event)
     {
+        try
+        {
+            String studentId = studentIdTextField.getText();
+            String studentName = studentNameTextField.getText();
+            String offenseName = offenseTypeComboBox.getValue();
+            String offenseType = levelOfOffenseComboBox.getValue();
+            String remarks = remarksTextArea.getText();
+
+            if(studentId.isEmpty() || studentName.isEmpty() || offenseType == null || datePicker.getValue() == null)
+            {
+                System.out.println("Fill out missing fields!");
+                return;
+            }
+
+            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+
+            record.getEnrollment().getStudent().setStudentId(studentId);
+            Student student = studentDao.findStudentWithRecordById(studentId);
+
+            record.getEnrollment().getStudent().setFirstName(student.getFirstName());
+            record.getEnrollment().getStudent().setMiddleName(student.getMiddleName());
+            record.getEnrollment().getStudent().setLastName(student.getLastName());
+
+            long actionId = disciplinaryActionDao.findActionIdByName(record.getAction().getActionName());
+            record.getAction().setActionId(actionId);
+
+            Offense offenseObj = offenseDao.findByName(offenseName);
+            record.setOffense(offenseObj);
+
+            record.setRemarks(remarks);
+            record.setDateOfViolation(dateOfViolation);
+            record.setStatus(RecordStatus.PENDING);
+
+            boolean status = recordFacade.updateStudentRecord(
+                    record.getRecordId(),
+                    record.getEnrollment(),
+                    record.getEmployee(),
+                    record.getOffense(),
+                    record.getDateOfViolation(),
+                    record.getAction(),
+                    record.getRemarks(),
+                    record.getStatus()
+                    );
+
+            if(status){
+                System.out.println("Violation Updated!");
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

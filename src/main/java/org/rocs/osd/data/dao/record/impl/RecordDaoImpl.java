@@ -188,11 +188,38 @@ public class RecordDaoImpl implements RecordDao
                             "remarks = ?, " +
                             "status = ? " +
                             "WHERE recordID = ?");
+
+            System.out.println("===== DEBUG UPDATE RECORD =====");
+
+            System.out.println("Enrollment ID: " + record.getEnrollment().getEnrollmentId());
+            System.out.println("Employee ID: " + record.getEmployee().getEmployeeId());
+            System.out.println("Offense ID: " + record.getOffense().getOffenseId());
+
+            System.out.println("Date of Violation: " + record.getDateOfViolation());
+
+            if (record.getDateOfResolution() != null) {
+                System.out.println("Date of Resolution: " + record.getDateOfResolution());
+            } else {
+                System.out.println("Date of Resolution: NULL");
+            }
+
+            System.out.println("Action ID: " + record.getAction().getActionId());
+            System.out.println("Remarks: " + record.getRemarks());
+            System.out.println("Status: " + record.getStatus());
+            System.out.println("Record ID (WHERE): " + record.getRecordId());
+
+            System.out.println("================================");
+
             stmt.setLong(1, record.getEnrollment().getEnrollmentId());
             stmt.setString(2, record.getEmployee().getEmployeeId());
             stmt.setLong(3, record.getOffense().getOffenseId());
             stmt.setDate(4, new java.sql.Date(record.getDateOfViolation().getTime()));
-            stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+
+            if (record.getDateOfResolution() != null)
+                stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+            else
+                stmt.setNull(5, java.sql.Types.DATE);
+
             stmt.setLong(6, record.getAction().getActionId());
             stmt.setString(7, record.getRemarks());
             stmt.setString(8, String.valueOf(record.getStatus()));
