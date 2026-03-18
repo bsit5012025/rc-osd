@@ -185,8 +185,6 @@ public class EditOffenseModalController
 
             Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
 
-            Student student = studentDao.findStudentWithRecordById(studentId);
-            record.getEnrollment().setStudent(student);
             long enrollmentID = enrollmentDao.findEnrollmentIdByStudentId(studentId);
             record.getEnrollment().setEnrollmentId(enrollmentID);
 
