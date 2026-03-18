@@ -11,11 +11,15 @@ import org.rocs.osd.model.enrollment.Enrollment;
 
 public class StudentController {
     @FXML
-    TableView<Enrollment> studentTable;
-    @FXML private TableColumn<Enrollment, String> studentIdColumn;
-    @FXML private TableColumn<Enrollment, String> studentNameColumn;
-    @FXML private TableColumn<Enrollment, String> gradeCourseColumn;
-    @FXML private TableColumn<Enrollment, String> sectionColumn;
+    private TableView<Enrollment> studentTable;
+    @FXML
+    private TableColumn<Enrollment, String> studentIdColumn;
+    @FXML
+    private TableColumn<Enrollment, String> studentNameColumn;
+    @FXML
+    private TableColumn<Enrollment, String> gradeCourseColumn;
+    @FXML
+    private TableColumn<Enrollment, String> sectionColumn;
 
     private EnrollmentFacade enrollmentFacade;
 
