@@ -1,5 +1,6 @@
 package org.rocs.osd.controller.login;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
@@ -181,6 +183,10 @@ public class LoginController {
             errorStage.setY(screenBounds.getHeight() - windowHeight);
 
             errorStage.show();
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            delay.setOnFinished(event -> {errorStage.close();});
+            delay.play();
             /**
              * TODO: If the UI/UX Designer decided to improve this, they can add an animation that lets the close after 3 seconds
              * */
