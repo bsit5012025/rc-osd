@@ -67,15 +67,8 @@ public class RecordFacadeImpl implements RecordFacade
         return savedSuccessfully;
     }
 
-    /**
-     * Updates an existing student record.
-     *
-     * @param remarks additional remarks (optional, max 500 characters).
-     * @param status the current status of the record.
-     * @return true if the record was successfully updated, false otherwise.
-     */
     @Override
-    public boolean updateStudentRecord(Enrollment enrollment, Employee employee, Offense offense,
+    public boolean updateStudentRecord(Long recordID, Enrollment enrollment, Employee employee, Offense offense,
                                        Date dateOfViolation, DisciplinaryAction action,
                                        String remarks, RecordStatus status)
     {
@@ -86,10 +79,11 @@ public class RecordFacadeImpl implements RecordFacade
 
         if(remarks != null && remarks.length() > 500)
         {
-           return false;
+            return false;
         }
 
         Record record = new Record();
+        record.setRecordId(recordID);
         record.setEnrollment(enrollment);
         record.setEmployee(employee);
         record.setOffense(offense);

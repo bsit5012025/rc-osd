@@ -188,11 +188,17 @@ public class RecordDaoImpl implements RecordDao
                             "remarks = ?, " +
                             "status = ? " +
                             "WHERE recordID = ?");
+
             stmt.setLong(1, record.getEnrollment().getEnrollmentId());
             stmt.setString(2, record.getEmployee().getEmployeeId());
             stmt.setLong(3, record.getOffense().getOffenseId());
             stmt.setDate(4, new java.sql.Date(record.getDateOfViolation().getTime()));
-            stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+
+            if (record.getDateOfResolution() != null)
+                stmt.setDate(5, new java.sql.Date(record.getDateOfResolution().getTime()));
+            else
+                stmt.setNull(5, java.sql.Types.DATE);
+
             stmt.setLong(6, record.getAction().getActionId());
             stmt.setString(7, record.getRemarks());
             stmt.setString(8, String.valueOf(record.getStatus()));

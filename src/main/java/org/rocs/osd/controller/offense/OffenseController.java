@@ -58,11 +58,37 @@ public class OffenseController {
             System.err.println("Unexpected Error while opening modal: " + e.getMessage());
         }
     }
+
+    public void onLoadEditOffenseModal(Record record)
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/offense/editOffenseModal.fxml"));
+            Parent root = loader.load();
+
+            EditOffenseModalController editOffenseModalController = loader.getController();
+            editOffenseModalController.setRecordData(record);
+
+            Stage modalStage = new Stage();
+            modalStage.initStyle(StageStyle.UNDECORATED);
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setResizable(false);
+            modalStage.setScene(new Scene(root));
+            modalStage.show();
+
+        } catch (IOException e) {
+            System.err.println("UI Error: Could not find or load editOffenseModal.fxml. Check the file path and Controller names.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected Error while opening modal: " + e.getMessage());
+        }
+    }
+
     @FXML
     public void initialize() {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
 
         loadDataToTable();
+        selectStudentRecord();
         loadRecordsOfViolation(Department.JHS);
     }
 
@@ -97,6 +123,16 @@ public class OffenseController {
             currentSchoolYear = (year - 1) + "-" + year;
         }
         violationsTable.setItems(FXCollections.observableArrayList(recordFacade.getViolationsByDepartment(department, currentSchoolYear)));
+    }
+
+    private void selectStudentRecord()
+    {
+        violationsTable.setOnMouseClicked(event -> {
+                Record record = violationsTable.getSelectionModel().getSelectedItem();
+                if (record != null) {
+                    onLoadEditOffenseModal(record);
+                }
+        });
     }
 
     @FXML
