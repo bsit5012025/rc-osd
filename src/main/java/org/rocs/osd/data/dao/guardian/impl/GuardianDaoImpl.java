@@ -4,6 +4,8 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.guardian.Relationship;
+import org.rocs.osd.model.person.student.Student;
+import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,9 +16,9 @@ import java.util.List;
 
 public class GuardianDaoImpl implements GuardianDao {
 
-    public List<Guardian> findGuardianByStudentId(String studentId) {
+    public List<StudentGuardian> findGuardianByStudentId(String studentId) {
 
-        List<Guardian> guardians = new ArrayList<>();
+        List<StudentGuardian> sgList = new ArrayList<>();
 
         String sql = """
                 SELECT g.*
@@ -42,14 +44,20 @@ public class GuardianDaoImpl implements GuardianDao {
                         Relationship.valueOf(rs.getString("relationship"))
                 );
 
-                guardians.add(guardian);
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentID"));
+
+                StudentGuardian sg = new StudentGuardian();
+                sg.setStudent(student);
+                sg.setGuardian(guardian);
+                sgList.add(sg);
             }
 
         } catch (SQLException e) {
             System.out.println("SQL Exception: " + e.getMessage());
         }
 
-        return guardians;
+        return sgList;
     }
 }
 

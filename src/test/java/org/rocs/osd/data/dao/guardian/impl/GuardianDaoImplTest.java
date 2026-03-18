@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
-import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.guardian.Relationship;
+import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,17 +75,19 @@ class GuardianDaoImplTest {
                 .thenReturn("FATHER")
                 .thenReturn("MOTHER");
 
-        GuardianDao guardianDao = new GuardianDaoImpl();
+        when(resultSet.getString("studentID"))
+                .thenReturn("JHS-0001")
+                .thenReturn("JHS-0001");
 
-        List<Guardian> guardians =
-                guardianDao.findGuardianByStudentId("JHS-0001");
+        GuardianDao dao = new GuardianDaoImpl();
 
-        assertEquals(2, guardians.size());
+        List<StudentGuardian> list = dao.findGuardianByStudentId("JHS-0001");
 
-        Guardian g1 = guardians.get(0);
+        assertEquals(2, list.size());
 
-        assertEquals(1L, g1.getGuardianID());
-        assertEquals("09171234567", g1.getContactNumber());
-        assertEquals(Relationship.FATHER, g1.getRelationship());
+        StudentGuardian sg1 = list.get(0);
+        assertEquals("JHS-0001", sg1.getStudent().getStudentId());
+        assertEquals(1L, sg1.getGuardian().getGuardianID());
+        assertEquals(Relationship.FATHER, sg1.getGuardian().getRelationship());
     }
 }
