@@ -6,7 +6,6 @@ public class Guardian extends Person {
     private long guardianID;
     private String contactNumber;
     private Relationship relationship;
-    private String studentID;
 
     public Guardian() {
 
@@ -15,7 +14,6 @@ public class Guardian extends Person {
         this.guardianID = guardianID;
         this.contactNumber = contactNumber;
         this.relationship = relationship;
-        this.studentID = studentID;
     }
 
     public long getGuardianID() {
@@ -40,13 +38,5 @@ public class Guardian extends Person {
 
     public void setRelationship(Relationship relationship) {
         this.relationship = relationship;
-    }
-
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
     }
 }
