@@ -11,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
-import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
-import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.data.dao.record.RecordDao;
@@ -21,10 +19,7 @@ import org.rocs.osd.data.dao.student.StudendDao;
 import org.rocs.osd.data.dao.student.impl.StudentDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
-import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
-import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.RecordStatus;
@@ -63,7 +58,6 @@ public class EditOffenseModalController
     public void setRecordData(Record record)
     {
         this.record = record;
-        System.out.println(record.getDateOfResolution());
         loadStudentRecordInfo();
     }
 
