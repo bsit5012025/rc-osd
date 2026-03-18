@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
+import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
 import org.rocs.osd.data.dao.record.RecordDao;
@@ -49,6 +51,7 @@ public class EditOffenseModalController
 
     private StudendDao studentDao;
     private OffenseDao offenseDao;
+    private EnrollmentDao enrollmentDao;
     private RecordFacade recordFacade;
     private DisciplinaryActionDao disciplinaryActionDao;
     private Record record;
@@ -57,6 +60,7 @@ public class EditOffenseModalController
     {
         offenseDao = new OffenseDaoImpl();
         studentDao = new StudentDaoImpl();
+        enrollmentDao = new EnrollmentDaoImpl();
         RecordDao dao = new RecordDaoImpl();
         disciplinaryActionDao = new DisciplinaryActionImpl();
         recordFacade = new RecordFacadeImpl(dao);
@@ -157,20 +161,34 @@ public class EditOffenseModalController
             String offenseType = levelOfOffenseComboBox.getValue();
             String remarks = remarksTextArea.getText();
 
-            if(studentId.isEmpty() || studentName.isEmpty() || offenseType == null || datePicker.getValue() == null)
+            if (studentId == null
+                    || studentId.isEmpty()
+                    || studentName == null
+                    || studentName.isEmpty()
+                    || offenseName == null
+                    || offenseType == null
+                    || datePicker.getValue() == null)
             {
-                System.out.println("Fill out missing fields!");
+
+                System.out.println("Fill out all required fields!");
+                return;
+            }
+
+            if (record == null
+                    || record.getEnrollment() == null
+                    || record.getAction() == null
+                    || record.getEnrollment().getStudent() == null)
+            {
+                System.out.println("Record, Enrollment, Action or student are missing or null!");
                 return;
             }
 
             Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
 
-            record.getEnrollment().getStudent().setStudentId(studentId);
             Student student = studentDao.findStudentWithRecordById(studentId);
-
-            record.getEnrollment().getStudent().setFirstName(student.getFirstName());
-            record.getEnrollment().getStudent().setMiddleName(student.getMiddleName());
-            record.getEnrollment().getStudent().setLastName(student.getLastName());
+            record.getEnrollment().setStudent(student);
+            long enrollmentID = enrollmentDao.findEnrollmentIdByStudentId(studentId);
+            record.getEnrollment().setEnrollmentId(enrollmentID);
 
             long actionId = disciplinaryActionDao.findActionIdByName(record.getAction().getActionName());
             record.getAction().setActionId(actionId);
