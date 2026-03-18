@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="cardRoot"
+      styleClass="requestCard"
+      stylesheets="@../../styles/request/request.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.rocs.osd.controller.request.RequestCardController">
+
+    <HBox alignment="TOP_LEFT">
+        <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Department: " />
+                <Label fx:id="deptLabel" styleClass="dataLabel" text="Department Name" />
+            </HBox>
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Name: " />
+                <Label fx:id="nameLabel" styleClass="dataLabel" text="Student Name" />
+            </HBox>
+
+            <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
+                <HBox styleClass="labelRow">
+                    <Label styleClass="boldLabel" text="Type: " />
+                    <Label fx:id="typeLabel" styleClass="dataLabel" text="Section" />
+                </HBox>
+                <Label styleClass="boldLabel" text="Reason for request: " />
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason goes here..." wrapText="true" />
+            </VBox>
+        </VBox>
+
+        <Button onAction="#toggleExpansion" styleClass="arrowButton">
+            <graphic>
+                <ImageView fx:id="arrowIcon" fitHeight="20" fitWidth="20" preserveRatio="true">
+                    <Image url="@../../assets/rightButton.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <HBox fx:id="actionBar" managed="false" styleClass="actionBarContainer" visible="false">
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox styleClass="actionBar">
+            <Button styleClass="denyButton" text="Deny" />
+            <Button styleClass="approveButton" text="Approve" />
+        </HBox>
+    </HBox>
+</VBox>
