@@ -29,12 +29,23 @@ import java.time.LocalDate;
 
 public class EditOffenseModalController
 {
-    @FXML private ComboBox<String> offenseTypeComboBox;
-    @FXML private ComboBox<String> levelOfOffenseComboBox;
-    @FXML private TextField studentIdTextField;
-    @FXML private TextField studentNameTextField;
-    @FXML private DatePicker datePicker;
-    @FXML private TextField remarksTextArea;
+    @FXML
+    private ComboBox<String> offenseTypeComboBox;
+
+    @FXML
+    private ComboBox<String> levelOfOffenseComboBox;
+
+    @FXML
+    private TextField studentIdTextField;
+
+    @FXML
+    private TextField studentNameTextField;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private TextField remarksTextArea;
 
     private StudendDao studentDao;
     private OffenseDao offenseDao;
