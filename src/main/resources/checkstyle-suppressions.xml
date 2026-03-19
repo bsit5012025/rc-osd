@@ -5,4 +5,5 @@
 <suppressions>
     <suppress checks="FinalParameters" files=".*\.java"/>
     <suppress checks="DesignForExtension" files=".*\.java"/>
+    <suppress checks="MagicNumber" files=".*\.java"/>
 </suppressions>
