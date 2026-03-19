@@ -6,6 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.rocs.osd.data.dao.request.RequestDao;
+import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
+import org.rocs.osd.facade.request.RequestFacade;
+import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
+import org.rocs.osd.model.request.Request;
+
+import java.util.List;
 
 public class RequestCardController {
 
@@ -14,7 +21,31 @@ public class RequestCardController {
     @FXML private HBox actionBar;
     @FXML private ImageView arrowIcon;
 
+    private RequestFacade requestFacade;
+
     private boolean isExpanded = false;
+
+    @FXML
+    public void initialize()
+    {
+        RequestDao requestDao = new RequestDaoImpl();
+        requestFacade = new RequestFacadeImpl(requestDao);
+
+        loadRequestData();
+    }
+
+    private void loadRequestData()
+    {
+        List<Request> requestList = requestFacade.getAllRequest();
+
+        for(Request request: requestList)
+        {
+            if (deptLabel != null) deptLabel.setText();
+            if (nameLabel != null) nameLabel.setText();
+            if (typeLabel != null) typeLabel.setText(request.getType());
+            if (reasonLabel != null) reasonLabel.setText(request.getMessage());
+        }
+    }
 
     public void setData(String dept, String name, String type, String reason) {
         if (deptLabel != null) deptLabel.setText(dept);
