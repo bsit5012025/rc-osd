@@ -2,6 +2,7 @@ package org.rocs.osd.controller.offense;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +50,9 @@ public class OffenseController {
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setResizable(false);
             modalStage.setScene(new Scene(root));
-            modalStage.show();
+            modalStage.setOnHidden(e -> refreshRecord());
+            modalStage.showAndWait();
+            refreshRecord();
 
         } catch (IOException e) {
             System.err.println("UI Error: Could not find or load AddOffenseModal.fxml. Check the file path and Controller names.");
@@ -139,6 +142,7 @@ public class OffenseController {
     private void onLoadJuniorHS() {
         loadRecordsOfViolation(Department.JHS);
         departmentLabel.setText("Junior HS Violations");
+        refreshRecord();
     }
 
     @FXML
@@ -151,5 +155,8 @@ public class OffenseController {
     private void onLoadCollege() {
         loadRecordsOfViolation(Department.COLLEGE);
         departmentLabel.setText("College Violations");
+    }
+    public void refreshRecord() {
+        loadRecordsOfViolation(Department.JHS);
     }
 }
