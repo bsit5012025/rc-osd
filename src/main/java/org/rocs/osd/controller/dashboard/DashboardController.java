@@ -14,10 +14,21 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Labeled;
 import org.rocs.osd.controller.request.RequestCardController;
+import org.rocs.osd.data.dao.employee.EmployeeDao;
+import org.rocs.osd.data.dao.employee.impl.EmployeeDaoImpl;
+import org.rocs.osd.data.dao.request.RequestDao;
+import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
+import org.rocs.osd.facade.employee.EmployeeFacade;
+import org.rocs.osd.facade.employee.impl.EmployeeFacadeImpl;
+import org.rocs.osd.facade.request.RequestFacade;
+import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
+import org.rocs.osd.model.person.employee.Employee;
+import org.rocs.osd.model.request.Request;
 
 
 /**
@@ -45,19 +56,44 @@ public class DashboardController {
     @FXML
     private VBox listContainer;
 
+    private RequestFacade requestFacade;
+    private EmployeeFacade employeeFacade;
+
     @FXML
     public void initialize() {
+        RequestDao requestDao = new RequestDaoImpl();
+        requestFacade = new RequestFacadeImpl(requestDao);
+
+        EmployeeDao employeeDao = new EmployeeDaoImpl();
+        employeeFacade = new EmployeeFacadeImpl(employeeDao);
+
         if (listContainer != null) {
             loadRequestData();
         }
     }
 
     private void loadRequestData() {
+        List<Request> requestList = requestFacade.getAllRequest();
+
         if (listContainer == null) return;
         listContainer.getChildren().clear();
-        addRequestCard("Junior High School", "John Doe", "Individual", "Penge records ni bogart para matransfer na sha.");
-        addRequestCard("College", "Jane Smith", "Section", "Penge records ng IT601 para sa good moral pls");
-        addRequestCard("College", "Leeane Reyes", "Batch", "Penge lang, gusto kolang.");
+        createRequestCards();
+//        addRequestCard("Junior High School", "John Doe", "Individual", "Penge records ni bogart para matransfer na sha.");
+//        addRequestCard("College", "Jane Smith", "Section", "Penge records ng IT601 para sa good moral pls");
+//        addRequestCard("College", "Leeane Reyes", "Batch", "Penge lang, gusto kolang.");
+    }
+
+    private void createRequestCards() {
+        List<Request> requestList = requestFacade.getAllRequest();
+
+        for (Request request : requestList) {
+            Employee employee = employeeFacade.getEmployeeByEmployeeID(request.getEmployeeID());
+            String dept = String.valueOf(employee.getDepartment());
+            String name = employee.getFirstName()+" "+employee.getMiddleName()+". "+employee.getLastName();
+            String type = request.getType();
+            String message = request.getMessage();
+            addRequestCard(dept, name, type, message);
+        }
     }
 
     private void addRequestCard(String dept, String name, String type, String reason) {

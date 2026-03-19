@@ -6,10 +6,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.rocs.osd.data.dao.employee.EmployeeDao;
+import org.rocs.osd.data.dao.employee.impl.EmployeeDaoImpl;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
+import org.rocs.osd.facade.employee.EmployeeFacade;
+import org.rocs.osd.facade.employee.impl.EmployeeFacadeImpl;
 import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
+import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.request.Request;
 
 import java.util.List;
@@ -22,6 +27,7 @@ public class RequestCardController {
     @FXML private ImageView arrowIcon;
 
     private RequestFacade requestFacade;
+    private EmployeeFacade employeeFacade;
 
     private boolean isExpanded = false;
 
@@ -31,7 +37,9 @@ public class RequestCardController {
         RequestDao requestDao = new RequestDaoImpl();
         requestFacade = new RequestFacadeImpl(requestDao);
 
-        loadRequestData();
+        EmployeeDao employeeDao = new EmployeeDaoImpl();
+        employeeFacade = new EmployeeFacadeImpl(employeeDao);
+
     }
 
     private void loadRequestData()
@@ -40,10 +48,20 @@ public class RequestCardController {
 
         for(Request request: requestList)
         {
-            if (deptLabel != null) deptLabel.setText();
-            if (nameLabel != null) nameLabel.setText();
+            Employee employee = employeeFacade.getEmployeeByEmployeeID(request.getEmployeeID());
+
+            if (deptLabel != null) deptLabel.setText(String.valueOf(employee.getDepartment()));
+            if (nameLabel != null) nameLabel.setText(employee.getFirstName()+" "+employee.getMiddleName()+". "+employee.getLastName());
             if (typeLabel != null) typeLabel.setText(request.getType());
             if (reasonLabel != null) reasonLabel.setText(request.getMessage());
+
+            System.out.println("----- Request Info -----");
+            System.out.println("Request ID: " + request.getRequestID());
+            System.out.println("Employee Department: " + employee.getDepartment());
+            System.out.println("Employee Name: " + employee.getFirstName()+" "+employee.getMiddleName()+". "+employee.getLastName());
+            System.out.println("Request Type: " + request.getType());
+            System.out.println("Request Message: " + request.getMessage());
+            System.out.println("------------------------\n");
         }
     }
 
