@@ -74,14 +74,9 @@ public class DashboardController {
     }
 
     private void loadRequestData() {
-        List<Request> requestList = requestFacade.getAllRequest();
-
         if (listContainer == null) return;
         listContainer.getChildren().clear();
         createRequestCards();
-//        addRequestCard("Junior High School", "John Doe", "Individual", "Penge records ni bogart para matransfer na sha.");
-//        addRequestCard("College", "Jane Smith", "Section", "Penge records ng IT601 para sa good moral pls");
-//        addRequestCard("College", "Leeane Reyes", "Batch", "Penge lang, gusto kolang.");
     }
 
     private void createRequestCards() {
