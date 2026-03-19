@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="cardRoot"
+      styleClass="requestCard"
+      stylesheets="@../../styles/appeal/appeal.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.rocs.osd.controller.appeal.AppealCardController">
+
+    <HBox alignment="TOP_LEFT">
+        <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Student ID: " />
+                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="Student ID" />
+            </HBox>
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Name: " />
+                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Student Name" />
+            </HBox>
+
+            <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
+                <HBox styleClass="labelRow">
+                    <Label styleClass="boldLabel" text="Offense: " />
+                    <Label fx:id="offenseLabel" styleClass="dataLabel" text="PDA" />
+                </HBox>
+                <Label styleClass="boldLabel" text="Reason for Appeal: " />
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason goes here..." wrapText="true" />
+            </VBox>
+        </VBox>
+
+        <Button fx:id="arrowButton" onAction="#toggleExpansion" styleClass="arrowButton">
+            <graphic>
+                <ImageView fx:id="arrowIcon" fitHeight="20" fitWidth="20" preserveRatio="true">
+                    <Image url="@../../assets/rightButton.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <HBox fx:id="actionBar" managed="false" styleClass="actionBarContainer" visible="false">
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox styleClass="actionBar">
+            <Button fx:id="denyButton" onAction="#handleAppealDeny" styleClass="denyButton" text="Deny" />
+            <Button fx:id="approveButton" onAction="#handleAppealApprove" styleClass="approveButton" text="Approve" />
+        </HBox>
+    </HBox>
+</VBox>
