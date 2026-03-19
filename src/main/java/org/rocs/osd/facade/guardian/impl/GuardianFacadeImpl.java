@@ -12,7 +12,7 @@ public class GuardianFacadeImpl implements GuardianFacade {
 
     private final GuardianDao guardianDao;
 
-    public GuardianFacadeImpl() {
+    public GuardianFacadeImpl(GuardianDaoImpl guardianDao) {
         this.guardianDao = new GuardianDaoImpl();
     }
 

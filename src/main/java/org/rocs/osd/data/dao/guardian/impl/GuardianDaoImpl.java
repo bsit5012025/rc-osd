@@ -21,10 +21,10 @@ public class GuardianDaoImpl implements GuardianDao {
         List<StudentGuardian> sgList = new ArrayList<>();
 
         String sql = """
-                SELECT g.*
-                FROM guardian g
-                JOIN studentGuardian sg ON g.guardianID = sg.guardianID
-                WHERE sg.studentID = ?
+                SELECT g.*, sg.studentID
+                    FROM guardian g
+                    JOIN studentGuardian sg ON g.guardianID = sg.guardianID
+                    WHERE sg.studentID = ?
             """;
 
         try (Connection conn = ConnectionHelper.getConnection();
@@ -41,7 +41,7 @@ public class GuardianDaoImpl implements GuardianDao {
                 guardian.setGuardianID(rs.getLong("guardianID"));
                 guardian.setContactNumber(rs.getString("contactNumber"));
                 guardian.setRelationship(
-                        Relationship.valueOf(rs.getString("relationship"))
+                        Relationship.valueOf(rs.getString("relationship").toUpperCase())
                 );
 
                 Student student = new Student();
