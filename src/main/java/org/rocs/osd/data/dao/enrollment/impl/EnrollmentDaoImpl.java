@@ -14,8 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO implementation for managing Enrollment records in the Office of Student Discipline System.
+ * Handle methods to retrieve student enrollments and latest enrollment records.
+ */
 public class EnrollmentDaoImpl implements EnrollmentDao {
 
+    /**
+     * Retrieves all enrollment records of a student by student ID.
+     * @param studentId the unique ID of the student.
+     * @return a List of Enrollment objects.
+     */
     public List<Enrollment> findEnrollmentsByStudentId(String studentId){
 
         List<Enrollment> enrollmentList = new ArrayList<>();
@@ -61,6 +70,11 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         return enrollmentList;
     }
 
+    /**
+     * Retrieves the latest enrollment ID of a student.
+     * @param studentId the unique ID of the student.
+     * @return the latest enrollment ID, or -1 if not found.
+     */
     public long findEnrollmentIdByStudentId(String studentId){
 
         try (Connection conn = ConnectionHelper.getConnection()) {
@@ -82,6 +96,10 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         }
         return -1;
     }
+    /**
+     * Retrieves the latest enrollment records of all students.
+     * @return a List of latest Enrollment objects.
+     */
     public List<Enrollment> findAllLatestEnrollments() {
         List<Enrollment> studentList = new ArrayList<>();
 

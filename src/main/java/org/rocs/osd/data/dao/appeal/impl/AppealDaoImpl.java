@@ -18,8 +18,8 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     /**
-     * Saves a new appeal record to the database.
-     * @param appeal the Appeal object to save.
+     * Retrieves all pending appeals with student and offense details.
+     * @return a List of pending Appeal objects.
      */
     @Override
     public List<Appeal> findPendingAppealsWithDetails() {

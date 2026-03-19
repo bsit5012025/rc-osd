@@ -14,8 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO implementation for managing Guardian records in the Office of Student Discipline System.
+ * Handles methods to retrieve guardian information associated with students.
+ */
 public class GuardianDaoImpl implements GuardianDao {
 
+    /**
+     * Retrieves all guardians associated with a specific student.
+     * @param studentId the unique ID of the student.
+     * @return a List of StudentGuardian objects.
+     */
     public List<StudentGuardian> findGuardianByStudentId(String studentId) {
 
         List<StudentGuardian> sgList = new ArrayList<>();

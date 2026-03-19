@@ -29,6 +29,10 @@ import org.rocs.osd.model.record.RecordStatus;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * Controller for editing an existing offense record.
+ * Handles loading, displaying, and updating student violation details.
+ */
 public class EditOffenseModalController
 {
     @FXML
@@ -56,6 +60,9 @@ public class EditOffenseModalController
     private DisciplinaryActionDao disciplinaryActionDao;
     private Record record;
 
+    /**
+     * Initializes DAO, Facade, and UI components.
+     */
     public void initialize()
     {
         offenseDao = new OffenseDaoImpl();
@@ -70,6 +77,9 @@ public class EditOffenseModalController
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
     }
 
+    /**
+     * Sets the record data to be edited.
+     */
     public void setRecordData(Record record)
     {
         this.record = record;

@@ -11,8 +11,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO implementation for managing Request records in the Office of Student Discipline (OSD) System.
+ * Handles methods to create, retrieve, and update requests.
+ */
 public class RequestDaoImpl implements RequestDao {
 
+    /**
+     * Adds a new request to the database.
+     * @param employeeID the ID of the employee submitting the request.
+     * @param details the details of the request.
+     * @param message the message or description of the request.
+     * @param type the type of request.
+     * @return true if the request was successfully added, otherwise false.
+     */
     @Override
     public boolean addRequest(String employeeID, String details, String message, String type)
     {
@@ -35,6 +47,10 @@ public class RequestDaoImpl implements RequestDao {
         return false;
     }
 
+    /**
+     * Retrieves all request records from the database.
+     * @return a List of Request objects.
+     */
     @Override
     public List<Request> findAllRequests() {
         List<Request> requestList = new ArrayList<>();
@@ -64,6 +80,12 @@ public class RequestDaoImpl implements RequestDao {
         return requestList;
     }
 
+    /**
+     * Updates the status of a request.
+     * @param requestID the ID of the request.
+     * @param status the new status value.
+     * @return true if the update was successful, otherwise false.
+     */
     @Override
     public boolean updateRequestStatus(long requestID, RequestStatus status) {
         String sql = "UPDATE REQUEST SET status = ? WHERE requestID = ?";

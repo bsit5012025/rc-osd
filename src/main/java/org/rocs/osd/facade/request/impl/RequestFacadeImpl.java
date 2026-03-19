@@ -7,10 +7,18 @@ import org.rocs.osd.model.request.RequestStatus;
 
 import java.util.List;
 
+/**
+ * Facade implementation for managing Request records in the Office of Student Discipline System.
+ * Handles methods to create, retrieve, and update requests.
+ */
 public class RequestFacadeImpl implements RequestFacade
 {
     private RequestDao requestDao;
 
+    /**
+     * Constructs a RequestFacadeImpl with the specified RequestDao.
+     * @param requestDao the DAO used for request data access.
+     */
     public RequestFacadeImpl(RequestDao requestDao)
     {
         this.requestDao = requestDao;
