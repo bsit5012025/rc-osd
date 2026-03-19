@@ -29,6 +29,7 @@ import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.request.Request;
+import org.rocs.osd.model.request.RequestStatus;
 
 
 /**
@@ -87,22 +88,25 @@ public class DashboardController {
         List<Request> requestList = requestFacade.getAllRequest();
 
         for (Request request : requestList) {
-            Employee employee = employeeFacade.getEmployeeByEmployeeID(request.getEmployeeID());
-            String dept = String.valueOf(employee.getDepartment());
-            String name = employee.getFirstName()+" "+employee.getMiddleName()+". "+employee.getLastName();
-            String type = request.getType();
-            String message = request.getMessage();
-            addRequestCard(dept, name, type, message);
+            if(request.getStatus() == RequestStatus.PENDING) {
+                Employee employee = employeeFacade.getEmployeeByEmployeeID(request.getEmployeeID());
+                String dept = String.valueOf(employee.getDepartment());
+                String name = employee.getFirstName() + " " + employee.getMiddleName() + ". " + employee.getLastName();
+                String type = request.getType();
+                String message = request.getMessage();
+                long requestId = request.getRequestID();
+                addRequestCard(dept, name, type, message, requestId);
+            }
         }
     }
 
-    private void addRequestCard(String dept, String name, String type, String reason) {
+    private void addRequestCard(String dept, String name, String type, String reason, long requestId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/request/RequestCard.fxml"));
             VBox card = loader.load();
             RequestCardController controller = loader.getController();
             if (controller != null) {
-                controller.setData(dept, name, type, reason);
+                controller.setData(dept, name, type, reason, requestId);
                 listContainer.getChildren().add(card);
             }
         } catch (Exception e) {
