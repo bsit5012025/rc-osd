@@ -24,7 +24,8 @@ jobs:
 
     - name: Build and Run Checkstyle
       # Executes the Maven checkstyle:check goal
-      run: mvn checkstyle:check
+      run: mvn checkstyle:check -Dcheckstyle.suppressions.location=src/main/resources/checkstyle-suppressions.xml
+
       # Note: For this to work, the Maven Checkstyle Plugin must be configured
       # in your pom.xml to output an XML report.
 
