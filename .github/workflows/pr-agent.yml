@@ -19,7 +19,7 @@ jobs:
         uses: qodo-ai/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          github_action_config.model: "gemini/gemini-1.5-flash"
+          github_action_config.model: "gpt-4"
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # Example: Enable/disable tools
           github_action_config.auto_review: "true"
