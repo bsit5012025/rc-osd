@@ -84,7 +84,7 @@ class AppealFacadeImplTest {
 
     @Test
     void testDeniedAppeal() {
-        assertDoesNotThrow(() -> facade.deniedAppeal(1L));
+        assertDoesNotThrow(() -> facade.denyAppeal(1L));
         verify(mockDao).updateAppealStatus(1L, "DENIED");
     }
 }
