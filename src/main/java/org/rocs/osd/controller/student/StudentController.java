@@ -19,7 +19,7 @@ public class StudentController {
     @FXML
     private TableView<Enrollment> studentTable;
 
-    /** Column for student ID */
+    /** Column for student ID. */
     @FXML
     private TableColumn<Enrollment, String> studentIdColumn;
 

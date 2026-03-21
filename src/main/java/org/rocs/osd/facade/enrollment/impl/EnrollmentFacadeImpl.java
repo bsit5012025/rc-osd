@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class EnrollmentFacadeImpl implements EnrollmentFacade {
 
+    /**
+     * DAO for handling enrollment data operations.
+     */
     private final EnrollmentDao enrollmentDao;
 
     /**

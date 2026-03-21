@@ -1,7 +1,3 @@
-/**
- * Package containing controllers for the Dashboard in the Office of Student
- * Discipline system. Handles navigation, module loading, and actions.
- */
 package org.rocs.osd.controller.dashboard;
 
 import javafx.event.ActionEvent;

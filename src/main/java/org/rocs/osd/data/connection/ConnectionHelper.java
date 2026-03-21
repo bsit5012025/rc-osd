@@ -35,13 +35,15 @@ public final class ConnectionHelper {
     }
     /**
      * This method is used to get a database connection.
+     *
+     *  @return a Connection object representing the database connection.
      */
     public static Connection getConnection() {
         try {
-            // This will load the database driver
+
             Class.forName(ORACLE_DRIVER).newInstance();
 
-            // Return a connection to the database
+
             return DriverManager.getConnection(
                     URL,
                     USERNAME,
@@ -49,7 +51,6 @@ public final class ConnectionHelper {
             );
 
         } catch (Exception e) {
-            // Throws an error if the connection fails
             throw new RuntimeException(e);
         }
     }

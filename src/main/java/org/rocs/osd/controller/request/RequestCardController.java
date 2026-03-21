@@ -18,23 +18,36 @@ public class RequestCardController {
      */
     @FXML
     private Label deptLabel;
+    /**
+     * Label displaying the name of the requester.
+     */
     @FXML
     private Label nameLabel;
+    /**
+     * Label displaying the type of the request.
+     */
     @FXML
     private Label typeLabel;
+    /**
+     * Label displaying the reason for the request.
+     */
     @FXML
     private Label reasonLabel;
     /**
      * Section that becomes visible when the card is expanded.
      */
-    @FXML private VBox expandedSection;
+    @FXML
+    private VBox expandedSection;
     /**
      * Container for action buttons (e.g., approve/deny).
      */
-    @FXML private HBox actionBar; /**
+    @FXML
+    private HBox actionBar;
+    /**
      * Arrow icon used to indicate expand/collapse state.
      */
-    @FXML private ImageView arrowIcon;
+    @FXML
+    private ImageView arrowIcon;
 
     /**
      * Tracks whether the card is expanded or collapsed.

@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 public class LoginController {
     /**
-     * Stage used to display login error popups .
+     * Stage used to display login error popups.
      */
     private Stage errorStage;
     /**
@@ -41,7 +41,7 @@ public class LoginController {
     @FXML
     private TextField usernameTextField;
     /**
-     * Password field for entering the password
+     * Password field for entering the password.
      */
     @FXML
     private PasswordField passwordField;
@@ -94,23 +94,23 @@ public class LoginController {
      */
     public void onLogin(ActionEvent event) {
 
-        /**
-         * Initialize DAO and Facade for login process.
+        /*
+          Initialize DAO and Facade for login process.
          */
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
 
-        /**
-         * This will check if the entered username
-         * and password are correct.
+        /*
+          This will check if the entered username
+          and password are correct.
          */
         boolean loginCheck = loginFacade.login(
         usernameTextField.getText(), passwordField.getText());
 
-        /**
-         * This will check if the username or password fields are empty
-         * and informs the user to fill them up.
+        /*
+          This will check if the username or password fields are empty
+          and informs the user to fill them up.
          */
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
@@ -120,16 +120,16 @@ public class LoginController {
             return;
         }
         try {
-            /**
-             * If the login credentials are correct,
-             * Dashboard screen will be loaded.
+            /*
+              If the login credentials are correct,
+              Dashboard screen will be loaded.
              */
             if (loginCheck) {
                 loadDashboard(event);
             } else {
-                /**
-                 * If the login fails, "Invalid username or password!
-                 * will be displayed".
+                /*
+                  If the login fails, "Invalid username or password!
+                  will be displayed".
                  */
                 showErrorPopup("Invalid username or password!");
             }
@@ -145,37 +145,37 @@ public class LoginController {
                 errorStage.close();
                 errorStage = null;
             }
-            /**
-             * This will load the Dashboard screen from the FXML file.
+            /*
+              This will load the Dashboard screen from the FXML file.
              */
             Parent root = FXMLLoader.load(getClass()
             .getResource("/view/dashboard/dashboard.fxml"));
-            /**
-             * This will get the current window from the button click event.
+            /*
+              This will get the current window from the button click event.
              */
             Stage stage = (Stage) ((Node)
             event.getSource()).getScene().getWindow();
-            /**
-             * This will display the Dashboard screen in the window.
+            /*
+              This will display the Dashboard screen in the window.
              */
             double width = stage.getWidth();
             double height = stage.getHeight();
             stage.setScene(new Scene(root, width, height));
-            /**
-             * This will make the window full screen.
+            /*
+              This will make the window full screen.
              */
             stage.setMaximized(true);
             stage.show();
-            /**
-             * Throw an exception if the Dashboard screen cannot be loaded.
+            /*
+              Throw an exception if the Dashboard screen cannot be loaded.
              */
         } catch (LoadException e) {
             System.err.println("Error loading Dashboard");
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
-            /**
-             * Throw an exception if the Dashboard screen cannot be loaded.
+            /*
+              Throw an exception if the Dashboard screen cannot be loaded.
              */
             throw new RuntimeException(e);
         }
@@ -189,10 +189,10 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
             "/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
-            /**
-             * Sets the login error banner to the bottom-center
-             * of the window on different screen sizes.
-             * */
+            /*
+              Sets the login error banner to the bottom-center
+              of the window on different screen sizes.
+              */
             errorStage = new Stage();
 
             Label label = (Label) root.lookup(
