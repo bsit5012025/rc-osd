@@ -26,16 +26,16 @@ public class Login {
 
     /**
      * Constructor with all fields.
-     * @param id unique ID of the login record.
-     * @param username username for login.
-     * @param password password for the username.
-     * @param person the person associated with this login.
+     * @param pId unique ID of the login record.
+     * @param pUsername username for login.
+     * @param pPassword password for the username.
+     * @param pPerson the person associated with this login.
      */
-    public Login(long id, String username, String password, Person person) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.person = person;
+    public Login(long pId, String pUsername, String pPassword, Person pPerson) {
+        this.id = pId;
+        this.username = pUsername;
+        this.password = pPassword;
+        this.person = pPerson;
     }
 
     /** @return unique ID of the login record. */
@@ -43,9 +43,9 @@ public class Login {
         return id;
     }
 
-    /** @param id sets the unique ID of the login record. */
-    public void setId(long id) {
-        this.id = id;
+    /** @param pId sets the unique ID of the login record. */
+    public void setId(long pId) {
+        this.id = pId;
     }
 
     /** @return the username. */
@@ -53,9 +53,9 @@ public class Login {
         return username;
     }
 
-    /** @param username sets the username. */
-    public void setUsername(String username) {
-        this.username = username;
+    /** @param pUsername sets the username. */
+    public void setUsername(String pUsername) {
+        this.username = pUsername;
     }
 
     /** @return the password. */
@@ -63,9 +63,9 @@ public class Login {
         return password;
     }
 
-    /** @param password sets the password. */
-    public void setPassword(String password) {
-        this.password = password;
+    /** @param pPassword sets the password. */
+    public void setPassword(String pPassword) {
+        this.password = pPassword;
     }
 
     /** @return the person associated with this login. */
@@ -73,8 +73,8 @@ public class Login {
         return person;
     }
 
-    /** @param person sets the person associated with this login. */
-    public void setPerson(Person person) {
-        this.person = person;
+    /** @param pPerson sets the person associated with this login. */
+    public void setPerson(Person pPerson) {
+        this.person = pPerson;
     }
 }

@@ -4,7 +4,10 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.offense.Offense;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +28,8 @@ public class OffenseDaoImpl implements OffenseDao {
     public Offense findOffenseById(String offenseID) {
         Offense offense = new Offense();
 
-        String sql = "SELECT o.offenseID, o.offense, o.type, o.description " +
-                "FROM offense o WHERE o.offenseID = ?";
+        String sql = "SELECT o.offenseID, o.offense, o.type, o.description "
+                + "FROM offense o WHERE o.offenseID = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -80,9 +83,9 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public Offense findByName(String offenseName) {
         Offense offense = null;
-        String sql = "SELECT offenseID, " +
-                "offense, " +
-                "type FROM offense WHERE offense = ?";
+        String sql = "SELECT offenseID, "
+                + "offense, "
+                + "type FROM offense WHERE offense = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -111,11 +114,11 @@ public class OffenseDaoImpl implements OffenseDao {
      */
     @Override
     public boolean addNewOffense(Offense offense) {
-        String sql = "INSERT INTO offense " +
-                "(offense, " +
-                "type, " +
-                "description)" +
-                " VALUES (?, ?, ?)";
+        String sql = "INSERT INTO offense "
+                + "(offense, "
+                + "type, "
+                + "description)"
+                + " VALUES (?, ?, ?)";
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

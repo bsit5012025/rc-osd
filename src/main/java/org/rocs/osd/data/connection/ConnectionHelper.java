@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 /**
  * This class is used create a connection to the database.
  */
-public class ConnectionHelper {
+public final class ConnectionHelper {
 
     /**
      * Database URL.
@@ -30,6 +30,9 @@ public class ConnectionHelper {
      */
     public static final String PASSWORD = "Changeme0";
 
+    private ConnectionHelper() {
+        throw new UnsupportedOperationException("Utility class");
+    }
     /**
      * This method is used to get a database connection.
      */

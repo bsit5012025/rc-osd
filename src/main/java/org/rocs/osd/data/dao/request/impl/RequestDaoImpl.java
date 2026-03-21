@@ -31,12 +31,12 @@ public class RequestDaoImpl implements RequestDao {
                               String type) {
         try (Connection con = ConnectionHelper.getConnection()) {
             String sql =
-                    "INSERT INTO request (employeeID, " +
-                            "details, " +
-                            "type, " +
-                            "message, " +
-                            "status) " +
-                            "VALUES (?, ?, ?, ?, ?)";
+                    "INSERT INTO request (employeeID, "
+                            + "details, "
+                            + "type, "
+                            + "message, "
+                            + "status) "
+                            + "VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 

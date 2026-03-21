@@ -19,9 +19,9 @@ public class StudentGuardian {
         return student;
     }
 
-    /** @param student sets the associated Student object. */
-    public void setStudent(Student student) {
-        this.student = student;
+    /** @param pStudent sets the associated Student object. */
+    public void setStudent(Student pStudent) {
+        this.student = pStudent;
     }
 
     /** @return the associated Guardian object. */
@@ -29,8 +29,8 @@ public class StudentGuardian {
         return guardian;
     }
 
-    /** @param guardian sets the associated Guardian object. */
-    public void setGuardian(Guardian guardian) {
-        this.guardian = guardian;
+    /** @param pGuardian sets the associated Guardian object. */
+    public void setGuardian(Guardian pGuardian) {
+        this.guardian = pGuardian;
     }
 }

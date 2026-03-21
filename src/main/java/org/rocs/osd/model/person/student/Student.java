@@ -28,24 +28,24 @@ public class Student extends Person {
     /**
      * Constructs a Student with all details.
      *
-     * @param personID ID from the Person class.
-     * @param lastName last name of the student.
-     * @param firstName first name of the student.
-     * @param middleName middle name of the student.
-     * @param studentId unique student ID.
-     * @param address student's address.
-     * @param studentType type/category of student.
-     * @param department department of the student.
+     * @param pPersonID ID from the Person class.
+     * @param pLastName last name of the student.
+     * @param pFirstName first name of the student.
+     * @param pMiddleName middle name of the student.
+     * @param pStudentId unique student ID.
+     * @param pAddress student's address.
+     * @param pStudentType type/category of student.
+     * @param pDepartment department of the student.
      */
-    public Student(Long personID, String lastName,
-                   String firstName, String middleName,
-                   String studentId, String address,
-                   String studentType, Department department) {
-        super(personID, lastName, firstName, middleName);
-        this.studentId = studentId;
-        this.address = address;
-        this.studentType = studentType;
-        this.department = department;
+    public Student(Long pPersonID, String pLastName,
+                   String pFirstName, String pMiddleName,
+                   String pStudentId, String pAddress,
+                   String pStudentType, Department pDepartment) {
+        super(pPersonID, pLastName, pFirstName, pMiddleName);
+        this.studentId = pStudentId;
+        this.address = pAddress;
+        this.studentType = pStudentType;
+        this.department = pDepartment;
     }
 
     /** @return the student ID. */
@@ -53,9 +53,9 @@ public class Student extends Person {
         return studentId;
     }
 
-    /** @param studentId sets the student ID. */
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    /** @param pStudentId sets the student ID. */
+    public void setStudentId(String pStudentId) {
+        this.studentId = pStudentId;
     }
 
     /** @return the student's address. */
@@ -63,9 +63,9 @@ public class Student extends Person {
         return address;
     }
 
-    /** @param address sets the student's address. */
-    public void setAddress(String address) {
-        this.address = address;
+    /** @param pAddress sets the student's pAddress. */
+    public void setAddress(String pAddress) {
+        this.address = pAddress;
     }
 
     /** @return the type of student. */
@@ -73,9 +73,9 @@ public class Student extends Person {
         return studentType;
     }
 
-    /** @param studentType sets the type of student. */
-    public void setStudentType(String studentType) {
-        this.studentType = studentType;
+    /** @param pStudentType sets the type of student. */
+    public void setStudentType(String pStudentType) {
+        this.studentType = pStudentType;
     }
 
     /** @return the department of the student. */
@@ -83,8 +83,8 @@ public class Student extends Person {
         return department;
     }
 
-    /** @param department sets the department of the student. */
-    public void setDepartment(Department department) {
-        this.department = department;
+    /** @param pDepartment sets the department of the student. */
+    public void setDepartment(Department pDepartment) {
+        this.department = pDepartment;
     }
 }

@@ -36,39 +36,39 @@ public class Appeal {
     /**
      * Constructor to create a complete Appeal object with all fields.
      *
-     * @param appealID unique identifier for the appeal.
-     * @param record student record associated with this appeal.
-     * @param enrollment enrollment information of the
+     * @param pAppealID unique identifier for the appeal.
+     * @param pRecord student record associated with this appeal.
+     * @param pEnrollment enrollment information of the
      *                   student filing the appeal.
-     * @param message message or reason for the appeal.
-     * @param dateFiled date when the appeal was filed.
-     * @param status current status of the appeal.
+     * @param pMessage message or reason for the appeal.
+     * @param pDateFiled date when the appeal was filed.
+     * @param pStatus current status of the appeal.
      */
-    public Appeal(long appealID, Record record, Enrollment enrollment,
-                  String message, Date dateFiled, String status) {
-        this.appealID = appealID;
-        this.record = record;
-        this.enrollment = enrollment;
-        this.message = message;
-        this.dateFiled = dateFiled;
-        this.status = status;
+    public Appeal(long pAppealID, Record pRecord, Enrollment pEnrollment,
+                  String pMessage, Date pDateFiled, String pStatus) {
+        this.appealID = pAppealID;
+        this.record = pRecord;
+        this.enrollment = pEnrollment;
+        this.message = pMessage;
+        this.dateFiled = pDateFiled;
+        this.status = pStatus;
     }
 
     /**
      * Constructor to create an Appeal without appealID or dateFiled.
      *
-     * @param record student record associated with this appeal.
-     * @param enrollment enrollment information of the
+     * @param pRecord student record associated with this appeal.
+     * @param pEnrollment enrollment information of the
      *                   student filing the appeal.
-     * @param message message or reason for the appeal.
-     * @param status current status of the appeal.
+     * @param pMessage message or reason for the appeal.
+     * @param pStatus current status of the appeal.
      */
-    public Appeal(Record record, Enrollment enrollment,
-                  String message, String status) {
-        this.record = record;
-        this.enrollment = enrollment;
-        this.message = message;
-        this.status = status;
+    public Appeal(Record pRecord, Enrollment pEnrollment,
+                  String pMessage, String pStatus) {
+        this.record = pRecord;
+        this.enrollment = pEnrollment;
+        this.message = pMessage;
+        this.status = pStatus;
     }
 
     /** @return the unique ID of this appeal. */
@@ -76,9 +76,9 @@ public class Appeal {
         return appealID;
     }
 
-    /** @param appealID sets the unique ID of this appeal. */
-    public void setAppealID(Long appealID) {
-        this.appealID = appealID;
+    /** @param pAppealID sets the unique ID of this appeal. */
+    public void setAppealID(Long pAppealID) {
+        this.appealID = pAppealID;
     }
 
     /** @return the related student record. */
@@ -86,9 +86,9 @@ public class Appeal {
         return record;
     }
 
-    /** @param record sets the related student record. */
-    public void setRecord(Record record) {
-        this.record = record;
+    /** @param pRecord sets the related student record. */
+    public void setRecord(Record pRecord) {
+        this.record = pRecord;
     }
 
     /** @return the enrollment associated with the appeal. */
@@ -96,9 +96,9 @@ public class Appeal {
         return enrollment;
     }
 
-    /** @param enrollment sets the enrollment associated with the appeal. */
-    public void setEnrollment(Enrollment enrollment) {
-        this.enrollment = enrollment;
+    /** @param pEnrollment sets the enrollment associated with the appeal. */
+    public void setEnrollment(Enrollment pEnrollment) {
+        this.enrollment = pEnrollment;
     }
 
     /** @return the message or reason for the appeal. */
@@ -106,9 +106,9 @@ public class Appeal {
         return message;
     }
 
-    /** @param message sets the message or reason for the appeal. */
-    public void setMessage(String message) {
-        this.message = message;
+    /** @param pMessage sets the message or reason for the appeal. */
+    public void setMessage(String pMessage) {
+        this.message = pMessage;
     }
 
     /** @return the date this appeal was filed. */
@@ -116,9 +116,9 @@ public class Appeal {
         return dateFiled;
     }
 
-    /** @param dateFiled sets the date this appeal was filed. */
-    public void setDateFiled(Date dateFiled) {
-        this.dateFiled = dateFiled;
+    /** @param mDateFiled sets the date this appeal was filed. */
+    public void setDateFiled(Date mDateFiled) {
+        this.dateFiled = mDateFiled;
     }
 
     /** @return the current status of the appeal. */
@@ -126,8 +126,8 @@ public class Appeal {
         return status;
     }
 
-    /** @param status sets the current status of the appeal. */
-    public void setStatus(String status) {
-        this.status = status;
+    /** @param pStatus sets the current status of the appeal. */
+    public void setStatus(String pStatus) {
+        this.status = pStatus;
     }
 }

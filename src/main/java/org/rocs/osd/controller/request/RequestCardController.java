@@ -16,7 +16,14 @@ public class RequestCardController {
      * Labels for displaying request details:
      * department, name, type, and reason.
      */
-    @FXML private Label deptLabel, nameLabel, typeLabel, reasonLabel;
+    @FXML
+    private Label deptLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label typeLabel;
+    @FXML
+    private Label reasonLabel;
     /**
      * Section that becomes visible when the card is expanded.
      */
@@ -36,17 +43,25 @@ public class RequestCardController {
 
     /**
      * Sets the data for the request card.
-     * @param dept the department name.
-     * @param name the requester name.
-     * @param type the request type.
-     * @param reason the reason for the request.
+     * @param pDept the department name.
+     * @param pName the requester name.
+     * @param pType the request type.
+     * @param pReason the reason for the request.
      */
-    public void setData(String dept, String name,
-    String type, String reason) {
-        if (deptLabel != null) deptLabel.setText(dept);
-        if (nameLabel != null) nameLabel.setText(name);
-        if (typeLabel != null) typeLabel.setText(type);
-        if (reasonLabel != null) reasonLabel.setText(reason);
+    public void setData(String pDept, String pName,
+    String pType, String pReason) {
+        if (deptLabel != null) {
+            deptLabel.setText(pDept);
+        }
+        if (nameLabel != null) {
+            nameLabel.setText(pName);
+        }
+        if (typeLabel != null) {
+            typeLabel.setText(pType);
+        }
+        if (reasonLabel != null) {
+            reasonLabel.setText(pReason);
+        }
     }
     /**
      * Toggles the expansion state of the card.
@@ -66,8 +81,11 @@ public class RequestCardController {
      * Prints an error message if the image is missing.
      */
     private void updateIcon() {
-        if (arrowIcon == null) return;
-        String imgPath = isExpanded ?
+        if (arrowIcon == null) {
+            return;
+        }
+        String imgPath = isExpanded
+                ?
         "/assets/downButton.png" : "/assets/rightButton.png";
         try {
             Image newImg = new Image(getClass().getResourceAsStream(imgPath));

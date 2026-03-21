@@ -54,8 +54,8 @@ public interface RecordDao {
      * @param schoolYear the school year to filter records.
      * @return a list of records matching the criteria.
      */
-    List<Record> findRecordListByDepartment
-    (Department department, String schoolYear);
+    List<Record> findRecordListByDepartment(
+            Department department, String schoolYear);
 
     /**
      * Counts the total number of violations for a given school year.

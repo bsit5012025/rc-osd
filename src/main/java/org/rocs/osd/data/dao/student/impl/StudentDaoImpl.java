@@ -21,32 +21,32 @@ public class StudentDaoImpl implements StudendDao {
      * The method joins the student, person, enrollment, and record tables
      * to retrieve complete student information.
      *
-     * @param StudentId the ID of the student to search.
+     * @param pStudentId the ID of the student to search.
      * @return a Student object populated with student and record info.
      */
     @Override
-    public Student findStudentWithRecordById(String StudentId) {
+    public Student findStudentWithRecordById(String pStudentId) {
         Student student = new Student();
 
         try (Connection conn = ConnectionHelper.getConnection()) {
 
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT s.studentID, " +
-                            "s.personID, " +
-                            "s.address, " +
-                            "s.studentType, " +
-                            "s.department, " +
-                            "p.lastName, " +
-                            "p.firstName, " +
-                            "p.middleName " +
-                            "FROM student s " +
-                            "JOIN person p ON s.personID = p.personID " +
-                            "JOIN enrollment e ON s.studentID = e.studentID " +
-                            "JOIN record r ON e.enrollmentID = r.enrollmentID " +
-                            "WHERE s.studentID = ?"
+                    "SELECT s.studentID, "
+                            + "s.personID, "
+                            + "s.address, "
+                            + "s.studentType, "
+                            + "s.department, "
+                            + "p.lastName, "
+                            + "p.firstName, "
+                            + "p.middleName "
+                            + "FROM student s "
+                            + "JOIN person p ON s.personID = p.personID "
+                            + "JOIN enrollment e ON s.studentID = e.studentID "
+                            + "JOIN record r ON e.enrollmentID = r.enrollmentID"
+                            + " WHERE s.studentID = ?"
             );
 
-            statement.setString(1, StudentId);
+            statement.setString(1, pStudentId);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -54,9 +54,10 @@ public class StudentDaoImpl implements StudendDao {
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
                 student.setStudentType(rs.getString("studentType"));
-                student.setDepartment(Department.valueOf
-                        (rs.getString("department")));
-                student.setLastName(rs.getString("lastName"));
+                student.setDepartment(Department.valueOf(rs.getString(
+                        "department")));
+                student.setLastName(rs.getString(
+                        "lastName"));
                 student.setFirstName(rs.getString("firstName"));
                 student.setMiddleName(rs.getString("middleName"));
             }
@@ -84,24 +85,24 @@ public class StudentDaoImpl implements StudendDao {
         try (Connection conn = ConnectionHelper.getConnection()) {
 
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT " +
-                            "s.studentID, " +
-                            "s.personID, " +
-                            "s.address, " +
-                            "s.studentType, " +
-                            "s.department, " +
-                            "p.lastName, " +
-                            "p.firstName, " +
-                            "p.middleName " +
-                            "FROM student s " +
-                            "JOIN person p ON s.personID = p.personID " +
-                            "JOIN enrollment e ON s.studentID =" +
-                            " e.studentID " +
-                            "JOIN record r ON e.enrollmentID = " +
-                            "r.enrollmentID " +
-                            "WHERE LOWER(p.lastName) = LOWER(?) " +
-                            "AND LOWER(p.firstName) = LOWER(?) " +
-                            "AND LOWER(p.middleName) = LOWER(?)"
+                    "SELECT "
+                            + "s.studentID, "
+                            + "s.personID, "
+                            + "s.address, "
+                            + "s.studentType, "
+                            + "s.department, "
+                            + "p.lastName, "
+                            + "p.firstName, "
+                            + "p.middleName "
+                            + "FROM student s "
+                            + "JOIN person p ON s.personID = p.personID "
+                            + "JOIN enrollment e ON s.studentID ="
+                            + " e.studentID "
+                            + "JOIN record r ON e.enrollmentID = "
+                            + "r.enrollmentID "
+                            + "WHERE LOWER(p.lastName) = LOWER(?) "
+                            + "AND LOWER(p.firstName) = LOWER(?) "
+                            + "AND LOWER(p.middleName) = LOWER(?)"
             );
 
             statement.setString(1, lastName);
@@ -114,8 +115,8 @@ public class StudentDaoImpl implements StudendDao {
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
                 student.setStudentType(rs.getString("studentType"));
-                student.setDepartment(Department.valueOf
-                (rs.getString("department")));
+                student.setDepartment(Department.valueOf(rs.getString(
+                        "department")));
                 student.setLastName(rs.getString("lastName"));
                 student.setFirstName(rs.getString("firstName"));
                 student.setMiddleName(rs.getString("middleName"));

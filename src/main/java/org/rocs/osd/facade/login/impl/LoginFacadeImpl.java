@@ -18,10 +18,10 @@ public class LoginFacadeImpl implements LoginFacade {
     /**
      * Constructor to set the login DAO dependency.
      *
-     * @param loginDao the DAO used to access login information
+     * @param pLoginDao the DAO used to access login information
      */
-    public LoginFacadeImpl(LoginDao loginDao) {
-        this.loginDao = loginDao;
+    public LoginFacadeImpl(LoginDao pLoginDao) {
+        this.loginDao = pLoginDao;
     }
 
     /**

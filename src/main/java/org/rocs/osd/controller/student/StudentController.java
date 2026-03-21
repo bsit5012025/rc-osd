@@ -68,8 +68,9 @@ public class StudentController {
         studentNameColumn.setCellValueFactory(cellData -> {
             var student = cellData.getValue().getStudent();
             return new SimpleStringProperty(
-                    student.getFirstName() + " " +
-                            student.getLastName()
+                    student.getFirstName()
+                            + " "
+                            + student.getLastName()
             );
         });
 

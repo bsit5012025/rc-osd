@@ -39,12 +39,12 @@ public class LoginController {
     * Text field for entering the username .
     */
     @FXML
-    TextField usernameTextField;
+    private TextField usernameTextField;
     /**
      * Password field for entering the password
      */
     @FXML
-    PasswordField passwordField;
+    private PasswordField passwordField;
     /**
      * Text field to display password in plain text when toggled.
      */
@@ -63,8 +63,10 @@ public class LoginController {
      */
     @FXML
     private void togglePasswordVisibility() {
-        if (passwordField == null ||
-                passwordTextField == null ||
+        if (passwordField == null
+                ||
+                passwordTextField == null
+                ||
                 togglePasswordButton == null) {
                 return;
         }
@@ -90,7 +92,7 @@ public class LoginController {
      * password and loads the Dashboard if successful.
      * @param event the action event triggered by clicking the login button.
      */
-    public void onLogin(ActionEvent event){
+    public void onLogin(ActionEvent event) {
 
         /**
          * Initialize DAO and Facade for login process.
@@ -103,8 +105,8 @@ public class LoginController {
          * This will check if the entered username
          * and password are correct.
          */
-        boolean loginCheck = loginFacade.login
-        (usernameTextField.getText(),passwordField.getText());
+        boolean loginCheck = loginFacade.login(
+        usernameTextField.getText(), passwordField.getText());
 
         /**
          * This will check if the username or password fields are empty
@@ -117,22 +119,21 @@ public class LoginController {
             showErrorPopup("Enter both username and password!");
             return;
         }
-        try{
+        try {
             /**
              * If the login credentials are correct,
              * Dashboard screen will be loaded.
              */
-            if(loginCheck){
+            if (loginCheck) {
                 loadDashboard(event);
-            }
-            else{
+            } else {
                 /**
                  * If the login fails, "Invalid username or password!
                  * will be displayed".
                  */
                 showErrorPopup("Invalid username or password!");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -159,7 +160,7 @@ public class LoginController {
              */
             double width = stage.getWidth();
             double height = stage.getHeight();
-            stage.setScene(new Scene(root,width,height));
+            stage.setScene(new Scene(root, width, height));
             /**
              * This will make the window full screen.
              */
@@ -168,7 +169,7 @@ public class LoginController {
             /**
              * Throw an exception if the Dashboard screen cannot be loaded.
              */
-        } catch (LoadException e){
+        } catch (LoadException e) {
             System.err.println("Error loading Dashboard");
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
@@ -185,8 +186,8 @@ public class LoginController {
             if (errorStage != null && errorStage.isShowing()) {
                 errorStage.close();
             }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource
-            ("/view/dialogs/loginError.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+            "/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
             /**
              * Sets the login error banner to the bottom-center
@@ -194,7 +195,8 @@ public class LoginController {
              * */
             errorStage = new Stage();
 
-            Label label = (Label) root.lookup("#lgnErrText");
+            Label label = (Label) root.lookup(
+                    "#lgnErrText");
             if (label != null) {
                 label.setText(message);
             }
@@ -217,7 +219,10 @@ public class LoginController {
             errorStage.show();
 
             PauseTransition delay = new PauseTransition(Duration.seconds(2));
-            delay.setOnFinished(event -> {errorStage.close();});
+            delay.setOnFinished(
+                    event -> {
+                        errorStage.close(); }
+            );
             delay.play();
 
 

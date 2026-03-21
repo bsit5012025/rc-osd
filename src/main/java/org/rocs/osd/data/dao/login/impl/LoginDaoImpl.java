@@ -29,11 +29,11 @@ public class LoginDaoImpl implements LoginDao {
 
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT l.id, l.username, l.password, l.personID, " +
-                            "p.lastname, p.firstname, p.middleName " +
-                            "FROM Login l " +
-                            "JOIN person p ON l.personID = p.personID " +
-                            "WHERE l.username = ?"
+                    "SELECT l.id, l.username, l.password, l.personID, "
+                            + "p.lastname, p.firstname, p.middleName "
+                            + "FROM Login l "
+                            + "JOIN person p ON l.personID = p.personID "
+                            + "WHERE l.username = ?"
             );
 
             statement.setString(1, username);

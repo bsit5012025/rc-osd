@@ -24,15 +24,15 @@ public class Guardian extends Person {
 
     /**
      * Constructor with all fields.
-     * @param guardianID unique guardian ID.
-     * @param contactNumber guardian's contact number.
-     * @param relationship relationship to the student.
+     * @param pGuardianID unique guardian ID.
+     * @param pContactNumber guardian's contact number.
+     * @param pRelationship relationship to the student.
      */
-    public Guardian(long guardianID, String contactNumber,
-                    Relationship relationship) {
-        this.guardianID = guardianID;
-        this.contactNumber = contactNumber;
-        this.relationship = relationship;
+    public Guardian(long pGuardianID, String pContactNumber,
+                    Relationship pRelationship) {
+        this.guardianID = pGuardianID;
+        this.contactNumber = pContactNumber;
+        this.relationship = pRelationship;
     }
 
     /** @return unique guardian ID. */
@@ -40,9 +40,9 @@ public class Guardian extends Person {
         return guardianID;
     }
 
-    /** @param guardianID sets the unique guardian ID. */
-    public void setGuardianID(long guardianID) {
-        this.guardianID = guardianID;
+    /** @param pGuardianID sets the unique guardian ID. */
+    public void setGuardianID(long pGuardianID) {
+        this.guardianID = pGuardianID;
     }
 
     /** @return the contact number of the guardian. */
@@ -50,9 +50,9 @@ public class Guardian extends Person {
         return contactNumber;
     }
 
-    /** @param contactNumber sets the guardian's contact number. */
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+    /** @param pContactNumber sets the guardian's contact number. */
+    public void setContactNumber(String pContactNumber) {
+        this.contactNumber = pContactNumber;
     }
 
     /** @return the relationship to the student. */
@@ -60,8 +60,8 @@ public class Guardian extends Person {
         return relationship;
     }
 
-    /** @param relationship sets the guardian's relationship to the student. */
-    public void setRelationship(Relationship relationship) {
-        this.relationship = relationship;
+    /** @param pRelationship sets the guardian's relationship to the student. */
+    public void setRelationship(Relationship pRelationship) {
+        this.relationship = pRelationship;
     }
 }

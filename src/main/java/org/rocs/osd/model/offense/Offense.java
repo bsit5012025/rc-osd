@@ -24,17 +24,17 @@ public class Offense {
 
     /**
      * Constructor with all fields.
-     * @param offenseId unique offense ID.
-     * @param offense name of the offense.
-     * @param type type of offense.
-     * @param description description of the offense.
+     * @param pOffenseId unique offense ID.
+     * @param pOffense name of the offense.
+     * @param pType type of offense.
+     * @param pDescription description of the offense.
      */
-    public Offense(long offenseId, String offense,
-                   String type, String description) {
-        this.offenseId = offenseId;
-        this.offense = offense;
-        this.type = type;
-        this.description = description;
+    public Offense(long pOffenseId, String pOffense,
+                   String pType, String pDescription) {
+        this.offenseId = pOffenseId;
+        this.offense = pOffense;
+        this.type = pType;
+        this.description = pDescription;
     }
 
     /** @return unique offense ID. */
@@ -42,9 +42,9 @@ public class Offense {
         return offenseId;
     }
 
-    /** @param offenseId sets the unique offense ID. */
-    public void setOffenseId(long offenseId) {
-        this.offenseId = offenseId;
+    /** @param pOffenseId sets the unique offense ID. */
+    public void setOffenseId(long pOffenseId) {
+        this.offenseId = pOffenseId;
     }
 
     /** @return the name of the offense. */
@@ -52,9 +52,9 @@ public class Offense {
         return offense;
     }
 
-    /** @param offense sets the name of the offense. */
-    public void setOffense(String offense) {
-        this.offense = offense;
+    /** @param pOffense sets the name of the offense. */
+    public void setOffense(String pOffense) {
+        this.offense = pOffense;
     }
 
     /** @return the type of the offense. */
@@ -62,9 +62,9 @@ public class Offense {
         return type;
     }
 
-    /** @param type sets the type of the offense. */
-    public void setType(String type) {
-        this.type = type;
+    /** @param pType sets the type of the offense. */
+    public void setType(String pType) {
+        this.type = pType;
     }
 
     /** @return the description of the offense. */
@@ -72,8 +72,8 @@ public class Offense {
         return description;
     }
 
-    /** @param description sets the description of the offense. */
-    public void setDescription(String description) {
-        this.description = description;
+    /** @param pDescription sets the description of the offense. */
+    public void setDescription(String pDescription) {
+        this.description = pDescription;
     }
 }

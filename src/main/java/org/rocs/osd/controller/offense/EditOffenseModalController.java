@@ -33,8 +33,7 @@ import java.time.LocalDate;
  * in the Office of Student Discipline System.
  * Handles loading, updating, and validating record data.
  */
-public class EditOffenseModalController
-{
+public class EditOffenseModalController {
     /**
      * ComboBox for selecting offense type.
      */
@@ -94,8 +93,7 @@ public class EditOffenseModalController
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
      */
-    public void initialize()
-    {
+    public void initialize() {
         offenseDao = new OffenseDaoImpl();
         studentDao = new StudentDaoImpl();
         enrollmentDao = new EnrollmentDaoImpl();
@@ -110,42 +108,41 @@ public class EditOffenseModalController
     /**
      * Sets the record data to be edited.
      *
-     * @param record the record to load into the form.
+     * @param pRecord the record to load into the form.
      */
-    public void setRecordData(Record record)
-    {
-        this.record = record;
+    public void setRecordData(Record pRecord) {
+        this.record = pRecord;
         loadStudentRecordInfo();
     }
     /**
      * Loads student and record details into the UI fields.
      */
-    private void loadStudentRecordInfo()
-    {
+    private void loadStudentRecordInfo() {
         studentIdTextField.setText(
                 record.getEnrollment().getStudent().getStudentId()
         );
 
         studentNameTextField.setText(
-                record.getEnrollment().getStudent().getFirstName() + " " +
-                        record.getEnrollment().getStudent().
-                        getMiddleName() + " " +
-                        record.getEnrollment()
-                        .getStudent()
-                        .getLastName()
+                record.getEnrollment().getStudent().getFirstName()
+                        + " "
+                        + record.getEnrollment().getStudent().getMiddleName()
+                        + " "
+                        + record.getEnrollment().getStudent().getLastName()
         );
 
-        datePicker.setValue(LocalDate.parse
-        (String.valueOf(record.getDateOfViolation())));
-        offenseTypeComboBox.setValue(record.getOffense().getOffense());
-        levelOfOffenseComboBox.setValue(record.getOffense().getType());
-        remarksTextArea.setText(record.getRemarks());
+        datePicker.setValue(LocalDate.parse(
+                String.valueOf(record.getDateOfViolation())));
+        offenseTypeComboBox.setValue(
+                record.getOffense().getOffense());
+        levelOfOffenseComboBox.setValue(
+                record.getOffense().getType());
+        remarksTextArea.setText(
+                record.getRemarks());
     }
     /**
      * Loads offense names into the ComboBox.
      */
-    private void loadComboBoxData(){
-
+    private void loadComboBoxData() {
         try {
             ObservableList<String> offenseList = FXCollections.
             observableArrayList(offenseDao.findAllOffenseName());
@@ -153,8 +150,8 @@ public class EditOffenseModalController
             observableArrayList(disciplinaryActionDao.findAllAction());
             offenseTypeComboBox.setItems(offenseList);
         } catch (Exception e) {
-            System.err.println("Database Error: Could not fetch " +
-                    "offense names from the database.");
+            System.err.println("Database Error: Could not fetch "
+                    + "offense names from the database.");
         }
     }
     /**
@@ -184,14 +181,18 @@ public class EditOffenseModalController
 
         String studentId = studentIdTextField.getText();
 
-        if (studentId.isEmpty()) return;
+        if (studentId.isEmpty()) {
+            return;
+        }
 
         Student student = studentDao.findStudentWithRecordById(studentId);
 
         if (student.getStudentId() != null) {
-            String fullName = student.getFirstName() + " " +
-                    student.getMiddleName() + " " +
-                    student.getLastName();
+            String fullName = student.getFirstName()
+                    + " "
+                    + student.getMiddleName()
+                    + " "
+                    + student.getLastName();
 
             studentNameTextField.setText(fullName);
         } else {
@@ -205,8 +206,7 @@ public class EditOffenseModalController
      * @param event action event from cancel button
      */
     @FXML
-    private void onCancel(ActionEvent event)
-    {
+    private void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -217,10 +217,8 @@ public class EditOffenseModalController
      * @param event action event from submit button.
      */
     @FXML
-    private void onSubmit(ActionEvent event)
-    {
-        try
-        {
+    private void onSubmit(ActionEvent event) {
+        try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseName = offenseTypeComboBox.getValue();
@@ -233,9 +231,7 @@ public class EditOffenseModalController
                     || studentName.isEmpty()
                     || offenseName == null
                     || offenseType == null
-                    || datePicker.getValue() == null)
-            {
-
+                    || datePicker.getValue() == null) {
                 System.out.println("Fill out all required fields!");
                 return;
             }
@@ -243,10 +239,9 @@ public class EditOffenseModalController
             if (record == null
                     || record.getEnrollment() == null
                     || record.getAction() == null
-                    || record.getEnrollment().getStudent() == null)
-            {
-                System.out.println("Record, Enrollment, " +
-                        "Action or student are missing or null!");
+                    || record.getEnrollment().getStudent() == null) {
+                System.out.println("Record, Enrollment, "
+                        + "Action or student are missing or null!");
                 return;
             }
 
@@ -278,16 +273,17 @@ public class EditOffenseModalController
                     record.getStatus()
                     );
 
-            if(status){
+            if (status) {
                 System.out.println("Violation Updated!");
 
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Stage stage = (Stage) ((Node) event.getSource())
+                        .getScene().getWindow();
                 stage.close();
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
+

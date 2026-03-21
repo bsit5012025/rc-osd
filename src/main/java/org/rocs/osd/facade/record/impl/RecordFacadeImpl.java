@@ -30,10 +30,10 @@ public class RecordFacadeImpl implements RecordFacade {
     /**
      * Constructor to inject the RecordDao dependency.
      *
-     * @param recordDao the RecordDao instance to use.
+     * @param pRecordDao the RecordDao instance to use.
      */
-    public RecordFacadeImpl(RecordDao recordDao) {
-        this.recordDao = recordDao;
+    public RecordFacadeImpl(RecordDao pRecordDao) {
+        this.recordDao = pRecordDao;
     }
 
     /**
@@ -144,7 +144,9 @@ public class RecordFacadeImpl implements RecordFacade {
 
         int count = 0;
         for (Map.Entry<String, Integer> entry : offenses.entrySet()) {
-            if (count == 5) break;
+            if (count == 5) {
+                break;
+            }
             String offense = entry.getKey();
             int offenseCount = entry.getValue();
             double percentage = (offenseCount * 100.0) / totalViolations;

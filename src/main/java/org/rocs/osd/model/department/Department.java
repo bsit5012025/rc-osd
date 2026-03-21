@@ -21,10 +21,10 @@ public enum Department {
     /**
      * Constructor to set the display name of the department.
      *
-     * @param displayName the display name of the department
+     * @param pDisplayName the display name of the department
      */
-    Department(String displayName) {
-        this.displayName = displayName;
+    Department(String pDisplayName) {
+        this.displayName = pDisplayName;
     }
 
     /**

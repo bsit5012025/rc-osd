@@ -26,17 +26,17 @@ public class Person {
     /**
      * Constructor with all fields.
      *
-     * @param personID unique identifier of the person.
-     * @param lastName last name of the person.
-     * @param firstName first name of the person.
-     * @param middleName middle name of the person.
+     * @param pPersonID unique identifier of the person.
+     * @param pLastName last name of the person.
+     * @param pFirstName first name of the person.
+     * @param pMiddleName middle name of the person.
      */
-    public Person(long personID, String lastName,
-                  String firstName, String middleName) {
-        this.personID = personID;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
+    public Person(long pPersonID, String pLastName,
+                  String pFirstName, String pMiddleName) {
+        this.personID = pPersonID;
+        this.lastName = pLastName;
+        this.firstName = pFirstName;
+        this.middleName = pMiddleName;
     }
 
     /** @return the unique person ID. */
@@ -44,9 +44,9 @@ public class Person {
         return personID;
     }
 
-    /** @param personID sets the unique person ID. */
-    public void setPersonID(long personID) {
-        this.personID = personID;
+    /** @param pPersonID sets the unique person ID. */
+    public void setPersonID(long pPersonID) {
+        this.personID = pPersonID;
     }
 
     /** @return the last name. */
@@ -54,9 +54,9 @@ public class Person {
         return lastName;
     }
 
-    /** @param lastName sets the last name. */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    /** @param pLastName sets the last name. */
+    public void setLastName(String pLastName) {
+        this.lastName = pLastName;
     }
 
     /** @return the first name. */
@@ -64,9 +64,9 @@ public class Person {
         return firstName;
     }
 
-    /** @param firstName sets the first name. */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    /** @param pFirstName sets the first name. */
+    public void setFirstName(String pFirstName) {
+        this.firstName = pFirstName;
     }
 
     /** @return the middle name. */
@@ -74,8 +74,8 @@ public class Person {
         return middleName;
     }
 
-    /** @param middleName sets the middle name. */
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    /** @param pMiddleName sets the middle name. */
+    public void setMiddleName(String pMiddleName) {
+        this.middleName = pMiddleName;
     }
 }

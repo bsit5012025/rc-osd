@@ -5,7 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
@@ -88,7 +91,7 @@ public class AddOffenseModalController {
      * automatically selects the level of offense based on
      * the selected offense type.
      */
-    public void initialize(){
+    public void initialize() {
         offenseDao = new OffenseDaoImpl();
         studentDao = new StudentDaoImpl();
         RecordDao dao = new RecordDaoImpl();
@@ -106,7 +109,7 @@ public class AddOffenseModalController {
      * into the offense type ComboBox.
      * Prints an error message if the database fetch fails.
      */
-    public void loadComboBoxData(){
+    public void loadComboBoxData() {
 
         try {
             ObservableList<String> offenseList = FXCollections.
@@ -116,8 +119,8 @@ public class AddOffenseModalController {
             offenseTypeComboBox.setItems(offenseList);
             actionComboBox.setItems(actionList);
         } catch (Exception e) {
-            System.err.println("Database Error: Could not fetch " +
-                    "offense names from the database.");
+            System.err.println("Database Error: Could not fetch "
+                    + "offense names from the database.");
         }
 
     }
@@ -151,14 +154,18 @@ public class AddOffenseModalController {
 
         String studentId = studentIdTextField.getText();
 
-        if (studentId.isEmpty()) return;
+        if (studentId.isEmpty()) {
+            return;
+        }
 
         Student student = studentDao.findStudentWithRecordById(studentId);
 
         if (student.getStudentId() != null) {
-            String fullName = student.getFirstName() + " " +
-                    student.getMiddleName() + " " +
-                    student.getLastName();
+            String fullName = student.getFirstName()
+                    + " "
+                    + student.getMiddleName()
+                    + " "
+                    + student.getLastName();
 
             studentNameTextField.setText(fullName);
         } else {
@@ -171,7 +178,7 @@ public class AddOffenseModalController {
      *
      * @param event action event from cancel button.
      */
-    public void onCancel(ActionEvent event){
+    public void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -181,8 +188,8 @@ public class AddOffenseModalController {
      *
      * @param event action event from submit button.
      */
-    public void onSubmit(ActionEvent event){
-        try{
+    public void onSubmit(ActionEvent event) {
+        try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseType = offenseTypeComboBox.getValue();
@@ -215,7 +222,7 @@ public class AddOffenseModalController {
                     actionID,
                     remarks
             );
-            if(record){
+            if (record) {
                 System.out.println("Violation recorded!");
 
                 Stage stage = (Stage) ((Node)
@@ -224,10 +231,11 @@ public class AddOffenseModalController {
                 .getWindow();
                 stage.close();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
     }
 }
+

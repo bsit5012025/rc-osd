@@ -25,12 +25,12 @@ public class GuardianDaoImpl implements GuardianDao {
     /**
      * Finds guardians for a given student by student ID.
      *
-     * @param studentId the ID of the student.
+     * @param pStudentId the ID of the student.
      * @return a list of StudentGuardian objects linking the student with their
      *         guardians. Returns an empty list if none found.
      */
     @Override
-    public List<StudentGuardian> findGuardianByStudentId(String studentId) {
+    public List<StudentGuardian> findGuardianByStudentId(String pStudentId) {
 
         List<StudentGuardian> sgList = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class GuardianDaoImpl implements GuardianDao {
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, studentId);
+            ps.setString(1, pStudentId);
 
             ResultSet rs = ps.executeQuery();
 
@@ -67,8 +67,8 @@ public class GuardianDaoImpl implements GuardianDao {
             }
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception (findGuardianByStudentId): " +
-                    e.getMessage());
+            System.out.println("SQL Exception (findGuardianByStudentId): "
+                    + e.getMessage());
         }
 
         return sgList;

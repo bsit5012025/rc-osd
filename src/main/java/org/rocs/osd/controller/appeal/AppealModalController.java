@@ -106,10 +106,10 @@ public class AppealModalController {
     /**
      * Sets the appeal data to display in the modal.
      *
-     * @param appeal the Appeal object containing details to display.
+     * @param pAppeal the Appeal object containing details to display.
      */
-    public void setAppeal(Appeal appeal) {
-        this.appeal = appeal;
+    public void setAppeal(Appeal pAppeal) {
+        this.appeal = pAppeal;
         loadAppealData();
     }
 
@@ -138,7 +138,9 @@ public class AppealModalController {
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
         }
-        if (popupBox != null) popupBox.setVisible(false);
+        if (popupBox != null) {
+            popupBox.setVisible(false);
+        }
     }
 
     /**
@@ -146,7 +148,9 @@ public class AppealModalController {
      * Hides sections initially.
      */
     private void loadAppealData() {
-        if (appeal == null) return;
+        if (appeal == null) {
+            return;
+        }
 
         Enrollment enrollment = appeal.getEnrollment();
         Record record = appeal.getRecord();
@@ -154,7 +158,7 @@ public class AppealModalController {
 
         studentIdLabel.setText(enrollment.getStudent().getStudentId());
         studentNameLabel.setText(student.getFirstName()
-        +" " + student.getLastName());
+        + " " + student.getLastName());
         offenseLabel.setText(record.getRemarks());
         reasonLabel.setText(appeal.getMessage());
 
@@ -189,7 +193,7 @@ public class AppealModalController {
      * Shows popup after denial.
      */
     private void handleAppealDeny() {
-        appealFacade.deniedAppeal(appeal.getAppealID());
+        appealFacade.denyAppeal(appeal.getAppealID());
         showPopupAndRemoveCard("Appeal denied!");
     }
 
@@ -205,7 +209,9 @@ public class AppealModalController {
 
         PauseTransition delay = new PauseTransition(Duration.seconds(1));
         delay.setOnFinished(e -> {
-            if (onActionComplete != null) onActionComplete.run();
+            if (onActionComplete != null) {
+                onActionComplete.run();
+            }
         });
 
         delay.play();

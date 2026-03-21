@@ -167,7 +167,8 @@ public class DashboardController {
             System.err.println("FXML file not found at the specified path. "
                     + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Failed to load Offense view. Check FXML errors. "
+            System.err.println(
+                    "Failed to load Offense view. Check FXML errors. "
                     + e.getMessage());
         }
     }
@@ -180,8 +181,8 @@ public class DashboardController {
     public void onLoadDashboard(ActionEvent event) {
         try {
             Parent dashboardView = FXMLLoader.load(Objects.requireNonNull(
-                    getClass().getResource
-                    ("/view/dashboard/centerDashboard.fxml")));
+                    getClass().getResource(
+                    "/view/dashboard/centerDashboard.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(dashboardView);
         } catch (NullPointerException e) {

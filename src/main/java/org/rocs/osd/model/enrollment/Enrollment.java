@@ -38,25 +38,25 @@ public class Enrollment {
 
     /**
      * Constructor to create an Enrollment with all values.
-     * @param enrollmentId unique ID of the enrollment.
-     * @param student student associated with this enrollment.
-     * @param schoolYear school year of the enrollment.
-     * @param studentLevel level/grade of the student.
-     * @param section section of the student.
-     * @param department department the student belongs to.
-     * @param disciplinaryStatus disciplinary status of the student.
+     * @param pEnrollmentId unique ID of the enrollment.
+     * @param pStudent student associated with this enrollment.
+     * @param pSchoolYear school year of the enrollment.
+     * @param pStudentLevel level/grade of the student.
+     * @param pSection section of the student.
+     * @param pDepartment department the student belongs to.
+     * @param pDisciplinaryStatus disciplinary status of the student.
      */
-    public Enrollment(long enrollmentId, Student student, String schoolYear,
-                      String studentLevel, String section,
-                      Department department,
-                      DisciplinaryStatus disciplinaryStatus) {
-        this.enrollmentId = enrollmentId;
-        this.student = student;
-        this.schoolYear = schoolYear;
-        this.studentLevel = studentLevel;
-        this.section = section;
-        this.department = department;
-        this.disciplinaryStatus = disciplinaryStatus;
+    public Enrollment(long pEnrollmentId, Student pStudent, String pSchoolYear,
+                      String pStudentLevel, String pSection,
+                      Department pDepartment,
+                      DisciplinaryStatus pDisciplinaryStatus) {
+        this.enrollmentId = pEnrollmentId;
+        this.student = pStudent;
+        this.schoolYear = pSchoolYear;
+        this.studentLevel = pStudentLevel;
+        this.section = pSection;
+        this.department = pDepartment;
+        this.disciplinaryStatus = pDisciplinaryStatus;
     }
 
     /** @return the unique ID of the enrollment */
@@ -64,9 +64,9 @@ public class Enrollment {
         return enrollmentId;
     }
 
-    /** @param enrollmentId sets the unique ID of the enrollment */
-    public void setEnrollmentId(long enrollmentId) {
-        this.enrollmentId = enrollmentId;
+    /** @param pEnrollmentId sets the unique ID of the enrollment */
+    public void setEnrollmentId(long pEnrollmentId) {
+        this.enrollmentId = pEnrollmentId;
     }
 
     /** @return the student associated with the enrollment */
@@ -74,9 +74,9 @@ public class Enrollment {
         return student;
     }
 
-    /** @param student sets the student associated with the enrollment */
-    public void setStudent(Student student) {
-        this.student = student;
+    /** @param pStudent sets the student associated with the enrollment */
+    public void setStudent(Student pStudent) {
+        this.student = pStudent;
     }
 
     /** @return the school year of the enrollment */
@@ -84,9 +84,9 @@ public class Enrollment {
         return schoolYear;
     }
 
-    /** @param schoolYear sets the school year of the enrollment */
-    public void setSchoolYear(String schoolYear) {
-        this.schoolYear = schoolYear;
+    /** @param pSchoolYear sets the school year of the enrollment */
+    public void setSchoolYear(String pSchoolYear) {
+        this.schoolYear = pSchoolYear;
     }
 
     /** @return the level or grade of the student */
@@ -94,9 +94,9 @@ public class Enrollment {
         return studentLevel;
     }
 
-    /** @param studentLevel sets the level or grade of the student */
-    public void setStudentLevel(String studentLevel) {
-        this.studentLevel = studentLevel;
+    /** @param pStudentLevel sets the level or grade of the student */
+    public void setStudentLevel(String pStudentLevel) {
+        this.studentLevel = pStudentLevel;
     }
 
     /** @return the section of the student */
@@ -104,9 +104,9 @@ public class Enrollment {
         return section;
     }
 
-    /** @param section sets the section of the student */
-    public void setSection(String section) {
-        this.section = section;
+    /** @param pSection sets the section of the student */
+    public void setSection(String pSection) {
+        this.section = pSection;
     }
 
     /** @return the department of the student */
@@ -114,9 +114,9 @@ public class Enrollment {
         return department;
     }
 
-    /** @param department sets the department of the student */
-    public void setDepartment(Department department) {
-        this.department = department;
+    /** @param pDepartment sets the department of the student */
+    public void setDepartment(Department pDepartment) {
+        this.department = pDepartment;
     }
 
     /** @return the disciplinary status of the student */
@@ -124,8 +124,9 @@ public class Enrollment {
         return disciplinaryStatus;
     }
 
-    /** @param disciplinaryStatus sets the disciplinary status of the student */
-    public void setDisciplinaryStatus(DisciplinaryStatus disciplinaryStatus) {
-        this.disciplinaryStatus = disciplinaryStatus;
+    /** @param pDisciplinaryStatus
+     * sets the disciplinary status of the student */
+    public void setDisciplinaryStatus(DisciplinaryStatus pDisciplinaryStatus) {
+        this.disciplinaryStatus = pDisciplinaryStatus;
     }
 }

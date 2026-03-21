@@ -16,10 +16,10 @@ public class EnrollmentFacadeImpl implements EnrollmentFacade {
 
     /**
      * Constructor for injecting an EnrollmentDao implementation.
-     * @param enrollmentDao the DAO to use for database operations.
+     * @param pEnrollmentDao the DAO to use for database operations.
      */
-    public EnrollmentFacadeImpl(EnrollmentDao enrollmentDao) {
-        this.enrollmentDao = enrollmentDao;
+    public EnrollmentFacadeImpl(EnrollmentDao pEnrollmentDao) {
+        this.enrollmentDao = pEnrollmentDao;
     }
 
     /**

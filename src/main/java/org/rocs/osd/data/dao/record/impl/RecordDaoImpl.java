@@ -16,7 +16,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * DAO implementation for managing student records in the Office of
@@ -152,9 +155,9 @@ public class RecordDaoImpl implements RecordDao {
         try (Connection con = ConnectionHelper.getConnection()) {
 
             String sql =
-                    "INSERT INTO record (enrollmentID, employeeID, " +
-                            "offenseID, dateOfViolation, actionID, remarks, " +
-                            "status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO record (enrollmentID, employeeID, "
+                            + "offenseID, dateOfViolation, actionID, remarks, "
+                            + "status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -187,14 +190,14 @@ public class RecordDaoImpl implements RecordDao {
         try (Connection con = ConnectionHelper.getConnection()) {
 
             String sql =
-                    "UPDATE record SET enrollmentID = ?, employeeID = ?, " +
-                            "offenseID = ?, " +
-                            "dateOfViolation = ?," +
-                            " dateOfResolution = ?, " +
-                            "actionID = ?, " +
-                            "remarks = ?, " +
-                            "status = ? " +
-                            "WHERE recordID = ?";
+                    "UPDATE record SET enrollmentID = ?, employeeID = ?, "
+                            + "offenseID = ?, "
+                            + "dateOfViolation = ?,"
+                            + " dateOfResolution = ?, "
+                            + "actionID = ?, "
+                            + "remarks = ?, "
+                            + "status = ? "
+                            + "WHERE recordID = ?";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -232,5 +235,26 @@ public class RecordDaoImpl implements RecordDao {
             );
             return false;
         }
+    }
+
+    @Override
+    public List<Record> findRecordListByDepartment(
+            Department department, String schoolYear) {
+        return List.of();
+    }
+
+    @Override
+    public int findTotalViolations(String schoolYear) {
+        return 0;
+    }
+
+    @Override
+    public int findTodayViolations() {
+        return 0;
+    }
+
+    @Override
+    public Map<String, Integer> findMostFrequentOffenses(String schoolYear) {
+        return Map.of();
     }
 }

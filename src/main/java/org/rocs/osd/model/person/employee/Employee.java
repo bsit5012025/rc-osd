@@ -24,22 +24,22 @@ public class Employee extends Person {
 
     /**
      * Constructor with all fields.
-     * @param personID ID inherited from Person.
-     * @param lastName employee last name.
-     * @param firstName employee first name.
+     * @param pPersonID ID inherited from Person.
+     * @param pLastName employee last name.
+     * @param pFirstName employee first name.
      * @param middleName employee middle name.
-     * @param employeeId unique employee ID.
-     * @param department employee department.
-     * @param employeeRole role of the employee.
+     * @param pEmployeeId unique employee ID.
+     * @param pDepartment employee pDepartment.
+     * @param pEmployeeRole role of the employee.
      */
-    public Employee(Long personID, String lastName,
-                    String firstName, String middleName,
-                    String employeeId, Department department,
-                    String employeeRole) {
-        super(personID, lastName, firstName, middleName);
-        this.employeeId = employeeId;
-        this.department = department;
-        this.employeeRole = employeeRole;
+    public Employee(Long pPersonID, String pLastName,
+                    String pFirstName, String middleName,
+                    String pEmployeeId, Department pDepartment,
+                    String pEmployeeRole) {
+        super(pPersonID, pLastName, pFirstName, middleName);
+        this.employeeId = pEmployeeId;
+        this.department = pDepartment;
+        this.employeeRole = pEmployeeRole;
     }
 
     /** @return unique employee ID. */
@@ -47,9 +47,9 @@ public class Employee extends Person {
         return employeeId;
     }
 
-    /** @param employeeId sets the unique employee ID. */
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    /** @param pEmployeeId sets the unique employee ID. */
+    public void setEmployeeId(String pEmployeeId) {
+        this.employeeId = pEmployeeId;
     }
 
     /** @return the department of the employee. */
@@ -57,9 +57,9 @@ public class Employee extends Person {
         return department;
     }
 
-    /** @param department sets the department of the employee. */
-    public void setDepartment(Department department) {
-        this.department = department;
+    /** @param pDepartment sets the department of the employee. */
+    public void setDepartment(Department pDepartment) {
+        this.department = pDepartment;
     }
 
     /** @return the role of the employee. */
@@ -67,8 +67,8 @@ public class Employee extends Person {
         return employeeRole;
     }
 
-    /** @param employeeRole sets the role of the employee. */
-    public void setEmployeeRole(String employeeRole) {
-        this.employeeRole = employeeRole;
+    /** @param pEmployeeRole sets the role of the employee. */
+    public void setEmployeeRole(String pEmployeeRole) {
+        this.employeeRole = pEmployeeRole;
     }
 }

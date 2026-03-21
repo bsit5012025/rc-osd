@@ -17,10 +17,10 @@ public class AppealFacadeImpl implements AppealFacade {
 
     /**
      * Constructs a facade with a custom AppealDao implementation.
-     * @param appealDao the AppealDao to use for database operations
+     * @param pAppealDao the AppealDao to use for database operations
      */
-    public AppealFacadeImpl(AppealDao appealDao) {
-        this.appealDao = appealDao;
+    public AppealFacadeImpl(AppealDao pAppealDao) {
+        this.appealDao = pAppealDao;
     }
 
     /**

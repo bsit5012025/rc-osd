@@ -54,30 +54,30 @@ public class Record {
     /**
      * Constructor with all fields to create a complete Record object.
      *
-     * @param recordId unique ID of the record.
-     * @param enrollment enrollment associated with the student.
-     * @param employee employee who recorded the offense.
-     * @param offense offense committed by the student.
-     * @param dateOfViolation date when the violation occurred.
-     * @param action disciplinary action applied.
-     * @param dateOfResolution date when the record was resolved.
-     * @param remarks additional remarks about the record.
-     * @param status current status of the record.
+     * @param pRecordId unique ID of the record.
+     * @param pEnrollment pEnrollment associated with the student.
+     * @param pEmployee pEmployee who recorded the pOffense.
+     * @param pOffense pOffense committed by the student.
+     * @param pDateOfViolation date when the violation occurred.
+     * @param pAction disciplinary pAction applied.
+     * @param pDateOfResolution date when the record was resolved.
+     * @param pRemarks additional pRemarks about the record.
+     * @param pStatus current pStatus of the record.
      */
-    public Record(long recordId, Enrollment enrollment,
-                  Employee employee, Offense offense,
-                  Date dateOfViolation, DisciplinaryAction action,
-                  Date dateOfResolution, String remarks,
-                  RecordStatus status) {
-        this.recordId = recordId;
-        this.enrollment = enrollment;
-        this.employee = employee;
-        this.offense = offense;
-        this.dateOfViolation = dateOfViolation;
-        this.action = action;
-        this.dateOfResolution = dateOfResolution;
-        this.remarks = remarks;
-        this.status = status;
+    public Record(long pRecordId, Enrollment pEnrollment,
+                  Employee pEmployee, Offense pOffense,
+                  Date pDateOfViolation, DisciplinaryAction pAction,
+                  Date pDateOfResolution, String pRemarks,
+                  RecordStatus pStatus) {
+        this.recordId = pRecordId;
+        this.enrollment = pEnrollment;
+        this.employee = pEmployee;
+        this.offense = pOffense;
+        this.dateOfViolation = pDateOfViolation;
+        this.action = pAction;
+        this.dateOfResolution = pDateOfResolution;
+        this.remarks = pRemarks;
+        this.status = pStatus;
     }
 
     /** @return the unique record ID */
@@ -85,9 +85,9 @@ public class Record {
         return recordId;
     }
 
-    /** @param recordId sets the unique record ID */
-    public void setRecordId(long recordId) {
-        this.recordId = recordId;
+    /** @param pRecordId sets the unique record ID */
+    public void setRecordId(long pRecordId) {
+        this.recordId = pRecordId;
     }
 
     /** @return the enrollment associated with the student */
@@ -95,9 +95,9 @@ public class Record {
         return enrollment;
     }
 
-    /** @param enrollment sets the enrollment associated with the student */
-    public void setEnrollment(Enrollment enrollment) {
-        this.enrollment = enrollment;
+    /** @param pEnrollment sets the pEnrollment associated with the student */
+    public void setEnrollment(Enrollment pEnrollment) {
+        this.enrollment = pEnrollment;
     }
 
     /** @return the employee who recorded the offense */
@@ -105,9 +105,9 @@ public class Record {
         return employee;
     }
 
-    /** @param employee sets the employee who recorded the offense */
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    /** @param pEmployee sets the pEmployee who recorded the offense */
+    public void setEmployee(Employee pEmployee) {
+        this.employee = pEmployee;
     }
 
     /** @return the offense committed by the student */
@@ -115,9 +115,9 @@ public class Record {
         return offense;
     }
 
-    /** @param offense sets the offense committed by the student */
-    public void setOffense(Offense offense) {
-        this.offense = offense;
+    /** @param pOffense sets the pOffense committed by the student */
+    public void setOffense(Offense pOffense) {
+        this.offense = pOffense;
     }
 
     /** @return the date of the violation */
@@ -125,9 +125,9 @@ public class Record {
         return dateOfViolation;
     }
 
-    /** @param dateOfViolation sets the date of the violation */
-    public void setDateOfViolation(Date dateOfViolation) {
-        this.dateOfViolation = dateOfViolation;
+    /** @param pDateOfViolation sets the date of the violation */
+    public void setDateOfViolation(Date pDateOfViolation) {
+        this.dateOfViolation = pDateOfViolation;
     }
 
     /** @return the disciplinary action applied */
@@ -135,9 +135,9 @@ public class Record {
         return action;
     }
 
-    /** @param action sets the disciplinary action applied */
-    public void setAction(DisciplinaryAction action) {
-        this.action = action;
+    /** @param pAction sets the disciplinary pAction applied */
+    public void setAction(DisciplinaryAction pAction) {
+        this.action = pAction;
     }
 
     /** @return the date when the record was resolved */
@@ -145,9 +145,9 @@ public class Record {
         return dateOfResolution;
     }
 
-    /** @param dateOfResolution sets the date when the record was resolved */
-    public void setDateOfResolution(Date dateOfResolution) {
-        this.dateOfResolution = dateOfResolution;
+    /** @param pDateOfResolution sets the date when the record was resolved */
+    public void setDateOfResolution(Date pDateOfResolution) {
+        this.dateOfResolution = pDateOfResolution;
     }
 
     /** @return remarks or comments about the record */
@@ -155,9 +155,9 @@ public class Record {
         return remarks;
     }
 
-    /** @param remarks sets remarks or comments about the record */
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    /** @param pRemarks sets pRemarks or comments about the record */
+    public void setRemarks(String pRemarks) {
+        this.remarks = pRemarks;
     }
 
     /** @return the current status of the record */
@@ -165,8 +165,8 @@ public class Record {
         return status;
     }
 
-    /** @param status sets the current status of the record */
-    public void setStatus(RecordStatus status) {
-        this.status = status;
+    /** @param pStatus sets the current pStatus of the record */
+    public void setStatus(RecordStatus pStatus) {
+        this.status = pStatus;
     }
 }

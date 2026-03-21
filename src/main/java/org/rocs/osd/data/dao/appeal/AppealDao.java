@@ -24,3 +24,4 @@ public interface AppealDao {
      */
     void updateAppealStatus(long appealId, String status);
 }
+

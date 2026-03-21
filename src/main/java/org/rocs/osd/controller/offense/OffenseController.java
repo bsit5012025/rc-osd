@@ -2,7 +2,6 @@ package org.rocs.osd.controller.offense;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,9 +65,8 @@ public class OffenseController {
      * undecorated, non-resizable window.
      * @param event the ActionEvent triggered by the user.
      */
-    public void onLoadOffenseModal(ActionEvent event){
+    public void onLoadOffenseModal(ActionEvent event) {
         try {
-
             Parent root = FXMLLoader.load(getClass().
             getResource("/view/offense/addOffenseModal.fxml"));
             Stage modalStage = new Stage();
@@ -81,8 +79,9 @@ public class OffenseController {
             refreshRecord();
 
         } catch (IOException e) {
-            System.err.println("UI Error: Could not find or load " +
-            "AddOffenseModal.fxml. Check the file path and Controller names.");
+            System.err.println("UI Error: Could not find or load "
+                    + "AddOffenseModal.fxml. "
+                    + "Check the file path and Controller names.");
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Unexpected Error while opening modal: "
@@ -94,8 +93,7 @@ public class OffenseController {
      *
      * @param record the selected record to edit
      */
-    public void onLoadEditOffenseModal(Record record)
-    {
+    public void onLoadEditOffenseModal(Record record) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().
             getResource("/view/offense/editOffenseModal.fxml"));
@@ -113,9 +111,9 @@ public class OffenseController {
             modalStage.show();
 
         } catch (IOException e) {
-            System.err.println("UI Error: Could not find " +
-            "or load editOffenseModal.fxml. " +
-            "Check the file path and Controller names.");
+            System.err.println("UI Error: Could not find "
+                    + "or load editOffenseModal.fxml. "
+                    + "Check the file path and Controller names.");
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Unexpected Error while opening modal: "
@@ -137,7 +135,6 @@ public class OffenseController {
      * Sets up table column mappings.
      */
     private void loadDataToTable() {
-
         studentIdColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue()
                 .getEnrollment()
@@ -148,8 +145,10 @@ public class OffenseController {
             var student = cellData.getValue()
                     .getEnrollment()
                     .getStudent();
-            return new SimpleStringProperty
-        (student.getFirstName() + " " + student.getLastName());
+            return new SimpleStringProperty(
+                    student.getFirstName()
+                            + " "
+                            + student.getLastName());
         });
 
         offenseLevelColumn.setCellValueFactory(cellData ->
@@ -185,8 +184,7 @@ public class OffenseController {
     /**
      * Handles row click to open edit modal.
      */
-    private void selectStudentRecord()
-    {
+    private void selectStudentRecord() {
         violationsTable.setOnMouseClicked(event -> {
                 Record record = violationsTable.
                 getSelectionModel().getSelectedItem();
@@ -227,3 +225,4 @@ public class OffenseController {
         loadRecordsOfViolation(Department.JHS);
     }
 }
+

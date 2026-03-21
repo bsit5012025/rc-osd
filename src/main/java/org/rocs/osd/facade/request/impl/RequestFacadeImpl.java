@@ -23,10 +23,10 @@ public class RequestFacadeImpl implements RequestFacade {
 
     /**
      * Constructor to inject the RequestDao dependency.
-     * @param requestDao the DAO used to handle request database operations.
+     * @param pRequestDao the DAO used to handle request database operations.
      */
-    public RequestFacadeImpl(RequestDao requestDao) {
-        this.requestDao = requestDao;
+    public RequestFacadeImpl(RequestDao pRequestDao) {
+        this.requestDao = pRequestDao;
     }
 
     /**
@@ -41,10 +41,10 @@ public class RequestFacadeImpl implements RequestFacade {
     @Override
     public boolean addRequest(String employeeID,
     String details, String message, String type) {
-        boolean status = validateString(employeeID, 10, false) &&
-                validateString(details, 100, false) &&
-                validateString(message, 500, true) &&
-                validateString(type, 100, false);
+        boolean status = validateString(employeeID, 10, false)
+                && validateString(details, 100, false)
+                && validateString(message, 500, true)
+                && validateString(type, 100, false);
 
         if (status) {
             requestDao.addRequest(employeeID, details, message, type);

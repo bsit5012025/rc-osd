@@ -28,15 +28,15 @@ public class GuardianFacadeImpl implements GuardianFacade {
 
     /**
      * Retrieves all guardians associated with a specific student ID.
-     * @param studentID the unique ID of the student.
+     * @param pStudentID the unique ID of the student.
      * @return a List of StudentGuardian objects associated with the student.
      */
     @Override
-    public List<StudentGuardian> getGuardianByStudentId(String studentID) {
-        if (studentID == null || studentID.trim().isEmpty()) {
+    public List<StudentGuardian> getGuardianByStudentId(String pStudentID) {
+        if (pStudentID == null || pStudentID.trim().isEmpty()) {
             return new ArrayList<>();
         }
 
-        return guardianDao.findGuardianByStudentId(studentID);
+        return guardianDao.findGuardianByStudentId(pStudentID);
     }
 }
