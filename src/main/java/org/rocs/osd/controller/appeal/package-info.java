@@ -6,4 +6,3 @@
  * approving, and denying requests through the user interface.
  */
 package org.rocs.osd.controller.appeal;
-
