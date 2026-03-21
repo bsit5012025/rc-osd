@@ -7,53 +7,92 @@ import org.rocs.osd.model.request.RequestStatus;
 
 import java.util.List;
 
-public class RequestFacadeImpl implements RequestFacade
-{
+/**
+ * Facade implementation for managing requests in the Office of Student
+ * Discipline System.
+ *
+ * Provides methods to add requests, retrieve all
+ * requests, and update request status.
+ */
+public class RequestFacadeImpl implements RequestFacade {
+
+    /**
+     * DAO used to interact with request data in the database.
+     * */
     private RequestDao requestDao;
 
-    public RequestFacadeImpl(RequestDao requestDao)
-    {
+    /**
+     * Constructor to inject the RequestDao dependency.
+     * @param requestDao the DAO used to handle request database operations.
+     */
+    public RequestFacadeImpl(RequestDao requestDao) {
         this.requestDao = requestDao;
     }
 
+    /**
+     * Adds a new request to the system after validating input.
+     *
+     * @param employeeID the employee submitting the request.
+     * @param details brief details about the request.
+     * @param message optional message or description.
+     * @param type the type of request.
+     * @return true if the request was successfully added.
+     */
     @Override
-    public boolean addRequest(String employeeID, String details, String message, String type)
-    {
-        boolean status = validateString(employeeID,10,false) &&
+    public boolean addRequest(String employeeID,
+    String details, String message, String type) {
+        boolean status = validateString(employeeID, 10, false) &&
                 validateString(details, 100, false) &&
                 validateString(message, 500, true) &&
-                validateString(type, 100, false );
+                validateString(type, 100, false);
 
-        if(status)
-        {
+        if (status) {
             requestDao.addRequest(employeeID, details, message, type);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    private boolean validateString(String s, int maxLength, boolean allowsNull)
-    {
-        if(allowsNull)
+    /**
+     * Validates a string based on max length and whether null/empty values
+     * are allowed.
+     *
+     * @param s the string to validate.
+     * @param maxLength maximum allowed length.
+     * @param allowsNull whether null or empty strings are allowed.
+     * @return true if valid, false otherwise.
+     */
+    private boolean validateString(String s,
+    int maxLength, boolean allowsNull) {
+        if (allowsNull) {
             return !(s != null && s.length() > maxLength);
-        else
-            return !(s == null || s.isBlank() || s.isEmpty() || s.length() > maxLength);
+        } else {
+            return !(s == null || s.isBlank() || s.isEmpty()
+                    || s.length() > maxLength);
+        }
     }
 
+    /**
+     * Retrieves all requests in the system.
+     *
+     * @return a list of all Request objects.
+     */
     @Override
-    public List<Request> getAllRequest()
-    {
+    public List<Request> getAllRequest() {
         return requestDao.findAllRequests();
     }
 
+    /**
+     * Updates the status of an existing request.
+     *
+     * @param requestID the ID of the request to update.
+     * @param status the new status of the request.
+     * @return true if the status was updated successfully.
+     */
     @Override
-    public boolean updateRequestStatus(long requestID, RequestStatus status)
-    {
-        if(status == null)
-        {
+    public boolean updateRequestStatus(long requestID, RequestStatus status) {
+        if (status == null) {
             return false;
         }
 

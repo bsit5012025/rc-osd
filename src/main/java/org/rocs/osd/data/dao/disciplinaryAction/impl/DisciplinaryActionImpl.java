@@ -10,26 +10,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * DAO implementation for managing Disciplinary Action records in the Office of Student Discipline (OSD) System.
- * Provides methods to find actions by ID or name, and to retrieve all disciplinary actions.
+ * DAO implementation for managing disciplinary actions in the Office of Student
+ * Discipline System. Provides methods to find actions by ID or name and
+ * retrieve all actions.
  */
 public class DisciplinaryActionImpl implements DisciplinaryActionDao {
 
     /**
-     * Finds a disciplinary action name by its ID.
+     * Finds the name of a disciplinary action by its ID.
      * @param actionId the unique ID of the disciplinary action.
-     * @return an Optional containing the action name if found, or Optional.empty() if not.
+     * @return the action name if found; null if not found.
      */
     @Override
-    public String findActionById (long actionId) {
-
-
+    public String findActionById(long actionId) {
         try (Connection conn = ConnectionHelper.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement("SELECT action FROM disciplinaryAction WHERE actionId = ?");
-            statement.setLong(1, actionId);
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT action FROM disciplinaryAction WHERE actionId = ?"
+            );
+            stmt.setLong(1, actionId);
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return rs.getString("action");
@@ -43,18 +43,20 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
     }
 
     /**
-     * Retrieves a list of all disciplinary action names, sorted alphabetically.
+     * Retrieves all disciplinary action names from the database,
+     * sorted alphabetically.
      *
-     * @return a List of action names.
+     * @return a list of all action names
      */
     @Override
     public List<String> findAllAction() {
-
         List<String> actions = new ArrayList<>();
 
         try (Connection conn = ConnectionHelper.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement("SELECT action FROM disciplinaryAction ORDER BY action");
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT action FROM disciplinaryAction ORDER BY action"
+            );
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 actions.add(rs.getString("action"));
@@ -69,20 +71,23 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
 
     /**
      * Finds the ID of a disciplinary action by its name.
+     *
      * @param action the name of the disciplinary action.
-     * @return an Optional containing the action ID if found, or Optional.empty() if not.
+     * @return the action ID if found; -1 if not found.
      */
     @Override
     public long findActionIdByName(String action) {
         try (Connection conn = ConnectionHelper.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement("SELECT actionId FROM disciplinaryAction WHERE action = ?");
-            statement.setString(1, action);
-            ResultSet rs = statement.executeQuery();
-
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT actionId FROM disciplinaryAction WHERE action = ?"
+            );
+            stmt.setString(1, action);
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return rs.getLong("actionId");
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

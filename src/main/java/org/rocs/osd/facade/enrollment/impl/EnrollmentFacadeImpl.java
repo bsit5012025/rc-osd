@@ -6,22 +6,54 @@ import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.util.List;
 
+/**
+ * Facade implementation for Enrollment operations in the Office of Student
+ * Discipline System.
+ */
 public class EnrollmentFacadeImpl implements EnrollmentFacade {
 
     private final EnrollmentDao enrollmentDao;
 
-    public EnrollmentFacadeImpl(EnrollmentDao enrollmentDao) {this.enrollmentDao = enrollmentDao;}
+    /**
+     * Constructor for injecting an EnrollmentDao implementation.
+     * @param enrollmentDao the DAO to use for database operations.
+     */
+    public EnrollmentFacadeImpl(EnrollmentDao enrollmentDao) {
+        this.enrollmentDao = enrollmentDao;
+    }
 
+    /**
+     * Retrieves a list of the latest enrollment records for all students.
+     *
+     * @return a List of Enrollment objects representing the most recent
+     * enrollment of each student.
+     */
+    @Override
     public List<Enrollment> getAllLatestEnrollments() {
         return enrollmentDao.findAllLatestEnrollments();
     }
 
+    /**
+     * Retrieves all enrollment records associated with a specific student.
+     *
+     * @param studentId the unique ID of the student.
+     * @return a List of Enrollment objects for the given student.
+     */
+    @Override
     public List<Enrollment> getEnrollmentsByStudentId(String studentId) {
         return enrollmentDao.findEnrollmentsByStudentId(studentId);
     }
 
+    /**
+     * Retrieves the most recent enrollment record for a specific student.
+     * @param studentId the unique ID of the student.
+     * @return the latest Enrollment object for the student,
+     * or null if none exist.
+     */
+    @Override
     public Enrollment getLatestEnrollmentByStudentId(String studentId) {
-        List<Enrollment> enrollments = enrollmentDao.findEnrollmentsByStudentId(studentId);
+        List<Enrollment> enrollments = enrollmentDao
+        .findEnrollmentsByStudentId(studentId);
 
         if (enrollments == null || enrollments.isEmpty()) {
             return null;

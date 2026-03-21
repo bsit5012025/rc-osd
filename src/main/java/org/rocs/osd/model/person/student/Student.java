@@ -4,16 +4,20 @@ import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.Person;
 
 /**
- * Represents a student entity in the Office of Student Discipline System.
- * Stores personal information inherited from Person, as well as student-specific details such as ID, address, type, and department.
+ * Represents a student in the Office of Student Discipline System.
+ * Stores personal info from Person plus student-specific details such as ID,
+ * address, type, and department.
  */
-    public class Student extends Person {
+public class Student extends Person {
 
+    /** Unique identifier assigned to the student. */
     private String studentId;
+    /** Unique identifier assigned to the student. */
     private String address;
+    /** Type or category of the student. */
     private String studentType;
+    /** Type or category of the student. */
     private Department department;
-
 
     /**
      * Default constructor.
@@ -21,7 +25,22 @@ import org.rocs.osd.model.person.Person;
     public Student() {
     }
 
-    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, Department department) {
+    /**
+     * Constructs a Student with all details.
+     *
+     * @param personID ID from the Person class.
+     * @param lastName last name of the student.
+     * @param firstName first name of the student.
+     * @param middleName middle name of the student.
+     * @param studentId unique student ID.
+     * @param address student's address.
+     * @param studentType type/category of student.
+     * @param department department of the student.
+     */
+    public Student(Long personID, String lastName,
+                   String firstName, String middleName,
+                   String studentId, String address,
+                   String studentType, Department department) {
         super(personID, lastName, firstName, middleName);
         this.studentId = studentId;
         this.address = address;
@@ -29,65 +48,42 @@ import org.rocs.osd.model.person.Person;
         this.department = department;
     }
 
-
-    /**
-     * Gets the student ID.
-     *
-     * @return  the studentId.
-     */
+    /** @return the student ID. */
     public String getStudentId() {
         return studentId;
     }
 
-    /**
-     * Sets the student ID.
-     *
-     * @param studentId  the studentId to set.
-     */
+    /** @param studentId sets the student ID. */
     public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 
-    /**
-     * Gets the student's address.
-     *
-     * @return  the address.
-     */
+    /** @return the student's address. */
     public String getAddress() {
         return address;
     }
 
-    /**
-     * Sets the student's address.
-     *
-     * @param address the address to set.
-     */
+    /** @param address sets the student's address. */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    /**
-     * Gets the type of student.
-     *
-     * @return  the studentType.
-     */
+    /** @return the type of student. */
     public String getStudentType() {
         return studentType;
     }
 
-    /**
-     * Sets the type of student.
-     *
-     * @param studentType  the studentType to set.
-     */
+    /** @param studentType sets the type of student. */
     public void setStudentType(String studentType) {
         this.studentType = studentType;
     }
 
+    /** @return the department of the student. */
     public Department getDepartment() {
         return department;
     }
 
+    /** @param department sets the department of the student. */
     public void setDepartment(Department department) {
         this.department = department;
     }

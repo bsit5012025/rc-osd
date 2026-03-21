@@ -3,29 +3,33 @@ package org.rocs.osd.model.login;
 import org.rocs.osd.model.person.Person;
 
 /**
- * Represents a user's login credentials in the Office of Student Discipline System.
- * Stores the unique ID, username, and password of a user.
+ * Represents a user's login credentials in the OSD System.
+ * Stores ID, username, password, and associated person info.
  */
 public class Login {
 
-
+    /** Unique ID of the login record. */
     private long id;
+
+    /** Username used to access the system. */
     private String username;
+
+    /** Password associated with the username. */
     private String password;
+
+    /** Person linked to this login. */
     private Person person;
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     public Login() {
     }
 
-
     /**
-     * Constructor to create a Login with an ID, username, and password.
-     *	@param id unique identifier of the Login record.
-     *	@param username username used by the user to access the system.
-     *	@param password the password associated with the username.
+     * Constructor with all fields.
+     * @param id unique ID of the login record.
+     * @param username username for login.
+     * @param password password for the username.
+     * @param person the person associated with this login.
      */
     public Login(long id, String username, String password, Person person) {
         this.id = id;
@@ -34,69 +38,43 @@ public class Login {
         this.person = person;
     }
 
-
-
-    /**
-     * Gets the ID of the login record.
-     *
-     *	@return the ID.
-     */
+    /** @return unique ID of the login record. */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the ID of the login record.
-     *
-     *	@param id the new ID.
-     */
+    /** @param id sets the unique ID of the login record. */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the username.
-     *
-     *	@return the username.
-     */
+    /** @return the username. */
     public String getUsername() {
         return username;
     }
 
-    /**
-     * Sets the username.
-     *
-     *	@param username the new username.
-     */
+    /** @param username sets the username. */
     public void setUsername(String username) {
         this.username = username;
     }
 
-    /**
-     * Gets the password.
-     *
-     *	@return the password.
-     */
+    /** @return the password. */
     public String getPassword() {
         return password;
     }
 
-    /**
-     * Sets the password.
-     *
-     *	@param password the new password.
-     */
+    /** @param password sets the password. */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public Person getPerson()
-    {
+    /** @return the person associated with this login. */
+    public Person getPerson() {
         return person;
     }
 
-    public void setPerson(Person person)
-    {
+    /** @param person sets the person associated with this login. */
+    public void setPerson(Person person) {
         this.person = person;
     }
 }

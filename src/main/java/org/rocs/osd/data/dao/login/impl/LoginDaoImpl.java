@@ -11,17 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * DAO implementation for managing Login records in the Office of Student Discipline System.
+ * DAO implementation for managing Login records in the Office of Student
+ * Discipline System.
  */
-public class LoginDaoImpl implements LoginDao  {
-
+public class LoginDaoImpl implements LoginDao {
 
     /**
      * Finds and retrieves a Login object from the database by username.
      *
      * @param username the username to search for.
-     *
-     * @return an Optional containing the Login object if found, or Optional.empty() if not.
+     * @return a Login object with credentials and associated person info.
+     * Returns an empty Login object if no match is found.
      */
     @Override
     public Login findLoginByUsername(String username) {
@@ -29,22 +29,17 @@ public class LoginDaoImpl implements LoginDao  {
 
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT " +
-                            "l.id, " +
-                            "l.username, " +
-                            "l.password, " +
-                            "l.personID, "+
-                            "p.lastname, " +
-                            "p.firstname, " +
-                            "p.middleName " +
-                            "from Login l " +
-                            "JOIN person p on l.personID = p.personID " +
-                            "WHERE l.username = ?");
+                    "SELECT l.id, l.username, l.password, l.personID, " +
+                            "p.lastname, p.firstname, p.middleName " +
+                            "FROM Login l " +
+                            "JOIN person p ON l.personID = p.personID " +
+                            "WHERE l.username = ?"
+            );
 
             statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 Person person = new Person();
                 person.setPersonID(rs.getLong("personID"));
                 person.setLastName(rs.getString("lastname"));

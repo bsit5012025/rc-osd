@@ -12,19 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of AppealDao that handles database operations for Appeal records in the Office of Student Discipline System.
- * Handles database operations such as saving, retrieving, and updating appeals.
+ * Implementation of AppealDao that handles database operations for Appeal
+ * records in the Office of Student Discipline System.
+ * Provides methods to retrieve pending appeals and update appeal statuses.
  */
 public class AppealDaoImpl implements AppealDao {
 
     /**
-     * Saves a new appeal record to the database.
-     * @param appeal the Appeal object to save.
+     * Retrieves all pending appeals along with related student, enrollment,
+     * and record details.
+     * @return a list of pending Appeal objects with full details
      */
     @Override
     public List<Appeal> findPendingAppealsWithDetails() {
-
         List<Appeal> list = new ArrayList<>();
+
         String sql = """
             SELECT a.appealID,
                    a.recordID,
@@ -36,14 +38,14 @@ public class AppealDaoImpl implements AppealDao {
                    p.firstName,
                    p.lastName,
                    o.offense
-                    FROM appeal a
-                    JOIN record r ON a.recordID = r.recordID
-                    JOIN offense o ON r.offenseID = o.offenseID
-                    JOIN enrollment e ON a.enrollmentID = e.enrollmentID
-                    JOIN student s ON e.studentID = s.studentID
-                    JOIN person p ON s.personID = p.personID
-                    WHERE a.status = 'PENDING'
-                    ORDER BY a.dateFiled DESC
+              FROM appeal a
+              JOIN record r ON a.recordID = r.recordID
+              JOIN offense o ON r.offenseID = o.offenseID
+              JOIN enrollment e ON a.enrollmentID = e.enrollmentID
+              JOIN student s ON e.studentID = s.studentID
+              JOIN person p ON s.personID = p.personID
+             WHERE a.status = 'PENDING'
+             ORDER BY a.dateFiled DESC
         """;
 
         try (Connection conn = ConnectionHelper.getConnection();
@@ -76,19 +78,20 @@ public class AppealDaoImpl implements AppealDao {
                 list.add(appeal);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching pending appeals", e);
         }
+
         return list;
     }
 
     /**
-     * Updates the status of an existing appeal record.
+     * Updates the status of a given appeal record in the database.
+     *
      * @param appealId the ID of the appeal to update.
      * @param status the new status value.
      */
     @Override
     public void updateAppealStatus(long appealId, String status) {
-
         String sql = "UPDATE appeal SET status = ? WHERE appealID = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
@@ -97,9 +100,9 @@ public class AppealDaoImpl implements AppealDao {
             ps.setString(1, status);
             ps.setLong(2, appealId);
             ps.executeUpdate();
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating appeal status", e);
         }
     }
 }
-

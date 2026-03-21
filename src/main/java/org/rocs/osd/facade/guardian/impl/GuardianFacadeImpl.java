@@ -8,14 +8,29 @@ import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Facade implementation for managing Guardian records in the Office of
+ * Student Discipline System.
+ */
 public class GuardianFacadeImpl implements GuardianFacade {
 
+    /**
+     * DAO object used for retrieving guardian data from the database.
+     * */
     private final GuardianDao guardianDao;
 
+    /**
+     * Default constructor.
+     * */
     public GuardianFacadeImpl() {
         this.guardianDao = new GuardianDaoImpl();
     }
 
+    /**
+     * Retrieves all guardians associated with a specific student ID.
+     * @param studentID the unique ID of the student.
+     * @return a List of StudentGuardian objects associated with the student.
+     */
     @Override
     public List<StudentGuardian> getGuardianByStudentId(String studentID) {
         if (studentID == null || studentID.trim().isEmpty()) {

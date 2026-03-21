@@ -24,27 +24,53 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * Controller for managing offenses in the Office of Student Discipline System.
+ * Controller for managing offenses in the
+ * Office of Student Discipline System.
  * This class handles opening the "Add Offense" modal.
  */
 public class OffenseController {
-
+    /**
+     * Table displaying list of violations.
+     */
     @FXML private TableView<Record> violationsTable;
+    /**
+     * Column for student ID.
+     */
     @FXML private TableColumn<Record, String> studentIdColumn;
+    /**
+     * Column for student name.
+     */
     @FXML private TableColumn<Record, String> studentNameColumn;
+    /**
+     * Column for offense level.
+     */
     @FXML private TableColumn<Record, String> offenseLevelColumn;
+    /**
+     * Column for offense type.
+     */
     @FXML private TableColumn<Record, String> offenseTypeColumn;
+    /**
+     * Column for violation date.
+     */
     @FXML private TableColumn<Record, String> dateColumn;
+    /**
+     * Label displaying current department.
+     */
     @FXML private Label departmentLabel;
+    /**
+     * Facade for accessing record data.
+     */
     private RecordFacade recordFacade;
     /**
-     * Opens the "Add Offense" modal as an undecorated, non-resizable window.
+     * Opens the "Add Offense" modal as an
+     * undecorated, non-resizable window.
      * @param event the ActionEvent triggered by the user.
      */
     public void onLoadOffenseModal(ActionEvent event){
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("/view/offense/addOffenseModal.fxml"));
+            Parent root = FXMLLoader.load(getClass().
+            getResource("/view/offense/addOffenseModal.fxml"));
             Stage modalStage = new Stage();
             modalStage.initStyle(StageStyle.UNDECORATED);
             modalStage.initModality(Modality.APPLICATION_MODAL);
@@ -55,20 +81,28 @@ public class OffenseController {
             refreshRecord();
 
         } catch (IOException e) {
-            System.err.println("UI Error: Could not find or load AddOffenseModal.fxml. Check the file path and Controller names.");
+            System.err.println("UI Error: Could not find or load " +
+            "AddOffenseModal.fxml. Check the file path and Controller names.");
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Unexpected Error while opening modal: " + e.getMessage());
+            System.err.println("Unexpected Error while opening modal: "
+            + e.getMessage());
         }
     }
-
+    /**
+     * Opens the Edit Offense modal with selected record.
+     *
+     * @param record the selected record to edit
+     */
     public void onLoadEditOffenseModal(Record record)
     {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/offense/editOffenseModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().
+            getResource("/view/offense/editOffenseModal.fxml"));
             Parent root = loader.load();
 
-            EditOffenseModalController editOffenseModalController = loader.getController();
+            EditOffenseModalController editOffenseModalController
+            = loader.getController();
             editOffenseModalController.setRecordData(record);
 
             Stage modalStage = new Stage();
@@ -79,13 +113,18 @@ public class OffenseController {
             modalStage.show();
 
         } catch (IOException e) {
-            System.err.println("UI Error: Could not find or load editOffenseModal.fxml. Check the file path and Controller names.");
+            System.err.println("UI Error: Could not find " +
+            "or load editOffenseModal.fxml. " +
+            "Check the file path and Controller names.");
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Unexpected Error while opening modal: " + e.getMessage());
+            System.err.println("Unexpected Error while opening modal: "
+            + e.getMessage());
         }
     }
-
+    /**
+     * Initializes controller and loads initial data.
+     */
     @FXML
     public void initialize() {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
@@ -94,27 +133,42 @@ public class OffenseController {
         selectStudentRecord();
         loadRecordsOfViolation(Department.JHS);
     }
-
+    /**
+     * Sets up table column mappings.
+     */
     private void loadDataToTable() {
 
         studentIdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEnrollment().getStudent().getStudentId()));
+                new SimpleStringProperty(cellData.getValue()
+                .getEnrollment()
+                .getStudent()
+                .getStudentId()));
 
         studentNameColumn.setCellValueFactory(cellData -> {
-            var student = cellData.getValue().getEnrollment().getStudent();
-            return new SimpleStringProperty(student.getFirstName() + " " + student.getLastName());
+            var student = cellData.getValue()
+                    .getEnrollment()
+                    .getStudent();
+            return new SimpleStringProperty
+        (student.getFirstName() + " " + student.getLastName());
         });
 
         offenseLevelColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getOffense().getType()));
+                new SimpleStringProperty(cellData.
+                getValue().getOffense().getType()));
 
         offenseTypeColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getOffense().getOffense()));
+                new SimpleStringProperty(cellData.
+                getValue().getOffense().getOffense()));
 
         dateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDateOfViolation().toString()));
+                new SimpleStringProperty(cellData.getValue().
+                getDateOfViolation().toString()));
     }
-
+    /**
+     * Loads violations filtered by department and school year.
+     *
+     * @param department the selected department.
+     */
     private void loadRecordsOfViolation(Department department) {
         LocalDate now = LocalDate.now();
         String currentSchoolYear;
@@ -125,37 +179,50 @@ public class OffenseController {
         } else {
             currentSchoolYear = (year - 1) + "-" + year;
         }
-        violationsTable.setItems(FXCollections.observableArrayList(recordFacade.getViolationsByDepartment(department, currentSchoolYear)));
+        violationsTable.setItems(FXCollections.observableArrayList(recordFacade.
+        getViolationsByDepartment(department, currentSchoolYear)));
     }
-
+    /**
+     * Handles row click to open edit modal.
+     */
     private void selectStudentRecord()
     {
         violationsTable.setOnMouseClicked(event -> {
-                Record record = violationsTable.getSelectionModel().getSelectedItem();
+                Record record = violationsTable.
+                getSelectionModel().getSelectedItem();
                 if (record != null) {
                     onLoadEditOffenseModal(record);
                 }
         });
     }
-
+    /**
+     * Handles row click to open edit modal.
+     */
     @FXML
     private void onLoadJuniorHS() {
         loadRecordsOfViolation(Department.JHS);
         departmentLabel.setText("Junior HS Violations");
         refreshRecord();
     }
-
+    /**
+     * Loads Senior High School violations.
+     */
     @FXML
     private void onLoadSeniorHS() {
         loadRecordsOfViolation(Department.SHS);
         departmentLabel.setText("Senior HS Violations");
     }
-
+    /**
+     * Loads College violations.
+     */
     @FXML
     private void onLoadCollege() {
         loadRecordsOfViolation(Department.COLLEGE);
         departmentLabel.setText("College Violations");
     }
+    /**
+     * Refreshes the violation table.
+     */
     public void refreshRecord() {
         loadRecordsOfViolation(Department.JHS);
     }

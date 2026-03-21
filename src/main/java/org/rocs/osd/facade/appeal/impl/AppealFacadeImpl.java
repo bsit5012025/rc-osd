@@ -8,25 +8,33 @@ import org.rocs.osd.model.appeal.Appeal;
 import java.util.List;
 
 /**
- * Facade implementation for managing Appeal records in the Office of Student Discipline System.
- * Provides a simplified interface for managing appeals, handling database operations via AppealDao.
+ * Facade implementation for managing Appeal records in the
+ * Office of Student Discipline System.
  */
 public class AppealFacadeImpl implements AppealFacade {
+    /** DAO for handling appeal data operations. */
+    private final AppealDao appealDao;
 
-    private AppealDao appealDao;
-
+    /**
+     * Constructs a facade with a custom AppealDao implementation.
+     * @param appealDao the AppealDao to use for database operations
+     */
     public AppealFacadeImpl(AppealDao appealDao) {
         this.appealDao = appealDao;
     }
 
+    /**
+     * Constructs a facade with the default AppealDaoImpl.
+     */
     public AppealFacadeImpl() {
         this.appealDao = new AppealDaoImpl();
     }
 
     /**
-     * Retrieves all appeal records with associated student and offense details.
+     * Retrieves all pending appeal records along
+     * with student and offense details.
      *
-     * @return a List of Appeal objects
+     * @return a List of pending Appeal objects.
      */
     @Override
     public List<Appeal> getPendingAppeals() {
@@ -34,7 +42,8 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Approves the appeal with the given ID by updating its status.
+     * Approves the appeal with the given ID by
+     * updating its status to "APPROVED".
      *
      * @param appealId the ID of the appeal to approve.
      */
@@ -44,12 +53,12 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Rejects the appeal with the given ID by updating its status.
+     * Denies the appeal with the given ID by updating its status to "DENIED".
      *
-     * @param appealId the ID of the appeal to reject.
+     * @param appealId the ID of the appeal to deny
      */
     @Override
-    public void deniedAppeal(long appealId) {
+    public void denyAppeal(long appealId) {
         appealDao.updateAppealStatus(appealId, "DENIED");
     }
 }

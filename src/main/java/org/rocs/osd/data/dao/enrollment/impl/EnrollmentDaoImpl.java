@@ -14,28 +14,40 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the EnrollmentDao interface.
+ * Handles retrieval of student enrollment information from the
+ * database in the Office of Student Discipline System.
+ */
 public class EnrollmentDaoImpl implements EnrollmentDao {
 
-    public List<Enrollment> findEnrollmentsByStudentId(String studentId){
+    /**
+     * Finds all enrollments of a student by their student ID.
+     *
+     * @param studentId the ID of the student
+     * @return a list of Enrollment objects, sorted by school year
+     *         in descending order. Returns an empty list if none found.
+     */
+    public List<Enrollment> findEnrollmentsByStudentId(String studentId) {
 
         List<Enrollment> enrollmentList = new ArrayList<>();
 
-        try(Connection conn = ConnectionHelper.getConnection()){
+        try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT e.*, " +
-                            "s.personID, " +
-                            "s.address, " +
+                    "SELECT e.*, s.personID, s.address, " +
                             "s.departmentID AS studentDepartmentID " +
                             "FROM enrollment e " +
                             "JOIN student s ON e.studentID = s.studentID " +
-                            "WHERE studentID = ? ORDER BY schoolYear DESC");
+                            "WHERE studentID = ? " +
+                            "ORDER BY schoolYear DESC"
+            );
             statement.setString(1, studentId);
             ResultSet rs = statement.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 Enrollment enrollment = new Enrollment();
                 Student student = new Student();
-                DisciplinaryStatus disciplinaryStatus = new DisciplinaryStatus();
+                DisciplinaryStatus status = new DisciplinaryStatus();
 
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
                 enrollment.setSchoolYear(rs.getString("schoolYear"));
@@ -45,15 +57,19 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 student.setStudentId(rs.getString("studentID"));
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
-                student.setDepartment(Department.valueOf(rs.getString("studentDepartmentID")));
+                student.setDepartment(Department.valueOf
+                (rs.getString("studentDepartmentID")));
                 enrollment.setStudent(student);
 
-                enrollment.setDepartment(Department.valueOf(rs.getString("studentDepartmentID")));
-                disciplinaryStatus.setDisciplinaryStatusId(rs.getLong("disciplinaryStatusID"));
-                enrollment.setDisciplinaryStatus(disciplinaryStatus);
+                enrollment.setDepartment(Department.valueOf
+                (rs.getString("studentDepartmentID")));
+                status.setDisciplinaryStatusId
+                (rs.getLong("disciplinaryStatusID"));
+                enrollment.setDisciplinaryStatus(status);
 
                 enrollmentList.add(enrollment);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,7 +77,13 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         return enrollmentList;
     }
 
-    public long findEnrollmentIdByStudentId(String studentId){
+    /**
+     * Retrieves the latest enrollment ID for a given student.
+     *
+     * @param studentId the student ID
+     * @return the latest enrollment ID, or -1 if not found
+     */
+    public long findEnrollmentIdByStudentId(String studentId) {
 
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
@@ -69,7 +91,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                             "FROM enrollment " +
                             "WHERE studentID = ? " +
                             "ORDER BY schoolYear DESC " +
-                            "FETCH FIRST 1 ROW ONLY");
+                            "FETCH FIRST 1 ROW ONLY"
+            );
             statement.setString(1, studentId);
             ResultSet rs = statement.executeQuery();
 
@@ -77,52 +100,64 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 return rs.getLong("enrollmentID");
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return -1;
     }
+
+    /**
+     * Retrieves all latest enrollments for all students.
+     *
+     * @return a list of Enrollment objects representing the latest
+     *         enrollment of each student
+     */
     public List<Enrollment> findAllLatestEnrollments() {
-        List<Enrollment> studentList = new ArrayList<>();
+        List<Enrollment> enrollmentList = new ArrayList<>();
 
         try (Connection conn = ConnectionHelper.getConnection()) {
-
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT e.enrollmentID, e.studentID, e.studentLevel, e.section, e.department, " +
-                        "s.personID, s.address, " +
-                        "p.firstName, p.lastName, p.middleName " +
-                        "FROM enrollment e " +
-                        "JOIN student s ON e.studentID = s.studentID " +
-                        "JOIN person p ON s.personID = p.personID " +
-                        "WHERE e.schoolYear = (SELECT MAX(e2.schoolYear) FROM enrollment e2 WHERE e2.studentID = e.studentID )");
+                    "SELECT e.enrollmentID, e.studentID, e.studentLevel," +
+                            " e.section, e.department, " +
+                            "s.personID, s.address, " +
+                            "p.firstName, p.lastName," +
+                            " p.middleName " +
+                            "FROM enrollment e " +
+                            "JOIN student s ON e.studentID = s.studentID " +
+                            "JOIN person p ON s.personID = p.personID " +
+                            "WHERE e.schoolYear = (" +
+                            "SELECT MAX(e2.schoolYear) " +
+                            "FROM enrollment e2 " +
+                            "WHERE e2.studentID = e.studentID)"
+            );
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
-
                 Enrollment enrollment = new Enrollment();
                 Student student = new Student();
 
                 enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
                 enrollment.setStudentLevel(rs.getString("studentLevel"));
                 enrollment.setSection(rs.getString("section"));
-                enrollment.setDepartment(Department.valueOf(rs.getString("department")));
+                enrollment.setDepartment(Department.valueOf
+                (rs.getString("department")));
 
                 student.setStudentId(rs.getString("studentID"));
                 student.setPersonID(rs.getLong("personID"));
                 student.setAddress(rs.getString("address"));
-
                 student.setFirstName(rs.getString("firstName"));
                 student.setLastName(rs.getString("lastName"));
                 student.setMiddleName(rs.getString("middleName"));
 
                 enrollment.setStudent(student);
-                studentList.add(enrollment);
+                enrollmentList.add(enrollment);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return studentList;
+        return enrollmentList;
     }
 }

@@ -14,18 +14,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO implementation for managing guardian information in the Office of
+ * Student Discipline System.
+ *
+ * Provides methods to retrieve guardians associated with students.
+ */
 public class GuardianDaoImpl implements GuardianDao {
 
+    /**
+     * Finds guardians for a given student by student ID.
+     *
+     * @param studentId the ID of the student.
+     * @return a list of StudentGuardian objects linking the student with their
+     *         guardians. Returns an empty list if none found.
+     */
+    @Override
     public List<StudentGuardian> findGuardianByStudentId(String studentId) {
 
         List<StudentGuardian> sgList = new ArrayList<>();
 
         String sql = """
-                SELECT g.*
+                SELECT g.*, sg.studentID
                 FROM guardian g
                 JOIN studentGuardian sg ON g.guardianID = sg.guardianID
                 WHERE sg.studentID = ?
-            """;
+                """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -37,7 +51,6 @@ public class GuardianDaoImpl implements GuardianDao {
             while (rs.next()) {
 
                 Guardian guardian = new Guardian();
-
                 guardian.setGuardianID(rs.getLong("guardianID"));
                 guardian.setContactNumber(rs.getString("contactNumber"));
                 guardian.setRelationship(
@@ -54,10 +67,10 @@ public class GuardianDaoImpl implements GuardianDao {
             }
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("SQL Exception (findGuardianByStudentId): " +
+                    e.getMessage());
         }
 
         return sgList;
     }
 }
-

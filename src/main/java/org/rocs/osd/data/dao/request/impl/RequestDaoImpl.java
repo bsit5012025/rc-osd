@@ -11,13 +11,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the RequestDao interface.
+ * This class handles database operations for Request objects including:
+ * adding a new request, fetching all requests, and updating request status.
+ */
 public class RequestDaoImpl implements RequestDao {
 
+    /**
+     * Adds a new request to the database with status PENDING.
+     * @param employeeID the ID of the employee creating the request.
+     * @param details the details of the request.
+     * @param message the message or reason for the request.
+     * @param type the type/category of the request.
+     * @return true if the request was successfully added, false otherwise.
+     */
     @Override
-    public boolean addRequest(String employeeID, String details, String message, String type)
-    {
+    public boolean addRequest(String employeeID, String details, String message,
+                              String type) {
         try (Connection con = ConnectionHelper.getConnection()) {
-            String sql = "INSERT INTO request (employeeID, details, type, message, status) VALUES (?, ?, ?, ?, ?)";
+            String sql =
+                    "INSERT INTO request (employeeID, " +
+                            "details, " +
+                            "type, " +
+                            "message, " +
+                            "status) " +
+                            "VALUES (?, ?, ?, ?, ?)";
+
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setString(1, employeeID);
@@ -35,6 +55,12 @@ public class RequestDaoImpl implements RequestDao {
         return false;
     }
 
+    /**
+     * Retrieves all requests from the database.
+     * Each record from the REQUEST table is mapped to a Request object.
+     *
+     * @return a List of Request objects representing all requests
+     */
     @Override
     public List<Request> findAllRequests() {
         List<Request> requestList = new ArrayList<>();
@@ -58,12 +84,19 @@ public class RequestDaoImpl implements RequestDao {
             }
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception (getAllRequests): " + e.getMessage());
+            System.out.println("SQL Exception (getAllRequests): "
+            + e.getMessage());
         }
 
         return requestList;
     }
 
+    /**
+     * Updates the status of a request in the database.
+     * @param requestID the ID of the request to update.
+     * @param status the new status to assign to the request.
+     * @return true if the update was successful, false otherwise.
+     */
     @Override
     public boolean updateRequestStatus(long requestID, RequestStatus status) {
         String sql = "UPDATE REQUEST SET status = ? WHERE requestID = ?";
@@ -77,9 +110,9 @@ public class RequestDaoImpl implements RequestDao {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception (updateRequestStatus): " + e.getMessage());
+            System.out.println("SQL Exception (updateRequestStatus): "
+            + e.getMessage());
         }
-
         return false;
     }
 }
