@@ -76,4 +76,6 @@ public interface RecordDao {
      * @return a map of offense names and their frequency counts.
      */
     Map<String, Integer> findMostFrequentOffenses(String schoolYear);
+    List<Record> findRecordByStudentId(String studentId);
+
 }
