@@ -4,16 +4,20 @@ import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.Person;
 
 /**
- * Represents a student entity in the Office of Student Discipline System.
- * Stores personal information inherited from Person, as well as student-specific details such as ID, address, type, and department.
+ * Represents a student in the Office of Student Discipline System.
+ * Stores personal info from Person plus student-specific details such as ID,
+ * address, type, and department.
  */
-    public class Student extends Person {
+public class Student extends Person {
 
+    /** Unique identifier assigned to the student. */
     private String studentId;
+    /** Unique identifier assigned to the student. */
     private String address;
+    /** Type or category of the student. */
     private String studentType;
+    /** Type or category of the student. */
     private Department department;
-
 
     /**
      * Default constructor.
@@ -21,74 +25,66 @@ import org.rocs.osd.model.person.Person;
     public Student() {
     }
 
-    public Student(Long personID, String lastName, String firstName, String middleName, String studentId, String address, String studentType, Department department) {
-        super(personID, lastName, firstName, middleName);
-        this.studentId = studentId;
-        this.address = address;
-        this.studentType = studentType;
-        this.department = department;
+    /**
+     * Constructs a Student with all details.
+     *
+     * @param pPersonID ID from the Person class.
+     * @param pLastName last name of the student.
+     * @param pFirstName first name of the student.
+     * @param pMiddleName middle name of the student.
+     * @param pStudentId unique student ID.
+     * @param pAddress student's address.
+     * @param pStudentType type/category of student.
+     * @param pDepartment department of the student.
+     */
+    public Student(Long pPersonID, String pLastName,
+                   String pFirstName, String pMiddleName,
+                   String pStudentId, String pAddress,
+                   String pStudentType, Department pDepartment) {
+        super(pPersonID, pLastName, pFirstName, pMiddleName);
+        this.studentId = pStudentId;
+        this.address = pAddress;
+        this.studentType = pStudentType;
+        this.department = pDepartment;
     }
 
-
-    /**
-     * Gets the student ID.
-     *
-     * @return  the studentId.
-     */
+    /** @return the student ID. */
     public String getStudentId() {
         return studentId;
     }
 
-    /**
-     * Sets the student ID.
-     *
-     * @param studentId  the studentId to set.
-     */
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    /** @param pStudentId sets the student ID. */
+    public void setStudentId(String pStudentId) {
+        this.studentId = pStudentId;
     }
 
-    /**
-     * Gets the student's address.
-     *
-     * @return  the address.
-     */
+    /** @return the student's address. */
     public String getAddress() {
         return address;
     }
 
-    /**
-     * Sets the student's address.
-     *
-     * @param address the address to set.
-     */
-    public void setAddress(String address) {
-        this.address = address;
+    /** @param pAddress sets the student's pAddress. */
+    public void setAddress(String pAddress) {
+        this.address = pAddress;
     }
 
-    /**
-     * Gets the type of student.
-     *
-     * @return  the studentType.
-     */
+    /** @return the type of student. */
     public String getStudentType() {
         return studentType;
     }
 
-    /**
-     * Sets the type of student.
-     *
-     * @param studentType  the studentType to set.
-     */
-    public void setStudentType(String studentType) {
-        this.studentType = studentType;
+    /** @param pStudentType sets the type of student. */
+    public void setStudentType(String pStudentType) {
+        this.studentType = pStudentType;
     }
 
+    /** @return the department of the student. */
     public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    /** @param pDepartment sets the department of the student. */
+    public void setDepartment(Department pDepartment) {
+        this.department = pDepartment;
     }
 }
