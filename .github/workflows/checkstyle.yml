@@ -3,9 +3,8 @@ name: Checkstyle on Pull Request
 on: [push, pull_request]
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
+  checks: write
 
 jobs:
   checkstyle:
