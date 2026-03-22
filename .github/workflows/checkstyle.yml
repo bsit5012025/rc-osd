@@ -1,0 +1,38 @@
+name: Checkstyle on Pull Request
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      # Uses the checkout action to get your repository's code
+      uses: actions/checkout@v4
+
+    - name: Set up Java
+      # Uses the setup-java action to configure the Java environment
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17' # Specify your Java version
+        distribution: 'temurin'
+        cache: 'maven' # Caches dependencies for faster subsequent runs
+
+    - name: Build and Run Checkstyle
+      # Executes the Maven checkstyle:check goal
+      run: mvn checkstyle:check -Dcheckstyle.suppressions.location=src/main/resources/checkstyle-suppressions.xml
+
+      # Note: For this to work, the Maven Checkstyle Plugin must be configured
+      # in your pom.xml to output an XML report.
+
+    - name: Push Checkstyle results to GitHub
+      # Optional: Use an action to present results as GitHub annotations/checks
+      if: always() # Run even if the previous step failed
+      uses: jwgmeligmeyling/checkstyle-github-action@v1.2
+      with:
+        path: '**/checkstyle-result.xml'

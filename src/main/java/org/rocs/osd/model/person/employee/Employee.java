@@ -4,60 +4,71 @@ import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.Person;
 
 /**
- * Represents an employee with personal and employee-specific details.
+ * Represents an employee in the OSD System.
  * Inherits from Person and includes employee ID, department, and role.
  */
 public class Employee extends Person {
 
+    /** Unique employee ID. */
     private String employeeId;
+
+    /** Department the employee belongs to. */
     private Department department;
+
+    /** Role of the employee. */
     private String employeeRole;
 
-    /**
-     * Default constructor.
-     * Initializes an empty Employee object.
-     */
+    /** Default constructor. */
     public Employee() {
     }
 
-
-    public Employee(Long personID, String lastName, String firstName, String middleName, String employeeId, Department department, String employeeRole) {
-        super(personID, lastName, firstName, middleName);
-        this.employeeId = employeeId;
-        this.department = department;
-        this.employeeRole = employeeRole;
+    /**
+     * Constructor with all fields.
+     * @param pPersonID ID inherited from Person.
+     * @param pLastName employee last name.
+     * @param pFirstName employee first name.
+     * @param middleName employee middle name.
+     * @param pEmployeeId unique employee ID.
+     * @param pDepartment employee pDepartment.
+     * @param pEmployeeRole role of the employee.
+     */
+    public Employee(Long pPersonID, String pLastName,
+                    String pFirstName, String middleName,
+                    String pEmployeeId, Department pDepartment,
+                    String pEmployeeRole) {
+        super(pPersonID, pLastName, pFirstName, middleName);
+        this.employeeId = pEmployeeId;
+        this.department = pDepartment;
+        this.employeeRole = pEmployeeRole;
     }
 
-    /**
-     * @return the unique employee ID.
-     */
+    /** @return unique employee ID. */
     public String getEmployeeId() {
         return employeeId;
     }
 
-    /**
-     *	@param employeeId sets the unique employee ID.
-     */
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    /** @param pEmployeeId sets the unique employee ID. */
+    public void setEmployeeId(String pEmployeeId) {
+        this.employeeId = pEmployeeId;
     }
 
+    /** @return the department of the employee. */
     public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    /** @param pDepartment sets the department of the employee. */
+    public void setDepartment(Department pDepartment) {
+        this.department = pDepartment;
     }
 
-    /**
-     * @return the role of the employee.
-     */
+    /** @return the role of the employee. */
     public String getEmployeeRole() {
         return employeeRole;
     }
 
-    public void setEmployeeRole(String employeeRole) {
-        this.employeeRole = employeeRole;
+    /** @param pEmployeeRole sets the role of the employee. */
+    public void setEmployeeRole(String pEmployeeRole) {
+        this.employeeRole = pEmployeeRole;
     }
 }
