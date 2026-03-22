@@ -22,10 +22,14 @@ import org.rocs.osd.model.record.Record;
  */
 public class AppealCardController {
 
-    @FXML private Label studentIdLabel, studentNameLabel, offenseLabel, reasonLabel, popupLabel;
-    @FXML private VBox expandedSection, popupBox;
-    @FXML private HBox actionBar;
-    @FXML private ImageView arrowIcon;
+    @FXML
+    private Label studentIdLabel, studentNameLabel, offenseLabel, reasonLabel, popupLabel;
+    @FXML
+    private VBox expandedSection, popupBox;
+    @FXML
+    private HBox actionBar;
+    @FXML
+    private ImageView arrowIcon;
     private boolean isExpanded = false;
     private AppealFacade appealFacade = new AppealFacadeImpl();
     private Appeal appeal;
@@ -50,6 +54,7 @@ public class AppealCardController {
 
     /**
      * Sets the appeal data to display in the card.
+     *
      * @param appeal the Appeal object containing details to display.
      */
     public void setAppeal(Appeal appeal) {
@@ -59,6 +64,7 @@ public class AppealCardController {
 
     /**
      * Sets a callback to be executed after an action (approve/deny) is completed.
+     *
      * @param callback a Runnable to run when the action is complete.
      */
     public void setOnActionComplete(Runnable callback) {
@@ -122,7 +128,7 @@ public class AppealCardController {
     @FXML
     private void handleAppealDeny() {
         if (appeal != null) {
-            appealFacade.deniedAppeal(appeal.getAppealID());
+            appealFacade.denyAppeal(appeal.getAppealID());
         }
         showPopupAndRemoveCard("Appeal denied!");
     }
