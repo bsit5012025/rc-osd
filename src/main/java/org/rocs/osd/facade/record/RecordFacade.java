@@ -95,4 +95,12 @@ public interface RecordFacade {
      */
     List<Record> getViolationsByDepartment(Department department,
                 String schoolYear);
+
+    /**
+     * Retrieves student record using student ID.
+     *
+     * @param studentId the student ID to find record.
+     * @return record of student.
+     * */
+    List<Record> getRecordByStudentId(String studentId);
 }
