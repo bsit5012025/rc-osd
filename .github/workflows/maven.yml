@@ -41,11 +41,7 @@ jobs:
       run: dir target
     # Create Windows installer using jpackage
     - name: Create installer
-      run: |
-        jpackage --type exe --name OSDApp --input target --main-jar rc-osd-1.0-SNAPSHOT.jar 
-        --main-class org.rocs.osd.OfficeOfStudentDisciplineApplication --module-path target/lib 
-        --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base,java.sql,java.management,java.security.jgss 
-        --win-console --win-dir-chooser --win-menu --win-shortcut --dest target
+      run: jpackage --type exe --name OSDApp --input target --main-jar rc-osd-1.0-SNAPSHOT.jar --main-class org.rocs.osd.OfficeOfStudentDisciplineApplication --module-path target/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base,java.sql,java.management,java.security.jgss --win-console --win-dir-chooser --win-menu --win-shortcut --dest target
     # Upload generated installer as artifact
     - name: Upload installer
       uses: actions/upload-artifact@v4
