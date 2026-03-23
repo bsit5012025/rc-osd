@@ -29,17 +29,16 @@ public final class SmsService {
     /**
      * Base URL for the SMS gateway provider .
      * */
-    private final static String baseUrl = cLoader.get("sms.base.url");
+    private static final String BASEURL = cLoader.get("sms.base.url");
 
     /**
      * Authentication username for the SMS API.
      * */
-    private final static String username = cLoader.get("sms.username");
-
+    private static final String USERNAME = cLoader.get("sms.username");
     /**
      * Authentication password for the SMS API.
      * */
-    private final static String password = cLoader.get("sms.password");
+    private static final String PASSWORD = cLoader.get("sms.password");
 
     /**
      * Sends an SMS message synchronously.
@@ -63,13 +62,14 @@ public final class SmsService {
             /*
               URL encode the message to handle special characters and spaces.
               */
-            String encodedMessage = URLEncoder.encode(pMessage, StandardCharsets.UTF_8);
+            String encodedMessage = URLEncoder.encode(
+                    pMessage, StandardCharsets.UTF_8);
 
-            String urlString = baseUrl
+            String urlString = BASEURL
                     + "?username="
-                    + username
+                    + USERNAME
                     + "&password="
-                    + password
+                    + PASSWORD
                     + "&phone="
                     + pPhone
                     + "&message="
