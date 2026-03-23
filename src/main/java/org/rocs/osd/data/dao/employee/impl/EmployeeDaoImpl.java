@@ -11,32 +11,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EmployeeDaoImpl implements EmployeeDao
-{
+public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
-    public Employee findEmployeeByEmployeeID(String employeeID)
-    {
-        try (Connection conn = ConnectionHelper.getConnection()){
+    public Employee findEmployeeByEmployeeID(String employeeID) {
+        try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT " +
-                            "e.employeeID, " +
-                            "e.department, " +
-                            "e.employeeRole, " +
-                            "p.personID, " +
-                            "p.firstName, " +
-                            "p.lastName, " +
-                            "p.middleName " +
-                            "FROM employee e " +
-                            "JOIN person p ON e.personID = p.personID " +
-                            "WHERE e.employeeID = ?"
-            );
-
+                    "SELECT "
+                           + "e.employeeID, "
+                           + "e.department, "
+                           + "e.employeeRole, "
+                           + "p.personID, "
+                           + "p.firstName, "
+                           + "p.lastName, "
+                           + "p.middleName "
+                           + "FROM employee e "
+                           + "JOIN person p ON e.personID = p.personID "
+                           + "WHERE e.employeeID = ?");
             statement.setString(1, employeeID);
             ResultSet rs = statement.executeQuery();
 
-            if (rs.next())
-            {
+            if (rs.next()) {
                 Person person = new Person();
                 person.setPersonID(rs.getLong("personID"));
                 person.setFirstName(rs.getString("firstName"));
@@ -58,9 +53,8 @@ public class EmployeeDaoImpl implements EmployeeDao
 
                 return employee;
             }
-        }
-        catch (SQLException e)
-        {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

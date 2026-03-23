@@ -18,8 +18,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Labeled;
 import org.rocs.osd.controller.request.RequestCardController;
 import org.rocs.osd.data.dao.employee.EmployeeDao;
 import org.rocs.osd.data.dao.employee.impl.EmployeeDaoImpl;
@@ -60,7 +58,10 @@ public class DashboardController {
     @FXML
     private VBox listContainer;
 
+    /** Facade for handling request operations. */
     private RequestFacade requestFacade;
+
+    /** Facade for handling employee operations. */
     private EmployeeFacade employeeFacade;
 
     /** Initializes the dashboard controller and loads request data. */
@@ -90,10 +91,13 @@ public class DashboardController {
         List<Request> requestList = requestFacade.getAllRequest();
 
         for (Request request : requestList) {
-            if(request.getStatus() == RequestStatus.PENDING) {
-                Employee employee = employeeFacade.getEmployeeByEmployeeID(request.getEmployeeID());
+            if (request.getStatus() == RequestStatus.PENDING) {
+                Employee employee = employeeFacade.getEmployeeByEmployeeID(
+                        request.getEmployeeID());
                 String dept = String.valueOf(employee.getDepartment());
-                String name = employee.getFirstName() + " " + employee.getMiddleName() + ". " + employee.getLastName();
+                String name = employee.getFirstName()
+                        + " " + employee.getMiddleName()
+                        + ". " + employee.getLastName();
                 String type = request.getType();
                 String message = request.getMessage();
                 long requestId = request.getRequestID();
@@ -108,11 +112,12 @@ public class DashboardController {
      * @param name the student name.
      * @param type the type of request.
      * @param reason the reason for the request.
+     * @param requestId To record where card is
      */
     private void addRequestCard(String dept,
                                 String name,
                                 String type,
-                                String reason
+                                String reason,
                                 long requestId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
