@@ -23,43 +23,69 @@ import org.rocs.osd.model.record.Record;
  */
 public class AppealCardController {
 
-    /** Student ID label. */
+    /**
+     * Student ID label.
+     */
     @FXML private Label studentIdLabel;
 
-    /** Student name label. */
+    /**
+     * Student name label.
+     */
     @FXML private Label studentNameLabel;
 
-    /** Offense label. */
+    /**
+     * Offense label.
+     */
     @FXML private Label offenseLabel;
 
-    /** Reason label. */
+    /**
+     * Reason label.
+     */
     @FXML private Label reasonLabel;
 
-    /** Popup label. */
+    /**
+     * Popup label.
+     */
     @FXML private Label popupLabel;
 
-    /** Expanded section container. */
+    /**
+     * Expanded section container.
+     */
     @FXML private VBox expandedSection;
 
-    /** Popup container. */
+    /**
+     * Popup container.
+     */
     @FXML private VBox popupBox;
 
-    /** Action buttons container. */
+    /**
+     * Action buttons container.
+     */
     @FXML private HBox actionBar;
 
-    /** Arrow icon image. */
+    /**
+     *  Arrow icon image.
+     */
     @FXML private ImageView arrowIcon;
 
-    /** Expansion state flag. */
+    /**
+     * Expansion state flag.
+     */
     private boolean isExpanded = false;
 
-    /** Facade for appeal operations. */
+    /**
+     * Facade for appeal operations.
+     */
     private AppealFacade appealFacade = new AppealFacadeImpl();
 
-    /** Current appeal data. */
+    /**
+     * Current appeal data.
+     */
     private Appeal appeal;
 
-    /** Callback after action. */
+    /**
+     * Callback after action.
+     */
     private Runnable onActionComplete;
 
     /**

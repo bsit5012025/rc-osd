@@ -15,11 +15,11 @@
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Student ID: " />
-                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="Student ID" />
+                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="CT23-0000" />
             </HBox>
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Name: " />
-                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Student Name" />
+                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Leeane Reyes" />
             </HBox>
 
             <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
@@ -28,7 +28,7 @@
                     <Label fx:id="offenseLabel" styleClass="dataLabel" text="PDA" />
                 </HBox>
                 <Label styleClass="boldLabel" text="Reason for Appeal: " />
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason goes here..." wrapText="true" />
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason just a little bit enough..." wrapText="true" />
             </VBox>
         </VBox>
 
