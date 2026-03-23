@@ -34,9 +34,13 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT e.*, s.personID, s.address, "
-                            + "s.departmentID AS studentDepartmentID "
+                    "SELECT e.*, s.personID, s.address, s.studentType, "
+                            + "s.departmentID AS studentDepartmentID, "
+                            + "ds.status AS disciplinaryStatusName "
                             + "FROM enrollment e "
+                            + "LEFT JOIN disciplinaryStatus ds "
+                            + "ON e.disciplinaryStatusID "
+                            + "= ds.disciplinaryStatusID "
                             + "JOIN student s ON e.studentID = s.studentID "
                             + "WHERE studentID = ? "
                             + "ORDER BY schoolYear DESC"
@@ -62,6 +66,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                         "studentID"));
                 student.setPersonID(rs.getLong(
                         "personID"));
+                student.setStudentType(rs.getString(
+                        "studentType"));
                 student.setAddress(rs.getString(
                         "address"));
                 student.setDepartment(Department.valueOf(rs.getString(
@@ -72,6 +78,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                         "studentDepartmentID")));
                 status.setDisciplinaryStatusId(rs.getLong(
                         "disciplinaryStatusID"));
+                status.setStatus(rs.getString("disciplinaryStatusName"));
                 enrollment.setDisciplinaryStatus(status);
 
                 enrollmentList.add(enrollment);
@@ -127,13 +134,18 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         try (Connection conn = ConnectionHelper.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(
                     "SELECT e.enrollmentID, e.studentID, e.studentLevel,"
-                            + " e.section, e.department, "
-                            + "s.personID, s.address, "
+                            + " e.section, e.department, e.schoolYear, "
+                            + "s.personID, s.address, s.studentType, "
                             + "p.firstName, p.lastName,"
-                            + " p.middleName "
+                            + "p.middleName, "
+                            + "ds.disciplinaryStatusID,"
+                            + "ds.status, ds.description "
                             + "FROM enrollment e "
                             + "JOIN student s ON e.studentID = s.studentID "
                             + "JOIN person p ON s.personID = p.personID "
+                            + "LEFT JOIN disciplinaryStatus ds "
+                            + "ON e.disciplinaryStatusID "
+                            + "= ds.disciplinaryStatusID "
                             + "WHERE e.schoolYear = ("
                             + "SELECT MAX(e2.schoolYear) "
                             + "FROM enrollment e2 "
@@ -144,6 +156,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
             while (rs.next()) {
                 Enrollment enrollment = new Enrollment();
                 Student student = new Student();
+                DisciplinaryStatus status = new DisciplinaryStatus();
 
                 enrollment.setEnrollmentId(rs.getLong(
                         "enrollmentID"));
@@ -153,19 +166,30 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                         "section"));
                 enrollment.setDepartment(Department.valueOf(rs.getString(
                         "department")));
+                enrollment.setSchoolYear(rs.getString(
+                        "schoolYear"));
                 student.setStudentId(rs.getString(
                         "studentID"));
                 student.setPersonID(rs.getLong(
                         "personID"));
                 student.setAddress(rs.getString(
                         "address"));
+                student.setStudentType(rs.getString(
+                        "studentType"));
                 student.setFirstName(rs.getString(
                         "firstName"));
                 student.setLastName(rs.getString(
                         "lastName"));
                 student.setMiddleName(rs.getString(
                         "middleName"));
+                status.setDisciplinaryStatusId(rs.getLong(
+                        "disciplinaryStatusID"));
+                status.setStatus(rs.getString(
+                        "status"));
+                status.setDescription(rs.getString(
+                        "description"));
 
+                enrollment.setDisciplinaryStatus(status);
                 enrollment.setStudent(student);
                 enrollmentList.add(enrollment);
             }
