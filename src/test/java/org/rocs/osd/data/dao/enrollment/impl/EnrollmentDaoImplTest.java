@@ -88,6 +88,7 @@ class EnrollmentDaoImplTest {
         when(this.resultSet.getString("studentLevel")).thenReturn("Grade-8", "Grade-9");
         when(this.resultSet.getString("section")).thenReturn("St. Hannibal", "St. Anthony");
         when(this.resultSet.getString("department")).thenReturn("JHS", "JHS");
+        when(this.resultSet.getString("schoolYear")).thenReturn("2024-2025", "2025-2026");
 
         when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0002");
         when(this.resultSet.getLong("personID")).thenReturn(1L, 2L);
@@ -95,7 +96,7 @@ class EnrollmentDaoImplTest {
         when(this.resultSet.getString("firstName")).thenReturn("Juan", "Maria");
         when(this.resultSet.getString("lastName")).thenReturn("Dela Cruz", "Santos");
         when(this.resultSet.getString("middleName")).thenReturn("A", "B");
-
+        when(this.resultSet.getString("studentType")).thenReturn("Intern", "Intern");
         List<Enrollment> result = enrollmentDao.findAllLatestEnrollments();
 
         assertNotNull(result);
