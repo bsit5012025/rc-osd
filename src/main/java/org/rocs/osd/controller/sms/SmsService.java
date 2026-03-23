@@ -5,80 +5,149 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-    public class SmsService {
+/**
+ * Service class responsible for handling SMS
+ * communications via an external gateway.
+ * <p>
+ * This class provides methods to send SMS messages
+ * both synchronously and asynchronously,
+ * utilizing a REST-based GET API.
+ */
+public final class SmsService {
+    /**
+     * Configuration loader instance used to retrieve API credentials.
+     * */
+    private static ConfigLoader cLoader;
+    /**
+     * Private constructor to prevent instantiation.
+     * */
+    private SmsService() {
 
-        private static final String USERNAME = "test";
-        private static final String PASSWORD = "test";
-        /**
-         * Change IP according to what GSM Modem(SMS) is displaying
-         * */
-        private static final String BASE_URL = "http://10.63.93.239:8090/SendSMS";
+    }
+    /**
+     * Base URL for the SMS gateway provider .
+     * */
+    private final static String baseUrl = cLoader.get("sms.base.url");
 
-        public static void sendSMS(String phone, String message) {
+    /**
+     * Authentication username for the SMS API.
+     * */
+    private final static String username = cLoader.get("sms.username");
 
-            try {
-                String encodedMessage = URLEncoder.encode(message, "UTF-8");
-                /**
-                 * USERNAME and PASSWORD are for the accounts on the GSM Modem(SMS), our third-party app that
-                 * acts as a middleman between the actual phone used for sending SMS and the java app.
-                 * */
-                String urlString = BASE_URL +
-                        "?username=" + USERNAME +
-                        "&password=" + PASSWORD +
-                        "&phone=" + phone +
-                        "&message=" + encodedMessage;
+    /**
+     * Authentication password for the SMS API.
+     * */
+    private final static String password = cLoader.get("sms.password");
 
-                URL url = new URL(urlString);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    /**
+     * Sends an SMS message synchronously.
+     * <p>
+     * This method formats the phone number,
+     * encodes the message, and performs an
+     * HTTP GET request to the configured gateway.
+     * It logs the response or errors to the console.
+     *
+     * @param pPhone   The recipient's phone number (e.g., "09123456789").
+     * @param pMessage The text content of the SMS.
+     */
+    public static void sendSMS(String pPhone, String pMessage) {
 
+        try {
+            /*
+              Standardize phone format before sending.
+             * */
+            pPhone = formatPhone(pPhone);
 
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
+            /*
+              URL encode the message to handle special characters and spaces.
+              */
+            String encodedMessage = URLEncoder.encode(pMessage, StandardCharsets.UTF_8);
 
-                conn.setRequestMethod("GET");
+            String urlString = baseUrl
+                    + "?username="
+                    + username
+                    + "&password="
+                    + password
+                    + "&phone="
+                    + pPhone
+                    + "&message="
+                    + encodedMessage;
 
-                int responseCode = conn.getResponseCode();
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                responseCode == 200 ?
-                                        conn.getInputStream() :
-                                        conn.getErrorStream()
-                        )
-                );
+            /*
+             * Sets timeout limits to keep the
+             * application from hanging
+             * */
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            conn.setRequestMethod("GET");
 
-                String line;
-                StringBuilder response = new StringBuilder();
+            int responseCode = conn.getResponseCode();
 
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
+            /*
+             * Read the response stream (input if success,
+             * error stream if failed)
+             * */
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            responseCode == 200
+                                    ?
+                                    conn.getInputStream()
+                                    :
+                                    conn.getErrorStream()
+                    )
+            );
 
-                reader.close();
+            String line;
+            StringBuilder response = new StringBuilder();
 
-
-                if (responseCode == 200) {
-                    System.out.println("SMS SENT SUCCESSFULLY: " + response);
-                } else {
-                    System.err.println("SMS FAILED: " + response);
-                }
-
-            } catch (Exception e) {
-                System.err.println("SMS ERROR: " + e.getMessage());
-                e.printStackTrace();
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
             }
-        }
 
-        public static void sendSMSAsync(String phone, String message) {
+            reader.close();
 
-            new Thread(() -> sendSMS(phone, message)).start();
-        }
-
-        public static String formatPhone(String phone) {
-            if (phone.startsWith("0")) {
-                return "+63" + phone.substring(1);
+            if (responseCode == 200) {
+                System.out.println("SMS SENT SUCCESSFULLY: " + response);
+            } else {
+                System.err.println("SMS FAILED: " + response);
             }
-            return phone;
+
+        } catch (Exception e) {
+            System.err.println("SMS ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
+    /**
+     * Sends an SMS message asynchronously by spawning a new thread.
+     * <p>
+     * Use this method to prevent the main execution thread from blocking
+     * while waiting for the network response.
+     *
+     * @param pPhone   The recipient's phone number.
+     * @param pMessage The text content of the SMS.
+     */
+    public static void sendSMSAsync(String pPhone, String pMessage) {
+        new Thread(() -> sendSMS(pPhone, pMessage)).start();
+    }
+
+    /**
+     * Formats a local Philippine phone number to international format.
+     * <p>
+     * Replaces the leading '0' with the '+63' country code.
+     *
+     * @param pPhone The raw phone number string.
+     * @return The formatted phone number string.
+     */
+    public static String formatPhone(String pPhone) {
+        if (pPhone.startsWith("0")) {
+            return "+63" + pPhone.substring(1);
+        }
+        return pPhone;
+    }
+}

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * DAO implementation for managing guardian information in the Office of
  * Student Discipline System.
- *
+ *<p>
  * Provides methods to retrieve guardians associated with students.
  */
 public class GuardianDaoImpl implements GuardianDao {
@@ -54,7 +54,8 @@ public class GuardianDaoImpl implements GuardianDao {
                 guardian.setGuardianID(rs.getLong("guardianID"));
                 guardian.setContactNumber(rs.getString("contactNumber"));
                 guardian.setRelationship(
-                        Relationship.valueOf(rs.getString("relationship"))
+                        Relationship.valueOf(rs.getString(
+                                "relationship").toUpperCase())
                 );
 
                 Student student = new Student();
