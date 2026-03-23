@@ -24,28 +24,51 @@ import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
 import java.io.IOException;
 
 /**
- * Controller responsible for handling user interactions in the Login screen of the Office of Student Discipline.
- * It validates user credentials and manages navigation to the Dashboard view.
+ * Controller responsible for handling user interactions in
+ * the Login screen of the Office of Student Discipline.
+ *
+ * It validates user credentials and manages
+ * navigation to the Dashboard view.
  */
 public class LoginController {
+    /**
+     * Stage used to display login error popups.
+     */
     private Stage errorStage;
-
+    /**
+    * Text field for entering the username .
+    */
     @FXML
-    TextField usernameTextField;
-
+    private TextField usernameTextField;
+    /**
+     * Password field for entering the password.
+     */
     @FXML
-    PasswordField passwordField;
-
+    private PasswordField passwordField;
+    /**
+     * Text field to display password in plain text when toggled.
+     */
     @FXML
     private TextField passwordTextField;
-
+    /**
+     * Button used to toggle password visibility.
+     */
     @FXML
     private javafx.scene.control.Button togglePasswordButton;
 
+    /**
+     * Toggles the visibility of the password input.
+     * Shows the password in plain text if currently hidden,
+     * and hides it if currently visible.
+     */
     @FXML
     private void togglePasswordVisibility() {
-        if (passwordField == null || passwordTextField == null || togglePasswordButton == null) {
-            return;
+        if (passwordField == null
+                ||
+                passwordTextField == null
+                ||
+                togglePasswordButton == null) {
+                return;
         }
         if (passwordField.isVisible()) {
             passwordTextField.setText(passwordField.getText());
@@ -65,25 +88,29 @@ public class LoginController {
     }
     /**
      * Handles the login process when the Login button is clicked.
-     * This method validates the entered username and password and loads the Dashboard if successful.
+     * This method validates the entered username and
+     * password and loads the Dashboard if successful.
      * @param event the action event triggered by clicking the login button.
      */
-    public void onLogin(ActionEvent event){
+    public void onLogin(ActionEvent event) {
 
-        /**
-         * Initialize DAO and Facade for login process.
+        /*
+          Initialize DAO and Facade for login process.
          */
         LoginFacade loginFacade;
         LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
 
-        /**
-         * This will check if the entered username and password are correct.
+        /*
+          This will check if the entered username
+          and password are correct.
          */
-        boolean loginCheck = loginFacade.login(usernameTextField.getText(),passwordField.getText());
+        boolean loginCheck = loginFacade.login(
+        usernameTextField.getText(), passwordField.getText());
 
-        /**
-         * This will check if the username or password fields are empty and informs the user to fill them up.
+        /*
+          This will check if the username or password fields are empty
+          and informs the user to fill them up.
          */
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
@@ -92,20 +119,21 @@ public class LoginController {
             showErrorPopup("Enter both username and password!");
             return;
         }
-        try{
-            /**
-             * If the login credentials are correct, Dashboard screen will be loaded.
+        try {
+            /*
+              If the login credentials are correct,
+              Dashboard screen will be loaded.
              */
-            if(loginCheck){
+            if (loginCheck) {
                 loadDashboard(event);
-            }
-            else{
-                /**
-                 * If the login fails, "Invalid username or password! will be displayed".
+            } else {
+                /*
+                  If the login fails, "Invalid username or password!
+                  will be displayed".
                  */
                 showErrorPopup("Invalid username or password!");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -117,35 +145,37 @@ public class LoginController {
                 errorStage.close();
                 errorStage = null;
             }
-            /**
-             * This will load the Dashboard screen from the FXML file.
+            /*
+              This will load the Dashboard screen from the FXML file.
              */
-            Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard/dashboard.fxml"));
-            /**
-             * This will get the current window from the button click event.
+            Parent root = FXMLLoader.load(getClass()
+            .getResource("/view/dashboard/dashboard.fxml"));
+            /*
+              This will get the current window from the button click event.
              */
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            /**
-             * This will display the Dashboard screen in the window.
+            Stage stage = (Stage) ((Node)
+            event.getSource()).getScene().getWindow();
+            /*
+              This will display the Dashboard screen in the window.
              */
             double width = stage.getWidth();
             double height = stage.getHeight();
-            stage.setScene(new Scene(root,width,height));
-            /**
-             * This will make the window full screen.
+            stage.setScene(new Scene(root, width, height));
+            /*
+              This will make the window full screen.
              */
             stage.setMaximized(true);
             stage.show();
-            /**
-             * Throw an exception if the Dashboard screen cannot be loaded.
+            /*
+              Throw an exception if the Dashboard screen cannot be loaded.
              */
-        } catch (LoadException e){
+        } catch (LoadException e) {
             System.err.println("Error loading Dashboard");
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
-            /**
-             * Throw an exception if the Dashboard screen cannot be loaded.
+            /*
+              Throw an exception if the Dashboard screen cannot be loaded.
              */
             throw new RuntimeException(e);
         }
@@ -156,14 +186,17 @@ public class LoginController {
             if (errorStage != null && errorStage.isShowing()) {
                 errorStage.close();
             }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dialogs/loginError.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+            "/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
-            /**
-             * Sets the login error banner to the bottom-center of the window on different screen sizes.
-             * */
+            /*
+              Sets the login error banner to the bottom-center
+              of the window on different screen sizes.
+              */
             errorStage = new Stage();
 
-            Label label = (Label) root.lookup("#lgnErrText");
+            Label label = (Label) root.lookup(
+                    "#lgnErrText");
             if (label != null) {
                 label.setText(message);
             }
@@ -175,7 +208,8 @@ public class LoginController {
             errorStage.initStyle(StageStyle.TRANSPARENT);
             errorStage.initModality(Modality.NONE);
 
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Rectangle2D screenBounds = Screen.getPrimary()
+            .getVisualBounds();
             double windowWidth = root.prefWidth(-1);
             double windowHeight = root.prefHeight(-1);
 
@@ -185,14 +219,16 @@ public class LoginController {
             errorStage.show();
 
             PauseTransition delay = new PauseTransition(Duration.seconds(2));
-            delay.setOnFinished(event -> {errorStage.close();});
+            delay.setOnFinished(
+                    event -> {
+                        errorStage.close(); }
+            );
             delay.play();
-            /**
-             * TODO: If the UI/UX Designer decided to improve this, they can add an animation that lets the close after 3 seconds
-             * */
+
 
         } catch (IOException ioe) {
-            System.err.println("Could not load Error Popup: " + ioe.getMessage());
+            System.err.println("Could not load Error Popup: "
+            + ioe.getMessage());
             ioe.printStackTrace();
         }
     }

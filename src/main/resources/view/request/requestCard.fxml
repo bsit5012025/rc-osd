@@ -44,8 +44,14 @@
     <HBox fx:id="actionBar" managed="false" styleClass="actionBarContainer" visible="false">
         <Region HBox.hgrow="ALWAYS" />
         <HBox styleClass="actionBar">
-            <Button styleClass="denyButton" text="Deny" />
-            <Button styleClass="approveButton" text="Approve" />
+            <Button styleClass="denyButton" text="Deny" onAction="#onDeny" />
+            <Button styleClass="approveButton" text="Approve" onAction="#onApprove" />
         </HBox>
     </HBox>
+
+    <VBox fx:id="popupBox" alignment="CENTER" spacing="5"
+          style="-fx-background-color: #DDE1EB; -fx-padding: 10; -fx-background-radius: 8;"
+          visible="false">
+        <Label fx:id="popupLabel" style="-fx-font-weight: bold; -fx-text-fill: #000000;"/>
+    </VBox>
 </VBox>

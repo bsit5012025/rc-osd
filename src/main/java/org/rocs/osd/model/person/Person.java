@@ -2,104 +2,80 @@ package org.rocs.osd.model.person;
 
 /**
  * Represents a person record in the Office of Student Discipline System.
- * Stores basic personal details including ID, first name, last name, and middle name.
- * This class serves as a base class for Student and Employee models.
+ * Stores basic personal details including ID, first name, last name, and middle
+ * name. Serves as a base class for Student and Employee.
  */
 public class Person {
 
+    /** Unique identifier for the person. */
     private long personID;
+
+    /** Last name of the person. */
     private String lastName;
+
+    /** First name of the person. */
     private String firstName;
+
+    /** Middle name of the person. */
     private String middleName;
 
-    /**
-     * Default constructor
-     */
+    /** Default constructor. */
     public Person() {
     }
 
     /**
-     * @param personID   unique identifier of the person
-     * @param lastName   last name of the person
-     * @param firstName  first name of the person
-     * @param middleName middle name of the person
+     * Constructor with all fields.
+     *
+     * @param pPersonID unique identifier of the person.
+     * @param pLastName last name of the person.
+     * @param pFirstName first name of the person.
+     * @param pMiddleName middle name of the person.
      */
-    public Person(long personID, String lastName, String firstName, String middleName) {
-        this.personID = personID;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
+    public Person(long pPersonID, String pLastName,
+                  String pFirstName, String pMiddleName) {
+        this.personID = pPersonID;
+        this.lastName = pLastName;
+        this.firstName = pFirstName;
+        this.middleName = pMiddleName;
     }
 
-    /**
-     * Gets the unique person ID.
-     *
-     * @return  the personID.
-     */
+    /** @return the unique person ID. */
     public long getPersonID() {
         return personID;
     }
 
-    /**
-     * Sets the unique person ID.
-     *
-     * @param personID  the personID to set.
-     */
-    public void setPersonID(long personID) {
-        this.personID = personID;
+    /** @param pPersonID sets the unique person ID. */
+    public void setPersonID(long pPersonID) {
+        this.personID = pPersonID;
     }
 
-    /**
-     * Gets the last name of the person.
-     *
-     * @return  the lastName.
-     */
+    /** @return the last name. */
     public String getLastName() {
         return lastName;
     }
 
-    /**
-     * Sets the last name of the person.
-     *
-     * @param lastName  the lastName to set
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    /** @param pLastName sets the last name. */
+    public void setLastName(String pLastName) {
+        this.lastName = pLastName;
     }
 
-    /**
-     * Gets the first name of the person.
-     *
-     * @return  the firstName
-     */
+    /** @return the first name. */
     public String getFirstName() {
         return firstName;
     }
 
-    /**
-     * Sets the first name of the person.
-     *
-     * @param firstName  the firstName to set.
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    /** @param pFirstName sets the first name. */
+    public void setFirstName(String pFirstName) {
+        this.firstName = pFirstName;
     }
 
-    /**
-     * Gets the middle name of the person.
-     *
-     * @return  the middleName.
-     */
+    /** @return the middle name. */
     public String getMiddleName() {
         return middleName;
     }
 
-    /**
-     * Sets the middle name of the person.
-     *
-     * @param middleName  the middleName to set.
-     */
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    /** @param pMiddleName sets the middle name. */
+    public void setMiddleName(String pMiddleName) {
+        this.middleName = pMiddleName;
     }
 }

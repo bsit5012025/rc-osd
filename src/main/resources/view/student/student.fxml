@@ -11,7 +11,8 @@
             prefWidth="900.0"
             styleClass="mainBackground"
             xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.rocs.osd.controller.student.StudentController">
     <stylesheets>
         <URL value="@../../styles/student/student.css" />
     </stylesheets>
@@ -48,10 +49,10 @@
     <center>
         <TableView fx:id="studentTable" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn prefWidth="150.0" text="Student_ID" />
-                <TableColumn prefWidth="250.0" text="Student Name" />
-                <TableColumn prefWidth="150.0" text="Grade/Course" />
-                <TableColumn prefWidth="150.0" text="Section" />
+                <TableColumn fx:id="studentIdColumn" prefWidth="150.0" text="Student_ID" />
+                <TableColumn fx:id="studentNameColumn" prefWidth="250.0" text="Student Name" />
+                <TableColumn fx:id="gradeCourseColumn" prefWidth="150.0" text="Grade/Course" />
+                <TableColumn fx:id="sectionColumn" prefWidth="150.0" text="Section" />
             </columns>
 
             <items>
