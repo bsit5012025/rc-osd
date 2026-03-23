@@ -1,9 +1,3 @@
-/**
- * This package contains classes for handling student appeals
- * in the Office of Student Discipline system.
- * It includes controllers for
- * UI modals and lists.
- */
 package org.rocs.osd.controller.appeal;
 
 import javafx.fxml.FXML;
@@ -19,20 +13,19 @@ import java.util.List;
 /**
  * Controller for managing and displaying appeal records
  * in the Office of Student Discipline System.
- * It loads appeals from the database and displays them in the UI.
+ * It loads appeals from the database and displays them
+ * in the UI.
  */
 public class AppealController {
 
     /**
-     * VBox container that holds appeal cards.
-     * Cleared and updated on initialization.
+     * Container that holds all appeal cards in the UI.
      */
     @FXML
     private VBox listContainer;
 
     /**
-     * Facade to access appeal data from the database.
-     * Uses AppealFacadeImpl as the implementation.
+     * Facade used to retrieve appeal data from backend.
      */
     private AppealFacade appealFacade = new AppealFacadeImpl();
 
@@ -42,36 +35,37 @@ public class AppealController {
      */
     @FXML
     public void initialize() {
-
-        listContainer.getChildren().clear();
-        loadAppealsFromDB();
+        if (listContainer != null) {
+            listContainer.getChildren().clear();
+            loadAppealsFromDB();
+        }
     }
 
     /**
-     * Loads pending appeals from the database.
-     * Adds each appeal as a card in the listContainer.
+     * Fetches pending appeals from the database
+     * and injects them into the listContainer.
      */
     private void loadAppealsFromDB() {
-
         List<Appeal> appeals = appealFacade.getPendingAppeals();
 
         for (Appeal appeal : appeals) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().
-                        getResource("/view/appeal/appealModal.fxml"));
-
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/appeal/AppealCard.fxml"));
                 VBox card = loader.load();
 
-                AppealModalController controller = loader.getController();
-                controller.setAppeal(appeal);
-
-                controller.setOnActionComplete(() ->
-                listContainer.getChildren().remove(card));
-                listContainer.getChildren().add(card);
+                AppealCardController controller = loader.getController();
+                if (controller != null) {
+                    controller.setAppeal(appeal);
+                    controller.setOnActionComplete(() ->
+                            listContainer.getChildren().remove(card));
+                    listContainer.getChildren().add(card);
+                }
             } catch (IOException e) {
+                System.err.println(
+                        "Error loading Appeal Card: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
 }
-
