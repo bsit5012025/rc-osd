@@ -23,140 +23,140 @@ DROP TABLE studentGuardian CASCADE CONSTRAINTS;
 
 -- PERSON ENTITY
 CREATE TABLE person(
-                       personID number(20,0) generated as identity
-                           constraint PERSON_NOT_NULL not null,
-                       lastName VARCHAR(50) NOT NULL,
-                       firstName VARCHAR(100) NOT NULL,
-                       middleName VARCHAR(30),
-                       primary key (personID)
+personID number(20,0) generated as identity
+constraint PERSON_NOT_NULL not null,
+lastName VARCHAR(50) NOT NULL,
+firstName VARCHAR(100) NOT NULL,
+middleName VARCHAR(30),
+primary key (personID)
 );
 
 -- LOGIN ENTITY
 CREATE TABLE login (
-                       id number(20,0) generated as identity
-                           constraint LOGIN_NOT_NULL not null,
-                       personID number(20,0) unique,
-                       username varchar2(25 char)
-                           constraint LOGIN_USERNAME_NOT_NULL not null,
-                       password varchar2(255 char)
-                           constraint LOGIN_PASSWORD_NOT_NULL not null,
-                       join_date timestamp(6),
-                       last_login_date timestamp(6),
-                       role varchar2(255 char),
-                       authorities varchar2(255 char),
-                       is_active number(1,0),
-                       is_locked number(1,0),
-                       primary key (id)
+id number(20,0) generated as identity
+constraint LOGIN_NOT_NULL not null,
+personID number(20,0) unique,
+username varchar2(25 char)
+constraint LOGIN_USERNAME_NOT_NULL not null,
+password varchar2(255 char)
+constraint LOGIN_PASSWORD_NOT_NULL not null,
+join_date timestamp(6),
+last_login_date timestamp(6),
+role varchar2(255 char),
+authorities varchar2(255 char),
+is_active number(1,0),
+is_locked number(1,0),
+primary key (id)
 );
 
 -- OFFENSE ENTITY
 CREATE TABLE offense (
-                         offenseID number(20,0) generated as identity
-                             constraint OFFENSE_NOT_NULL not null,
-                         offense VARCHAR(100),
-                         type VARCHAR(50),
-                         description VARCHAR(500),
-                         PRIMARY KEY (offenseID)
+offenseID number(20,0) generated as identity
+constraint OFFENSE_NOT_NULL not null,
+offense VARCHAR(100),
+type VARCHAR(50),
+description VARCHAR(500),
+PRIMARY KEY (offenseID)
 );
 
 -- DISCIPLINARY ACTION ENTITY
 CREATE TABLE disciplinaryAction (
-                                    actionID number(20,0) PRIMARY KEY,
-                                    action VARCHAR(100),
-                                    description VARCHAR(500)
+actionID number(20,0) PRIMARY KEY,
+action VARCHAR(100),
+description VARCHAR(500)
 );
 
 -- EMPLOYEE ENTITY
 CREATE TABLE employee (
-                          employeeID VARCHAR(10) PRIMARY KEY,
-                          personID number(20,0),
-                          department varchar(20),
-                          employeeRole VARCHAR(30)
+employeeID VARCHAR(10) PRIMARY KEY,
+personID number(20,0),
+department varchar(20),
+employeeRole VARCHAR(30)
 );
 
 -- STUDENT ENTITY
 CREATE TABLE student (
-                         studentID VARCHAR(10) PRIMARY KEY,
-                         personID number(20,0),
-                         address VARCHAR(255),
-                         studentType VARCHAR(20),
-                         department VARCHAR(20)
+studentID VARCHAR(10) PRIMARY KEY,
+personID number(20,0),
+address VARCHAR(255),
+studentType VARCHAR(20),
+department VARCHAR(20)
 );
 
 -- DISCIPLINARY STATUS ENTITY
 CREATE TABLE disciplinaryStatus (
-                                    disciplinaryStatusID number(20,0) PRIMARY KEY,
-                                    status VARCHAR(30),
-                                    description VARCHAR(255)
+disciplinaryStatusID number(20,0) PRIMARY KEY,
+status VARCHAR(30),
+description VARCHAR(255)
 );
 
 -- ENROLLMENT ENTITY
 CREATE TABLE enrollment (
-                            enrollmentID number(20,0) generated as identity
-                                constraint ENROLLMENT_NOT_NULL not null,
-                            studentID VARCHAR(10),
-                            schoolYear VARCHAR(9),
-                            studentLevel VARCHAR(30),
-                            section VARCHAR(50),
-                            department VARCHAR(20),
-                            disciplinaryStatusID number(20,0),
-                            primary key (enrollmentID)
+enrollmentID number(20,0) generated as identity
+constraint ENROLLMENT_NOT_NULL not null,
+studentID VARCHAR(10),
+schoolYear VARCHAR(9),
+studentLevel VARCHAR(30),
+section VARCHAR(50),
+department VARCHAR(20),
+disciplinaryStatusID number(20,0),
+primary key (enrollmentID)
 );
 
 -- RECORD ENTITY
 CREATE TABLE record (
-                        recordID number(20,0) generated as identity
-                            constraint RECORD_NOT_NULL not null,
-                        enrollmentID number(20,0),
-                        employeeID VARCHAR(10),
-                        offenseID number(20,0),
-                        dateOfViolation DATE,
-                        actionID number(20,0),
-                        dateOfResolution DATE,
-                        remarks VARCHAR(500),
-                        status VARCHAR(30),
-                        primary key (recordID)
+recordID number(20,0) generated as identity
+constraint RECORD_NOT_NULL not null,
+enrollmentID number(20,0),
+employeeID VARCHAR(10),
+offenseID number(20,0),
+dateOfViolation DATE,
+actionID number(20,0),
+dateOfResolution DATE,
+remarks VARCHAR(500),
+status VARCHAR(30),
+primary key (recordID)
 );
 
 -- APPEAL ENTITY
 CREATE TABLE appeal (
-                        appealID number(20,0) generated as identity
-                            constraint APPEAL_NOT_NULL not null,
-                        recordID number(20,0),
-                        enrollmentID number(20,0),
-                        message VARCHAR(500),
-                        dateFiled DATE,
-                        status VARCHAR(20),
-                        primary key (appealID)
+appealID number(20,0) generated as identity
+    constraint APPEAL_NOT_NULL not null,
+recordID number(20,0),
+enrollmentID number(20,0),
+message VARCHAR(500),
+dateFiled DATE,
+status VARCHAR(20),
+primary key (appealID)
 );
 
 --REQUEST ENTITY
 CREATE TABLE request (
-                         requestID number(20,0) generated as identity
-                             constraint REQUEST_NOT_NULL not null,
-                         employeeID VARCHAR(10),
-                         details VARCHAR(100),
-                         message VARCHAR(500),
-                         type VARCHAR(100),
-                         status VARCHAR(10),
-                         primary key (requestID)
+requestID number(20,0) generated as identity
+    constraint REQUEST_NOT_NULL not null,
+employeeID VARCHAR(10),
+details VARCHAR(100),
+message VARCHAR(500),
+type VARCHAR(100),
+status VARCHAR(10),
+primary key (requestID)
 );
 
 -- GUARDIAN ENTITY
 CREATE TABLE guardian (
-                          guardianID number(20,0) generated as identity
-                              constraint GUARDIAN_NOT_NULL not null,
-                          personID number(20,0),
-                          contactNumber VARCHAR2(20),
-                          relationship VARCHAR2(50),
-                          primary key (guardianID)
+guardianID number(20,0) generated as identity
+    constraint GUARDIAN_NOT_NULL not null,
+personID number(20,0),
+contactNumber VARCHAR2(20),
+relationship VARCHAR2(50),
+primary key (guardianID)
 );
 
 CREATE TABLE studentGuardian (
-                                 studentID VARCHAR2(10),
-                                 guardianID NUMBER(20,0),
-                                 primary key (studentID, guardianID)
-);
+studentID VARCHAR2(10),
+guardianID NUMBER(20,0),
+primary key (studentID, guardianID)
+    );
 
 -- CONSTRAINTS
 ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
@@ -341,7 +341,6 @@ INSERT INTO employee (employeeID, personID, department, employeeRole) VALUES ('E
 INSERT INTO employee (employeeID, personID, department, employeeRole) VALUES ('EMP-002', 60, 'JHS', 'PREFECT');
 INSERT INTO employee (employeeID, personID, department, employeeRole) VALUES ('EMP-003', 59, 'COLLEGE', 'PREFECT');
 
---COLLEGE
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('CT23-0001', 1, 'Malabag', 'Extern', 'COLLEGE');
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('CT23-0002', 2, 'Malabag', 'Extern', 'COLLEGE');
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('CT23-0003', 3, 'Malabag', 'Extern', 'COLLEGE');
@@ -400,7 +399,6 @@ INSERT INTO student (studentID, personID, address, studentType, department) VALU
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('SHS-0056', 56, 'Malabag', 'Extern', 'SHS');
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('SHS-0057', 57, 'Malabag', 'Extern', 'SHS');
 INSERT INTO student (studentID, personID, address, studentType, department) VALUES ('SHS-0058', 58, 'Malabag', 'Extern', 'SHS');
-
 
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (1, 'Good Standing', 'Student has no disciplinary issues and maintains good behavior.');
 INSERT INTO disciplinaryStatus (disciplinaryStatusID, status, description) VALUES (2, 'Conduct Monitoring', 'Student is under observation due to minor conduct issues.');
@@ -467,7 +465,6 @@ INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department
 INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department, disciplinaryStatusID) VALUES ('SHS-0057', '2025-2026', 'Grade-11', 'St. Joseph', 'SHS', 3);
 INSERT INTO enrollment (studentID, schoolYear, studentLevel, section, department, disciplinaryStatusID) VALUES ('SHS-0058', '2025-2026', 'Grade-11', 'St. Joseph', 'SHS', 3);
 
-
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (20, 'EMP-002', 8, TO_DATE('2025-09-15', 'YYYY-MM-DD'), 1, TO_DATE('2025-09-17', 'YYYY-MM-DD'), 'Repeatedly late to class', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (18, 'EMP-003', 5, TO_DATE('2025-01-12', 'YYYY-MM-DD'), 2, TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Caught holding hands', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (12, 'EMP-003', 10, TO_DATE('2025-04-28', 'YYYY-MM-DD'), 2, TO_DATE('2025-04-30', 'YYYY-MM-DD'), 'She was seen bringing alcohol to the acquintace party.', 'PENDING');
@@ -499,7 +496,6 @@ INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, action
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (58, 'EMP-003', 7, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'The guard saw the student trying to sneak out of the school', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (54, 'EMP-003', 3, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Stealing money', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (29, 'EMP-003', 17, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Not wearing proper uniform', 'PENDING');
-
 
 INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (15, 1, 'I swear not to be late to class again', TO_DATE('2025-07-29','YYYY-MM-DD'), 'PENDING');
 INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (18, 2, 'I did not punch my classmate', TO_DATE('2025-07-29','YYYY-MM-DD'), 'PENDING');
