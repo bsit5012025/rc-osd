@@ -18,11 +18,15 @@ import java.util.List;
  */
 public class AppealController {
 
-    /** Container that holds all appeal cards in the UI. */
+    /**
+     * Container that holds all appeal cards in the UI.
+     */
     @FXML
     private VBox listContainer;
 
-    /** Facade used to retrieve appeal data from backend. */
+    /**
+     * Facade used to retrieve appeal data from backend.
+     */
     private AppealFacade appealFacade = new AppealFacadeImpl();
 
     /**
