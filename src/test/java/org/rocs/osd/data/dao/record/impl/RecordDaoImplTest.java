@@ -279,4 +279,45 @@ class RecordDaoImplTest
 
         verify(preparedStatement).executeQuery();
     }
+    @Test
+    void testFindRecordsByStudentIdReturnRecordsOfStudent() throws  SQLException{
+        when(connection.prepareStatement((anyString()))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.getLong("recordID")).thenReturn(1L);
+        when(resultSet.getDate("dateOfViolation")).thenReturn(Date.valueOf("2025-01-12"));
+        when(resultSet.getDate("dateOfResolution")).thenReturn(Date.valueOf("2025-01-20"));
+        when(resultSet.getString("remarks")).thenReturn("Repeatedly late to class");
+        when(resultSet.getString("status")).thenReturn("RESOLVED");
+
+        when(resultSet.getLong("enrollmentID")).thenReturn(2L);
+        when(resultSet.getString("studentID")).thenReturn("JHS-0001");
+        when(resultSet.getString("schoolYear")).thenReturn("2025-2026");
+        when(resultSet.getString("studentLevel")).thenReturn("Grade-9");
+        when(resultSet.getString("section")).thenReturn("St. Anthony");
+
+        when(resultSet.getString("firstName")).thenReturn("Carl");
+        when(resultSet.getString("middleName")).thenReturn("D");
+        when(resultSet.getString("lastName")).thenReturn("Cain");
+
+        when(resultSet.getString("offense")).thenReturn("Tardiness");
+        when(resultSet.getString("type")).thenReturn("Major Offense");
+
+        when(resultSet.getString("action")).thenReturn("Probation");
+
+        List<Record> records = recordDao.findRecordByStudentId("JHS-0001");
+
+        assertNotNull(records);
+        assertEquals(1, records.size());
+
+        Record record = records.get(0);
+
+        assertEquals("JHS-0001", record.getEnrollment().getStudent().getStudentId());
+        assertEquals("Carl", record.getEnrollment().getStudent().getFirstName());
+        assertEquals("Tardiness", record.getOffense().getOffense());
+        assertEquals("Probation", record.getAction().getActionName());
+
+    }
+
 }

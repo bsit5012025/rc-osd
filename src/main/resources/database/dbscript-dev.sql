@@ -41,8 +41,8 @@ constraint LOGIN_USERNAME_NOT_NULL not null,
 password varchar2(255 char)
 constraint LOGIN_PASSWORD_NOT_NULL not null,
 join_date timestamp(6),
-last_login_date timestamp(6),
-role varchar2(255 char),
+ last_login_date timestamp(6),
+ role varchar2(255 char),
 authorities varchar2(255 char),
 is_active number(1,0),
 is_locked number(1,0),
@@ -52,7 +52,7 @@ primary key (id)
 -- OFFENSE ENTITY
 CREATE TABLE offense (
 offenseID number(20,0) generated as identity
-constraint OFFENSE_NOT_NULL not null,
+    constraint OFFENSE_NOT_NULL not null,
 offense VARCHAR(100),
 type VARCHAR(50),
 description VARCHAR(500),
@@ -93,7 +93,7 @@ description VARCHAR(255)
 -- ENROLLMENT ENTITY
 CREATE TABLE enrollment (
 enrollmentID number(20,0) generated as identity
-constraint ENROLLMENT_NOT_NULL not null,
+    constraint ENROLLMENT_NOT_NULL not null,
 studentID VARCHAR(10),
 schoolYear VARCHAR(9),
 studentLevel VARCHAR(30),
@@ -106,7 +106,7 @@ primary key (enrollmentID)
 -- RECORD ENTITY
 CREATE TABLE record (
 recordID number(20,0) generated as identity
-constraint RECORD_NOT_NULL not null,
+    constraint RECORD_NOT_NULL not null,
 enrollmentID number(20,0),
 employeeID VARCHAR(10),
 offenseID number(20,0),
@@ -156,7 +156,7 @@ CREATE TABLE studentGuardian (
 studentID VARCHAR2(10),
 guardianID NUMBER(20,0),
 primary key (studentID, guardianID)
-    );
+);
 
 -- CONSTRAINTS
 ALTER TABLE login ADD CONSTRAINT FK_LOGIN_PERSON FOREIGN KEY (personID) REFERENCES person(personID);
