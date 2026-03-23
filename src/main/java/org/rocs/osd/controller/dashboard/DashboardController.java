@@ -16,8 +16,21 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import org.rocs.osd.controller.request.RequestCardController;
+import org.rocs.osd.data.dao.employee.EmployeeDao;
+import org.rocs.osd.data.dao.employee.impl.EmployeeDaoImpl;
+import org.rocs.osd.data.dao.request.RequestDao;
+import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
+import org.rocs.osd.facade.employee.EmployeeFacade;
+import org.rocs.osd.facade.employee.impl.EmployeeFacadeImpl;
+import org.rocs.osd.facade.request.RequestFacade;
+import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
+import org.rocs.osd.model.person.employee.Employee;
+import org.rocs.osd.model.request.Request;
+import org.rocs.osd.model.request.RequestStatus;
+
 
 /**
  * Controller for the Dashboard screen of the Office of Student Discipline.
@@ -45,9 +58,21 @@ public class DashboardController {
     @FXML
     private VBox listContainer;
 
+    /** Facade for handling request operations. */
+    private RequestFacade requestFacade;
+
+    /** Facade for handling employee operations. */
+    private EmployeeFacade employeeFacade;
+
     /** Initializes the dashboard controller and loads request data. */
     @FXML
     public void initialize() {
+        RequestDao requestDao = new RequestDaoImpl();
+        requestFacade = new RequestFacadeImpl(requestDao);
+
+        EmployeeDao employeeDao = new EmployeeDaoImpl();
+        employeeFacade = new EmployeeFacadeImpl(employeeDao);
+
         if (listContainer != null) {
             loadRequestData();
         }
@@ -59,12 +84,26 @@ public class DashboardController {
             return;
         }
         listContainer.getChildren().clear();
-        addRequestCard("Junior High School", "John Doe", "Individual",
-                "Penge records ni bogart para matransfer na sha.");
-        addRequestCard("College", "Jane Smith", "Section",
-                "Penge records ng IT601 para sa good moral pls");
-        addRequestCard("College", "Leeane Reyes", "Batch",
-                "Penge lang, gusto kolang.");
+        createRequestCards();
+    }
+
+    private void createRequestCards() {
+        List<Request> requestList = requestFacade.getAllRequest();
+
+        for (Request request : requestList) {
+            if (request.getStatus() == RequestStatus.PENDING) {
+                Employee employee = employeeFacade.getEmployeeByEmployeeID(
+                        request.getEmployeeID());
+                String dept = String.valueOf(employee.getDepartment());
+                String name = employee.getFirstName()
+                        + " " + employee.getMiddleName()
+                        + ". " + employee.getLastName();
+                String type = request.getType();
+                String message = request.getMessage();
+                long requestId = request.getRequestID();
+                addRequestCard(dept, name, type, message, requestId);
+            }
+        }
     }
 
     /**
@@ -73,18 +112,20 @@ public class DashboardController {
      * @param name the student name.
      * @param type the type of request.
      * @param reason the reason for the request.
+     * @param requestId To record where card is
      */
     private void addRequestCard(String dept,
                                 String name,
                                 String type,
-                                String reason) {
+                                String reason,
+                                long requestId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("/view/request/RequestCard.fxml"));
             VBox card = loader.load();
             RequestCardController controller = loader.getController();
             if (controller != null) {
-                controller.setData(dept, name, type, reason);
+                controller.setData(dept, name, type, reason, requestId);
                 listContainer.getChildren().add(card);
             }
         } catch (Exception e) {
@@ -152,6 +193,7 @@ public class DashboardController {
      * Loads the Offense module into the dashboard content area.
      * @param event ActionEvent triggered by the Offense button.
      */
+
     @FXML
     public void onLoadOffense(ActionEvent event) {
         try {
@@ -283,4 +325,5 @@ public class DashboardController {
             }
         }
     }
+
 }
