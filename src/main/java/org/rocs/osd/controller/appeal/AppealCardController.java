@@ -26,47 +26,56 @@ public class AppealCardController {
     /**
      * Student ID label.
      */
-    @FXML private Label studentIdLabel;
+    @FXML
+    private Label studentIdLabel;
 
     /**
      * Student name label.
      */
-    @FXML private Label studentNameLabel;
+    @FXML
+    private Label studentNameLabel;
 
     /**
      * Offense label.
      */
-    @FXML private Label offenseLabel;
+    @FXML
+    private Label offenseLabel;
 
     /**
      * Reason label.
      */
-    @FXML private Label reasonLabel;
+    @FXML
+    private Label reasonLabel;
 
     /**
      * Popup label.
      */
-    @FXML private Label popupLabel;
+    @FXML
+    private Label popupLabel;
 
     /**
      * Expanded section container.
      */
-    @FXML private VBox expandedSection;
+    @FXML
+    private VBox expandedSection;
 
     /**
      * Popup container.
      */
-    @FXML private VBox popupBox;
+    @FXML
+    private VBox popupBox;
 
     /**
      * Action buttons container.
      */
-    @FXML private HBox actionBar;
+    @FXML
+    private HBox actionBar;
 
     /**
      *  Arrow icon image.
      */
-    @FXML private ImageView arrowIcon;
+    @FXML
+    private ImageView arrowIcon;
 
     /**
      * Expansion state flag.
