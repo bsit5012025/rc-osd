@@ -165,4 +165,13 @@ class RecordFacadeImplTest
         assertEquals(2, result.size());
         verify(recordDao).findRecordListByDepartment(department, "2024-2025");
     }
+    @Test
+    void testGetRecordByStudentID(){
+        List<Record> records = new ArrayList<>();
+
+        when(recordDao.findRecordByStudentId("JHS-0001")).thenReturn(records);
+        List<Record> result = recordFacade.getRecordByStudentId("JHS-0001");
+
+        assertEquals(records, result);
+    }
 }
