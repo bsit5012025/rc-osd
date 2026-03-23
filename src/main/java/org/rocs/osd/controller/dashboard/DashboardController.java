@@ -8,7 +8,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -33,33 +35,35 @@ import org.rocs.osd.model.request.RequestStatus;
 
 
 /**
- * Controller responsible for handling user interactions on the Dashboard screen of the Office of Student Discipline (OSD) System.
- * The dashboard acts as the main navigation interface of the OSD.
- * It allows users to load different modules such as Offense, Appeal, Request, and Student records into the main content area.
- *The DashboardController manages user interactions on the Dashboard screen.
+ * Controller for the Dashboard screen of the Office of Student Discipline.
+ * Manages module loading, sidebar toggling, and logout/popup actions.
  */
 public class DashboardController {
 
-    /**
-     * Container used to dynamically load different module views (Offense, Appeal, Request, Student) inside the dashboard.
-     */
+    /** Wrapper for dynamically loading modules inside the dashboard. */
     @FXML
-    StackPane mainContentWrapper;
-    @FXML
-    Button logoutButton;
+    private StackPane mainContentWrapper;
 
+    /** Logout button in the dashboard UI. */
+    @FXML
+    private Button logoutButton;
+
+    /** Sidebar container holding navigation buttons. */
     @FXML
     private VBox sidebar;
 
+    /** Flag indicating if the sidebar is currently collapsed. */
     @FXML
     private boolean sidebarCollapsed = false;
 
+    /** Container for request cards in the Request module. */
     @FXML
     private VBox listContainer;
 
     private RequestFacade requestFacade;
     private EmployeeFacade employeeFacade;
 
+    /** Initializes the dashboard controller and loads request data. */
     @FXML
     public void initialize() {
         RequestDao requestDao = new RequestDaoImpl();
@@ -73,8 +77,11 @@ public class DashboardController {
         }
     }
 
+    /** Loads sample request data into the list container. */
     private void loadRequestData() {
-        if (listContainer == null) return;
+        if (listContainer == null) {
+            return;
+        }
         listContainer.getChildren().clear();
         createRequestCards();
     }
@@ -95,9 +102,21 @@ public class DashboardController {
         }
     }
 
-    private void addRequestCard(String dept, String name, String type, String reason, long requestId) {
+    /**
+     * Adds a single request card to the list container.
+     * @param dept the department of the request.
+     * @param name the student name.
+     * @param type the type of request.
+     * @param reason the reason for the request.
+     */
+    private void addRequestCard(String dept,
+                                String name,
+                                String type,
+                                String reason
+                                long requestId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/request/RequestCard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/view/request/RequestCard.fxml"));
             VBox card = loader.load();
             RequestCardController controller = loader.getController();
             if (controller != null) {
@@ -109,24 +128,23 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens the logout confirmation dialog when the logout button is clicked.
-     * This dialog asks the user to confirm whether they want to exit the system or remain logged in.
-     * @param event the action event triggered by clicking the logout button.
-     *   This method is used for logout button
+     * @param event ActionEvent triggered by clicking the logout button.
      */
     @FXML
     public void onLogout(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/dialogs/logoutConfirmation.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/view/dialogs/logoutConfirmation.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage currentStage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
             stage.initOwner(currentStage);
             stage.setResizable(false);
             stage.showAndWait();
@@ -135,6 +153,7 @@ public class DashboardController {
         }
     }
 
+    /** Toggles the sidebar between collapsed and expanded states. */
     @FXML
     public void toggleSidebar() {
         if (sidebarCollapsed) {
@@ -143,7 +162,9 @@ public class DashboardController {
             sidebar.setMaxWidth(200);
             for (Node node : sidebar.lookupAll(".sidebarItem")) {
                 if (node instanceof Labeled button) {
-                    button.setText(button.getUserData() != null ? button.getUserData().toString() : button.getText());
+                    button.setText(button.getUserData() != null
+                            ? button.getUserData().toString()
+                            : button.getText());
                 }
             }
             sidebarCollapsed = false;
@@ -164,103 +185,124 @@ public class DashboardController {
     }
 
     /**
-     * Loads the Offense module view into the dashboard content area.
-     *
-     * @param event the action event triggered by the Offense navigation button.
-     * This method is used to load Offense view inside the dashboard
+     * Loads the Offense module into the dashboard content area.
+     * @param event ActionEvent triggered by the Offense button.
      */
 
     @FXML
     public void onLoadOffense(ActionEvent event) {
         try {
-            Parent offenseView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/offense/offense.fxml")));
+            Parent offenseView = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/view/offense/offense.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(offenseView);
         } catch (NullPointerException e) {
-            System.err.println("FXML file not found at the specified path." + e.getMessage());
+            System.err.println("FXML file not found at the specified path. "
+                    + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
-        }
-    }
-
-    @FXML
-    public void onLoadDashboard(ActionEvent event) {
-        try {
-            Parent dashboardView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/dashboard/centerDashboard.fxml")));
-            mainContentWrapper.getChildren().clear();
-            mainContentWrapper.getChildren().add(dashboardView);
-        } catch (NullPointerException e) {
-            System.err.println("FXML file not found at the specified path." + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
-        }
-    }
-
-    @FXML
-    public void onLoadAppeal(ActionEvent event) {
-        try {
-            Parent appealView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appeal/appeal.fxml")));
-            mainContentWrapper.getChildren().clear();
-            mainContentWrapper.getChildren().add(appealView);
-        } catch (NullPointerException e) {
-            System.err.println("FXML file not found at the specified path." + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+            System.err.println(
+                    "Failed to load Offense view. Check FXML errors. "
+                    + e.getMessage());
         }
     }
 
     /**
-     * Loads the Request module view into the dashboard content area.
-     * @param event the action event triggered by the Request navigation button.
+     * Loads the Dashboard (center) module into the content area.
+     * @param event ActionEvent triggered by the Dashboard button.
+     */
+    @FXML
+    public void onLoadDashboard(ActionEvent event) {
+        try {
+            Parent dashboardView = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource(
+                    "/view/dashboard/centerDashboard.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(dashboardView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found. " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Failed to load Dashboard view. "
+            + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads the Appeal module into the dashboard content area.
+     * @param event ActionEvent triggered by the Appeal button.
+     */
+    @FXML
+    public void onLoadAppeal(ActionEvent event) {
+        try {
+            Parent appealView = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/view/appeal/appeal.fxml")));
+            mainContentWrapper.getChildren().clear();
+            mainContentWrapper.getChildren().add(appealView);
+        } catch (NullPointerException e) {
+            System.err.println("FXML file not found. "
+                    + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Failed to load Appeal view. "
+                    + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads the Request module into the dashboard content area.
+     * @param event ActionEvent triggered by the Request button.
      */
     @FXML
     public void onLoadRequest(ActionEvent event) {
         try {
-            Parent requestView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/request/request.fxml")));
+            Parent requestView = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/view/request/request.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(requestView);
         } catch (NullPointerException e) {
-            System.err.println("FXML file not found at the specified path." + e.getMessage());
+            System.err.println("FXML file not found. " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+            System.err.println("Failed to load Request view. "
+                    + e.getMessage());
         }
     }
 
     /**
-     * Loads the Student module view into the dashboard content area.
-     *
-     * @param event the action event triggered by the Student navigation button.
+     * Loads the Student module into the dashboard content area.
+     * @param event ActionEvent triggered by the Student button.
      */
     @FXML
     public void onLoadStudent(ActionEvent event) {
         try {
-            Parent studentView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/student/student.fxml")));
+            Parent studentView = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/view/student/student.fxml")));
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(studentView);
         } catch (NullPointerException e) {
-            System.err.println("FXML file not found at the specified path." + e.getMessage());
+            System.err.println("FXML file not found. "
+                    + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Error: Failed to load the Offense view. Check for FXML syntax errors." +  e.getMessage() );
+            System.err.println("Failed to load Student view. "
+                    + e.getMessage());
         }
     }
 
     /**
-     * Logs the user out of the system and redirects them to the login screen.
-     * This method closes the logout confirmation dialog and loads the login interface in the main application window.
-     * @param event the action event triggered when the user confirms logout.
+     * Logs the user out and redirects to the login screen.
+     * @param event ActionEvent triggered on logout confirmation.
      */
     public void logout(ActionEvent event) {
         try {
-            Stage popupStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage popupStage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
             Stage mainStage = (Stage) popupStage.getOwner();
             popupStage.close();
-            Parent root = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
+            Parent root = FXMLLoader.load(getClass()
+                    .getResource("/view/login/login.fxml"));
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+            Scene scene = new Scene(root, screenBounds.getWidth(),
+                    screenBounds.getHeight());
             mainStage.setScene(scene);
             mainStage.setMaximized(true);
             mainStage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,7 +310,7 @@ public class DashboardController {
 
     /**
      * Closes the currently opened popup window.
-     * @param event the action event triggered by the close button.
+     * @param event ActionEvent triggered by the close button.
      */
     public void closePopup(ActionEvent event) {
         if (event != null && event.getSource() instanceof Node node) {
