@@ -399,4 +399,79 @@ public class RecordDaoImpl implements RecordDao {
 
         return offenses;
     }
+    @Override
+    public List<Record> findRecordByStudentId(String studentId) {
+        List<Record> records = new ArrayList<>();
+
+        try (Connection con = ConnectionHelper.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT r.recordID, r.dateOfViolation, r.dateOfResolution, "
+                            + "r.remarks, r.status, "
+                            + "e.enrollmentID, e.schoolYear, e.studentLevel, "
+                            + "e.section, "
+                            + "s.studentID, "
+                            + "p.firstName, p.middleName, p.lastName, "
+                            + "o.offense, o.type, "
+                            + "da.action "
+                            + "FROM record r "
+                            + "JOIN enrollment e "
+                            + "ON r.enrollmentID = e.enrollmentID "
+                            + "JOIN student s ON e.studentID = s.studentID "
+                            + "JOIN person p ON s.personID = p.personID "
+                            + "JOIN offense o "
+                            + "ON r.offenseID = o.offenseID "
+                            + "JOIN disciplinaryAction da "
+                            + "ON r.actionID = da.actionID "
+                            + "WHERE s.studentID = ? "
+                            + "ORDER BY r.dateOfViolation DESC");
+            statement.setString(1, studentId);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Record record = new Record();
+
+                record.setRecordId(result.getLong("recordID"));
+                record.setDateOfViolation(result.getDate("dateOfViolation"));
+                record.setDateOfResolution(
+                        result.getDate("dateOfResolution"));
+                record.setRemarks(
+                        result.getString("remarks"));
+                record.setStatus(
+                        RecordStatus.valueOf(result.getString("status")));
+
+                Student student = new Student();
+                student.setStudentId(result.getString("studentID"));
+                student.setFirstName(result.getString("firstName"));
+                student.setMiddleName(result.getString("middleName"));
+                student.setLastName(result.getString("lastName"));
+
+                Enrollment enrollment = new Enrollment();
+                enrollment.setEnrollmentId(result.getLong("enrollmentID"));
+                enrollment.setSchoolYear(result.getString("schoolYear"));
+                enrollment.setStudentLevel(result.getString("studentLevel"));
+                enrollment.setSection(result.getString("section"));
+                enrollment.setStudent(student);
+                record.setEnrollment(enrollment);
+
+                Offense offense = new Offense();
+                offense.setOffense(result.getString("offense"));
+                offense.setType(
+                        result.getString("type"));
+
+                record.setOffense(offense);
+
+
+                DisciplinaryAction disciplinaryAction
+                        = new DisciplinaryAction();
+                disciplinaryAction.setActionName(result.getString("action"));
+                record.setAction(disciplinaryAction);
+                records.add(record);
+            }
+    } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return records;
+
+    }
+
 }

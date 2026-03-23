@@ -1,6 +1,6 @@
 name: Checkstyle on Pull Request
 
-on: [push, pull_request]
+on: [pull_request]
 
 permissions:
   contents: read
