@@ -63,7 +63,7 @@ class EnrollmentDaoImplTest {
         when(this.resultSet.getLong("personID")).thenReturn(1L,1L);
         when(this.resultSet.getString("address")).thenReturn("Buho","Buho");
         when(this.resultSet.getString("studentDepartmentID")).thenReturn("JHS","JHS");
-
+        when(this.resultSet.getString("studentType")).thenReturn("Intern", "Intern");
         List<Enrollment> result = enrollmentDao.findEnrollmentsByStudentId("JHS-0001");
 
         assertNotNull(result);
