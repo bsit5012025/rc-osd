@@ -190,4 +190,9 @@ public class RecordFacadeImpl implements RecordFacade {
                                                   String schoolYear) {
         return recordDao.findRecordListByDepartment(department, schoolYear);
     }
+
+    @Override
+    public List<Record> getRecordByStudentId(String studentId) {
+        return recordDao.findRecordByStudentId(studentId);
+    }
 }
