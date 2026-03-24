@@ -53,7 +53,8 @@ public class Appeal {
      * @param pRemarks message or remarks for the denying the appeal.
      */
     public Appeal(long pAppealID, Record pRecord, Enrollment pEnrollment,
-                  String pMessage, Date pDateFiled, String pStatus, Date pDateProcessed, String pRemarks) {
+                  String pMessage, Date pDateFiled, String pStatus,
+                  Date pDateProcessed, String pRemarks) {
         this.appealID = pAppealID;
         this.record = pRecord;
         this.enrollment = pEnrollment;
@@ -142,10 +143,14 @@ public class Appeal {
     }
 
     /** @return the date when appeal is processed. */
-    public Date getDateProcessed() { return dateProcessed; }
+    public Date getDateProcessed() {
+        return dateProcessed;
+    }
 
     /** @param pDateProcessed sets the date when appeal is processed */
-    public void setDateProcessed(Date pDateProcessed) { this.dateProcessed = pDateProcessed; }
+    public void setDateProcessed(Date pDateProcessed) {
+        this.dateProcessed = pDateProcessed;
+    }
 
     /** @return the current remark message for deniedAppeal tab. */
     public String getRemarks() {

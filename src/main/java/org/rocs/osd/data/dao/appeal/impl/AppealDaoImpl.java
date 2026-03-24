@@ -23,8 +23,8 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     /**
-     * Retrieves all appeals by its status along with related student, enrollment,
-     * and record details.
+     * Retrieves all appeals by its status along with related
+     * student, enrollment, and record details.
      * @param status the appeal status (PENDING, APPROVED, DENIED)
      * @return list of appeals
      */
@@ -56,7 +56,7 @@ public class AppealDaoImpl implements AppealDao {
         """;
 
         try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql)) {
              ps.setString(1, status);
              ResultSet rs = ps.executeQuery();
 
@@ -102,7 +102,8 @@ public class AppealDaoImpl implements AppealDao {
      */
     @Override
     public void updateAppealStatus(long appealId, String status) {
-        String sql = "UPDATE appeal SET status = ?, dateProcessed = CURRENT_DATE WHERE appealID = ?";
+        String sql = "UPDATE appeal SET status = ?," +
+                " dateProcessed = CURRENT_DATE WHERE appealID = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

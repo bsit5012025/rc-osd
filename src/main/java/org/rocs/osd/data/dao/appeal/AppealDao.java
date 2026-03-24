@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AppealDao {
     /**
-     * Retrieves appeals based on their status (PENDING, APPROVED, DENIED)
+     * Retrieves appeals based on their status (PENDING, APPROVED, DENIED).
      *
      * @param status the status to filter appeals
      * @return list of appeals with full details
