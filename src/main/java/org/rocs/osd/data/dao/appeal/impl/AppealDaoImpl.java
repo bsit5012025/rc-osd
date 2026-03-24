@@ -102,8 +102,10 @@ public class AppealDaoImpl implements AppealDao {
      */
     @Override
     public void updateAppealStatus(long appealId, String status) {
-        String sql = "UPDATE appeal SET status = ?," +
-                " dateProcessed = CURRENT_DATE WHERE appealID = ?";
+        String sql = """
+                UPDATE appeal SET status = ?,
+                dateProcessed = CURRENT_DATE WHERE appealID = ?
+                """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
