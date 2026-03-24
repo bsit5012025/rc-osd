@@ -39,8 +39,7 @@ import java.sql.Date;
 /**
  * Controller for the "Add Offense" modal in the Office of
  * Student Discipline System.
- *<p>
- *  This class handles the population of offense type
+ * This class handles the population of offense type
  * and level ComboBoxes and automatically selects the
  * level of offense based on the selected offense type.
  */
@@ -81,7 +80,9 @@ public class AddOffenseModalController {
      */
     @FXML
     private TextArea remarksTextArea;
-    /***/
+    /**
+     * Checkbox for notifying parents/guardian.
+     * */
     @FXML
     private CheckBox notifyParentsCheckBox;
     /**
@@ -103,7 +104,9 @@ public class AddOffenseModalController {
      * DAO for enrollment operations.
      */
     private EnrollmentDao enrollmentDao;
-    /***/
+    /**
+     * Facade for guardian actions.
+     * */
     private GuardianFacade guardianFacade;
     /**
      * Controller for the "Add Offense" modal.
@@ -216,7 +219,6 @@ public class AddOffenseModalController {
             String actionName = actionComboBox.getValue();
             String remarks = remarksTextArea.getText();
 
-
             if (studentId.isEmpty()
                     || studentName.isEmpty()
                     || offenseType == null
@@ -225,7 +227,6 @@ public class AddOffenseModalController {
                 System.out.println("Fill out missing fields!");
                 return;
             }
-
 
             Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
             String employeeId = "EMP-002";
@@ -245,7 +246,6 @@ public class AddOffenseModalController {
                     remarks
             );
             if (record) {
-                System.out.println("Violation recorded!");
                 if (notifyParentsCheckBox.isSelected()) {
                     try {
                         var studentGuardians =
@@ -299,5 +299,6 @@ public class AddOffenseModalController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Violation recorded!");
     }
 }

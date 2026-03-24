@@ -10,16 +10,11 @@ import java.nio.charset.StandardCharsets;
 /**
  * Service class responsible for handling SMS
  * communications via an external gateway.
- * <p>
  * This class provides methods to send SMS messages
  * both synchronously and asynchronously,
  * utilizing a REST-based GET API.
  */
 public final class SmsService {
-    /**
-     * Configuration loader instance used to retrieve API credentials.
-     * */
-    private static ConfigLoader cLoader;
     /**
      * Private constructor to prevent instantiation.
      * */
@@ -27,22 +22,27 @@ public final class SmsService {
 
     }
     /**
-     * Base URL for the SMS gateway provider .
+     * Base URL for the SMS gateway provider.
+     * @return The configured base URL string.
      * */
-    private static final String BASEURL = cLoader.get("sms.base.url");
+    private static String getBaseUrl() {
+        return ConfigLoader.get("sms.base.url"); }
 
     /**
      * Authentication username for the SMS API.
+     * @return The configured username string.
      * */
-    private static final String USERNAME = cLoader.get("sms.username");
+    private static String getUsername() {
+        return ConfigLoader.get("sms.username"); }
     /**
      * Authentication password for the SMS API.
+     * @return The configured password string.
      * */
-    private static final String PASSWORD = cLoader.get("sms.password");
+    private static String getPassword() {
+        return ConfigLoader.get("sms.password"); }
 
     /**
      * Sends an SMS message synchronously.
-     * <p>
      * This method formats the phone number,
      * encodes the message, and performs an
      * HTTP GET request to the configured gateway.
@@ -64,12 +64,19 @@ public final class SmsService {
               */
             String encodedMessage = URLEncoder.encode(
                     pMessage, StandardCharsets.UTF_8);
+              /*
+              Checks if getBaseUrl is null and returns a message if it is null
+              */
+            if (getBaseUrl() == null) {
+                throw new Exception(
+                        "Configuration missing! Check config.properties file.");
+            }
 
-            String urlString = BASEURL
+            String urlString = getBaseUrl()
                     + "?username="
-                    + USERNAME
+                    + getUsername()
                     + "&password="
-                    + PASSWORD
+                    + getPassword()
                     + "&phone="
                     + pPhone
                     + "&message="
@@ -125,7 +132,6 @@ public final class SmsService {
 
     /**
      * Sends an SMS message asynchronously by spawning a new thread.
-     * <p>
      * Use this method to prevent the main execution thread from blocking
      * while waiting for the network response.
      *
@@ -138,7 +144,6 @@ public final class SmsService {
 
     /**
      * Formats a local Philippine phone number to international format.
-     * <p>
      * Replaces the leading '0' with the '+63' country code.
      *
      * @param pPhone The raw phone number string.
