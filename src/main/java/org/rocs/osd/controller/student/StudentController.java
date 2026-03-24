@@ -2,8 +2,14 @@ package org.rocs.osd.controller.student;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.facade.enrollment.EnrollmentFacade;
 import org.rocs.osd.facade.enrollment.impl.EnrollmentFacadeImpl;
@@ -48,6 +54,7 @@ public class StudentController {
                 new EnrollmentDaoImpl()
         );
         loadDataToTable();
+        selectStudentRecord();
     }
 
     /**
@@ -94,4 +101,36 @@ public class StudentController {
                 )
         );
     }
+        private void selectStudentRecord() {
+            studentTable.setOnMouseClicked(event -> {
+                Enrollment enrollment = studentTable.
+                        getSelectionModel().getSelectedItem();
+                if (enrollment != null) {
+                    loadStudentRecord(enrollment);
+                }
+            });
+        }
+
+        private void loadStudentRecord(Enrollment enrollment) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/view/student/studentRecord.fxml"));
+                Parent root = loader.load();
+
+                StudentRecordController studentRecordController
+                        = loader.getController();
+                studentRecordController.setStudentData(enrollment);
+
+                Stage studentStage = new Stage();
+
+                studentStage.initModality(Modality.APPLICATION_MODAL);
+                studentStage.initStyle(StageStyle.UNDECORATED);
+                studentStage.setResizable(false);
+                studentStage.setScene(new Scene(root));
+                studentStage.showAndWait();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 }
