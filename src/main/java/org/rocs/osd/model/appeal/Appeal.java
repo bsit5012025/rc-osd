@@ -29,6 +29,12 @@ public class Appeal {
     /** Current status of the appeal. */
     private String status;
 
+    /** Date when the appeal was processed.*/
+    private Date dateProcessed;
+
+    /** Message or remarks for the denying the appeal. */
+    private String remarks;
+
     /** Default constructor to initialize an empty Appeal object. */
     public Appeal() {
     }
@@ -43,15 +49,19 @@ public class Appeal {
      * @param pMessage message or reason for the appeal.
      * @param pDateFiled date when the appeal was filed.
      * @param pStatus current status of the appeal.
+     * @param pDateProcessed date when the appeal was processed.
+     * @param pRemarks message or remarks for the denying the appeal.
      */
     public Appeal(long pAppealID, Record pRecord, Enrollment pEnrollment,
-                  String pMessage, Date pDateFiled, String pStatus) {
+                  String pMessage, Date pDateFiled, String pStatus, Date pDateProcessed, String pRemarks) {
         this.appealID = pAppealID;
         this.record = pRecord;
         this.enrollment = pEnrollment;
         this.message = pMessage;
         this.dateFiled = pDateFiled;
         this.status = pStatus;
+        this.dateProcessed = pDateProcessed;
+        this.remarks = pRemarks;
     }
 
     /**
@@ -129,5 +139,21 @@ public class Appeal {
     /** @param pStatus sets the current status of the appeal. */
     public void setStatus(String pStatus) {
         this.status = pStatus;
+    }
+
+    /** @return the date when appeal is processed. */
+    public Date getDateProcessed() { return dateProcessed; }
+
+    /** @param pDateProcessed sets the date when appeal is processed */
+    public void setDateProcessed(Date pDateProcessed) { this.dateProcessed = pDateProcessed; }
+
+    /** @return the current remark message for deniedAppeal tab. */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /** @param pRemarks sets the remark message for deny button. */
+    public void setRemarks(String pRemarks) {
+        this.remarks = remarks;
     }
 }
