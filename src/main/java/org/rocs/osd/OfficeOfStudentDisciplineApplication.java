@@ -43,6 +43,6 @@ public class OfficeOfStudentDisciplineApplication extends Application {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        launch(); // launch JavaFX application
+        launch();
     }
 }

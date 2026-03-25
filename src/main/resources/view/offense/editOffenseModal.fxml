@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="490.0" prefWidth="546.0" styleClass="editOffenseContainer" stylesheets="@../../styles/offense/editOffense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.EditOffenseModalController">
+<StackPane prefHeight="490.0" prefWidth="546.0" styleClass="editOffenseContainer" stylesheets="@../../styles/offense/editOffense.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.EditOffenseModalController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <center>
@@ -75,7 +76,7 @@
                   <VBox prefHeight="141.0" prefWidth="506.0">
                      <children>
                         <Label styleClass="editOffenseLabel" text="Remarks:" />
-                        <TextField fx:id="remarksTextArea" alignment="TOP_LEFT" prefHeight="149.0" prefWidth="506.0" styleClass="editOffenseRemarks" />
+                        <TextArea fx:id="remarksTextArea" prefHeight="149.0" prefWidth="506.0" styleClass="editOffenseRemarks" />
                      </children>
                   </VBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="54.0" prefWidth="506.0" spacing="5.0">

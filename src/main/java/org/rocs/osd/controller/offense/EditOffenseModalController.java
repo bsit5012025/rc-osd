@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
@@ -64,7 +65,7 @@ public class EditOffenseModalController {
      * TextField for remarks input.
      */
     @FXML
-    private TextField remarksTextArea;
+    private TextArea remarksTextArea;
     /**
      * DAO for student operations.
      */
@@ -136,6 +137,7 @@ public class EditOffenseModalController {
                 record.getOffense().getOffense());
         levelOfOffenseComboBox.setValue(
                 record.getOffense().getType());
+        remarksTextArea.setWrapText(true);
         remarksTextArea.setText(
                 record.getRemarks());
     }

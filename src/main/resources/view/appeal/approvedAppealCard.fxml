@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -9,7 +8,7 @@
       stylesheets="@../../styles/appeal/appeal.css"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.rocs.osd.controller.appeal.AppealCardController">
+      fx:controller="org.rocs.osd.controller.appeal.ApprovedAppealCardController">
 
     <HBox alignment="TOP_LEFT">
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
@@ -29,19 +28,14 @@
                 </HBox>
 
                 <Label styleClass="boldLabel" text="Reason for Appeal: " />
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason just a little bit enough..." wrapText="true" />
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason..." wrapText="true" />
 
-                <VBox spacing="2" styleClass="commentContainer">
+                <VBox spacing="5" styleClass="commentContainer">
                     <Label styleClass="boldLabel" text="Comment:" />
-                    <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
+                    <TextArea fx:id="commentArea" editable="false" prefHeight="60.0"
+                              styleClass="commentTextArea, readOnlyArea" wrapText="true"
+                              text="This appeal was approved." />
                 </VBox>
-
-                <HBox fx:id="actionBar" alignment="CENTER_RIGHT" styleClass="actionBarContainer">
-                    <HBox styleClass="actionBar">
-                        <Button fx:id="denyButton" onAction="#handleAppealDeny" styleClass="denyButton" text="Deny" />
-                        <Button fx:id="approveButton" onAction="#handleAppealApprove" styleClass="approveButton" text="Approve" />
-                    </HBox>
-                </HBox>
             </VBox>
         </VBox>
 
