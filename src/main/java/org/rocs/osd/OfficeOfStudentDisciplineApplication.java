@@ -24,7 +24,7 @@ public class OfficeOfStudentDisciplineApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass()
-        .getResource("/view/appeal/appeal.fxml"));
+        .getResource("/view/login/login.fxml"));
         Parent mainLayout = loader.load();
 
 
