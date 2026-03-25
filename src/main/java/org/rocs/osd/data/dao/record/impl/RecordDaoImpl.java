@@ -247,7 +247,7 @@ public class RecordDaoImpl implements RecordDao {
                     "SELECT "
                             + "r.recordID, r.dateOfViolation, "
                             + "r.dateOfResolution, "
-                            + "r.remarks, r.status, \" "
+                            + "r.remarks, r.status, "
                             + "e.enrollmentID, e.studentID, e.schoolYear, "
                             + "e.studentLevel, e.section, e.department, "
                             + "sp.firstName, sp.middleName, sp.lastName, "
