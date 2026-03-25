@@ -125,6 +125,8 @@ CREATE TABLE appeal (
    message VARCHAR(500),
    dateFiled DATE,
    status VARCHAR(20),
+   dateProcessed DATE,
+   remarks VARCHAR(500),
    primary key (appealID)
 );
 
@@ -137,6 +139,8 @@ CREATE TABLE request (
    message VARCHAR(500),
    type VARCHAR(100),
    status VARCHAR(10),
+   dateProcessed DATE,
+   remarks VARCHAR(500),
    primary key (requestID)
 );
 
