@@ -171,6 +171,7 @@ public class LoginController {
              */
         } catch (LoadException e) {
             System.err.println("Error loading Dashboard");
+            e.printStackTrace();
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {

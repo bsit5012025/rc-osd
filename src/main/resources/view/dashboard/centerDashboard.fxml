@@ -14,7 +14,7 @@
             stylesheets="@../../styles/dashboard/dashboard.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.rocs.osd.controller.dashboard.DashboardController">
+            fx:controller="org.rocs.osd.controller.dashboard.CenterDashboardController">
 
     <center>
         <StackPane fx:id="mainContentWrapper" styleClass="mainContentWrapper">
@@ -22,7 +22,7 @@
                 <HBox styleClass="statsRow">
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Total Violations" />
-                        <Label styleClass="statValue" text="200" />
+                        <Label fx:id="totalViolationLabel" styleClass="statValue" text="200" />
                         <ProgressBar maxWidth="1200" progress="0.85" />
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
