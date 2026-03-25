@@ -24,7 +24,7 @@ public class OfficeOfStudentDisciplineApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass()
-        .getResource("/view/login/login.fxml"));
+        .getResource("/view/appeal/appeal.fxml"));
         Parent mainLayout = loader.load();
 
 
@@ -43,6 +43,6 @@ public class OfficeOfStudentDisciplineApplication extends Application {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        launch(); // launch JavaFX application
+        launch();
     }
 }
