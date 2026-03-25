@@ -97,7 +97,9 @@ public class DeniedAppealCardController {
      * @param appeal set appeal data.
      */
     public void setAppeal(Appeal appeal) {
-        if (appeal == null) return; {
+        if (appeal == null) {
+            return;
+        }
 
             Enrollment e = appeal.getEnrollment();
             Record r = appeal.getRecord();
@@ -120,6 +122,5 @@ public class DeniedAppealCardController {
             if (commentArea != null) {
                 commentArea.setText(appeal.getRemarks());
             }
-        }
     }
 }

@@ -104,10 +104,9 @@ public class AppealDaoImpl implements AppealDao {
      */
     @Override
     public void processAppeal(long appealId, String status, String remarks) {
-        String sql = """
-            UPDATE appeal 
-            SET status = ?, remarks = ?, dateProcessed = CURRENT_DATE 
-            WHERE appealID = ?
+    String sql = """
+    UPDATE appeal SET status = ?, remarks = ?, dateProcessed = CURRENT_DATE 
+        WHERE appealID = ?
     """;
 
         try (Connection conn = ConnectionHelper.getConnection();

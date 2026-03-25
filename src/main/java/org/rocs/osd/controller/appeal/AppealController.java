@@ -45,13 +45,17 @@ public class AppealController {
      */
     private void loadAppealsByStatus(String status) {
 
-        if (listContainer == null) return; {
+        if (listContainer == null) {
+                return;
+            }
 
             listContainer.getChildren().clear();
 
             List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
 
-            if (appeals == null) return; {
+            if (appeals == null) {
+                return;
+            }
 
             for (Appeal appeal : appeals) {
                 try {
@@ -72,7 +76,8 @@ public class AppealController {
                     VBox card = loader.load();
 
                     if ("PENDING".equals(status)) {
-                        AppealCardController controller = loader.getController();
+                        AppealCardController controller =
+                                loader.getController();
 
                         controller.setAppeal(appeal);
 
@@ -101,8 +106,8 @@ public class AppealController {
                     }
                 }
             }
-        }
-    }
+
+
 
     /**
      * Handles pending tab click.

@@ -97,7 +97,9 @@ public class ApprovedAppealCardController {
      * @param appeal set appeal data.
      */
     public void setAppeal(Appeal appeal) {
-        if (appeal == null) return; {
+        if (appeal == null) {
+            return;
+        }
 
             Enrollment e = appeal.getEnrollment();
             Record r = appeal.getRecord();
@@ -122,4 +124,3 @@ public class ApprovedAppealCardController {
             }
         }
     }
-}
