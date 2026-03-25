@@ -17,10 +17,10 @@ public class AppealConfirmationController {
 
     /**
      * Sets confirm action callback.
-     * @param onConfirm action to execute on confirm
+     * @param pOnConfirm action to execute on confirm
      */
-    public void setOnConfirm(Runnable onConfirm) {
-        this.onConfirm = onConfirm;
+    public void setOnConfirm(Runnable pOnConfirm) {
+        this.onConfirm = pOnConfirm;
     }
 
     /**

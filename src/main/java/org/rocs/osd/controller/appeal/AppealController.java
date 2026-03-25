@@ -6,7 +6,6 @@ import javafx.scene.layout.VBox;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
-import javafx.scene.control.Button;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,59 +41,65 @@ public class AppealController {
     /**
      * Fetches pending appeals from the database
      * and injects them into the listContainer.
+     * @param status load appeal status.
      */
     private void loadAppealsByStatus(String status) {
 
-        if (listContainer == null) return;
+        if (listContainer == null) return; {
 
-        listContainer.getChildren().clear();
+            listContainer.getChildren().clear();
 
-        List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
+            List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
 
-        if (appeals == null) return;
+            if (appeals == null) return; {
 
-        for (Appeal appeal : appeals) {
-            try {
+            for (Appeal appeal : appeals) {
+                try {
 
-                FXMLLoader loader;
+                    FXMLLoader loader;
 
-                if ("APPROVED".equals(status)) {
-                    loader = new FXMLLoader(getClass().getResource(
-                            "/view/appeal/approvedAppealCard.fxml"));
-                } else if ("DENIED".equals(status)) {
-                    loader = new FXMLLoader(getClass().getResource(
-                            "/view/appeal/deniedAppealCard.fxml"));
-                } else {
-                    loader = new FXMLLoader(getClass().getResource(
-                            "/view/appeal/appealCard.fxml"));
+                    if ("APPROVED".equals(status)) {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/approvedAppealCard.fxml"));
+                    } else if ("DENIED".equals(status)) {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/deniedAppealCard.fxml"));
+                    } else {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/appealCard.fxml"));
+                    }
+
+                    VBox card = loader.load();
+
+                    if ("PENDING".equals(status)) {
+                        AppealCardController controller = loader.getController();
+
+                        controller.setAppeal(appeal);
+
+                        controller.setStatus(status);
+
+                        controller.setOnActionComplete(() ->
+                                loadAppealsByStatus("PENDING"));
+
+                    } else if ("APPROVED".equals(status)) {
+                        ApprovedAppealCardController controller =
+                                loader.getController();
+                        controller.setAppeal(appeal);
+
+                    } else {
+                        DeniedAppealCardController controller =
+                                loader.getController();
+                        controller.setAppeal(appeal);
+                    }
+
+                    listContainer.getChildren().add(card);
+
+                } catch (IOException e) {
+                    System.err.println("Error loading Appeal Card: "
+                            + e.getMessage());
+                    e.printStackTrace();
+                    }
                 }
-
-                VBox card = loader.load();
-
-                if ("PENDING".equals(status)) {
-                    AppealCardController controller = loader.getController();
-
-                    controller.setAppeal(appeal);
-
-                    controller.setStatus(status);
-
-                    controller.setOnActionComplete(() ->
-                            loadAppealsByStatus("PENDING"));
-
-                } else if ("APPROVED".equals(status)) {
-                    ApprovedAppealCardController controller = loader.getController();
-                    controller.setAppeal(appeal);
-
-                } else {
-                    DeniedAppealCardController controller = loader.getController();
-                    controller.setAppeal(appeal);
-                }
-
-                listContainer.getChildren().add(card);
-
-            } catch (IOException e) {
-                System.err.println("Error loading Appeal Card: " + e.getMessage());
-                e.printStackTrace();
             }
         }
     }

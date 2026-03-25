@@ -124,33 +124,35 @@ public class AppealCardController {
      * Loads and displays appeal-related data into the UI components.
      */
     private void loadAppealData() {
-        if (appeal == null) return;
+        if (appeal == null) return; {
 
-        Enrollment enrollment = appeal.getEnrollment();
-        Record record = appeal.getRecord();
-        Student student = enrollment.getStudent();
+            Enrollment enrollment = appeal.getEnrollment();
+            Record record = appeal.getRecord();
+            Student student = enrollment.getStudent();
 
-        if (studentIdLabel != null) {
-            studentIdLabel.setText(student.getStudentId());
-        }
+            if (studentIdLabel != null) {
+                studentIdLabel.setText(student.getStudentId());
+            }
 
-        if (studentNameLabel != null) {
-            studentNameLabel.setText(
-                    student.getFirstName() + " " + student.getLastName()
-            );
-        }
-
-        if (offenseLabel != null) {
-            offenseLabel.setText(record.getRemarks());
-        }
-
-        if (reasonLabel != null) {
-            if ("DENIED".equals(appeal.getStatus())) {
-                reasonLabel.setText(
-                        appeal.getMessage() + "\n\nRemarks: " + appeal.getRemarks()
+            if (studentNameLabel != null) {
+                studentNameLabel.setText(
+                        student.getFirstName() + " " + student.getLastName()
                 );
-            } else {
-                reasonLabel.setText(appeal.getMessage());
+            }
+
+            if (offenseLabel != null) {
+                offenseLabel.setText(record.getRemarks());
+            }
+
+            if (reasonLabel != null) {
+                if ("DENIED".equals(appeal.getStatus())) {
+                    reasonLabel.setText(
+                            appeal.getMessage() + "\n\nRemarks: "
+                                    + appeal.getRemarks()
+                    );
+                } else {
+                    reasonLabel.setText(appeal.getMessage());
+                }
             }
         }
     }
@@ -188,7 +190,7 @@ public class AppealCardController {
      * Updates the arrow icon based on expansion state.
      */
     private void updateIcon() {
-        if (arrowIcon == null) return;
+        if (arrowIcon == null) return; {
 
         String imgPath = isExpanded
                 ? "/assets/downButton.png"
@@ -199,6 +201,7 @@ public class AppealCardController {
             arrowIcon.setImage(newImg);
         } catch (Exception e) {
             arrowIcon.setRotate(isExpanded ? 90 : 0);
+        }
         }
     }
 
@@ -218,10 +221,12 @@ public class AppealCardController {
      */
     @FXML
     private void handleAppealApprove() {
-        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
+        showConfirmation
+                ("/view/dialogs/approvedAppealConfirmation.fxml",
+                        () -> {
 
-            String remarks = (commentArea != null &&
-                    !commentArea.getText().trim().isEmpty())
+            String remarks = (commentArea != null
+                    && !commentArea.getText().trim().isEmpty())
                     ? commentArea.getText()
                     : null;
 
@@ -235,19 +240,20 @@ public class AppealCardController {
      */
     @FXML
     private void handleAppealDeny() {
-        if (appeal == null) return;
+        if (appeal == null) return; {
 
-        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
-            showError("Please enter remarks before denying.");
-            return;
+            if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+                showError("Please enter remarks before denying.");
+                return;
+            }
+
+            String remarks = commentArea.getText();
+
+            showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
+                appealFacade.denyAppeal(appeal.getAppealID(), remarks);
+                showPopupAndRemoveCard("Appeal denied!");
+            });
         }
-
-        String remarks = commentArea.getText();
-
-        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
-            appealFacade.denyAppeal(appeal.getAppealID(), remarks);
-            showPopupAndRemoveCard("Appeal denied!");
-        });
     }
 
     /**
@@ -258,6 +264,7 @@ public class AppealCardController {
 
     /**
      * Shows popup and removes card after delay.
+     * @param message remove card and show message.
      */
     private void showPopupAndRemoveCard(String message) {
         if (popupLabel != null) {
@@ -283,18 +290,21 @@ public class AppealCardController {
 
     /**
      * Sets the appeal status.
-     * @param status current status of the appeal
+     * @param pstatus current status of the appeal
      */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(String pstatus) {
+        this.status = pstatus;
     }
 
     /**
      * Displays a confirmation popup before performing an action.
+     * @param fxmlPath path to the confirmation dialog FXML file
+     * @param onConfirmAction action to execute when confirmed
      */
     private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource(fxmlPath));
             StackPane popupRoot = loader.load();
 
             AppealConfirmationController controller = loader.getController();
@@ -319,6 +329,7 @@ public class AppealCardController {
 
     /**
      * Displays an error message temporarily.
+     * @param message show error message.
      */
     private void showError(String message) {
         if (errorLabel != null) {

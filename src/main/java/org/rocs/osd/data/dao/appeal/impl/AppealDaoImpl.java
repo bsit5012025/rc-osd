@@ -106,9 +106,7 @@ public class AppealDaoImpl implements AppealDao {
     public void processAppeal(long appealId, String status, String remarks) {
         String sql = """
             UPDATE appeal 
-            SET status = ?, 
-                remarks = ?, 
-                dateProcessed = CURRENT_DATE 
+            SET status = ?, remarks = ?, dateProcessed = CURRENT_DATE 
             WHERE appealID = ?
     """;
 
