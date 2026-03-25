@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="cardRoot"
+      styleClass="requestCard"
+      stylesheets="@../../styles/request/request.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.rocs.osd.controller.request.DeniedRequestCardController">
+
+    <HBox alignment="TOP_LEFT">
+        <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Department: " />
+                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="Junior High School" />
+            </HBox>
+            <HBox styleClass="labelRow">
+                <Label styleClass="boldLabel" text="Name: " />
+                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Philip Daganio" />
+            </HBox>
+
+            <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
+                <HBox styleClass="labelRow">
+                    <Label styleClass="boldLabel" text="Type: " />
+                    <Label fx:id="offenseLabel" styleClass="dataLabel" text="Section" />
+                </HBox>
+
+                <Label styleClass="boldLabel" text="Reason for Request: " />
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason..." wrapText="true" />
+
+                <VBox spacing="5" styleClass="commentContainer">
+                    <Label styleClass="boldLabel" text="Comment:" />
+                    <TextArea fx:id="commentArea" editable="false" prefHeight="60.0"
+                              styleClass="commentTextArea, readOnlyArea" wrapText="true"
+                              text="This request was approved." />
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <Button fx:id="arrowButton" onAction="#toggleExpansion" styleClass="arrowButton">
+            <graphic>
+                <ImageView fx:id="arrowIcon" fitHeight="20" fitWidth="20" preserveRatio="true">
+                    <Image url="@../../assets/rightButton.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

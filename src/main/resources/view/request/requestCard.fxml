@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -15,11 +14,11 @@
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Department: " />
-                <Label fx:id="deptLabel" styleClass="dataLabel" text="Department Name" />
+                <Label fx:id="deptLabel" styleClass="dataLabel" text="College" />
             </HBox>
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Name: " />
-                <Label fx:id="nameLabel" styleClass="dataLabel" text="Student Name" />
+                <Label fx:id="nameLabel" styleClass="dataLabel" text="Lian glazel" />
             </HBox>
 
             <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
@@ -27,12 +26,29 @@
                     <Label styleClass="boldLabel" text="Type: " />
                     <Label fx:id="typeLabel" styleClass="dataLabel" text="Section" />
                 </HBox>
-                <Label styleClass="boldLabel" text="Reason for request: " />
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason goes here..." wrapText="true" />
+
+                <Label styleClass="boldLabel" text="Reason for Request: ">
+                    <VBox.margin>
+                        <javafx.geometry.Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason text goes here..." wrapText="true" />
+
+                <VBox spacing="2" styleClass="commentContainer">
+                    <Label styleClass="boldLabel" text="Comment:" />
+                    <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
+                </VBox>
+
+                <HBox fx:id="actionBar" alignment="CENTER_RIGHT" styleClass="actionBarContainer">
+                    <HBox styleClass="actionBar">
+                        <Button fx:id="denyButton" onAction="#onDeny" styleClass="denyButton" text="Deny" />
+                        <Button fx:id="approveButton" onAction="#onApprove" styleClass="approveButton" text="Approve" />
+                    </HBox>
+                </HBox>
             </VBox>
         </VBox>
 
-        <Button onAction="#toggleExpansion" styleClass="arrowButton">
+        <Button fx:id="arrowButton" onAction="#toggleExpansion" styleClass="arrowButton">
             <graphic>
                 <ImageView fx:id="arrowIcon" fitHeight="20" fitWidth="20" preserveRatio="true">
                     <Image url="@../../assets/rightButton.png" />
@@ -41,17 +57,7 @@
         </Button>
     </HBox>
 
-    <HBox fx:id="actionBar" managed="false" styleClass="actionBarContainer" visible="false">
-        <Region HBox.hgrow="ALWAYS" />
-        <HBox styleClass="actionBar">
-            <Button styleClass="denyButton" text="Deny" onAction="#onDeny" />
-            <Button styleClass="approveButton" text="Approve" onAction="#onApprove" />
-        </HBox>
-    </HBox>
-
-    <VBox fx:id="popupBox" alignment="CENTER" spacing="5"
-          style="-fx-background-color: #DDE1EB; -fx-padding: 10; -fx-background-radius: 8;"
-          visible="false">
+    <VBox fx:id="popupBox" alignment="CENTER" managed="false" visible="false" styleClass="popupBox">
         <Label fx:id="popupLabel" style="-fx-font-weight: bold; -fx-text-fill: #000000;"/>
     </VBox>
 </VBox>

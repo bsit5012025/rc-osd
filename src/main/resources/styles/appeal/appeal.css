@@ -169,10 +169,9 @@
     -fx-background-color: transparent;
 }
 
-/* Styling for the uneditable approved view */
 .readOnlyArea {
     -fx-opacity: 0.8;
-    -fx-background-color: #f4f4f4; /* Light gray background to show it's disabled */
+    -fx-background-color: #f4f4f4;
     -fx-border-color: #DCDCDC;
 }
 
@@ -180,7 +179,6 @@
     -fx-background-color: #f4f4f4;
 }
 
-/* Removes the navy focus border since the user doesn't need to type here */
 .readOnlyArea:focused {
     -fx-border-color: #DCDCDC;
 }
