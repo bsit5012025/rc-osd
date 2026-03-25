@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
+import javafx.scene.control.Button;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,37 +36,90 @@ public class AppealController {
      */
     @FXML
     public void initialize() {
-        if (listContainer != null) {
-            listContainer.getChildren().clear();
-            loadAppealsFromDB();
-        }
+        loadAppealsByStatus("PENDING");
     }
 
     /**
      * Fetches pending appeals from the database
      * and injects them into the listContainer.
      */
-    private void loadAppealsFromDB() {
-        List<Appeal> appeals = appealFacade.getPendingAppeals();
+    private void loadAppealsByStatus(String status) {
+
+        if (listContainer == null) return;
+
+        listContainer.getChildren().clear();
+
+        List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
+
+        if (appeals == null) return;
 
         for (Appeal appeal : appeals) {
             try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/view/appeal/AppealCard.fxml"));
+
+                FXMLLoader loader;
+
+                if ("APPROVED".equals(status)) {
+                    loader = new FXMLLoader(getClass().getResource(
+                            "/view/appeal/approvedAppealCard.fxml"));
+                } else if ("DENIED".equals(status)) {
+                    loader = new FXMLLoader(getClass().getResource(
+                            "/view/appeal/deniedAppealCard.fxml"));
+                } else {
+                    loader = new FXMLLoader(getClass().getResource(
+                            "/view/appeal/appealCard.fxml"));
+                }
+
                 VBox card = loader.load();
 
-                AppealCardController controller = loader.getController();
-                if (controller != null) {
+                if ("PENDING".equals(status)) {
+                    AppealCardController controller = loader.getController();
+
                     controller.setAppeal(appeal);
+
+                    controller.setStatus(status);
+
                     controller.setOnActionComplete(() ->
-                            listContainer.getChildren().remove(card));
-                    listContainer.getChildren().add(card);
+                            loadAppealsByStatus("PENDING"));
+
+                } else if ("APPROVED".equals(status)) {
+                    ApprovedAppealCardController controller = loader.getController();
+                    controller.setAppeal(appeal);
+
+                } else {
+                    DeniedAppealCardController controller = loader.getController();
+                    controller.setAppeal(appeal);
                 }
+
+                listContainer.getChildren().add(card);
+
             } catch (IOException e) {
-                System.err.println(
-                        "Error loading Appeal Card: " + e.getMessage());
+                System.err.println("Error loading Appeal Card: " + e.getMessage());
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Handles pending tab click.
+     */
+    @FXML
+    private void handlePendingTab() {
+        loadAppealsByStatus("PENDING");
+    }
+
+    /**
+     * Handles approved tab click.
+     */
+    @FXML
+    private void handleApprovedTab() {
+        loadAppealsByStatus("APPROVED");
+    }
+
+    /**
+     * Handles denied tab click.
+     */
+    @FXML
+    private void handleDeniedTab() {
+        loadAppealsByStatus("DENIED");
     }
 }

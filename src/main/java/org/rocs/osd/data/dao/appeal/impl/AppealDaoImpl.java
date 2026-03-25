@@ -95,49 +95,34 @@ public class AppealDaoImpl implements AppealDao {
     }
 
     /**
-     * Updates the status of a given appeal record in the database.
+     * Updates the status of an appeal in the database.
+     * Also saves remarks and sets the processed date.
      *
-     * @param appealId the ID of the appeal to update.
-     * @param status the new status value.
+     * @param appealId ID of the appeal to update
+     * @param status new status (APPROVED / DENIED)
+     * @param remarks optional remarks for the appeal
      */
     @Override
-    public void updateAppealStatus(long appealId, String status) {
+    public void processAppeal(long appealId, String status, String remarks) {
         String sql = """
-                UPDATE appeal SET status = ?,
-                dateProcessed = CURRENT_DATE WHERE appealID = ?
-                """;
+            UPDATE appeal 
+            SET status = ?, 
+                remarks = ?, 
+                dateProcessed = CURRENT_DATE 
+            WHERE appealID = ?
+    """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
-            ps.setLong(2, appealId);
+            ps.setString(2, remarks);
+            ps.setLong(3, appealId);
+
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating appeal status", e);
-        }
-    }
-
-    /**
-     * save the remarks of a given appeal in the database.
-     *
-     * @param appealId the ID of the appeal
-     * @param remarks the remarks to be saved
-     */
-    @Override
-    public void saveRemarks(long appealId, String remarks) {
-        String sql = "UPDATE appeal SET remarks = ? WHERE appealID = ?";
-
-        try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, remarks);
-            ps.setLong(2, appealId);
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error saving remarks", e);
+            throw new RuntimeException("Error processing appeal", e);
         }
     }
 }

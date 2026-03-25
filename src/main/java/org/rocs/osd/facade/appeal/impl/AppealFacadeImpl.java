@@ -39,28 +39,28 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Approves the appeal with the given ID by
-     * updating its status to "APPROVED".
+     * Approves an appeal and optionally saves remarks.
      *
-     * @param appealId the ID of the appeal to approve.
+     * @param appealId ID of the appeal to approve
+     * @param remarks optional remarks for approval
      */
     @Override
-    public void approveAppeal(long appealId) {
-        appealDao.updateAppealStatus(appealId, "APPROVED");
+    public void approveAppeal(long appealId, String remarks) {
+        appealDao.processAppeal(appealId, "APPROVED", remarks);
     }
 
     /**
-     * Denies the appeal and saves the corresponding remarks.
+     * Denies an appeal and requires remarks.
      *
-     * @param appealId the ID of the appeal
-     * @param remarks the remarks
+     * @param appealId ID of the appeal to deny
+     * @param remarks required remarks explaining denial
+     * @throws IllegalArgumentException if remarks is empty
      */
     @Override
     public void denyAppeal(long appealId, String remarks) {
         if (remarks == null || remarks.trim().isEmpty()) {
             throw new IllegalArgumentException("Denial remarks is required.");
         }
-        appealDao.updateAppealStatus(appealId, "DENIED");
-        appealDao.saveRemarks(appealId, remarks);
+        appealDao.processAppeal(appealId, "DENIED", remarks);
     }
 }

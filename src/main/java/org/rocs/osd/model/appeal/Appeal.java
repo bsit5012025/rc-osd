@@ -159,6 +159,6 @@ public class Appeal {
 
     /** @param pRemarks sets the remark message for deny button. */
     public void setRemarks(String pRemarks) {
-        this.remarks = remarks;
+        this.remarks = pRemarks;
     }
 }

@@ -28,11 +28,12 @@ class AppealFacadeImplTest {
     }
 
     @Test
-    void testGetAppealsStatus() {
+    void testGetAppealsByStatus() {
         Appeal appeal = new Appeal();
         appeal.setAppealID(1L);
         appeal.setMessage("Test appeal");
         appeal.setStatus("PENDING");
+        appeal.setRemarks("Test Remarks");
 
         Record record = new Record();
         record.setRecordId(1L);
@@ -59,6 +60,7 @@ class AppealFacadeImplTest {
         assertEquals(1L, actual.getAppealID());
         assertEquals("Test appeal", actual.getMessage());
         assertEquals("PENDING", actual.getStatus());
+        assertEquals("Test Remarks", result.get(0).getRemarks());
 
         assertNotNull(actual.getRecord());
         assertEquals(1L, actual.getRecord().getRecordId());
@@ -72,20 +74,34 @@ class AppealFacadeImplTest {
         assertEquals("S001", actualStudent.getStudentId());
         assertEquals("John", actualStudent.getFirstName());
         assertEquals("Doe", actualStudent.getLastName());
+        assertEquals(1, result.size());
 
         verify(mockDao).findAppealsByStatus("PENDING");
     }
 
     @Test
-    void testApproveAppeal() {
-        assertDoesNotThrow(() -> facade.approveAppeal(1L));
-        verify(mockDao).updateAppealStatus(1L, "APPROVED");
+    void testApproveAppealWithRemarks() {
+        assertDoesNotThrow(() -> facade.approveAppeal(1L, "Approved note"));
+        verify(mockDao).processAppeal(1L, "APPROVED", "Approved note");
+    }
+
+    @Test
+    void testApproveAppealWithoutRemarks() {
+        assertDoesNotThrow(() -> facade.approveAppeal(1L, null));
+        verify(mockDao).processAppeal(1L, "APPROVED", null);
     }
 
     @Test
     void testDenyAppealWithRemarks() {
-        assertDoesNotThrow(() -> facade.denyAppeal(1L, "Invalid remarks"));
-        verify(mockDao).updateAppealStatus(1L, "DENIED");
-        verify(mockDao).saveRemarks(1L, "Invalid remarks");
+        assertDoesNotThrow(() -> facade.denyAppeal(1L, "Invalid request"));
+        verify(mockDao).processAppeal(1L, "DENIED", "Invalid request");
+    }
+
+    @Test
+    void testDenyAppealWithoutRemarksThrowsException() {
+        assertDoesNotThrow(() -> assertThrows(IllegalArgumentException.class, () ->
+                facade.denyAppeal(1L, " ")
+        ));
+        verify(mockDao, never()).processAppeal(anyLong(), anyString(), any());
     }
 }

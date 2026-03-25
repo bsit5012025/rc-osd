@@ -75,6 +75,7 @@ class AppealDaoImplTest {
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
+        assertEquals("Test Remarks", appeal.getRemarks());
 
         Record record = appeal.getRecord();
         assertNotNull(record);
@@ -96,26 +97,30 @@ class AppealDaoImplTest {
     }
 
     @Test
-    void testUpdateAppealStatus() throws SQLException {
+    void testProcessAppeal() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> appealDao.updateAppealStatus(1L, "APPROVED"));
+        assertDoesNotThrow(() ->
+                appealDao.processAppeal(1L, "APPROVED", "Optional remark")
+        );
 
         verify(preparedStatement).setString(1, "APPROVED");
-        verify(preparedStatement).setLong(2, 1L);
+        verify(preparedStatement).setString(2, "Optional remark");
+        verify(preparedStatement).setLong(3, 1L);
         verify(preparedStatement).executeUpdate();
     }
 
     @Test
-    void testSaveRemarks() throws SQLException {
+    void testProcessAppealWithNullRemarks() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> appealDao.saveRemarks(1L, "Invalid remarks"));
+        assertDoesNotThrow(() ->
+                appealDao.processAppeal(1L, "APPROVED", null)
+        );
 
-        verify(preparedStatement).setString(1, "Invalid remarks");
-        verify(preparedStatement).setLong(2, 1L);
-        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).setString(1, "APPROVED");
+        verify(preparedStatement).setString(2, null);
+        verify(preparedStatement).setLong(3, 1L);
     }
 }

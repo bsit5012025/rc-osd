@@ -18,7 +18,7 @@ public interface AppealFacade {
      * Approves the appeal with the given ID.
      * @param appealId the ID of the appeal to approve
      */
-    void approveAppeal(long appealId);
+    void approveAppeal(long appealId, String remarks);
 
     /**
      * Denies the appeal with a corresponding remarks.
