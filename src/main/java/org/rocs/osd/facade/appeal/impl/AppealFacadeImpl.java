@@ -31,14 +31,11 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Retrieves all pending appeal records along
-     * with student and offense details.
-     *
-     * @return a List of pending Appeal objects.
+     * Retrieves appeals by status.
      */
     @Override
-    public List<Appeal> getPendingAppeals() {
-        return appealDao.findPendingAppealsWithDetails();
+    public List<Appeal> getAppealsByStatus(String status) {
+        return appealDao.findAppealsByStatus(status);
     }
 
     /**
@@ -53,12 +50,17 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Denies the appeal with the given ID by updating its status to "DENIED".
+     * Denies the appeal and saves the corresponding remarks.
      *
-     * @param appealId the ID of the appeal to deny
+     * @param appealId the ID of the appeal
+     * @param remarks the remarks
      */
     @Override
-    public void denyAppeal(long appealId) {
+    public void denyAppeal(long appealId, String remarks) {
+        if (remarks == null || remarks.trim().isEmpty()) {
+            throw new IllegalArgumentException("Denial remarks is required.");
+        }
         appealDao.updateAppealStatus(appealId, "DENIED");
+        appealDao.saveRemarks(appealId, remarks);
     }
 }

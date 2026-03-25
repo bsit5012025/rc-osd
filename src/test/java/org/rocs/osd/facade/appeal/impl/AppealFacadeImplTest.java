@@ -28,7 +28,7 @@ class AppealFacadeImplTest {
     }
 
     @Test
-    void testGetPendingAppeals() {
+    void testGetAppealsStatus() {
         Appeal appeal = new Appeal();
         appeal.setAppealID(1L);
         appeal.setMessage("Test appeal");
@@ -49,9 +49,9 @@ class AppealFacadeImplTest {
         enrollment.setStudent(student);
         appeal.setEnrollment(enrollment);
 
-        when(mockDao.findPendingAppealsWithDetails()).thenReturn(List.of(appeal));
+        when(mockDao.findAppealsByStatus("PENDING")).thenReturn(List.of(appeal));
 
-        List<Appeal> result = facade.getPendingAppeals();
+        List<Appeal> result = facade.getAppealsByStatus("PENDING");
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -73,7 +73,7 @@ class AppealFacadeImplTest {
         assertEquals("John", actualStudent.getFirstName());
         assertEquals("Doe", actualStudent.getLastName());
 
-        verify(mockDao).findPendingAppealsWithDetails();
+        verify(mockDao).findAppealsByStatus("PENDING");
     }
 
     @Test
@@ -83,8 +83,9 @@ class AppealFacadeImplTest {
     }
 
     @Test
-    void testDeniedAppeal() {
-        assertDoesNotThrow(() -> facade.denyAppeal(1L));
+    void testDenyAppealWithRemarks() {
+        assertDoesNotThrow(() -> facade.denyAppeal(1L, "Invalid remarks"));
         verify(mockDao).updateAppealStatus(1L, "DENIED");
+        verify(mockDao).saveRemarks(1L, "Invalid remarks");
     }
 }

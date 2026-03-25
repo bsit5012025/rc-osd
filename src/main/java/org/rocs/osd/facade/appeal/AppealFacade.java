@@ -7,11 +7,12 @@ import java.util.List;
 public interface AppealFacade {
 
     /**
-     * Retrieves all pending appeals with associated
-     * student and offense details.
-     * @return a List of pending Appeal objects
+     * Retrieves appeals by status.
+     *
+     * @param status the appeal status
+     * @return list of appeals
      */
-    List<Appeal> getPendingAppeals();
+    List<Appeal> getAppealsByStatus(String status);
 
     /**
      * Approves the appeal with the given ID.
@@ -20,8 +21,10 @@ public interface AppealFacade {
     void approveAppeal(long appealId);
 
     /**
-     * Denies the appeal with the given ID.
+     * Denies the appeal with a corresponding remarks.
+     *
      * @param appealId the ID of the appeal to deny
+     * @param remarks the remarks for denial
      */
-    void denyAppeal(long appealId);
+    void denyAppeal(long appealId, String remarks);
 }
