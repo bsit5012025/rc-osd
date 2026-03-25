@@ -108,7 +108,8 @@ public class OffenseController {
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setResizable(false);
             modalStage.setScene(new Scene(root));
-            modalStage.show();
+            modalStage.setOnHidden(e -> refreshRecord());
+            modalStage.showAndWait();
 
         } catch (IOException e) {
             System.err.println("UI Error: Could not find "
