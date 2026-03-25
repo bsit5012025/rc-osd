@@ -224,7 +224,7 @@ public class AppealCardController {
      */
     @FXML
     private void handleAppealApprove() {
-    showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml",() -> {
+    showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
 
             String remarks = (commentArea != null
                     && !commentArea.getText().trim().isEmpty())
