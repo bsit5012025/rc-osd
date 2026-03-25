@@ -86,6 +86,15 @@ public class RequestCardController {
     /** Initializes the dashboard controller and loads request data. */
     @FXML
     public void initialize() {
+        if (expandedSection != null) {
+            expandedSection.setVisible(false);
+            expandedSection.setManaged(false);
+        }
+        if (actionBar != null) {
+            actionBar.setVisible(false);
+            actionBar.setManaged(false);
+        }
+
         RequestDao requestDao = new RequestDaoImpl();
         requestFacade = new RequestFacadeImpl(requestDao);
     }
