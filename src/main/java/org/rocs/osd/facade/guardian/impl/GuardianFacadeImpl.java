@@ -18,7 +18,6 @@ public class GuardianFacadeImpl implements GuardianFacade {
      * DAO object used for retrieving guardian data from the database.
      * */
     private final GuardianDao guardianDao;
-
     /**
      * Default constructor.
      * */
