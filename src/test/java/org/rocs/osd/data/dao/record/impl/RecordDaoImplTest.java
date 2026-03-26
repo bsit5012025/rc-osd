@@ -70,7 +70,9 @@ class RecordDaoImplTest
             when(resultSet.getString("schoolYear")).thenReturn("2025-2026");
             when(resultSet.getString("studentLevel")).thenReturn("Grade-8");
             when(resultSet.getString("section")).thenReturn("St. Hannibal");
-
+            when(resultSet.getString("studId")).thenReturn("STUD-001");
+            when(resultSet.getString("firstName")).thenReturn("John");
+            when(resultSet.getString("lastName")).thenReturn("Doe");
             when(resultSet.getLong("studentPersonID")).thenReturn(2L);
             when(resultSet.getString("studentAddress")).thenReturn("Buho");
             when(resultSet.getString("studentType")).thenReturn("Intern");
