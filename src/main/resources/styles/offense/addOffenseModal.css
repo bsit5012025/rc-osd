@@ -1,5 +1,5 @@
 .root {
--fx-font-family: "Arial";
+    -fx-font-family: "Arial";
 }
 
 .modalContainer {
@@ -28,40 +28,65 @@
     -fx-font-weight: bold;
 }
 
-.inputTextFieldOffense, .datePicker {
-    -fx-pref-height: 35;
-    -fx-background-color: white;
-    -fx-border-color: #767676;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
-    -fx-font-size: 14;
-}
-
-.inputTextFieldOffense:hover, .datePicker:hover {
-    -fx-border-color: navy;
-}
-
-.inputTextFieldOffense:focused, .datePicker:focused {
-    -fx-border-color: navy;
-}
-
-.datePicker > .text-field {
-    -fx-background-color: transparent;
-}
-
+.inputTextFieldOffense,
+.datePicker,
 .inputTextArea {
     -fx-background-color: white;
     -fx-border-color: #767676;
     -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
     -fx-font-size: 14;
+    -fx-text-fill: black;
 }
 
-.inputTextArea:hover {
+.inputTextFieldOffense, .datePicker {
+    -fx-pref-height: 35;
+}
+
+.inputTextArea {
+    -fx-pref-height: 150;
+    -fx-min-height: 150;
+}
+
+.inputTextFieldOffense:hover, .datePicker:hover,
+.inputTextArea:hover, .inputTextFieldOffense:focused,
+.datePicker:focused, .inputTextArea:focused {
     -fx-border-color: navy;
 }
 
-.inputTextArea:focused {
-    -fx-border-color: navy;
+
+.combo-box.inputTextFieldOffense {
+    -fx-background-color: white;
+}
+
+.combo-box.inputTextFieldOffense > .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-padding: 5 10;
+}
+
+.combo-box-popup .list-view .list-cell:hover,
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: navy !important;
+    -fx-text-fill: white !important;
+}
+
+.combo-box.inputTextFieldOffense .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box.inputTextFieldOffense .arrow {
+    -fx-background-color: #767676;
+}
+
+
+.datePicker > .text-field {
+    -fx-background-color: transparent;
 }
 
 .cancelButton {
@@ -76,6 +101,10 @@
     -fx-cursor: hand;
 }
 
+.cancelButton:hover {
+    -fx-background-color: #F0F0F0;
+}
+
 .submitOffenseButton {
     -fx-pref-width: 80;
     -fx-pref-height: 30;
@@ -87,20 +116,38 @@
 }
 
 .submitOffenseButton:hover {
-    -fx-background-color: #0000CC;
+    -fx-background-color: blue;
 }
 
-.cancelButton:hover {
-    -fx-background-color: #F0F0F0;
+.cancelButton:pressed, .submitOffenseButton:pressed {
+    -fx-translate-y: 2;
 }
 
 .check-box:selected .box {
     -fx-background-color: navy;
     -fx-border-color: navy;
-    -fx-background-radius: 3;
-    -fx-border-radius: 3;
 }
 
 .check-box:selected .mark {
     -fx-background-color: white;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .day-cell:filled:selected {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .day-cell:focused {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .day-cell:filled:selected:focused {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
 }
