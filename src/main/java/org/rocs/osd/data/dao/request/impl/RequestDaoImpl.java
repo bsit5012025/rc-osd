@@ -56,31 +56,37 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     /**
-     * Retrieves all requests from the database.
+     * Retrieves all requests with the specified status from the database.
      * Each record from the REQUEST table is mapped to a Request object.
      *
+     * @param status used to filter requests.
      * @return a List of Request objects representing all requests
      */
     @Override
-    public List<Request> findAllRequests() {
+    public List<Request> findAllRequestsByStatus(RequestStatus status) {
         List<Request> requestList = new ArrayList<>();
 
-        String sql = "SELECT * FROM REQUEST";
+        String sql = "SELECT * FROM REQUEST WHERE status = ?";
 
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                Request r = new Request();
-                r.setRequestID(rs.getLong("requestID"));
-                r.setEmployeeID(rs.getString("employeeID"));
-                r.setDetails(rs.getString("details"));
-                r.setType(rs.getString("type"));
-                r.setMessage(rs.getString("message"));
-                r.setStatus(RequestStatus.valueOf(rs.getString("status")));
+            stmt.setString(1, String.valueOf(status));
 
-                requestList.add(r);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Request r = new Request();
+                    r.setRequestID(rs.getLong("requestID"));
+                    r.setEmployeeID(rs.getString("employeeID"));
+                    r.setDetails(rs.getString("details"));
+                    r.setType(rs.getString("type"));
+                    r.setMessage(rs.getString("message"));
+                    r.setDateProcessed(rs.getDate("dateProcessed"));
+                    r.setRemarks(rs.getString("remarks"));
+                    r.setStatus(RequestStatus.valueOf(rs.getString("status")));
+
+                    requestList.add(r);
+                }
             }
 
         } catch (SQLException e) {
@@ -94,18 +100,26 @@ public class RequestDaoImpl implements RequestDao {
     /**
      * Updates the status of a request in the database.
      * @param requestID the ID of the request to update.
+     * @param remarks the remarks of user approving or denying the request.
      * @param status the new status to assign to the request.
      * @return true if the update was successful, false otherwise.
      */
     @Override
-    public boolean updateRequestStatus(long requestID, RequestStatus status) {
-        String sql = "UPDATE REQUEST SET status = ? WHERE requestID = ?";
+    public boolean updateRequestStatus(long requestID,
+                                       String remarks,
+                                       RequestStatus status) {
+        String sql = "UPDATE REQUEST SET "
+                + "status = ?, "
+                + "remarks = ?, "
+                + "dateProcessed = SYSDATE "
+                + "WHERE requestID = ?";
 
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, status.toString());
-            stmt.setString(2, String.valueOf(requestID));
+            stmt.setString(2, remarks);
+            stmt.setLong(3, requestID);
 
             return stmt.executeUpdate() > 0;
 

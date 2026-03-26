@@ -51,7 +51,7 @@ class RequestFacadeImplTest
     }
 
     @Test
-    void testGetAllRequest()
+    void testGetAllRequestByStatus()
     {
         Request request = new Request();
         request.setRequestID(1L);
@@ -61,9 +61,9 @@ class RequestFacadeImplTest
         request.setMessage("Requesting for the conduct record of all students in St. Andrew");
         request.setStatus(RequestStatus.APPROVED);
 
-        when(requestDao.findAllRequests()).thenReturn(List.of(request));
+        when(requestDao.findAllRequestsByStatus(any(RequestStatus.class))).thenReturn(List.of(request));
 
-        List<Request> list = requestFacade.getAllRequest();
+        List<Request> list = requestFacade.getAllRequestByStatus(RequestStatus.APPROVED);
         Request list1 = list.get(0);
 
         assertNotNull(list);
@@ -75,17 +75,17 @@ class RequestFacadeImplTest
         assertEquals("Requesting for the conduct record of all students in St. Andrew" ,list1.getMessage());
         assertEquals(RequestStatus.APPROVED ,list1.getStatus());
 
-        verify(requestDao, times(1)).findAllRequests();
+        verify(requestDao, times(1)).findAllRequestsByStatus(any(RequestStatus.class));
     }
 
     @Test
     void testUpdateRequestStatus()
     {
-        when(requestDao.updateRequestStatus(anyLong(), any(RequestStatus.class))).thenReturn(true);
+        when(requestDao.updateRequestStatus(anyLong(), anyString(), any(RequestStatus.class))).thenReturn(true);
 
-        boolean status = requestFacade.updateRequestStatus(1L, RequestStatus.APPROVED);
+        boolean status = requestFacade.updateRequestStatus(1L, "test Remarks", RequestStatus.APPROVED);
 
         assertTrue(status);
-        verify(requestDao, times(1)).updateRequestStatus(1L, RequestStatus.APPROVED);
+        verify(requestDao, times(1)).updateRequestStatus(1L, "test Remarks", RequestStatus.APPROVED);
     }
 }

@@ -27,18 +27,21 @@ public interface RequestFacade {
                        String message, String type);
 
     /**
-     * Retrieves all requests stored in the system.
+     * Retrieves all requests by status in the system.
      *
+     * @param status used to filter requests.
      * @return a list of all Request objects.
      */
-    List<Request> getAllRequest();
+    List<Request> getAllRequestByStatus(RequestStatus status);
 
     /**
      * Updates the status of an existing request.
      *
      * @param requestID the ID of the request to update.
+     * @param remarks the remarks of the request to update.
      * @param status the new status value.
      * @return true if the status was updated successfully.
      */
-    boolean updateRequestStatus(long requestID, RequestStatus status);
+    boolean updateRequestStatus(long requestID, String remarks,
+                                RequestStatus status);
 }

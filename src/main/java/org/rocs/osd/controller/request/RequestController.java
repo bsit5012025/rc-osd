@@ -42,20 +42,22 @@ public class RequestController {
         EmployeeDao employeeDao = new EmployeeDaoImpl();
         employeeFacade = new EmployeeFacadeImpl(employeeDao);
 
-        loadRequestData();
+        loadPendingRequestData();
     }
 
-    /** Loads and filters request data to create UI cards. */
-    private void loadRequestData() {
+
+    /** Loads and filters Pending request data to create UI cards. */
+    private void loadPendingRequestData() {
         if (listContainer == null) {
             return;
         }
 
         listContainer.getChildren().clear();
-        List<Request> requestList = requestFacade.getAllRequest();
+        List<Request> requestList = requestFacade.getAllRequestByStatus(
+                RequestStatus.PENDING);
 
-        for (Request request : requestList) {
-            if (request.getStatus() == RequestStatus.PENDING) {
+        if (requestList != null) {
+            for (Request request : requestList) {
                 Employee employee = employeeFacade
                         .getEmployeeByEmployeeID(request.getEmployeeID());
                 String dept = String.valueOf(employee.getDepartment());
@@ -63,12 +65,162 @@ public class RequestController {
                         + employee.getMiddleName() + ". "
                         + employee.getLastName();
                 String type = request.getType();
-                String message = request.getMessage();
+                String reason = request.getMessage();
                 long requestId = request.getRequestID();
 
-                addRequestCard(dept, name, type, message, requestId);
+                addRequestCard(dept, name, type, reason, requestId);
             }
         }
+    }
+
+    /**
+     * Handles the "Pending" tab action.
+     * Loads pending request data and updates the UI.
+     * with corresponding request cards.
+     * */
+    @FXML
+    private void handlePendingTab() {
+        loadPendingRequestData();
+        System.out.println("pending ");
+    }
+
+    /** Loads and filters Approve request data to create UI cards. */
+    private void loadApproveRequestData() {
+        if (listContainer == null) {
+            return;
+        }
+
+        listContainer.getChildren().clear();
+        List<Request> requestList =
+                requestFacade.getAllRequestByStatus(RequestStatus.APPROVED);
+
+        if (requestList != null) {
+            for (Request request : requestList) {
+                Employee employee = employeeFacade
+                        .getEmployeeByEmployeeID(request.getEmployeeID());
+                String dept = String.valueOf(employee.getDepartment());
+                String name = employee.getFirstName() + " "
+                        + employee.getMiddleName() + ". "
+                        + employee.getLastName();
+                String type = request.getType();
+                String reason = request.getMessage();
+                String remarks = request.getRemarks();
+                long requestId = request.getRequestID();
+
+                addApproveRequestCard(dept, name, type,
+                        reason, remarks, requestId);
+            }
+        }
+    }
+
+    /**
+     * Loads the RequestCard FXML and adds it to the list.
+     * @param dept    the department name
+     * @param name      the name of the requester
+     * @param type      the type of request
+     * @param reason    the reason for the request
+     * @param remarks    the remarks for the request
+     * @param requestId the unique identifier for the request
+     */
+    private void addApproveRequestCard(String dept, String name,
+                                       String type, String reason,
+                                       String remarks, long requestId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/view/request/ApprovedRequestCard.fxml"));
+            VBox card = loader.load();
+
+            ApprovedRequestCardController controller =
+                    loader.getController();
+            if (controller != null) {
+                controller.setData(dept, name, type, reason,
+                        remarks, requestId);
+                listContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            System.err.println("Error creating request card.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Handles the "Approve" tab action.
+     * Loads approve request data and updates the UI.
+     * with corresponding request cards.
+     * */
+    @FXML
+    private void handleApproveTab() {
+        loadApproveRequestData();
+        System.out.println("approve ");
+    }
+
+    /** Loads and filters Denied request data to create UI cards. */
+    private void loadDeniedRequestData() {
+        if (listContainer == null) {
+            return;
+        }
+
+        listContainer.getChildren().clear();
+        List<Request> requestList =
+                requestFacade.getAllRequestByStatus(RequestStatus.DENIED);
+
+        if (requestList != null) {
+            for (Request request : requestList) {
+                Employee employee = employeeFacade
+                        .getEmployeeByEmployeeID(request.getEmployeeID());
+                String dept = String.valueOf(employee.getDepartment());
+                String name = employee.getFirstName() + " "
+                        + employee.getMiddleName() + ". "
+                        + employee.getLastName();
+                String type = request.getType();
+                String reason = request.getMessage();
+                String remarks = request.getRemarks();
+                long requestId = request.getRequestID();
+
+                addDeniedRequestCard(dept, name, type,
+                        reason, remarks, requestId);
+            }
+        }
+    }
+
+    /**
+     * Loads the RequestCard FXML and adds it to the list.
+     * @param dept    the department name
+     * @param name      the name of the requester
+     * @param type      the type of request
+     * @param reason    the reason for the request
+     * @param remarks    the remarks for the request
+     * @param requestId the unique identifier for the request
+     */
+    private void addDeniedRequestCard(String dept, String name,
+                                      String type, String reason,
+                                      String remarks, long requestId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/view/request/DeniedRequestCard.fxml"));
+            VBox card = loader.load();
+
+            DeniedRequestCardController controller = loader.getController();
+            if (controller != null) {
+                controller.setData(dept, name, type,
+                        reason, remarks, requestId);
+                listContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            System.err.println("Error creating request card.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Handles the "Denied" tab action.
+     * Loads denied request data and updates the UI.
+     * with corresponding request cards.
+     * */
+    @FXML
+    private void handleDeniedTab() {
+        loadDeniedRequestData();
+        System.out.println("denied ");
     }
 
     /**

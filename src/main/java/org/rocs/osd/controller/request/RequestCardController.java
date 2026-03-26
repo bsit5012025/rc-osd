@@ -3,6 +3,7 @@ package org.rocs.osd.controller.request;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -72,6 +73,13 @@ public class RequestCardController {
      */
     @FXML
     private Label popupLabel;
+    /**
+     * Holder for user comments where it will be
+     * stored on the remarks when approving or denying.
+     */
+    @FXML
+    private TextArea commentArea;
+
     /**
      * Tracks whether the card is expanded or collapsed.
      */
@@ -156,18 +164,31 @@ public class RequestCardController {
         }
     }
 
+    /**
+     * Approving the request status and add comments.
+     */
     @FXML
     private void onApprove() {
-        requestFacade.updateRequestStatus(cardId, RequestStatus.APPROVED);
+        requestFacade.updateRequestStatus(cardId, commentArea.getText(),
+                RequestStatus.APPROVED);
         showPopupAndRemoveCard("Request approved!");
     }
 
+    /**
+     * Denied the request status and add comments.
+     */
     @FXML
     private void onDeny() {
-        requestFacade.updateRequestStatus(cardId, RequestStatus.DENIED);
+        requestFacade.updateRequestStatus(cardId, commentArea.getText(),
+                RequestStatus.DENIED);
         showPopupAndRemoveCard("Request Denied!");
     }
 
+    /**
+     * Shows a popup for the card when it is successfully approved or denied.
+     *
+     * @param message the message to display in the popup.
+     */
     private void showPopupAndRemoveCard(String message) {
         popupLabel.setText(message);
         popupBox.setVisible(true);
