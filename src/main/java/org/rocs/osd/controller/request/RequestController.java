@@ -68,8 +68,35 @@ public class RequestController {
                 String reason = request.getMessage();
                 long requestId = request.getRequestID();
 
-                addRequestCard(dept, name, type, reason, requestId);
+                addPendingRequestCard(dept, name, type,
+                        reason, requestId);
             }
+        }
+    }
+
+    /**
+     * Loads the RequestCard FXML and adds it to the list.
+     * @param dept    the department name
+     * @param name      the name of the requester
+     * @param type      the type of request
+     * @param reason    the reason for the request
+     * @param requestId the unique identifier for the request
+     */
+    private void addPendingRequestCard(String dept, String name,
+                                String type, String reason, long requestId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/view/request/RequestCard.fxml"));
+            VBox card = loader.load();
+
+            RequestCardController controller = loader.getController();
+            if (controller != null) {
+                controller.setData(dept, name, type, reason, requestId);
+                listContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            System.err.println("Error creating request card.");
+            e.printStackTrace();
         }
     }
 
@@ -220,29 +247,4 @@ public class RequestController {
         loadDeniedRequestData();
     }
 
-    /**
-     * Loads the RequestCard FXML and adds it to the list.
-     * @param dept    the department name
-     * @param name      the name of the requester
-     * @param type      the type of request
-     * @param reason    the reason for the request
-     * @param requestId the unique identifier for the request
-     */
-    private void addRequestCard(String dept, String name,
-                                String type, String reason, long requestId) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/view/request/RequestCard.fxml"));
-            VBox card = loader.load();
-
-            RequestCardController controller = loader.getController();
-            if (controller != null) {
-                controller.setData(dept, name, type, reason, requestId);
-                listContainer.getChildren().add(card);
-            }
-        } catch (Exception e) {
-            System.err.println("Error creating request card.");
-            e.printStackTrace();
-        }
-    }
 }

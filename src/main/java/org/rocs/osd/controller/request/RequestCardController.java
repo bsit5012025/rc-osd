@@ -169,9 +169,20 @@ public class RequestCardController {
      */
     @FXML
     private void onApprove() {
-        requestFacade.updateRequestStatus(cardId, commentArea.getText(),
-                RequestStatus.APPROVED);
-        showPopupAndRemoveCard("Request approved!");
+        String comment = commentArea.getText();
+
+        if (comment.isBlank()) {
+            showPopupAndRemoveCard("Request Error! (Comment is blank)");
+            return;
+        }
+
+        boolean status = requestFacade.updateRequestStatus(cardId,
+                commentArea.getText(), RequestStatus.APPROVED);
+        if (status) {
+            showPopupAndRemoveCard("Request approved!");
+        } else {
+            showPopupAndRemoveCard("Request Error!");
+        }
     }
 
     /**
@@ -179,9 +190,20 @@ public class RequestCardController {
      */
     @FXML
     private void onDeny() {
-        requestFacade.updateRequestStatus(cardId, commentArea.getText(),
+        String comment = commentArea.getText();
+
+        if (comment.isBlank()) {
+            showPopupAndRemoveCard("Request Error! (Comment is blank)");
+            return;
+        }
+
+        boolean status = requestFacade.updateRequestStatus(cardId, comment,
                 RequestStatus.DENIED);
-        showPopupAndRemoveCard("Request Denied!");
+        if (status) {
+            showPopupAndRemoveCard("Request Denied!");
+        } else {
+            showPopupAndRemoveCard("Request Error!");
+        }
     }
 
     /**
@@ -190,17 +212,25 @@ public class RequestCardController {
      * @param message the message to display in the popup.
      */
     private void showPopupAndRemoveCard(String message) {
+        if (popupBox == null || popupLabel == null) {
+            return;
+        }
+
         popupLabel.setText(message);
         popupBox.setVisible(true);
+        popupBox.setManaged(true);
 
         PauseTransition delay = new PauseTransition(Duration.seconds(1));
         delay.setOnFinished(e -> {
-            if (cardRoot != null && cardRoot.getParent()
+            popupBox.setVisible(false);
+            popupBox.setManaged(false);
+
+            if (!commentArea.getText().isEmpty()
+                    && cardRoot != null && cardRoot.getParent()
                     instanceof VBox parentVBox) {
                 parentVBox.getChildren().remove(cardRoot);
             }
         });
-
         delay.play();
     }
 }
