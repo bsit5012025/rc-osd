@@ -18,9 +18,9 @@
             </Label>
 
             <HBox styleClass="tabContainer">
-                <Button styleClass="tabButton" text="Pending" />
-                <Button styleClass="tabButton" text="Approved" />
-                <Button styleClass="tabButton" text="Denied" />
+                <Button styleClass="tabButton" text="Pending" onAction="#handlePendingTab" />
+                <Button styleClass="tabButton" text="Approved" onAction="#handleApprovedTab" />
+                <Button styleClass="tabButton" text="Denied" onAction="#handleDeniedTab" />
             </HBox>
 
             <VBox styleClass="contentContainer" VBox.vgrow="ALWAYS">

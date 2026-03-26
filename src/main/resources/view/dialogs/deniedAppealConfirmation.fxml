@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="mainContainer"
+<StackPane fx:id="root" styleClass="mainContainer"
            stylesheets="@../../styles/dialog/appealConfirmation.css"
-           fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
+           fx:controller="org.rocs.osd.controller.appeal.AppealConfirmationController"
            xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/21">
 
@@ -33,8 +33,10 @@
             <Label styleClass="prompt-text" text="deny this appeal?" />
 
             <HBox styleClass="button-group">
-                <Button mnemonicParsing="false" onAction="#closePopup" styleClass="confirm-button" text="Cancel" />
-                <Button mnemonicParsing="false" styleClass="confirm-button" text="Confirm" />
+                <Button mnemonicParsing="false" onAction="#closePopup"
+                        styleClass="confirm-button" text="Cancel" />
+                <Button mnemonicParsing="false" onAction="#handleConfirmDeny"
+                        styleClass="confirm-button" text="Confirm" />
             </HBox>
         </VBox>
     </VBox>
