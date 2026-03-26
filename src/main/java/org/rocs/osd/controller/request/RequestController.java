@@ -81,7 +81,6 @@ public class RequestController {
     @FXML
     private void handlePendingTab() {
         loadPendingRequestData();
-        System.out.println("pending ");
     }
 
     /** Loads and filters Approve request data to create UI cards. */
@@ -151,7 +150,6 @@ public class RequestController {
     @FXML
     private void handleApproveTab() {
         loadApproveRequestData();
-        System.out.println("approve ");
     }
 
     /** Loads and filters Denied request data to create UI cards. */
@@ -220,7 +218,6 @@ public class RequestController {
     @FXML
     private void handleDeniedTab() {
         loadDeniedRequestData();
-        System.out.println("denied ");
     }
 
     /**

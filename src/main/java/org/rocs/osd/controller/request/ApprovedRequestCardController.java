@@ -24,27 +24,28 @@ public class ApprovedRequestCardController {
     @FXML
     private ImageView arrowIcon;
     /**
-     *
+     * Label displaying the name of the requester.
      */
     @FXML
     private Label deptLabel;
     /**
-     *
+     * Label displaying the name of the requester.
      */
     @FXML
     private Label studentNameLabel;
     /**
-     *
+     * Label displaying the type of the request.
      */
     @FXML
     private Label typeLabel;
     /**
-     *
+     * Label displaying the reason for the request.
      */
     @FXML
     private Label reasonLabel;
     /**
-     *
+     * Label for displaying the reason
+     * why it is approve or denied.
      */
     @FXML
     private TextArea commentArea;

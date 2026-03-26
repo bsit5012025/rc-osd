@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="cardRoot" styleClass="requestCard" stylesheets="@../../styles/request/request.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.request.DeniedRequestCardController">
+<VBox fx:id="cardRoot" styleClass="requestCard" stylesheets="@../../styles/request/request.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.request.DeniedRequestCardController">
 
     <HBox alignment="TOP_LEFT">
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
