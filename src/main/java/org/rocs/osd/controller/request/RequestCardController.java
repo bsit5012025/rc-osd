@@ -2,18 +2,25 @@ package org.rocs.osd.controller.request;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
 import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.request.RequestStatus;
+
+import java.io.IOException;
 
 /**
  * Controller for handling request card UI behavior.
@@ -80,6 +87,11 @@ public class RequestCardController {
     @FXML
     private TextArea commentArea;
 
+
+    /**
+     * Callback after action.
+     */
+    private Runnable onActionComplete;
     /**
      * Tracks whether the card is expanded or collapsed.
      */
@@ -90,6 +102,16 @@ public class RequestCardController {
 
     /** ID of the current request. */
     private long cardId;
+
+    /**
+     * Sets a callback to be executed after an action
+     * (approve/deny) is completed.
+     * @param callback a Runnable to run when the action is complete.
+     */
+    public void setOnActionComplete(Runnable callback) {
+        this.onActionComplete = callback;
+    }
+
 
     /** Initializes the dashboard controller and loads request data. */
     @FXML
@@ -169,20 +191,18 @@ public class RequestCardController {
      */
     @FXML
     private void onApprove() {
-        String comment = commentArea.getText();
+        showConfirmation(
+                "/view/dialogs/approvedRequestConfirmation.fxml", () -> {
 
-        if (comment.isBlank()) {
-            showPopupAndRemoveCard("Request Error! (Comment is blank)");
-            return;
-        }
+            String remarks = (commentArea != null
+                    && !commentArea.getText().trim().isEmpty())
+                    ? commentArea.getText()
+                    : null;
 
-        boolean status = requestFacade.updateRequestStatus(cardId,
-                commentArea.getText(), RequestStatus.APPROVED);
-        if (status) {
-            showPopupAndRemoveCard("Request approved!");
-        } else {
-            showPopupAndRemoveCard("Request Error!");
-        }
+            requestFacade.updateRequestStatus(cardId,
+                 remarks, RequestStatus.APPROVED);
+            showPopupAndRemoveCard("Appeal approved!");
+        });
     }
 
     /**
@@ -190,20 +210,18 @@ public class RequestCardController {
      */
     @FXML
     private void onDeny() {
-        String comment = commentArea.getText();
+        showConfirmation(
+                "/view/dialogs/deniedRequestConfirmation.fxml", () -> {
 
-        if (comment.isBlank()) {
-            showPopupAndRemoveCard("Request Error! (Comment is blank)");
-            return;
-        }
+            String remarks = (commentArea != null
+                    && !commentArea.getText().trim().isEmpty())
+                    ? commentArea.getText()
+                    : null;
 
-        boolean status = requestFacade.updateRequestStatus(cardId, comment,
-                RequestStatus.DENIED);
-        if (status) {
-            showPopupAndRemoveCard("Request Denied!");
-        } else {
-            showPopupAndRemoveCard("Request Error!");
-        }
+            requestFacade.updateRequestStatus(cardId,
+                    remarks, RequestStatus.DENIED);
+            showPopupAndRemoveCard("Appeal denied!");
+        });
     }
 
     /**
@@ -212,25 +230,55 @@ public class RequestCardController {
      * @param message the message to display in the popup.
      */
     private void showPopupAndRemoveCard(String message) {
-        if (popupBox == null || popupLabel == null) {
-            return;
+        if (popupLabel != null) {
+            popupLabel.setText(message);
+        }
+        if (popupBox != null) {
+            popupBox.setVisible(true);
         }
 
-        popupLabel.setText(message);
-        popupBox.setVisible(true);
-        popupBox.setManaged(true);
-
-        PauseTransition delay = new PauseTransition(Duration.seconds(1));
+        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         delay.setOnFinished(e -> {
-            popupBox.setVisible(false);
-            popupBox.setManaged(false);
+            if (popupBox != null) {
+                popupBox.setVisible(false);
+                popupBox.setManaged(false);
+            }
 
-            if (!commentArea.getText().isEmpty()
-                    && cardRoot != null && cardRoot.getParent()
-                    instanceof VBox parentVBox) {
+            if (cardRoot != null
+                    && cardRoot.getParent() instanceof VBox parentVBox) {
                 parentVBox.getChildren().remove(cardRoot);
+            }
+
+            if (onActionComplete != null) {
+                onActionComplete.run();
             }
         });
         delay.play();
     }
+
+    /**
+     * Displays a confirmation popup before performing an action.
+     * @param fxmlPath path to the confirmation dialog FXML file
+     * @param onConfirmAction action to execute when confirmed
+     */
+    private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(fxmlPath));
+            StackPane popupRoot = loader.load();
+
+            RequestConfirmationController controller = loader.getController();
+            controller.setOnConfirm(onConfirmAction);
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(popupRoot));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
