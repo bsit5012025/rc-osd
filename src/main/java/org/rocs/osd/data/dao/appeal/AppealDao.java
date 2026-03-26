@@ -11,17 +11,20 @@ import java.util.List;
  */
 public interface AppealDao {
     /**
-     * Retrieves all pending appeals with full details.
+     * Retrieves appeals based on their status (PENDING, APPROVED, DENIED).
      *
-     * @return list of pending appeals.
+     * @param status the status to filter appeals
+     * @return list of appeals with full details
      */
-    List<Appeal> findPendingAppealsWithDetails();
-    /**
-     * Updates the status of an appeal.
-     *
-     * @param appealId the ID of the appeal
-     * @param status   the new status of the appeal
-     */
-    void updateAppealStatus(long appealId, String status);
-}
+    List<Appeal> findAppealsByStatus(String status);
 
+    /**
+     * Updates the status of an appeal in the database.
+     * Also saves remarks and sets the processed date.
+     *
+     * @param appealId ID of the appeal to update
+     * @param status new status (APPROVED / DENIED)
+     * @param remarks optional remarks for the appeal
+     */
+    void processAppeal(long appealId, String status, String remarks);
+}
