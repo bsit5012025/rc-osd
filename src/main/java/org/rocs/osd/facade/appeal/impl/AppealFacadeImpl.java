@@ -31,34 +31,36 @@ public class AppealFacadeImpl implements AppealFacade {
     }
 
     /**
-     * Retrieves all pending appeal records along
-     * with student and offense details.
-     *
-     * @return a List of pending Appeal objects.
+     * Retrieves appeals by status.
      */
     @Override
-    public List<Appeal> getPendingAppeals() {
-        return appealDao.findPendingAppealsWithDetails();
+    public List<Appeal> getAppealsByStatus(String status) {
+        return appealDao.findAppealsByStatus(status);
     }
 
     /**
-     * Approves the appeal with the given ID by
-     * updating its status to "APPROVED".
+     * Approves an appeal and optionally saves remarks.
      *
-     * @param appealId the ID of the appeal to approve.
+     * @param appealId ID of the appeal to approve
+     * @param remarks optional remarks for approval
      */
     @Override
-    public void approveAppeal(long appealId) {
-        appealDao.updateAppealStatus(appealId, "APPROVED");
+    public void approveAppeal(long appealId, String remarks) {
+        appealDao.processAppeal(appealId, "APPROVED", remarks);
     }
 
     /**
-     * Denies the appeal with the given ID by updating its status to "DENIED".
+     * Denies an appeal and requires remarks.
      *
-     * @param appealId the ID of the appeal to deny
+     * @param appealId ID of the appeal to deny
+     * @param remarks required remarks explaining denial
+     * @throws IllegalArgumentException if remarks is empty
      */
     @Override
-    public void denyAppeal(long appealId) {
-        appealDao.updateAppealStatus(appealId, "DENIED");
+    public void denyAppeal(long appealId, String remarks) {
+        if (remarks == null || remarks.trim().isEmpty()) {
+            throw new IllegalArgumentException("Denial remarks is required.");
+        }
+        appealDao.processAppeal(appealId, "DENIED", remarks);
     }
 }
