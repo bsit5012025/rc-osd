@@ -49,7 +49,7 @@ class AppealDaoImplTest {
     }
 
     @Test
-    void testFindPendingAppealsWithDetails() throws SQLException {
+    void testFindAppealsByStatus() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true, false);
@@ -59,12 +59,14 @@ class AppealDaoImplTest {
         when(resultSet.getString("message")).thenReturn("Test appeal");
         when(resultSet.getDate("dateFiled")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
         when(resultSet.getString("status")).thenReturn("PENDING");
+        when(resultSet.getDate("dateProcessed")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
+        when(resultSet.getString("remarks")).thenReturn("Test Remarks");
         when(resultSet.getString("studentID")).thenReturn("S001");
         when(resultSet.getString("firstName")).thenReturn("John");
         when(resultSet.getString("lastName")).thenReturn("Doe");
         when(resultSet.getString("offense")).thenReturn("Late Submission");
 
-        List<Appeal> appeals = appealDao.findPendingAppealsWithDetails();
+        List<Appeal> appeals = appealDao.findAppealsByStatus("PENDING");
 
         assertNotNull(appeals);
         assertEquals(1, appeals.size());
@@ -73,6 +75,7 @@ class AppealDaoImplTest {
         assertEquals(1L, appeal.getAppealID());
         assertEquals("Test appeal", appeal.getMessage());
         assertEquals("PENDING", appeal.getStatus());
+        assertEquals("Test Remarks", appeal.getRemarks());
 
         Record record = appeal.getRecord();
         assertNotNull(record);
@@ -89,18 +92,35 @@ class AppealDaoImplTest {
         assertEquals("John", student.getFirstName());
         assertEquals("Doe", student.getLastName());
 
+        verify(preparedStatement).setString(1, "PENDING");
         verify(preparedStatement).executeQuery();
     }
 
     @Test
-    void testUpdateAppealStatus() throws SQLException {
+    void testProcessAppeal() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> appealDao.updateAppealStatus(1L, "APPROVED"));
+        assertDoesNotThrow(() ->
+                appealDao.processAppeal(1L, "APPROVED", "Optional remark")
+        );
 
         verify(preparedStatement).setString(1, "APPROVED");
-        verify(preparedStatement).setLong(2, 1L);
+        verify(preparedStatement).setString(2, "Optional remark");
+        verify(preparedStatement).setLong(3, 1L);
         verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testProcessAppealWithNullRemarks() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+
+        assertDoesNotThrow(() ->
+                appealDao.processAppeal(1L, "APPROVED", null)
+        );
+
+        verify(preparedStatement).setString(1, "APPROVED");
+        verify(preparedStatement).setString(2, null);
+        verify(preparedStatement).setLong(3, 1L);
     }
 }

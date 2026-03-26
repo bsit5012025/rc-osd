@@ -23,12 +23,13 @@ import java.util.List;
 public class AppealDaoImpl implements AppealDao {
 
     /**
-     * Retrieves all pending appeals along with related student, enrollment,
-     * and record details.
-     * @return a list of pending Appeal objects with full details
+     * Retrieves all appeals by its status along with related
+     * student, enrollment, and record details.
+     * @param status the appeal status (PENDING, APPROVED, DENIED)
+     * @return list of appeals
      */
     @Override
-    public List<Appeal> findPendingAppealsWithDetails() {
+    public List<Appeal> findAppealsByStatus(String status) {
         List<Appeal> list = new ArrayList<>();
 
         String sql = """
@@ -38,6 +39,8 @@ public class AppealDaoImpl implements AppealDao {
                    a.message,
                    a.dateFiled,
                    a.status,
+                   a.dateProcessed,
+                   a.remarks,
                    s.studentID,
                    p.firstName,
                    p.lastName,
@@ -48,13 +51,14 @@ public class AppealDaoImpl implements AppealDao {
               JOIN enrollment e ON a.enrollmentID = e.enrollmentID
               JOIN student s ON e.studentID = s.studentID
               JOIN person p ON s.personID = p.personID
-             WHERE a.status = 'PENDING'
+             WHERE a.status = ?
              ORDER BY a.dateFiled DESC
         """;
 
         try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             ps.setString(1, status);
+             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Appeal appeal = new Appeal();
@@ -62,6 +66,8 @@ public class AppealDaoImpl implements AppealDao {
                 appeal.setMessage(rs.getString("message"));
                 appeal.setDateFiled(rs.getDate("dateFiled"));
                 appeal.setStatus(rs.getString("status"));
+                appeal.setRemarks(rs.getString("remarks"));
+                appeal.setDateProcessed(rs.getDate("dateProcessed"));
 
                 Record record = new Record();
                 record.setRecordId(rs.getLong("recordID"));
@@ -82,31 +88,41 @@ public class AppealDaoImpl implements AppealDao {
                 list.add(appeal);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching pending appeals", e);
+            throw new RuntimeException("Error fetching appeal by status", e);
         }
 
         return list;
     }
 
     /**
-     * Updates the status of a given appeal record in the database.
+     * Updates the status of an appeal in the database.
+     * Also saves remarks and sets the processed date.
      *
-     * @param appealId the ID of the appeal to update.
-     * @param status the new status value.
+     * @param appealId ID of the appeal to update
+     * @param status new status (APPROVED / DENIED)
+     * @param remarks optional remarks for the appeal
      */
     @Override
-    public void updateAppealStatus(long appealId, String status) {
-        String sql = "UPDATE appeal SET status = ? WHERE appealID = ?";
+    public void processAppeal(long appealId, String status, String remarks) {
+        String sql = """
+    UPDATE appeal
+    SET status = ?,
+        remarks = ?,
+        dateProcessed = CURRENT_DATE
+    WHERE appealID = ?
+    """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
-            ps.setLong(2, appealId);
+            ps.setString(2, remarks);
+            ps.setLong(3, appealId);
+
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating appeal status", e);
+            throw new RuntimeException("Error processing appeal", e);
         }
     }
 }

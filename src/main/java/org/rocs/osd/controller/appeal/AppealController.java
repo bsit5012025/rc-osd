@@ -35,37 +35,101 @@ public class AppealController {
      */
     @FXML
     public void initialize() {
-        if (listContainer != null) {
-            listContainer.getChildren().clear();
-            loadAppealsFromDB();
-        }
+        loadAppealsByStatus("PENDING");
     }
 
     /**
      * Fetches pending appeals from the database
      * and injects them into the listContainer.
+     * @param status load appeal status.
      */
-    private void loadAppealsFromDB() {
-        List<Appeal> appeals = appealFacade.getPendingAppeals();
+    private void loadAppealsByStatus(String status) {
 
-        for (Appeal appeal : appeals) {
-            try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/view/appeal/AppealCard.fxml"));
-                VBox card = loader.load();
-
-                AppealCardController controller = loader.getController();
-                if (controller != null) {
-                    controller.setAppeal(appeal);
-                    controller.setOnActionComplete(() ->
-                            listContainer.getChildren().remove(card));
-                    listContainer.getChildren().add(card);
-                }
-            } catch (IOException e) {
-                System.err.println(
-                        "Error loading Appeal Card: " + e.getMessage());
-                e.printStackTrace();
+        if (listContainer == null) {
+                return;
             }
-        }
+
+            listContainer.getChildren().clear();
+
+            List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
+
+            if (appeals == null) {
+                return;
+            }
+
+            for (Appeal appeal : appeals) {
+                try {
+
+                    FXMLLoader loader;
+
+                    if ("APPROVED".equals(status)) {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/approvedAppealCard.fxml"));
+                    } else if ("DENIED".equals(status)) {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/deniedAppealCard.fxml"));
+                    } else {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/view/appeal/appealCard.fxml"));
+                    }
+
+                    VBox card = loader.load();
+
+                    if ("PENDING".equals(status)) {
+                        AppealCardController controller =
+                                loader.getController();
+
+                        controller.setAppeal(appeal);
+
+                        controller.setStatus(status);
+
+                        controller.setOnActionComplete(() ->
+                                loadAppealsByStatus("PENDING"));
+
+                    } else if ("APPROVED".equals(status)) {
+                        ApprovedAppealCardController controller =
+                                loader.getController();
+                        controller.setAppeal(appeal);
+
+                    } else {
+                        DeniedAppealCardController controller =
+                                loader.getController();
+                        controller.setAppeal(appeal);
+                    }
+
+                    listContainer.getChildren().add(card);
+
+                } catch (IOException e) {
+                    System.err.println("Error loading Appeal Card: "
+                            + e.getMessage());
+                    e.printStackTrace();
+                    }
+                }
+            }
+
+
+
+    /**
+     * Handles pending tab click.
+     */
+    @FXML
+    private void handlePendingTab() {
+        loadAppealsByStatus("PENDING");
+    }
+
+    /**
+     * Handles approved tab click.
+     */
+    @FXML
+    private void handleApprovedTab() {
+        loadAppealsByStatus("APPROVED");
+    }
+
+    /**
+     * Handles denied tab click.
+     */
+    @FXML
+    private void handleDeniedTab() {
+        loadAppealsByStatus("DENIED");
     }
 }
