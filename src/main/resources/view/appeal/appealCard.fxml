@@ -15,24 +15,25 @@
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Student ID: " />
-                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="CT23-0000" />
+                <Label fx:id="studentIdLabel" styleClass="dataLabel" />
             </HBox>
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Name: " />
-                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Lian glazel" />
+                <Label fx:id="studentNameLabel" styleClass="dataLabel"/>
             </HBox>
 
             <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
                 <HBox styleClass="labelRow">
                     <Label styleClass="boldLabel" text="Offense: " />
-                    <Label fx:id="offenseLabel" styleClass="dataLabel" text="PDA" />
+                    <Label fx:id="offenseLabel" styleClass="dataLabel"/>
                 </HBox>
 
                 <Label styleClass="boldLabel" text="Reason for Appeal: " />
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason just a little bit enough..." wrapText="true" />
+                <Label fx:id="reasonLabel" styleClass="reasonText" wrapText="true" />
 
                 <VBox spacing="2" styleClass="commentContainer">
                     <Label styleClass="boldLabel" text="Comment:" />
+                    <Label fx:id="errorLabel" text="Error here" visible="false" styleClass="errorLabel" />
                     <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
                 </VBox>
 
@@ -52,5 +53,6 @@
                 </ImageView>
             </graphic>
         </Button>
+
     </HBox>
 </VBox>

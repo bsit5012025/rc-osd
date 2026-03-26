@@ -182,3 +182,9 @@
 .readOnlyArea:focused {
     -fx-border-color: #DCDCDC;
 }
+
+.errorLabel {
+    -fx-text-fill: #d32f2f;
+    -fx-font-size: 16px;
+    -fx-padding: 2 0 0 0;
+}
