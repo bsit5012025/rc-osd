@@ -1,88 +1,139 @@
 .root {
-    -fx-font-family: Arial;
+    -fx-font-family: "Arial";
 }
 
-.saveButtonEditOffense {
-    -fx-background-color: #000080;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 10 25;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-}
-
-.saveButtonEditOffense:hover {
-    -fx-background-color: blue;
-    -fx-text-fill: white;
-}
-
-.cancelButtonEditOffense {
+.modalContainer {
     -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 15, 0, 0, 4);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-border-color: #BFBFBF;
+    -fx-padding: 25;
+}
+
+.subLabelForModal {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+.linePaneColorGray {
+    -fx-background-color: navy;
+}
+
+.lightLabelForTextField {
+    -fx-font-size: 16;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+
+.inputTextFieldOffense,
+.datePicker,
+.inputTextArea {
+    -fx-background-color: white;
+    -fx-border-color: #767676;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 14;
+    -fx-text-fill: black;
+}
+
+.inputTextFieldOffense,
+.datePicker {
+    -fx-pref-height: 35;
+}
+
+.inputTextArea {
+    -fx-pref-height: 150;
+    -fx-min-height: 150;
+}
+
+.inputTextFieldOffense:hover,
+.datePicker:hover,
+.inputTextArea:hover,
+.inputTextFieldOffense:focused,
+.datePicker:focused,
+.inputTextArea:focused {
+    -fx-border-color: navy;
+}
+
+.combo-box.inputTextFieldOffense {
+    -fx-background-color: white;
+}
+
+.combo-box.inputTextFieldOffense > .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-padding: 5 10;
+}
+
+.combo-box-popup .list-view .list-cell:hover,
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: navy !important;
+    -fx-text-fill: white !important;
+}
+
+.datePicker > .text-field {
+    -fx-background-color: transparent;
+}
+
+.cancelButton {
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
+    -fx-background-color: white;
+    -fx-border-color: navy;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
     -fx-text-fill: navy;
-    -fx-background-radius: 8;
-    -fx-padding: 10 25;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-border-color: navy;
-    -fx-border-radius: 8;
 }
 
-.cancelButtonEditOffense:hover {
+.cancelButton:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+.cancelButton:pressed, .submitOffenseButton:pressed {
+    -fx-translate-y: 2;
+}
+
+.submitOffenseButton {
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
+    -fx-background-color: navy;
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.submitOffenseButton:hover {
+    -fx-background-color: blue;
+}
+
+.date-picker-popup .day-cell:hover {
     -fx-background-color: navy;
     -fx-text-fill: white;
 }
 
-.editOffenseTextArea {
-    -fx-background-color: white;
-    -fx-border-color: #DCDDE1;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-min-height: 38px;
-    -fx-pref-height: 38px;
-}
-
-.editOffenseDate {
-    -fx-background-color: white;
-    -fx-border-color: #DCDDE1;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-min-height: 38px;
-    -fx-pref-height: 38px;
-    -fx-pref-width: 274px;
-}
-
-.titleEditOffense {
-    -fx-font-size: 19px;
-    -fx-font-weight: bold;
-}
-
-.editOffenseContainer {
-    -fx-padding: 20px;
-}
-
-.pane {
+.date-picker-popup .day-cell:filled:selected {
     -fx-background-color: navy;
+    -fx-text-fill: white;
 }
 
-.viewStudentGrid {
-    -fx-padding: 0 0 0 5px;
+.date-picker-popup .day-cell:focused {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
 }
 
-.editOffenseLabel {
-    -fx-font-weight: bold;
+.date-picker-popup .day-cell:filled:selected:focused {
+    -fx-background-color: navy;
+    -fx-text-fill: white;
 }
-
-.editOffenseComboBox {
-    -fx-background-color: white;
-    -fx-border-color: #DCDDE1;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-min-height: 38px;
-    -fx-pref-height: 38px;
-    -fx-pref-width: 274px;
-}
-
-.editOffenseTextArea:hover, .editOffenseComboBox:hover, .editOffenseDate:hover, .editOffenseRemarks:hover {
-    -fx-border-color: navy;
-}
-
