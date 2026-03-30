@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane prefHeight="482.0" prefWidth="546.0" styleClass="studentOffenseContainer" stylesheets="@../../styles/offense/viewStudentOffense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.login.LoginController">
+<StackPane prefHeight="482.0" prefWidth="546.0" styleClass="studentOffenseContainer" stylesheets="@../../styles/offense/viewStudentOffense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.ViewOffenseModalController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0">
             <center>
@@ -24,44 +24,51 @@
                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Student ID:" />
-                                        <TextArea editable="false" styleClass="viewStudentTextArea" />
+                                        <TextArea fx:id="studentIdField" editable="false" styleClass="viewStudentTextArea" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="10.0" layoutY="4.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Student Name:" />
-                                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" styleClass="viewStudentTextArea" />
+                                        <TextArea fx:id="studentNameField" editable="false" prefHeight="200.0" prefWidth="200.0" styleClass="viewStudentTextArea" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="10.0" layoutY="81.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Date:" />
-                                        <DatePicker editable="false" styleClass="viewStudentTextArea" />
+                                        <DatePicker fx:id="datePicker" editable="false" styleClass="viewStudentTextArea" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="10.0" layoutY="152.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Offense Type:" />
-                                        <ComboBox prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
+                                        <ComboBox fx:id="offenseTypeField" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="253.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Level of Offense:" />
-                                        <ComboBox prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
+                                        <ComboBox fx:id="offenseLevelField" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
                                     </children>
                                 </VBox>
                             </children>
                         </GridPane>
                         <Label styleClass="viewStudentLabel" text="Remarks:" />
-                        <TextField alignment="TOP_LEFT" editable="false" maxHeight="141.0" maxWidth="486.0" prefHeight="141.0" prefWidth="486.0">
+                        <TextField fx:id="remarksField" alignment="TOP_LEFT" editable="false" maxHeight="141.0" maxWidth="486.0" prefHeight="141.0" prefWidth="486.0">
                             <VBox.margin>
                                 <Insets bottom="5.0" />
                             </VBox.margin></TextField>
                         <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="486.0" styleClass="buttonBar">
                             <children>
-                                <Button mnemonicParsing="false" styleClass="editButton" text="Edit" />
-                                <Button mnemonicParsing="false" styleClass="resolveButton" text="Resolve" />
+                                <Button fx:id="editButton"
+                                        text="Edit"
+                                        styleClass="editButton"
+                                        onAction="#onEdit"/>
+
+                                <Button fx:id="resolveButton"
+                                        text="Resolve"
+                                        styleClass="resolveButton"
+                                        onAction="#onResolve"/>
                             </children>
                         </HBox>
                     </children>

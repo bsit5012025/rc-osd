@@ -89,36 +89,29 @@ public class OffenseController {
         }
     }
     /**
-     * Opens the Edit Offense modal with selected record.
+     *  Opens the View Offense modal with selected record.
      *
      * @param record the selected record to edit
      */
-    public void onLoadEditOffenseModal(Record record) {
+    public void onLoadViewOffenseModal(Record record) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().
-            getResource("/view/offense/editOffenseModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/view/offense/viewStudentOffenseModal.fxml"));
             Parent root = loader.load();
 
-            EditOffenseModalController editOffenseModalController
-            = loader.getController();
-            editOffenseModalController.setRecordData(record);
+            ViewOffenseModalController controller = loader.getController();
+            controller.setRecordData(record);
 
             Stage modalStage = new Stage();
-            modalStage.initStyle(StageStyle.UNDECORATED);
             modalStage.initModality(Modality.APPLICATION_MODAL);
-            modalStage.setResizable(false);
             modalStage.setScene(new Scene(root));
-            modalStage.setOnHidden(e -> refreshRecord());
-            modalStage.showAndWait();
 
-        } catch (IOException e) {
-            System.err.println("UI Error: Could not find "
-                    + "or load editOffenseModal.fxml. "
-                    + "Check the file path and Controller names.");
-            e.printStackTrace();
+            modalStage.setOnHidden(e -> refreshRecord());
+
+            modalStage.show();
+
         } catch (Exception e) {
-            System.err.println("Unexpected Error while opening modal: "
-            + e.getMessage());
+            e.printStackTrace();
         }
     }
     /**
@@ -190,7 +183,7 @@ public class OffenseController {
                 Record record = violationsTable.
                 getSelectionModel().getSelectedItem();
                 if (record != null) {
-                    onLoadEditOffenseModal(record);
+                    onLoadViewOffenseModal(record);
                 }
         });
     }
@@ -226,4 +219,3 @@ public class OffenseController {
         loadRecordsOfViolation(Department.JHS);
     }
 }
-
