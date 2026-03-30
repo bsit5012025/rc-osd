@@ -56,7 +56,9 @@ public class RecordDaoImpl implements RecordDao {
                    o.offenseID, o.offense, o.type AS offenseType,
                    o.description AS offenseDescription,
                    da.actionID, da.action,
-                   da.description AS actionDescription
+                   da.description AS actionDescription,
+                   p.firstName, p.lastName,
+                   s.studentID AS studId
             FROM record r
             JOIN enrollment e ON r.enrollmentID = e.enrollmentID
             JOIN student s ON e.studentID = s.studentID
@@ -65,6 +67,7 @@ public class RecordDaoImpl implements RecordDao {
             JOIN employee emp ON r.employeeID = emp.employeeID
             JOIN offense o ON r.offenseID = o.offenseID
             JOIN disciplinaryAction da ON r.actionID = da.actionID
+            JOIN person p ON s.personID = p.personID
             WHERE e.schoolYear = ?
             ORDER BY r.dateOfViolation DESC
             """;
@@ -79,6 +82,9 @@ public class RecordDaoImpl implements RecordDao {
                 student.setPersonID(rs.getLong("studentPersonID"));
                 student.setAddress(rs.getString("studentAddress"));
                 student.setStudentType(rs.getString("studentType"));
+                student.setStudentId(rs.getString("studId"));
+                student.setFirstName(rs.getString("firstName"));
+                student.setLastName(rs.getString("lastName"));
 
                 DisciplinaryStatus status = new DisciplinaryStatus();
                 status.setStatus(rs.getString("disciplinaryStatus"));

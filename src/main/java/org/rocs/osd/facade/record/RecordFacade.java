@@ -103,4 +103,12 @@ public interface RecordFacade {
      * @return record of student.
      * */
     List<Record> getRecordByStudentId(String studentId);
+    /**
+     * Retrieves student record using student ID.
+     *
+     * @param schoolYear the current school year to filter record.
+     * @param limit the limit number for records to show.
+     * @return record of student.
+     * */
+    List<Record> getRecentViolations(String schoolYear, int limit);
 }
