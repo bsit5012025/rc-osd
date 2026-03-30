@@ -195,4 +195,10 @@ public class RecordFacadeImpl implements RecordFacade {
     public List<Record> getRecordByStudentId(String studentId) {
         return recordDao.findRecordByStudentId(studentId);
     }
+
+    @Override
+    public List<Record> getRecentViolations(String schoolYear, int limit) {
+        List<Record> records = recordDao.findAllBySchoolYear(schoolYear);
+        return records.stream().limit(10).toList();
+    }
 }
