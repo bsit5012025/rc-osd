@@ -5,8 +5,12 @@ import javafx.scene.control.Label;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
+import org.rocs.osd.model.appeal.Appeal;
+import org.rocs.osd.facade.appeal.AppealFacade;
+import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class CenterDashboardController {
     /**
@@ -24,6 +28,7 @@ public class CenterDashboardController {
     @FXML
     public void initialize() {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
+        appealFacade = new AppealFacadeImpl();
         loadWidgetsOnDashboard();
     }
     /**
@@ -33,6 +38,7 @@ public class CenterDashboardController {
         String schoolYear = getCurrentSchoolYear();
         int total = recordFacade.getTotalViolations(schoolYear);
         totalViolationLabel.setText(String.valueOf(total));
+        loadPendingAppeals();
     }
 
     private String getCurrentSchoolYear() {
@@ -45,5 +51,26 @@ public class CenterDashboardController {
         } else {
             return (year - 1) + "-" + year;
         }
+    }
+    /**
+     * Label for current number of pendingAppeals.
+     * */
+    @FXML
+    private Label pendingAppealsLabel;
+
+    /**
+     * Object for appeal facade.
+     * */
+    private AppealFacade appealFacade;
+
+    /**
+     * Loads the data on fxml components using appeal facade.
+     * */
+    private void loadPendingAppeals() {
+        List<Appeal> pendingAppeals = appealFacade.getAppealsByStatus("PENDING");
+
+        int count = (pendingAppeals != null) ? pendingAppeals.size() : 0;
+
+        pendingAppealsLabel.setText(String.valueOf(count));
     }
 }

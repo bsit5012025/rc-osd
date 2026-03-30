@@ -27,7 +27,7 @@
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Pending Appeals" />
-                        <Label styleClass="statValue" text="5" />
+                        <Label fx:id="pendingAppealsLabel" styleClass="statValue" text="0" />
                         <ProgressBar maxWidth="1200" progress="0.25" />
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
