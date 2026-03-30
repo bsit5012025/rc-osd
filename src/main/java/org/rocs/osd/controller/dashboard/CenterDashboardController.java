@@ -67,7 +67,8 @@ public class CenterDashboardController {
      * Loads the data on fxml components using appeal facade.
      * */
     private void loadPendingAppeals() {
-        List<Appeal> pendingAppeals = appealFacade.getAppealsByStatus("PENDING");
+        List<Appeal> pendingAppeals =
+                appealFacade.getAppealsByStatus("PENDING");
 
         int count = (pendingAppeals != null) ? pendingAppeals.size() : 0;
 
