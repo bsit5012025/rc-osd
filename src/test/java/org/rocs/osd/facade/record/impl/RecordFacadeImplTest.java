@@ -174,4 +174,17 @@ class RecordFacadeImplTest
 
         assertEquals(records, result);
     }
+    @Test
+    void testGetRecentViolations(){
+        List<Record> records = new ArrayList<>();
+        for (int x = 1; x <= 10; x++) {
+            Record r = mock(Record.class);
+            records.add(r);
+        }
+        when(recordDao.findAllBySchoolYear("2025-2026")).thenReturn(records);
+        List<Record> result = recordFacade.getRecentViolations("2025-2026", 10);
+
+        assertEquals(10, result.size());
+        assertEquals(records.subList(0, 10), result);
+    }
 }

@@ -80,13 +80,13 @@
 
                 <VBox styleClass="panel" VBox.vgrow="ALWAYS">
                     <Label styleClass="panelTitle" text="Recent Violations" />
-                    <TableView VBox.vgrow="ALWAYS">
+                    <TableView VBox.vgrow="ALWAYS" fx:id="recentViolations" >
                         <columns>
-                            <TableColumn text="Student ID" />
-                            <TableColumn text="Student Name" />
-                            <TableColumn text="Level of Offense" />
-                            <TableColumn text="Offense Type" />
-                            <TableColumn text="Date" />
+                            <TableColumn fx:id="studentIdColumn" text="Student ID" />
+                            <TableColumn fx:id="studentNameColumn" text="Student Name" />
+                            <TableColumn fx:id="levelOfOffenseColumn" text="Level of Offense" />
+                            <TableColumn fx:id="offenseTypeColumn" text="Offense Type" />
+                            <TableColumn fx:id="dateColumn" text="Date" />
                         </columns>
                         <columnResizePolicy>
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
