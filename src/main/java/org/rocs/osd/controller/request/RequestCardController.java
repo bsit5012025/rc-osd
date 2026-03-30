@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -86,6 +87,11 @@ public class RequestCardController {
      */
     @FXML
     private TextArea commentArea;
+    /**
+     * Error label.
+     */
+    @FXML
+    private Label errorLabel;
 
 
     /**
@@ -123,6 +129,9 @@ public class RequestCardController {
         if (actionBar != null) {
             actionBar.setVisible(false);
             actionBar.setManaged(false);
+        }
+        if (popupBox != null) {
+            popupBox.setVisible(false);
         }
 
         RequestDao requestDao = new RequestDaoImpl();
@@ -201,7 +210,7 @@ public class RequestCardController {
 
             requestFacade.updateRequestStatus(cardId,
                  remarks, RequestStatus.APPROVED);
-            showPopupAndRemoveCard("Appeal approved!");
+            showPopupAndRemoveCard("Request approved!");
         });
     }
 
@@ -213,19 +222,21 @@ public class RequestCardController {
         showConfirmation(
                 "/view/dialogs/deniedRequestConfirmation.fxml", () -> {
 
-            String remarks = (commentArea != null
-                    && !commentArea.getText().trim().isEmpty())
-                    ? commentArea.getText()
-                    : null;
+            if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+                showError("Please enter remarks before denying.");
+                return;
+            }
 
             requestFacade.updateRequestStatus(cardId,
-                    remarks, RequestStatus.DENIED);
-            showPopupAndRemoveCard("Appeal denied!");
+                    commentArea.getText(), RequestStatus.DENIED);
+            showPopupAndRemoveCard("Request denied!");
         });
     }
 
+
     /**
-     * Shows a popup for the card when it is successfully approved or denied.
+     * Show a message for a moment, then run any
+     * extra actions and remove the card from the screen.
      *
      * @param message the message to display in the popup.
      */
@@ -239,18 +250,12 @@ public class RequestCardController {
 
         PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         delay.setOnFinished(e -> {
-            if (popupBox != null) {
-                popupBox.setVisible(false);
-                popupBox.setManaged(false);
-            }
-
-            if (cardRoot != null
-                    && cardRoot.getParent() instanceof VBox parentVBox) {
-                parentVBox.getChildren().remove(cardRoot);
-            }
-
             if (onActionComplete != null) {
                 onActionComplete.run();
+            }
+            if (cardRoot != null
+                    && cardRoot.getParent() instanceof Pane parent) {
+                parent.getChildren().remove(cardRoot);
             }
         });
         delay.play();
@@ -279,6 +284,27 @@ public class RequestCardController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Displays an error message temporarily.
+     * @param message show error message.
+     */
+    private void showError(String message) {
+        if (errorLabel != null) {
+            errorLabel.setText(message);
+            errorLabel.setVisible(true);
+            errorLabel.setManaged(true);
+        }
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(e -> {
+            if (errorLabel != null) {
+                errorLabel.setVisible(false);
+                errorLabel.setManaged(false);
+            }
+        });
+        delay.play();
     }
 
 }

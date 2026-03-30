@@ -188,3 +188,9 @@
     -fx-padding: 10;
     -fx-background-radius: 8;
 }
+
+.errorLabel {
+    -fx-text-fill: #d32f2f;
+    -fx-font-size: 16px;
+    -fx-padding: 2 0 0 0;
+}
