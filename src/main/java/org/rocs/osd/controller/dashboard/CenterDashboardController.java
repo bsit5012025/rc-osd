@@ -58,7 +58,7 @@ public class CenterDashboardController {
     @FXML
     private TableColumn<Record, String> dateColumn;
     /**
-     * VBox container for frequent offense
+     * VBox container for frequent offense.
      * */
     @FXML
     private VBox frequentOffenseContainer;
