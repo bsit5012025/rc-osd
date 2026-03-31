@@ -219,17 +219,17 @@ public class RequestCardController {
      */
     @FXML
     private void onDeny() {
+        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+            showError("Please enter remarks before denying.");
+            return;
+        }
+
         showConfirmation(
                 "/view/dialogs/deniedRequestConfirmation.fxml", () -> {
 
-            if (commentArea == null || commentArea.getText().trim().isEmpty()) {
-                showError("Please enter remarks before denying.");
-                return;
-            }
-
-            requestFacade.updateRequestStatus(cardId,
-                    commentArea.getText(), RequestStatus.DENIED);
-            showPopupAndRemoveCard("Request denied!");
+                requestFacade.updateRequestStatus(cardId,
+                        commentArea.getText(), RequestStatus.DENIED);
+                showPopupAndRemoveCard("Request denied!");
         });
     }
 
