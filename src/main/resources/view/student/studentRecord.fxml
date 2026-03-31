@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane prefHeight="750.0"
-            prefWidth="1100.0"
+            prefWidth="750.0"
             styleClass="rootPane"
             stylesheets="@../../styles/student/studentRecord.css"
             fx:controller="org.rocs.osd.controller.student.StudentRecordController"
