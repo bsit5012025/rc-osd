@@ -54,7 +54,7 @@
 
                 <VBox styleClass="panel">
                     <Label styleClass="panelTitle" text="Most Frequent Offenses Committed" />
-                    <VBox styleClass="offenseList">
+                    <VBox  fx:id="frequentOffenseContainer" styleClass="offenseList">
                         <HBox styleClass="offenseRow">
                             <Label styleClass="offenseName" text="Cheating" />
                             <ProgressBar maxWidth="1200" progress="0.75" HBox.hgrow="ALWAYS" />

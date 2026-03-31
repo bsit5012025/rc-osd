@@ -4,8 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
@@ -16,6 +19,7 @@ import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class CenterDashboardController {
     /**
@@ -54,6 +58,11 @@ public class CenterDashboardController {
     @FXML
     private TableColumn<Record, String> dateColumn;
     /**
+     * VBox container for frequent offense
+     * */
+    @FXML
+    private VBox frequentOffenseContainer;
+    /**
      * Object for record facade.
      * */
     private RecordFacade recordFacade;
@@ -67,6 +76,7 @@ public class CenterDashboardController {
         loadWidgetsOnDashboard();
         loadDataToTable();
         loadRecentViolations(getCurrentSchoolYear());
+        loadFrequentOffense();
     }
     /**
      * Loads the data on fxml components using record facade.
@@ -151,5 +161,28 @@ public class CenterDashboardController {
         int count = (pendingAppeals != null) ? pendingAppeals.size() : 0;
 
         pendingAppealsLabel.setText(String.valueOf(count));
+    }
+    private void loadFrequentOffense() {
+        String schoolYear = getCurrentSchoolYear();
+        var offenses = recordFacade.getMostFrequentOffense(schoolYear);
+        frequentOffenseContainer.getChildren().clear();
+
+        for (Map.Entry<String, Double> entry : offenses.entrySet()) {
+
+            String offenseName = entry.getKey();
+            double percentage = entry.getValue();
+            double progress = percentage / 100.0;
+
+            HBox row = new HBox();
+            row.getStyleClass().add("offenseRow");
+            Label nameLabel = new Label(offenseName);
+            nameLabel.getStyleClass().add("offenseName");
+            ProgressBar progressBar = new ProgressBar(progress);
+            progressBar.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(progressBar, javafx.scene.layout.Priority.ALWAYS);
+
+            row.getChildren().addAll(nameLabel, progressBar);
+            frequentOffenseContainer.getChildren().add(row);
+        }
     }
 }
