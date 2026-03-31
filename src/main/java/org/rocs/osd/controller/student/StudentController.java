@@ -126,7 +126,8 @@ public class StudentController {
                 studentStage.initModality(Modality.APPLICATION_MODAL);
                 studentStage.initStyle(StageStyle.UNDECORATED);
                 studentStage.setResizable(false);
-                Stage currentStage = (Stage) studentTable.getScene().getWindow();
+                Stage currentStage =
+                        (Stage) studentTable.getScene().getWindow();
                 double x = currentStage.getX() + 315;
                 double y = currentStage.getY() + 125;
                 studentStage.setX(x);
