@@ -364,8 +364,8 @@ public class RecordDaoImpl implements RecordDao {
         try (Connection con = ConnectionHelper.getConnection()) {
 
             PreparedStatement stmt = con.prepareStatement(
-            "SELECT COUNT(*) FROM record " +
-                    "WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
+            "SELECT COUNT(*) FROM record "
+               + "WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
