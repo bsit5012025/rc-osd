@@ -1,5 +1,7 @@
 package org.rocs.osd.model.request;
 
+import java.sql.Date;
+
 /**
  * Represents a request made by an employee in
  * the Office of Student Discipline System.
@@ -27,6 +29,12 @@ public class Request {
     /** Current status of the request. */
     private RequestStatus status;
 
+    /** Current Date where request was Processed of the request. */
+    private Date dateProcessed;
+
+    /** Remarks of the person approving or denying the request. */
+    private String remarks;
+
     /** Default constructor initializing an empty Request object. */
     public Request() {
     }
@@ -40,15 +48,20 @@ public class Request {
      * @param pMessage pMessage or explanation for the request.
      * @param pType pType or category of the request.
      * @param pStatus current pStatus of the request.
+     * @param pDateProcessed current pDateProcessed of the request.
+     * @param pRemarks current pRemarks of the request.
      */
     public Request(long pRequestID, String pEmployeeID, String pDetails,
-                   String pMessage, String pType, RequestStatus pStatus) {
+                   String pMessage, String pType, RequestStatus pStatus,
+                   Date pDateProcessed, String pRemarks) {
         this.requestID = pRequestID;
         this.employeeID = pEmployeeID;
         this.details = pDetails;
         this.message = pMessage;
         this.type = pType;
         this.status = pStatus;
+        this.dateProcessed = pDateProcessed;
+        this.remarks = pRemarks;
     }
 
     /** @return unique identifier of the request */
@@ -110,4 +123,34 @@ public class Request {
     public void setStatus(RequestStatus pStatus) {
         this.status = pStatus;
     }
+
+    /** @return The date when the request was processed. */
+    public Date getDateProcessed() {
+        return dateProcessed;
+    }
+
+    /** @param pDateProcessed Sets the date when the request was processed. */
+    public void setDateProcessed(Date pDateProcessed) {
+        this.dateProcessed = pDateProcessed;
+    }
+
+    /**
+     *  Getting the remarks of the
+     *  request why its approved or denied.
+     *
+     *  @return current remarks of a request
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * Person approving or denying the request.
+     *
+     * @param pRemarks Sets the remarks of the Request
+     */
+    public void setRemarks(String pRemarks) {
+        this.remarks = pRemarks;
+    }
+
 }

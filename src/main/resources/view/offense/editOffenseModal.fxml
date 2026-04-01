@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane fx:id="editOffenseModal"
            styleClass="modalContainer"
@@ -34,7 +47,7 @@
 
                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
                   <Label styleClass="lightLabelForTextField" text="Student Name:" />
-                  <TextField fx:id="studentNameTextField" styleClass="inputTextFieldOffense" />
+                  <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
                </VBox>
 
                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
@@ -56,6 +69,11 @@
                   <Label styleClass="lightLabelForTextField" text="Action:" />
                   <ComboBox fx:id="actionComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
                </VBox>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
             </GridPane>
 
             <VBox spacing="5.0">
