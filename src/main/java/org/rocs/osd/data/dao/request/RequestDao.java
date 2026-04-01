@@ -25,18 +25,22 @@ public interface RequestDao {
                        String type);
 
     /**
-     * Retrieves all requests from the database.
+     * Retrieves all requests with the specified status from the database.
      * Each database record is mapped to a Request object.
      *
+     * @param status used to filter requests.
      * @return a List of Request objects.
      */
-    List<Request> findAllRequests();
+    List<Request> findAllRequestsByStatus(RequestStatus status);
 
     /**
      * Updates the status of a request in the database.
      * @param requestID the unique ID of the request to update.
-     * @param status    the new status to assign to the request.
+     * @param remarks the remarks of user approving or denying the request.
+     * @param status the new status to assign to the request.
      * @return true if the update was successful, false otherwise.
      */
-    boolean updateRequestStatus(long requestID, RequestStatus status);
+    boolean updateRequestStatus(long requestID,
+                               String remarks,
+                               RequestStatus status);
 }
