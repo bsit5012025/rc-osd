@@ -127,6 +127,7 @@ public class StudentController {
                 studentStage.initStyle(StageStyle.UNDECORATED);
                 studentStage.setResizable(false);
                 studentStage.setScene(new Scene(root));
+                studentStage.centerOnScreen();
                 studentStage.showAndWait();
 
             } catch (Exception e) {
