@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.request.RequestDao;
+import org.rocs.osd.model.record.RecordStatus;
 import org.rocs.osd.model.request.Request;
 import org.rocs.osd.model.request.RequestStatus;
 
@@ -62,15 +63,16 @@ class RequestDaoImplTest {
         when(resultSet.getString("message"))
                 .thenReturn("Requesting for the conduct record of all students in St. Andrew");
         when(resultSet.getString("status")).thenReturn("APPROVED");
+        when(resultSet.getString("remarks")).thenReturn("Test Remark");
 
         RequestDao dao = new RequestDaoImpl();
-        List<Request> requests = dao.findAllRequests();
+        List<Request> requests = dao.findAllRequestsByStatus(RequestStatus.PENDING);
 
         assertFalse(requests.isEmpty());
 
-        Request r = requests.getFirst();
+        Request r = requests.get(0);
 
-        assertEquals(1, r.getRequestID());
+        assertEquals(1L, r.getRequestID());
         assertEquals("EMP-001", r.getEmployeeID());
         assertEquals("St. Andrew", r.getDetails());
         assertEquals("By Section", r.getType());
@@ -79,6 +81,7 @@ class RequestDaoImplTest {
                 r.getMessage()
         );
         assertEquals(RequestStatus.APPROVED, r.getStatus());
+        assertEquals("Test Remark", r.getRemarks());
 
         verify(preparedStatement).executeQuery();
     }
@@ -116,14 +119,15 @@ class RequestDaoImplTest {
 
         RequestDao dao = new RequestDaoImpl();
 
-        boolean status = dao.updateRequestStatus(1, RequestStatus.APPROVED);
+        boolean status = dao.updateRequestStatus(1,"helo", RequestStatus.APPROVED);
 
         assertTrue(status);
 
         verify(connection, times(1)).prepareStatement(anyString());
 
         verify(preparedStatement).setString(1, "APPROVED");
-        verify(preparedStatement).setString(2, "1");
+        verify(preparedStatement).setString(2, "helo");
+        verify(preparedStatement).setLong(3, 1L);
 
         verify(preparedStatement).executeUpdate();
     }

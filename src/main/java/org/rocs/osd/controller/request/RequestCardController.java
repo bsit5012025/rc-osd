@@ -2,17 +2,26 @@ package org.rocs.osd.controller.request;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
 import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.request.RequestStatus;
+
+import java.io.IOException;
 
 /**
  * Controller for handling request card UI behavior.
@@ -73,6 +82,23 @@ public class RequestCardController {
     @FXML
     private Label popupLabel;
     /**
+     * Holder for user comments where it will be
+     * stored on the remarks when approving or denying.
+     */
+    @FXML
+    private TextArea commentArea;
+    /**
+     * Error label.
+     */
+    @FXML
+    private Label errorLabel;
+
+
+    /**
+     * Callback after action.
+     */
+    private Runnable onActionComplete;
+    /**
      * Tracks whether the card is expanded or collapsed.
      */
     private boolean isExpanded = false;
@@ -82,6 +108,16 @@ public class RequestCardController {
 
     /** ID of the current request. */
     private long cardId;
+
+    /**
+     * Sets a callback to be executed after an action
+     * (approve/deny) is completed.
+     * @param callback a Runnable to run when the action is complete.
+     */
+    public void setOnActionComplete(Runnable callback) {
+        this.onActionComplete = callback;
+    }
+
 
     /** Initializes the dashboard controller and loads request data. */
     @FXML
@@ -93,6 +129,9 @@ public class RequestCardController {
         if (actionBar != null) {
             actionBar.setVisible(false);
             actionBar.setManaged(false);
+        }
+        if (popupBox != null) {
+            popupBox.setVisible(false);
         }
 
         RequestDao requestDao = new RequestDaoImpl();
@@ -156,30 +195,116 @@ public class RequestCardController {
         }
     }
 
+    /**
+     * Approving the request status and add comments.
+     */
     @FXML
     private void onApprove() {
-        requestFacade.updateRequestStatus(cardId, RequestStatus.APPROVED);
-        showPopupAndRemoveCard("Request approved!");
+        showConfirmation(
+                "/view/dialogs/approvedRequestConfirmation.fxml", () -> {
+
+            String remarks = (commentArea != null
+                    && !commentArea.getText().trim().isEmpty())
+                    ? commentArea.getText()
+                    : null;
+
+            requestFacade.updateRequestStatus(cardId,
+                 remarks, RequestStatus.APPROVED);
+            showPopupAndRemoveCard("Request approved!");
+        });
     }
 
+    /**
+     * Denied the request status and add comments.
+     */
     @FXML
     private void onDeny() {
-        requestFacade.updateRequestStatus(cardId, RequestStatus.DENIED);
-        showPopupAndRemoveCard("Request Denied!");
+        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+            showError("Please enter remarks before denying.");
+            return;
+        }
+
+        showConfirmation(
+                "/view/dialogs/deniedRequestConfirmation.fxml", () -> {
+
+                requestFacade.updateRequestStatus(cardId,
+                        commentArea.getText(), RequestStatus.DENIED);
+                showPopupAndRemoveCard("Request denied!");
+        });
     }
 
-    private void showPopupAndRemoveCard(String message) {
-        popupLabel.setText(message);
-        popupBox.setVisible(true);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1));
+    /**
+     * Show a message for a moment, then run any
+     * extra actions and remove the card from the screen.
+     *
+     * @param message the message to display in the popup.
+     */
+    private void showPopupAndRemoveCard(String message) {
+        if (popupLabel != null) {
+            popupLabel.setText(message);
+        }
+        if (popupBox != null) {
+            popupBox.setVisible(true);
+        }
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         delay.setOnFinished(e -> {
-            if (cardRoot != null && cardRoot.getParent()
-                    instanceof VBox parentVBox) {
-                parentVBox.getChildren().remove(cardRoot);
+            if (onActionComplete != null) {
+                onActionComplete.run();
+            }
+            if (cardRoot != null
+                    && cardRoot.getParent() instanceof Pane parent) {
+                parent.getChildren().remove(cardRoot);
             }
         });
-
         delay.play();
     }
+
+    /**
+     * Displays a confirmation popup before performing an action.
+     * @param fxmlPath path to the confirmation dialog FXML file
+     * @param onConfirmAction action to execute when confirmed
+     */
+    private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(fxmlPath));
+            StackPane popupRoot = loader.load();
+
+            RequestConfirmationController controller = loader.getController();
+            controller.setOnConfirm(onConfirmAction);
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(popupRoot));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Displays an error message temporarily.
+     * @param message show error message.
+     */
+    private void showError(String message) {
+        if (errorLabel != null) {
+            errorLabel.setText(message);
+            errorLabel.setVisible(true);
+            errorLabel.setManaged(true);
+        }
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(e -> {
+            if (errorLabel != null) {
+                errorLabel.setVisible(false);
+                errorLabel.setManaged(false);
+            }
+        });
+        delay.play();
+    }
+
 }
