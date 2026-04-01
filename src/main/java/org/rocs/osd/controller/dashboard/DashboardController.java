@@ -43,7 +43,7 @@ public class DashboardController {
     /** Initializes the dashboard controller. */
     @FXML
     public void initialize() {
-        // Initialization logic for the dashboard frame itself.
+        loadModule("/view/dashboard/centerDashboard.fxml");
     }
 
     /**
