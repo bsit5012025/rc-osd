@@ -14,27 +14,26 @@
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Department: " />
-                <Label fx:id="studentIdLabel" styleClass="dataLabel" text="Junior High School" />
+                <Label fx:id="deptLabel" styleClass="dataLabel" />
             </HBox>
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Name: " />
-                <Label fx:id="studentNameLabel" styleClass="dataLabel" text="Philip Daganio" />
+                <Label fx:id="studentNameLabel" styleClass="dataLabel" />
             </HBox>
 
             <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
                 <HBox styleClass="labelRow">
                     <Label styleClass="boldLabel" text="Type: " />
-                    <Label fx:id="offenseLabel" styleClass="dataLabel" text="Section" />
+                    <Label fx:id="typeLabel" styleClass="dataLabel" text="Section" />
                 </HBox>
 
                 <Label styleClass="boldLabel" text="Reason for Request: " />
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Just give me a reason..." wrapText="true" />
+                <Label fx:id="reasonLabel" styleClass="reasonText" wrapText="true" />
 
                 <VBox spacing="5" styleClass="commentContainer">
                     <Label styleClass="boldLabel" text="Comment:" />
                     <TextArea fx:id="commentArea" editable="false" prefHeight="60.0"
-                              styleClass="commentTextArea, readOnlyArea" wrapText="true"
-                              text="This request was approved." />
+                              styleClass="commentTextArea, readOnlyArea" wrapText="true" />
                 </VBox>
             </VBox>
         </VBox>

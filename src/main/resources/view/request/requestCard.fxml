@@ -14,17 +14,17 @@
         <VBox styleClass="infoSection" HBox.hgrow="ALWAYS">
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Department: " />
-                <Label fx:id="deptLabel" styleClass="dataLabel" text="College" />
+                <Label fx:id="deptLabel" styleClass="dataLabel" />
             </HBox>
             <HBox styleClass="labelRow">
                 <Label styleClass="boldLabel" text="Name: " />
-                <Label fx:id="nameLabel" styleClass="dataLabel" text="Lian glazel" />
+                <Label fx:id="nameLabel" styleClass="dataLabel" />
             </HBox>
 
             <VBox fx:id="expandedSection" managed="false" styleClass="expandedSection" visible="false">
                 <HBox styleClass="labelRow">
                     <Label styleClass="boldLabel" text="Type: " />
-                    <Label fx:id="typeLabel" styleClass="dataLabel" text="Section" />
+                    <Label fx:id="typeLabel" styleClass="dataLabel" />
                 </HBox>
 
                 <Label styleClass="boldLabel" text="Reason for Request: ">
@@ -32,10 +32,11 @@
                         <javafx.geometry.Insets top="5.0" />
                     </VBox.margin>
                 </Label>
-                <Label fx:id="reasonLabel" styleClass="reasonText" text="Reason text goes here..." wrapText="true" />
+                <Label fx:id="reasonLabel" styleClass="reasonText" wrapText="true" />
 
                 <VBox spacing="2" styleClass="commentContainer">
                     <Label styleClass="boldLabel" text="Comment:" />
+                    <Label fx:id="errorLabel" text="Error here" visible="false" managed="false" styleClass="errorLabel" />
                     <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
                 </VBox>
 
