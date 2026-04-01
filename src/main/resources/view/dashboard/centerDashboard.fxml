@@ -38,16 +38,16 @@
                     <VBox styleClass="dateCard" HBox.hgrow="ALWAYS">
                         <HBox styleClass="dateContent">
                             <VBox styleClass="dateVerticalStack">
-                                <Label styleClass="dateMonth" text="FEB" />
-                                <Label styleClass="dateDay" text="04">
+                                <Label fx:id="monthLabel" styleClass="dateMonth" text="FEB" />
+                                <Label fx:id="dayLabel" styleClass="dateDay" text="04">
                                     <VBox.margin><Insets left="-5.0" top="10.0" /></VBox.margin>
                                 </Label>
-                                <Label styleClass="dateWeek" text="TUE">
+                                <Label fx:id="weekLabel" styleClass="dateWeek" text="TUE">
                                     <VBox.margin><Insets top="10.0" /></VBox.margin>
                                 </Label>
                             </VBox>
                             <VBox styleClass="dateSeparator" />
-                            <Label styleClass="timeText" text="05:28 PM" />
+                            <Label fx:id="timeLabel" styleClass="timeText" text="05:28 PM" />
                         </HBox>
                     </VBox>
                 </HBox>

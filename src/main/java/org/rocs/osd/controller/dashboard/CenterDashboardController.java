@@ -1,10 +1,13 @@
 package org.rocs.osd.controller.dashboard;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.util.Duration;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
@@ -18,6 +21,8 @@ import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +32,26 @@ public class CenterDashboardController {
      * */
     @FXML
     private Label totalViolationLabel;
+    /**
+     * Label for month of date.
+     * */
+    @FXML
+    private Label monthLabel;
+    /**
+     * Label for day of date.
+     * */
+    @FXML
+    private Label dayLabel;
+    /**
+     * Label for week of date.
+     * */
+    @FXML
+    private Label weekLabel;
+    /**
+     * Label for time.
+     * */
+    @FXML
+    private Label timeLabel;
     /**
      * Table view for recent violations.
      * */
@@ -74,6 +99,7 @@ public class CenterDashboardController {
         recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
         appealFacade = new AppealFacadeImpl();
         loadWidgetsOnDashboard();
+        loadTime();
         loadDataToTable();
         loadRecentViolations(getCurrentSchoolYear());
         loadFrequentOffense();
@@ -98,6 +124,28 @@ public class CenterDashboardController {
         } else {
             return (year - 1) + "-" + year;
         }
+    }
+
+    private void loadTime() {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> loadDateTime())
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void loadDateTime() {
+        LocalDateTime now = LocalDateTime.now();
+
+        DateTimeFormatter month = DateTimeFormatter.ofPattern("MMM");
+        DateTimeFormatter day = DateTimeFormatter.ofPattern("dd");
+        DateTimeFormatter week = DateTimeFormatter.ofPattern("EEE");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("hh:mm a");
+
+        monthLabel.setText(now.format(month).toUpperCase());
+        dayLabel.setText(now.format(day));
+        weekLabel.setText(now.format(week).toUpperCase());
+        timeLabel.setText(now.format(time));
     }
     /**
      * Call record facade to dispaly recent violations on table view.

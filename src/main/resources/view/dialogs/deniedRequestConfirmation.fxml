@@ -8,9 +8,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="mainContainer"
+<StackPane fx:id="root"
+           styleClass="mainContainer"
            stylesheets="@../../styles/dialog/requestConfirmation.css"
-           fx:controller="org.rocs.osd.controller.dashboard.DashboardController"
+           fx:controller="org.rocs.osd.controller.request.RequestConfirmationController"
            xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/21">
 
@@ -34,7 +35,7 @@
 
             <HBox styleClass="button-group">
                 <Button mnemonicParsing="false" onAction="#closePopup" styleClass="confirm-button" text="Cancel" />
-                <Button mnemonicParsing="false" styleClass="confirm-button" text="Confirm" />
+                <Button mnemonicParsing="false" onAction="#handleConfirmDeny" styleClass="confirm-button" text="Confirm" />
             </HBox>
         </VBox>
     </VBox>
