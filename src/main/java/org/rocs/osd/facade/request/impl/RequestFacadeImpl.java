@@ -74,28 +74,35 @@ public class RequestFacadeImpl implements RequestFacade {
     }
 
     /**
-     * Retrieves all requests in the system.
+     * Retrieves all requests by status in the system.
      *
+     * @param status used to filter requests.
      * @return a list of all Request objects.
      */
     @Override
-    public List<Request> getAllRequest() {
-        return requestDao.findAllRequests();
+    public List<Request> getAllRequestByStatus(RequestStatus status) {
+        return requestDao.findAllRequestsByStatus(status);
     }
 
     /**
      * Updates the status of an existing request.
      *
      * @param requestID the ID of the request to update.
+     * @param remarks the remarks of the request to update.
      * @param status the new status of the request.
      * @return true if the status was updated successfully.
      */
     @Override
-    public boolean updateRequestStatus(long requestID, RequestStatus status) {
+    public boolean updateRequestStatus(long requestID, String remarks,
+                                       RequestStatus status) {
         if (status == null) {
             return false;
         }
 
-        return requestDao.updateRequestStatus(requestID, status);
+        if (remarks != null && remarks.length() > 500) {
+            return false;
+        }
+
+        return requestDao.updateRequestStatus(requestID, remarks, status);
     }
 }
