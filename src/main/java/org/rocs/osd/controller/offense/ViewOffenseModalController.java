@@ -162,11 +162,14 @@ public class ViewOffenseModalController {
             EditOffenseModalController controller =
                     loader.getController();
 
-            controller.setRecordData(record);
+            Stage viewOffenseModalStage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
+            controller.setRecordData(record, viewOffenseModalStage);
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+
             stage.show();
 
         } catch (Exception e) {

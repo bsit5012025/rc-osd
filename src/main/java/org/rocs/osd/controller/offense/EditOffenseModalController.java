@@ -91,6 +91,11 @@ public class EditOffenseModalController {
      */
     private Record record;
     /**
+     *  Reference to the parent (viewOffenseModal) stage.
+     */
+    private Stage viewOffenseModalStage;
+
+    /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
      */
@@ -107,12 +112,15 @@ public class EditOffenseModalController {
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
     }
     /**
-     * Sets the record data to be edited.
+     * Sets the prev stage and record data to be edited.
      *
      * @param pRecord the record to load into the form.
+     * @param pStage the parent stage (ViewOffenseModal)
+     *               that will be closed after submitting edits.
      */
-    public void setRecordData(Record pRecord) {
+    public void setRecordData(Record pRecord, Stage pStage) {
         this.record = pRecord;
+        this.viewOffenseModalStage = pStage;
         loadStudentRecordInfo();
     }
     /**
@@ -281,6 +289,7 @@ public class EditOffenseModalController {
                 Stage stage = (Stage) ((Node) event.getSource())
                         .getScene().getWindow();
                 stage.close();
+                viewOffenseModalStage.close();
             }
 
         } catch (Exception e) {
