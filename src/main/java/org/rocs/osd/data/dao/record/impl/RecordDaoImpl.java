@@ -354,6 +354,9 @@ public class RecordDaoImpl implements RecordDao {
         return total;
     }
 
+    /**
+     * Method for current day number of violation.
+     * */
     @Override
     public int findTodayViolations() {
         int total = 0;
@@ -361,7 +364,8 @@ public class RecordDaoImpl implements RecordDao {
         try (Connection con = ConnectionHelper.getConnection()) {
 
             PreparedStatement stmt = con.prepareStatement(
-                    "SELECT COUNT(*) FROM record");
+            "SELECT COUNT(*) FROM record " +
+                    "WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {

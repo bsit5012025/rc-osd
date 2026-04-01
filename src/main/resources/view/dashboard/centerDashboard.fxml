@@ -32,7 +32,7 @@
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Offenses Today" />
-                        <Label styleClass="statValue" text="25" />
+                        <Label fx:id="offensesTodayLabel" styleClass="statValue" text="0" />
                         <ProgressBar maxWidth="1200" progress="0.45" />
                     </VBox>
                     <VBox styleClass="dateCard" HBox.hgrow="ALWAYS">
