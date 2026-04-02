@@ -113,6 +113,7 @@ public class CenterDashboardController {
         int total = recordFacade.getTotalViolations(schoolYear);
         totalViolationLabel.setText(String.valueOf(total));
         loadPendingAppeals();
+        loadOffensesToday();
     }
 
     private String getCurrentSchoolYear() {
@@ -233,5 +234,19 @@ public class CenterDashboardController {
             row.getChildren().addAll(nameLabel, progressBar);
             frequentOffenseContainer.getChildren().add(row);
         }
+    }
+
+    /**
+     * Object for offense label.
+     * */
+    @FXML
+    private Label offensesTodayLabel;
+
+    /**
+     * Loads the data on fxml components using record facade.
+     * */
+    private void loadOffensesToday() {
+        int todayCount = recordFacade.getTodayViolations();
+        offensesTodayLabel.setText(String.valueOf(todayCount));
     }
 }

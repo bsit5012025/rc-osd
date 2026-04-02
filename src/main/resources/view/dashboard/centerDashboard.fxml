@@ -23,17 +23,14 @@
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Total Violations" />
                         <Label fx:id="totalViolationLabel" styleClass="statValue" text="200" />
-                        <ProgressBar maxWidth="1200" progress="0.85" />
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Pending Appeals" />
                         <Label fx:id="pendingAppealsLabel" styleClass="statValue" text="0" />
-                        <ProgressBar maxWidth="1200" progress="0.25" />
                     </VBox>
                     <VBox styleClass="statCard" HBox.hgrow="ALWAYS">
                         <Label styleClass="statTitle" text="Offenses Today" />
-                        <Label styleClass="statValue" text="25" />
-                        <ProgressBar maxWidth="1200" progress="0.45" />
+                        <Label fx:id="offensesTodayLabel" styleClass="statValue" text="0" />
                     </VBox>
                     <VBox styleClass="dateCard" HBox.hgrow="ALWAYS">
                         <HBox styleClass="dateContent">
