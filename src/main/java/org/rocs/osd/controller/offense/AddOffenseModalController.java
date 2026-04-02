@@ -229,6 +229,10 @@ public class AddOffenseModalController {
             }
 
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            LocalDate getDateOfViolation = datePicker.getValue();
+            LocalDate dateToday = LocalDate.now();
+            LocalDate dateLimit = dateToday.minusMonths(2);
             String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
