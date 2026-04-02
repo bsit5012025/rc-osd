@@ -31,27 +31,38 @@ public class OffenseController {
     /**
      * Table displaying list of violations.
      */
-    @FXML private TableView<Record> violationsTable;
+    @FXML
+    private TableView<Record> violationsTable;
     /**
      * Column for student ID.
      */
-    @FXML private TableColumn<Record, String> studentIdColumn;
+    @FXML
+    private TableColumn<Record, String> studentIdColumn;
     /**
      * Column for student name.
      */
-    @FXML private TableColumn<Record, String> studentNameColumn;
+    @FXML
+    private TableColumn<Record, String> studentNameColumn;
     /**
      * Column for offense level.
      */
-    @FXML private TableColumn<Record, String> offenseLevelColumn;
+    @FXML
+    private TableColumn<Record, String> offenseLevelColumn;
     /**
      * Column for offense type.
      */
-    @FXML private TableColumn<Record, String> offenseTypeColumn;
+    @FXML
+    private TableColumn<Record, String> offenseTypeColumn;
     /**
      * Column for violation date.
      */
-    @FXML private TableColumn<Record, String> dateColumn;
+    @FXML
+    TableColumn<Record, String> dateColumn;
+    /**
+     * Column for status of violation.
+     */
+    @FXML
+    private  TableColumn<Record, String> statusColumn;
     /**
      * Label displaying current department.
      */
@@ -156,6 +167,11 @@ public class OffenseController {
         dateColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().
                 getDateOfViolation().toString()));
+
+        statusColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getStatus().name()
+                ));
     }
     /**
      * Loads violations filtered by department and school year.
