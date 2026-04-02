@@ -90,12 +90,12 @@
 }
 
 .statTitle {
-    -fx-text-fill: #7f8c8d;
-    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 18px;
 }
 
 .statValue {
-    -fx-font-size: 36px;
+    -fx-font-size: 40px;
     -fx-font-weight: bold;
     -fx-padding: 5 0;
     -fx-text-fill: #2c3e50;

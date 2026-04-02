@@ -75,6 +75,8 @@
                <TableColumn fx:id="offenseLevelColumn" text="Level of Offense" />
                <TableColumn fx:id="offenseTypeColumn" text="Offense Type" />
                <TableColumn fx:id="dateColumn" text="Date" />
+               <TableColumn fx:id="statusColumn" text="Status" />
+
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
