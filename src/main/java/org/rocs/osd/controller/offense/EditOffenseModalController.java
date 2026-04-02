@@ -26,7 +26,6 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.RecordStatus;
-import org.w3c.dom.Text;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -42,7 +41,7 @@ public class EditOffenseModalController {
     @FXML
     private ComboBox<String> offenseTypeComboBox;
     /**
-     * ComboBox for displaying offense level.
+     * Text field for displaying offense level.
      */
     @FXML
     private TextField levelOfOffense;

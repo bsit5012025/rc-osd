@@ -56,7 +56,7 @@ public class AddOffenseModalController {
     @FXML
     private ComboBox<String> actionComboBox;
     /**
-     * Dropdown for displaying offense level.
+     * Text field for displaying offense level.
      */
     @FXML
     private TextField levelOfOffense;

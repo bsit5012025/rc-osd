@@ -25,7 +25,6 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
-import org.w3c.dom.Text;
 
 import java.sql.Date;
 
@@ -58,9 +57,8 @@ public class ViewOffenseModalController {
      */
     @FXML
     private ComboBox<String> offenseTypeField;
-
     /**
-     * ComboBox for offense level.
+     * Text field for displaying offense level.
      */
     @FXML
     private TextField offenseLevelField;
