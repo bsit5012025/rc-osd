@@ -57,7 +57,7 @@ public class OffenseController {
      * Column for violation date.
      */
     @FXML
-    TableColumn<Record, String> dateColumn;
+    private TableColumn<Record, String> dateColumn;
     /**
      * Column for status of violation.
      */
