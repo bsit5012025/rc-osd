@@ -25,6 +25,7 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
+import org.w3c.dom.Text;
 
 import java.sql.Date;
 
@@ -62,7 +63,7 @@ public class ViewOffenseModalController {
      * ComboBox for offense level.
      */
     @FXML
-    private ComboBox<String> offenseLevelField;
+    private TextField offenseLevelField;
 
     /**
      * TextArea for remarks.
@@ -138,7 +139,7 @@ public class ViewOffenseModalController {
                 record.getOffense().getOffense()
         );
 
-        offenseLevelField.setValue(
+        offenseLevelField.setText(
                 record.getOffense().getType()
         );
 
@@ -189,7 +190,7 @@ public class ViewOffenseModalController {
             String studentId = studentIdField.getText();
             String studentName = studentNameField.getText();
             String offenseName = offenseTypeField.getValue();
-            String offenseType = offenseLevelField.getValue();
+            String offenseType = offenseLevelField.getText();
             String remarks = remarksField.getText();
 
             if (studentId == null

@@ -26,6 +26,7 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.RecordStatus;
+import org.w3c.dom.Text;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -40,12 +41,11 @@ public class EditOffenseModalController {
      */
     @FXML
     private ComboBox<String> offenseTypeComboBox;
-
     /**
      * ComboBox for displaying offense level.
      */
     @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
+    private TextField levelOfOffense;
     /**
      * TextField for student ID input.
      */
@@ -143,7 +143,7 @@ public class EditOffenseModalController {
                 String.valueOf(record.getDateOfViolation())));
         offenseTypeComboBox.setValue(
                 record.getOffense().getOffense());
-        levelOfOffenseComboBox.setValue(
+        levelOfOffense.setText(
                 record.getOffense().getType());
         remarksTextArea.setWrapText(true);
         remarksTextArea.setText(
@@ -178,7 +178,7 @@ public class EditOffenseModalController {
                 Offense offense = offenseDao.findByName(selected);
 
                 if (offense != null) {
-                    levelOfOffenseComboBox.setValue(offense.getType());
+                    levelOfOffense.setText(offense.getType());
                 }
             }
         });
@@ -232,7 +232,7 @@ public class EditOffenseModalController {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseName = offenseTypeComboBox.getValue();
-            String offenseType = levelOfOffenseComboBox.getValue();
+            String offenseType = levelOfOffense.getText();
             String remarks = remarksTextArea.getText();
 
             if (studentId == null

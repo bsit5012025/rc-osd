@@ -47,7 +47,7 @@
 
                     <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <Label styleClass="lightLabelForTextField" text="Level of Offense" />
-                        <ComboBox fx:id="levelOfOffenseComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                        <TextField fx:id="levelOfOffense" editable="false" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
                     </VBox>
 
                     <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
