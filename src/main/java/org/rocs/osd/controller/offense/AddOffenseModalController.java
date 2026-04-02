@@ -33,7 +33,7 @@ import org.rocs.osd.facade.guardian.GuardianFacade;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.sql.Date;
-
+import java.time.LocalDate;
 
 
 /**
@@ -229,6 +229,9 @@ public class AddOffenseModalController {
             }
 
             Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            LocalDate getDateOfViolation = datePicker.getValue();
+            LocalDate dateToday = LocalDate.now();
+            LocalDate dateLimit = dateToday.minusMonths(2);
             String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
@@ -237,28 +240,38 @@ public class AddOffenseModalController {
             long enrollmentId = enrollmentDao.
                     findEnrollmentIdByStudentId(studentId);
 
-            boolean record = recordFacade.createStudentRecord(
-                    enrollmentId,
-                    employeeId,
-                    offenseId,
-                    dateOfViolation,
-                    actionID,
-                    remarks
-            );
-            if (record) {
-                if (notifyParentsCheckBox.isSelected()) {
-                    try {
-                        var studentGuardians =
-                                guardianFacade.getGuardianByStudentId(
-                                        studentId);
+            if (getDateOfViolation.isAfter(dateToday)) {
+                System.out.println(
+                        "Date is in the future, kindly double check the date.");
+                return;
+            }
+            if (getDateOfViolation.isBefore(dateLimit)) {
+                System.out.println(
+                        "Violations older than 2 months cannot be recorded.");
+                return;
+            }
+                boolean record = recordFacade.createStudentRecord(
+                        enrollmentId,
+                        employeeId,
+                        offenseId,
+                        dateOfViolation,
+                        actionID,
+                        remarks
+                );
+                if (record) {
+                    if (notifyParentsCheckBox.isSelected()) {
+                        try {
+                            var studentGuardians =
+                                    guardianFacade.getGuardianByStudentId(
+                                            studentId);
 
-                        if (studentGuardians == null
-                                || studentGuardians.isEmpty()) {
-                            System.out.println("No guardians found.");
-                            return;
-                        }
+                            if (studentGuardians == null
+                                    || studentGuardians.isEmpty()) {
+                                System.out.println("No guardians found.");
+                                return;
+                            }
 
-                        for (StudentGuardian sg : studentGuardians) {
+                            for (StudentGuardian sg : studentGuardians) {
 
                             Guardian guardian = sg.getGuardian();
                             if (guardian == null
@@ -266,36 +279,37 @@ public class AddOffenseModalController {
                                 continue;
                             }
 
-                            String phone = guardian.getContactNumber();
-                            phone = formatPhone(phone);
+                                String phone = guardian.getContactNumber();
+                                phone = formatPhone(phone);
 
-                            String message = "Good day!\nI am (NAME) "
-                                    + "Discipline Officer from "
-                                    + "Rogationist College. This is to inform "
-                                    + "you that your child "
-                                    + studentName
-                                    + ", committed an offense: \n\n"
-                                    + offenseType
-                                    + "\n \n"
-                                    + "Please coordinate with us thru call or "
-                                    + "in-person to settle this matter. "
-                                    + "Thank you!";
+                                String message = "Good day!\nI am (NAME) "
+                                        + "Discipline Officer from "
+                                        + "Rogationist College. "
+                                        + "This is to inform "
+                                        + "you that your child "
+                                        + studentName
+                                        + ", committed an offense: \n\n"
+                                        + offenseType
+                                        + "\n \n"
+                                        + "Please coordinate with us "
+                                        + "thru call or "
+                                        + "in-person to settle this matter. "
+                                        + "Thank you!";
 
-                            SmsService.sendSMSAsync(phone, message);
+                                SmsService.sendSMSAsync(phone, message);
 
-                            System.out.println("SMS sent to: "
-                                    + phone);
+                                System.out.println("SMS sent to: "
+                                        + phone);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                    Stage stage = (Stage) ((Node) event
+                            .getSource()).getScene().getWindow();
+                    stage.close();
                 }
-                Stage stage = (Stage) ((Node) event
-                        .getSource()).getScene().getWindow();
-                stage.close();
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
