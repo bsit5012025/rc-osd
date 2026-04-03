@@ -57,12 +57,11 @@ public class ViewOffenseModalController {
      */
     @FXML
     private ComboBox<String> offenseTypeField;
-
     /**
-     * ComboBox for offense level.
+     * Text field for displaying offense level.
      */
     @FXML
-    private ComboBox<String> offenseLevelField;
+    private TextField offenseLevelField;
 
     /**
      * TextArea for remarks.
@@ -138,7 +137,7 @@ public class ViewOffenseModalController {
                 record.getOffense().getOffense()
         );
 
-        offenseLevelField.setValue(
+        offenseLevelField.setText(
                 record.getOffense().getType()
         );
 
@@ -189,7 +188,7 @@ public class ViewOffenseModalController {
             String studentId = studentIdField.getText();
             String studentName = studentNameField.getText();
             String offenseName = offenseTypeField.getValue();
-            String offenseType = offenseLevelField.getValue();
+            String offenseType = offenseLevelField.getText();
             String remarks = remarksField.getText();
 
             if (studentId == null
