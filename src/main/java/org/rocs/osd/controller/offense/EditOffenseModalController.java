@@ -46,6 +46,11 @@ public class EditOffenseModalController {
     @FXML
     private TextField levelOfOffense;
     /**
+     * Dropdown for selecting disciplinary action.
+     */
+    @FXML
+    private ComboBox<String> actionComboBox;
+    /**
      * TextField for student ID input.
      */
     @FXML
@@ -147,6 +152,8 @@ public class EditOffenseModalController {
         remarksTextArea.setWrapText(true);
         remarksTextArea.setText(
                 record.getRemarks());
+        actionComboBox.setValue(
+                record.getAction().getActionName());
     }
     /**
      * Loads offense names into the ComboBox.
@@ -158,6 +165,7 @@ public class EditOffenseModalController {
             ObservableList<String> actionList = FXCollections.
             observableArrayList(disciplinaryActionDao.findAllAction());
             offenseTypeComboBox.setItems(offenseList);
+            actionComboBox.setItems(actionList);
         } catch (Exception e) {
             System.err.println("Database Error: Could not fetch "
                     + "offense names from the database.");
@@ -232,6 +240,8 @@ public class EditOffenseModalController {
             String studentName = studentNameTextField.getText();
             String offenseName = offenseTypeComboBox.getValue();
             String offenseType = levelOfOffense.getText();
+            String actionName = actionComboBox.getValue();
+
             String remarks = remarksTextArea.getText();
 
             if (studentId == null
@@ -263,6 +273,10 @@ public class EditOffenseModalController {
             long actionId = disciplinaryActionDao.
             findActionIdByName(record.getAction().getActionName());
             record.getAction().setActionId(actionId);
+
+            long actionID = disciplinaryActionDao.
+                    findActionIdByName(actionName);
+            record.getAction().setActionId(actionID);
 
             Offense offenseObj = offenseDao.findByName(offenseName);
             record.setOffense(offenseObj);
