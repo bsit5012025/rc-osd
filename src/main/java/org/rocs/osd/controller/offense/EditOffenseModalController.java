@@ -41,10 +41,10 @@ public class EditOffenseModalController {
     @FXML
     private ComboBox<String> offenseTypeComboBox;
     /**
-     * ComboBox for displaying offense level.
+     * Text field for displaying offense level.
      */
     @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
+    private TextField levelOfOffense;
     /**
      * Dropdown for selecting disciplinary action.
      */
@@ -147,7 +147,7 @@ public class EditOffenseModalController {
                 String.valueOf(record.getDateOfViolation())));
         offenseTypeComboBox.setValue(
                 record.getOffense().getOffense());
-        levelOfOffenseComboBox.setValue(
+        levelOfOffense.setText(
                 record.getOffense().getType());
         remarksTextArea.setWrapText(true);
         remarksTextArea.setText(
@@ -185,7 +185,7 @@ public class EditOffenseModalController {
                 Offense offense = offenseDao.findByName(selected);
 
                 if (offense != null) {
-                    levelOfOffenseComboBox.setValue(offense.getType());
+                    levelOfOffense.setText(offense.getType());
                 }
             }
         });
@@ -239,8 +239,8 @@ public class EditOffenseModalController {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseName = offenseTypeComboBox.getValue();
+            String offenseType = levelOfOffense.getText();
             String actionName = actionComboBox.getValue();
-            String offenseType = levelOfOffenseComboBox.getValue();
 
             String remarks = remarksTextArea.getText();
 

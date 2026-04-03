@@ -48,7 +48,7 @@
                                 <VBox layoutX="253.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
                                         <Label styleClass="viewStudentLabel" text="Level of Offense:" />
-                                        <ComboBox fx:id="offenseLevelField" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
+                                        <TextField fx:id="offenseLevelField" editable="false" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
                                     </children>
                                 </VBox>
                             </children>

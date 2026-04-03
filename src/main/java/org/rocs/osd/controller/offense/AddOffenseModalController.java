@@ -51,15 +51,15 @@ public class AddOffenseModalController {
     @FXML
     private ComboBox<String> offenseTypeComboBox;
     /**
-     * Dropdown for displaying offense level.
-     */
-    @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
-    /**
      * Dropdown for selecting disciplinary action.
      */
     @FXML
     private ComboBox<String> actionComboBox;
+    /**
+     * Text field for displaying offense level.
+     */
+    @FXML
+    private TextField levelOfOffense;
     /**
      * Input field for student ID.
      */
@@ -164,7 +164,7 @@ public class AddOffenseModalController {
                 Offense offense = offenseDao.findByName(selected);
 
                 if (offense != null) {
-                    levelOfOffenseComboBox.setValue(offense.getType());
+                    levelOfOffense.setText(offense.getType());
                 }
             }
         });
