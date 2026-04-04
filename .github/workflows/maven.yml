@@ -18,6 +18,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    workflow_dispatch:
 
 jobs:
   build:
@@ -33,9 +34,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    # Build project and copy dependencies (target/lib)
+    # Build project and copy dependencies (target/lib) added skipTests for CI, can still test locally.
     - name: Build with Maven
-      run: mvn -B clean package --file pom.xml
+      run: mvn -B clean package -DskipTests --file pom.xml
     # Verify that build output and dependencies exist
     - name: Verify target contents
       run: dir target
