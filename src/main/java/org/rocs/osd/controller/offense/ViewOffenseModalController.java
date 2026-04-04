@@ -35,16 +35,16 @@ import java.sql.Date;
 public class ViewOffenseModalController {
 
     /**
-     * TextArea for student ID.
+     * TextField for student ID.
      */
     @FXML
-    private TextArea studentIdField;
+    private TextField studentIdField;
 
     /**
-     * TextArea for student name.
+     * TextField for student name.
      */
     @FXML
-    private TextArea studentNameField;
+    private TextField studentNameField;
 
     /**
      * DatePicker for violation date.
@@ -57,6 +57,7 @@ public class ViewOffenseModalController {
      */
     @FXML
     private ComboBox<String> offenseTypeField;
+
     /**
      * Text field for displaying offense level.
      */
@@ -64,23 +65,32 @@ public class ViewOffenseModalController {
     private TextField offenseLevelField;
 
     /**
+     * TextField for action.
+     */
+    @FXML
+    private TextField actionField;
+
+    /**
      * TextArea for remarks.
      */
     @FXML
-    private TextField remarksField;
+    private TextArea remarksField;
 
     /**
      * Facade for record operations.
      */
     private RecordFacade recordFacade;
+
     /**
      * DAO for offense operations.
      */
     private OffenseDao offenseDao;
+
     /**
      * DAO for enrollment operations.
      */
     private EnrollmentDao enrollmentDao;
+
     /**
      * DAO for disciplinary actions.
      */
@@ -113,7 +123,6 @@ public class ViewOffenseModalController {
         loadRecordData();
     }
 
-
     /**
      * Loads record data into UI fields.
      */
@@ -139,6 +148,10 @@ public class ViewOffenseModalController {
 
         offenseLevelField.setText(
                 record.getOffense().getType()
+        );
+
+        actionField.setText(
+                record.getAction().getActionName()
         );
 
         remarksField.setText(record.getRemarks());
