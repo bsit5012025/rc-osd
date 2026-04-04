@@ -141,9 +141,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>
-                        --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                    </argLine>
+                    <systemPropertyVariables>
+                        <java.awt.headless>true</java.awt.headless>
+                    </systemPropertyVariables>
+                    <excludedGroups>gui</excludedGroups>
+                    <argLine>--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
         </plugins>

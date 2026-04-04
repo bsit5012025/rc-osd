@@ -34,9 +34,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    # Build project and copy dependencies (target/lib) added DexcludeTags for GUI only not supported on CI.
+    # Build project and copy dependencies (target/lib)
     - name: Build with Maven
-      run: mvn -B clean package -DexcludeTags=gui --file pom.xml
+      run: mvn -B clean package --file pom.xml
     # Verify that build output and dependencies exist
     - name: Verify target contents
       run: dir target
