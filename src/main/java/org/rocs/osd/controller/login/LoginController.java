@@ -86,6 +86,10 @@ public class LoginController {
             togglePasswordButton.getStyleClass().remove("show-icon");
         }
     }
+
+    /**
+     * Facade used to retrieve login data from backend.
+     */
     private LoginFacade loginFacade;
 
     /**
