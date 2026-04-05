@@ -81,15 +81,14 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
     public long findActionIdByName(String action) {
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT actionId FROM disciplinaryAction WHERE action "
-                             + "= ?");
-             ResultSet rs = stmt.executeQuery()) {
+                     "SELECT actionId FROM disciplinaryAction WHERE action = ?"
+             )) {
             stmt.setString(1, action);
-
-            if (rs.next()) {
-                return rs.getLong("actionId");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("actionId");
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

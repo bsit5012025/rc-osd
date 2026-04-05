@@ -68,11 +68,11 @@ public class RequestDaoImpl implements RequestDao {
         String sql = "SELECT * FROM REQUEST WHERE status = ?";
 
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, String.valueOf(status));
 
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Request r = new Request();
                     r.setRequestID(rs.getLong("requestID"));
@@ -86,10 +86,11 @@ public class RequestDaoImpl implements RequestDao {
 
                     requestList.add(r);
                 }
+            }
 
         } catch (SQLException e) {
             System.out.println("SQL Exception (getAllRequests): "
-            + e.getMessage());
+                    + e.getMessage());
         }
 
         return requestList;

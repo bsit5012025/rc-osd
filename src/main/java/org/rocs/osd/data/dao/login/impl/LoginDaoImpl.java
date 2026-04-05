@@ -28,15 +28,17 @@ public class LoginDaoImpl implements LoginDao {
         Login login = new Login();
 
         try (Connection conn = ConnectionHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(
-                    "SELECT l.id, l.username, l.password, l.personID, "
-                            + "p.lastname, p.firstname, p.middleName "
-                            + "FROM Login l "
-                            + "JOIN person p ON l.personID = p.personID "
-                            + "WHERE l.username = ?");
-            ResultSet rs = statement.executeQuery()) {
+             PreparedStatement statement = conn.prepareStatement(
+                     "SELECT l.id, l.username, l.password, l.personID, "
+                             + "p.lastname, p.firstname, p.middleName "
+                             + "FROM Login l "
+                             + "JOIN person p ON l.personID = p.personID "
+                             + "WHERE l.username = ?"
+             )) {
 
             statement.setString(1, username);
+            try (ResultSet rs = statement.executeQuery()) {
+
                 if (rs.next()) {
                     Person person = new Person();
                     person.setPersonID(rs.getLong("personID"));
@@ -49,6 +51,7 @@ public class LoginDaoImpl implements LoginDao {
                     login.setPassword(rs.getString("password"));
                     login.setPerson(person);
                 }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
