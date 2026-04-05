@@ -15,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.rocs.osd.controller.dialog.ConfirmationDialogController;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -37,7 +39,6 @@ public class DashboardController {
     private VBox sidebar;
 
     /** Flag indicating if the sidebar is currently collapsed. */
-    @FXML
     private boolean sidebarCollapsed = false;
 
     /** Initializes the dashboard controller. */
@@ -52,20 +53,60 @@ public class DashboardController {
      */
     @FXML
     public void onLogout(ActionEvent event) {
+        showConfirmation(
+                "Are you sure you ",
+                "want to logout?",
+                "Logout",
+                "Cancel",
+                () -> performLogout()
+        );
+    }
+
+    private void performLogout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("/view/dialogs/logoutConfirmation.fxml"));
-            Parent root = loader.load();
+            Stage stage = (Stage) logoutButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/view/login/login.fxml"));
+
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(
+                    root, screenBounds.getWidth(), screenBounds.getHeight());
+
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showConfirmation(
+            String l1, String l2, String confirmTxt,
+            String cancelTxt, Runnable action) {
+        try {
+            String path = "/view/dialogs/confirmation.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+
+            if (loader.getLocation() == null) {
+                throw new IOException("Cannot find FXML file at: " + path);
+            }
+            StackPane rootNode = loader.load();
+
+            ConfirmationDialogController controller = loader.getController();
+            if (controller != null) {
+                controller.setMessage(l1, l2);
+                controller.setButtonLabels(confirmTxt, cancelTxt);
+                controller.setOnConfirm(action);
+            }
+
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
             stage.initModality(Modality.APPLICATION_MODAL);
-            Stage currentStage = (Stage) ((Node) event.getSource())
-                    .getScene().getWindow();
-            stage.initOwner(currentStage);
-            stage.setResizable(false);
+            stage.initOwner(logoutButton.getScene().getWindow());
+            stage.setScene(new Scene(rootNode));
             stage.showAndWait();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

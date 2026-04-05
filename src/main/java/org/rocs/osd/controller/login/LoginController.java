@@ -5,18 +5,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.rocs.osd.controller.dialog.ErrorDialogController;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
@@ -36,8 +34,8 @@ public class LoginController {
      */
     private Stage errorStage;
     /**
-    * Text field for entering the username .
-    */
+     * Text field for entering the username .
+     */
     @FXML
     private TextField usernameTextField;
     /**
@@ -68,7 +66,7 @@ public class LoginController {
                 passwordTextField == null
                 ||
                 togglePasswordButton == null) {
-                return;
+            return;
         }
         if (passwordField.isVisible()) {
             passwordTextField.setText(passwordField.getText());
@@ -106,7 +104,7 @@ public class LoginController {
           and password are correct.
          */
         boolean loginCheck = loginFacade.login(
-        usernameTextField.getText(), passwordField.getText());
+                usernameTextField.getText(), passwordField.getText());
 
         /*
           This will check if the username or password fields are empty
@@ -149,12 +147,12 @@ public class LoginController {
               This will load the Dashboard screen from the FXML file.
              */
             Parent root = FXMLLoader.load(getClass()
-            .getResource("/view/dashboard/dashboard.fxml"));
+                    .getResource("/view/dashboard/dashboard.fxml"));
             /*
               This will get the current window from the button click event.
              */
             Stage stage = (Stage) ((Node)
-            event.getSource()).getScene().getWindow();
+                    event.getSource()).getScene().getWindow();
             /*
               This will display the Dashboard screen in the window.
              */
@@ -183,25 +181,18 @@ public class LoginController {
     }
     private void showErrorPopup(String message) {
         try {
-
             if (errorStage != null && errorStage.isShowing()) {
                 errorStage.close();
             }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-            "/view/dialogs/loginError.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/dialogs/error.fxml"));
             Parent root = loader.load();
-            /*
-              Sets the login error banner to the bottom-center
-              of the window on different screen sizes.
-              */
+
+            ErrorDialogController controller = loader.getController();
+            controller.setMessage(message);
+
             errorStage = new Stage();
-
-            Label label = (Label) root.lookup(
-                    "#lgnErrText");
-            if (label != null) {
-                label.setText(message);
-            }
-
             Scene scene = new Scene(root);
             scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
             errorStage.setScene(scene);
@@ -209,29 +200,28 @@ public class LoginController {
             errorStage.initStyle(StageStyle.TRANSPARENT);
             errorStage.initModality(Modality.NONE);
 
-            Rectangle2D screenBounds = Screen.getPrimary()
-            .getVisualBounds();
-            double windowWidth = root.prefWidth(-1);
-            double windowHeight = root.prefHeight(-1);
+            Stage mainStage = (Stage) usernameTextField.getScene().getWindow();
 
-            errorStage.setX((screenBounds.getWidth() - windowWidth) / 2);
-            errorStage.setY(screenBounds.getHeight() - windowHeight);
+            double popupWidth = 400;
+            double popupHeight = 70;
+            double centerX = mainStage.getX()
+                    + (mainStage.getWidth() - popupWidth) / 2;
+            double bottomY = mainStage.getY()
+                    + mainStage.getHeight() - popupHeight;
+
+            errorStage.setX(centerX);
+            errorStage.setY(bottomY);
 
             errorStage.show();
 
             PauseTransition delay = new PauseTransition(Duration.seconds(2));
-            delay.setOnFinished(
-                    event -> {
-                        errorStage.close(); }
-            );
+            delay.setOnFinished(event -> errorStage.close());
             delay.play();
 
-
-        } catch (IOException ioe) {
-            System.err.println("Could not load Error Popup: "
-            + ioe.getMessage());
-            ioe.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Could not load Error Popup: " + e.getMessage());
         }
     }
 
 }
+
