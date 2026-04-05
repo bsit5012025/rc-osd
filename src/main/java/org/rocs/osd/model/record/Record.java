@@ -1,6 +1,6 @@
 package org.rocs.osd.model.record;
 
-import org.rocs.osd.model.disciplinaryaction.DisciplinaryAction;
+import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;
@@ -49,7 +49,7 @@ public class Record {
      * Initializes an empty Record object.
      */
     public Record() {
-        //Intentionally empty constructor for record model
+        // Default constructor
     }
 
     /**

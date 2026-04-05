@@ -36,7 +36,7 @@ public class Request {
 
     /** Default constructor initializing an empty Request object. */
     public Request() {
-        /*Intentionally empty constructor for request model*/
+        // Default constructor
     }
 
     /**

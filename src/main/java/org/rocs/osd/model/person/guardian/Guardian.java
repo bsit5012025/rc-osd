@@ -20,7 +20,7 @@ public class Guardian extends Person {
 
     /** Default constructor. */
     public Guardian() {
-        //Intentionally empty constructor for guardian model
+        // Default constructor
     }
 
     /**

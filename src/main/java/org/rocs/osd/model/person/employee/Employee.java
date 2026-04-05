@@ -20,7 +20,7 @@ public class Employee extends Person {
 
     /** Default constructor. */
     public Employee() {
-        // Intentionally empty constructor for employee model
+        // Default constructor
     }
 
     /**

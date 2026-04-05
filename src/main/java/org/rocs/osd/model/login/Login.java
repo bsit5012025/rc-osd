@@ -22,7 +22,7 @@ public class Login {
 
     /** Default constructor. */
     public Login() {
-        // Intentionally empty constructor for login model
+        // Default constructor
     }
 
     /**

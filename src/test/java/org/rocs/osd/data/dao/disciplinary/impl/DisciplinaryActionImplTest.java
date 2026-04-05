@@ -1,4 +1,4 @@
-package org.rocs.osd.data.dao.disciplinaryaction.impl;
+package org.rocs.osd.data.dao.disciplinary.impl;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.disciplinaryaction.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 
 
 import java.sql.Connection;

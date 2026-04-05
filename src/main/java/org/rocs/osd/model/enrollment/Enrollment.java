@@ -1,7 +1,7 @@
 package org.rocs.osd.model.enrollment;
 
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinarystatus.DisciplinaryStatus;
+import org.rocs.osd.model.disciplinary.status.DisciplinaryStatus;
 import org.rocs.osd.model.person.student.Student;
 
 /**
@@ -34,7 +34,7 @@ public class Enrollment {
 
     /** Default constructor, creates an empty Enrollment object. */
     public Enrollment() {
-        // Intentionally empty constructor for enrollment model
+        // Default constructor
     }
 
     /**

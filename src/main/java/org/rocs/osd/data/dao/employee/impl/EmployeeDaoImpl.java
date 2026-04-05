@@ -27,10 +27,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
                            + "p.middleName "
                            + "FROM employee e "
                            + "JOIN person p ON e.personID = p.personID "
-                           + "WHERE e.employeeID = ?")) {
+                           + "WHERE e.employeeID = ?");
+            ResultSet rs = statement.executeQuery()) {
             statement.setString(1, employeeID);
 
-            try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     Person person = new Person();
                     person.setPersonID(rs.getLong("personID"));
@@ -53,7 +53,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
                     return employee;
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -45,11 +45,10 @@ public class GuardianDaoImpl implements GuardianDao {
                 """;
 
         try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             ps.setString(1, pStudentId);
-
-            try (ResultSet rs = ps.executeQuery()) {
 
                 while (rs.next()) {
 
@@ -71,7 +70,6 @@ public class GuardianDaoImpl implements GuardianDao {
                     sg.setGuardian(guardian);
                     sgList.add(sg);
                 }
-            }
         } catch (SQLException e) {
             System.out.println("SQL Exception (findGuardianByStudentId): "
                     + e.getMessage());

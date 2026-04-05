@@ -3,7 +3,7 @@ package org.rocs.osd.facade.record.impl;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinaryaction.DisciplinaryAction;
+import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;

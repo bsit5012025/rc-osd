@@ -33,12 +33,10 @@ public class LoginDaoImpl implements LoginDao {
                             + "p.lastname, p.firstname, p.middleName "
                             + "FROM Login l "
                             + "JOIN person p ON l.personID = p.personID "
-                            + "WHERE l.username = ?"
-            )) {
+                            + "WHERE l.username = ?");
+            ResultSet rs = statement.executeQuery()) {
 
             statement.setString(1, username);
-            try (ResultSet rs = statement.executeQuery()) {
-
                 if (rs.next()) {
                     Person person = new Person();
                     person.setPersonID(rs.getLong("personID"));
@@ -51,7 +49,6 @@ public class LoginDaoImpl implements LoginDao {
                     login.setPassword(rs.getString("password"));
                     login.setPerson(person);
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

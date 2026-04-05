@@ -88,18 +88,16 @@ public class OffenseDaoImpl implements OffenseDao {
                 + "type FROM offense WHERE offense = ?";
 
         try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             stmt.setString(1, offenseName);
-            try (ResultSet rs = stmt.executeQuery()) {
-
                 if (rs.next()) {
                     offense = new Offense();
                     offense.setOffenseId(rs.getLong("offenseID"));
                     offense.setOffense(rs.getString("offense"));
                     offense.setType(rs.getString("type"));
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

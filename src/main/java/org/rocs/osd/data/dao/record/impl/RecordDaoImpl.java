@@ -3,8 +3,8 @@ package org.rocs.osd.data.dao.record.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinaryaction.DisciplinaryAction;
-import org.rocs.osd.model.disciplinarystatus.DisciplinaryStatus;
+import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
+import org.rocs.osd.model.disciplinary.status.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;
@@ -73,9 +73,9 @@ public class RecordDaoImpl implements RecordDao {
             """;
 
         try (Connection conn = ConnectionHelper.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
             stmt.setString(1, schoolYear);
-            try (ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Student student = new Student();
@@ -140,7 +140,6 @@ public class RecordDaoImpl implements RecordDao {
 
                 records.add(record);
             }
-        }
         } catch (SQLException e) {
             System.out.println(
                     "SQL Exception (findAllBySchoolYear): "
@@ -272,12 +271,12 @@ public class RecordDaoImpl implements RecordDao {
                             + "JOIN person ep ON emp.personID = ep.personID "
                             + "WHERE e.department = ? "
                             + "AND e.schoolYear = ? "
-                            + "ORDER BY r.dateOfViolation DESC"
-            )) {
+                            + "ORDER BY r.dateOfViolation DESC");
+             ResultSet rs = statement.executeQuery()) {
 
             statement.setString(1, department.name());
             statement.setString(2, schoolYear);
-            try (ResultSet rs = statement.executeQuery()) {
+
 
                 while (rs.next()) {
                     Record record = new Record();
@@ -322,7 +321,6 @@ public class RecordDaoImpl implements RecordDao {
 
                     records.add(record);
                 }
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -338,15 +336,14 @@ public class RecordDaoImpl implements RecordDao {
             PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) "
                     + "FROM record r "
                     + "JOIN enrollment e ON r.enrollmentID = e.enrollmentID "
-                    + "WHERE e.schoolYear = ?"
-            )) {
+                    + "WHERE e.schoolYear = ?");
+            ResultSet rs = stmt.executeQuery()) {
             stmt.setString(1, schoolYear);
 
-            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     total = rs.getInt(1);
                 }
-            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -362,17 +359,14 @@ public class RecordDaoImpl implements RecordDao {
         int total = 0;
 
         try (Connection con = ConnectionHelper.getConnection();
-
             PreparedStatement stmt = con.prepareStatement(
             "SELECT COUNT(*) FROM record "
                + "WHERE TRUNC(dateOfViolation) = TRUNC(SYSDATE)"
-            )) {
-            try (ResultSet rs = stmt.executeQuery()) {
-
+            );
+            ResultSet rs = stmt.executeQuery())  {
                 if (rs.next()) {
                     total = rs.getInt(1);
                 }
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -394,15 +388,13 @@ public class RecordDaoImpl implements RecordDao {
                             + "= e.enrollmentID "
                             + "WHERE e.schoolYear = ? "
                             + "GROUP BY o.offense "
-                            + "ORDER BY total DESC"
-            )) {
+                            + "ORDER BY total DESC");
+            ResultSet rs = stmt.executeQuery()) {
             stmt.setString(1, schoolYear);
-            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     offenses.put(rs.getString("offense"), rs.getInt("total")
                     );
                 }
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -433,11 +425,9 @@ public class RecordDaoImpl implements RecordDao {
                             + "JOIN disciplinaryAction da "
                             + "ON r.actionID = da.actionID "
                             + "WHERE s.studentID = ? "
-                            + "ORDER BY r.dateOfViolation DESC"
-            )) {
+                            + "ORDER BY r.dateOfViolation DESC");
+             ResultSet result = statement.executeQuery()) {
             statement.setString(1, studentId);
-            try (ResultSet result = statement.executeQuery()) {
-
                 while (result.next()) {
                     Record record = new Record();
 
@@ -481,7 +471,6 @@ public class RecordDaoImpl implements RecordDao {
                     record.setAction(disciplinaryAction);
                     records.add(record);
                 }
-            }
     } catch (Exception e) {
             e.printStackTrace();
         }

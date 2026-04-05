@@ -56,47 +56,44 @@ public class AppealDaoImpl implements AppealDao {
         """;
 
         try (Connection conn = ConnectionHelper.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
              ps.setString(1, status);
 
-            try (ResultSet rs = ps.executeQuery()) {
-
                 while (rs.next()) {
-                Appeal appeal = new Appeal();
-                appeal.setAppealID(rs.getLong("appealID"));
-                appeal.setMessage(rs.getString("message"));
-                appeal.setDateFiled(rs.getDate("dateFiled"));
-                appeal.setStatus(rs.getString("status"));
-                appeal.setRemarks(rs.getString("remarks"));
-                appeal.setDateProcessed(rs.getDate(
-                        "dateProcessed"));
+                    Appeal appeal = new Appeal();
+                    appeal.setAppealID(rs.getLong("appealID"));
+                    appeal.setMessage(rs.getString("message"));
+                    appeal.setDateFiled(rs.getDate("dateFiled"));
+                    appeal.setStatus(rs.getString("status"));
+                    appeal.setRemarks(rs.getString("remarks"));
+                    appeal.setDateProcessed(rs.getDate(
+                            "dateProcessed"));
 
-                Record record = new Record();
-                record.setRecordId(rs.getLong("recordID"));
-                record.setRemarks(rs.getString("offense"));
-                appeal.setRecord(record);
+                    Record record = new Record();
+                    record.setRecordId(rs.getLong("recordID"));
+                    record.setRemarks(rs.getString("offense"));
+                    appeal.setRecord(record);
 
-                Enrollment enrollment = new Enrollment();
-                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
 
-                Student student = new Student();
-                student.setStudentId(rs.getString("studentID"));
-                student.setFirstName(rs.getString("firstName"));
-                student.setLastName(rs.getString("lastName"));
+                    Student student = new Student();
+                    student.setStudentId(rs.getString("studentID"));
+                    student.setFirstName(rs.getString("firstName"));
+                    student.setLastName(rs.getString("lastName"));
 
-                enrollment.setStudent(student);
-                appeal.setEnrollment(enrollment);
+                    enrollment.setStudent(student);
+                    appeal.setEnrollment(enrollment);
 
-                list.add(appeal);
+                    list.add(appeal);
                 }
-            }
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching appeal by status", e);
         }
 
         return list;
     }
-
     /**
      * Updates the status of an appeal in the database.
      * Also saves remarks and sets the processed date.
@@ -108,12 +105,12 @@ public class AppealDaoImpl implements AppealDao {
     @Override
     public void processAppeal(long appealId, String status, String remarks) {
         String sql = """
-    UPDATE appeal
-    SET status = ?,
-        remarks = ?,
-        dateProcessed = CURRENT_DATE
-    WHERE appealID = ?
-    """;
+                    UPDATE appeal
+                    SET status = ?,
+                    remarks = ?,
+                    dateProcessed = CURRENT_DATE
+                    WHERE appealID = ?
+                    """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

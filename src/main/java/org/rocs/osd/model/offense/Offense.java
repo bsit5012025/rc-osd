@@ -20,7 +20,7 @@ public class Offense {
 
     /** Default constructor. */
     public Offense() {
-        // Intentionally empty constructor for offense model
+        // Default constructor
     }
 
     /**

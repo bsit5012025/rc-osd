@@ -145,9 +145,9 @@ public class CenterDashboardController {
         DateTimeFormatter week = DateTimeFormatter.ofPattern("EEE");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("hh:mm a");
 
-        monthLabel.setText(now.format(month).toUpperCase(Locale.ROOT));
+        monthLabel.setText(now.format(month).toUpperCase(Locale.ENGLISH));
         dayLabel.setText(now.format(day));
-        weekLabel.setText(now.format(week).toUpperCase(Locale.ROOT));
+        weekLabel.setText(now.format(week).toUpperCase(Locale.ENGLISH));
         timeLabel.setText(now.format(time));
     }
     /**

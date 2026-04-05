@@ -3,7 +3,7 @@ package org.rocs.osd.data.dao.enrollment.impl;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinarystatus.DisciplinaryStatus;
+import org.rocs.osd.model.disciplinary.status.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
 
@@ -110,15 +110,13 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                             + "WHERE studentID = ? "
                             + "ORDER BY schoolYear DESC "
                             + "FETCH FIRST 1 ROW ONLY"
-            )) {
+            );
+            ResultSet rs = statement.executeQuery()) {
             statement.setString(1, studentId);
-
-            try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     return rs.getLong(
                             "enrollmentID");
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -153,10 +151,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                             + "WHERE e.schoolYear = ("
                             + "SELECT MAX(e2.schoolYear) "
                             + "FROM enrollment e2 "
-                            + "WHERE e2.studentID = e.studentID)"
-            )) {
-            try (ResultSet rs = statement.executeQuery()) {
-
+                            + "WHERE e2.studentID = e.studentID)");
+            ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     Enrollment enrollment = new Enrollment();
                     Student student = new Student();
@@ -197,7 +193,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     enrollment.setStudent(student);
                     enrollmentList.add(enrollment);
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

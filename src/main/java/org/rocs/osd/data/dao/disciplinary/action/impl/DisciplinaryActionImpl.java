@@ -1,7 +1,7 @@
-package org.rocs.osd.data.dao.disciplinaryaction.impl;
+package org.rocs.osd.data.dao.disciplinary.action.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.disciplinaryaction.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,23 +19,24 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
 
     /**
      * Finds the name of a disciplinary action by its ID.
+     *
      * @param actionId the unique ID of the disciplinary action.
      * @return the action name if found; null if not found.
      */
     @Override
     public String findActionById(long actionId) {
         try (Connection conn = ConnectionHelper.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT action FROM disciplinaryAction WHERE actionId = ?"
-            )) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT action FROM disciplinaryAction WHERE actionId = ?"
+             )) {
             stmt.setLong(1, actionId);
 
             try (ResultSet rs = stmt.executeQuery()) {
 
-            if (rs.next()) {
-                return rs.getString("action");
+                if (rs.next()) {
+                    return rs.getString("action");
+                }
             }
-}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,9 +55,9 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
         List<String> actions = new ArrayList<>();
 
         try (Connection conn = ConnectionHelper.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT action FROM disciplinaryAction ORDER BY action"
-            )) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT action FROM disciplinaryAction ORDER BY action"
+             )) {
             try (ResultSet rs = stmt.executeQuery()) {
 
                 while (rs.next()) {
@@ -79,15 +80,16 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
     @Override
     public long findActionIdByName(String action) {
         try (Connection conn = ConnectionHelper.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT actionId FROM disciplinaryAction WHERE action = ?"
-            )) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT actionId FROM disciplinaryAction WHERE action "
+                             + "= ?");
+             ResultSet rs = stmt.executeQuery()) {
             stmt.setString(1, action);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getLong("actionId");
-                }
+
+            if (rs.next()) {
+                return rs.getLong("actionId");
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

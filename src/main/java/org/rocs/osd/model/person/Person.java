@@ -21,7 +21,7 @@ public class Person {
 
     /** Default constructor. */
     public Person() {
-        // Intentionally empty constructor for person model
+        // Default constructor
     }
 
     /**
