@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.disciplinaryaction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;
