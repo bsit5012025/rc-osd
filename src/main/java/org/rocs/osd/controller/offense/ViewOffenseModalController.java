@@ -12,8 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinaryaction.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinaryaction.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -163,7 +163,7 @@ public class ViewOffenseModalController {
      * @param event button click event
      */
     @FXML
-    private void onEdit(ActionEvent event) {
+    void onEdit(ActionEvent event) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
@@ -195,7 +195,7 @@ public class ViewOffenseModalController {
      * @param event button click event
      */
     @FXML
-    private void onResolve(ActionEvent event) {
+    void onResolve(ActionEvent event) {
 
         try {
             String studentId = studentIdField.getText();
@@ -224,7 +224,7 @@ public class ViewOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
 
             long enrollmentID = enrollmentDao.
                     findEnrollmentIdByStudentId(studentId);

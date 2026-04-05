@@ -45,7 +45,7 @@ public class AppealConfirmationController {
      * Handles approve confirmation.
      */
     @FXML
-    private void handleConfirmApprove() {
+    void handleConfirmApprove() {
         if (onConfirm != null) {
             onConfirm.run();
         }
@@ -56,7 +56,7 @@ public class AppealConfirmationController {
      * Handles deny confirmation.
      */
     @FXML
-    private void handleConfirmDeny() {
+    void handleConfirmDeny() {
         if (onConfirm != null) {
             onConfirm.run();
         }

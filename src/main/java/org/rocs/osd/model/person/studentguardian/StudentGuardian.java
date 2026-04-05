@@ -1,4 +1,4 @@
-package org.rocs.osd.model.person.studentGuardian;
+package org.rocs.osd.model.person.studentguardian;
 
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;

@@ -1,4 +1,4 @@
-package org.rocs.osd.model.disciplinaryStatus;
+package org.rocs.osd.model.disciplinarystatus;
 
 /**
  * Represents a disciplinary status in the system.
@@ -17,6 +17,7 @@ public class DisciplinaryStatus {
 
     /** Default constructor, creates an empty object. */
     public DisciplinaryStatus() {
+        // Intentionally empty constructor for disciplinary status model
     }
 
     /**

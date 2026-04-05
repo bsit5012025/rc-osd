@@ -37,6 +37,7 @@ public class Appeal {
 
     /** Default constructor to initialize an empty Appeal object. */
     public Appeal() {
+        // Intentionally empty constructor for appeal model
     }
 
     /**

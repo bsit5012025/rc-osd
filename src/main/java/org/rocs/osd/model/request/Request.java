@@ -5,7 +5,6 @@ import java.sql.Date;
 /**
  * Represents a request made by an employee in
  * the Office of Student Discipline System.
- *
  * Stores details such as the employee making the request,
  * request type, message, and current status.
  */
@@ -37,6 +36,7 @@ public class Request {
 
     /** Default constructor initializing an empty Request object. */
     public Request() {
+        /*Intentionally empty constructor for request model*/
     }
 
     /**

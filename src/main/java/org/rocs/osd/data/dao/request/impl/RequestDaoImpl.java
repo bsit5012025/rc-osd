@@ -29,16 +29,15 @@ public class RequestDaoImpl implements RequestDao {
     @Override
     public boolean addRequest(String employeeID, String details, String message,
                               String type) {
-        try (Connection con = ConnectionHelper.getConnection()) {
-            String sql =
-                    "INSERT INTO request (employeeID, "
-                            + "details, "
-                            + "type, "
-                            + "message, "
-                            + "status) "
-                            + "VALUES (?, ?, ?, ?, ?)";
-
-            PreparedStatement stmt = con.prepareStatement(sql);
+        String sql =
+                "INSERT INTO request (employeeID, "
+                        + "details, "
+                        + "type, "
+                        + "message, "
+                        + "status) "
+                        + "VALUES (?, ?, ?, ?, ?)";
+        try (Connection con = ConnectionHelper.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, employeeID);
             stmt.setString(2, details);

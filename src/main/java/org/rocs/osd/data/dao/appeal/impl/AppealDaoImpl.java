@@ -58,16 +58,18 @@ public class AppealDaoImpl implements AppealDao {
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
              ps.setString(1, status);
-             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
                 Appeal appeal = new Appeal();
                 appeal.setAppealID(rs.getLong("appealID"));
                 appeal.setMessage(rs.getString("message"));
                 appeal.setDateFiled(rs.getDate("dateFiled"));
                 appeal.setStatus(rs.getString("status"));
                 appeal.setRemarks(rs.getString("remarks"));
-                appeal.setDateProcessed(rs.getDate("dateProcessed"));
+                appeal.setDateProcessed(rs.getDate(
+                        "dateProcessed"));
 
                 Record record = new Record();
                 record.setRecordId(rs.getLong("recordID"));
@@ -86,6 +88,7 @@ public class AppealDaoImpl implements AppealDao {
                 appeal.setEnrollment(enrollment);
 
                 list.add(appeal);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching appeal by status", e);

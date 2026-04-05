@@ -12,8 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.controller.sms.SmsService;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinaryaction.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinaryaction.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -28,7 +28,7 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
+import org.rocs.osd.model.person.studentguardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
@@ -228,7 +228,7 @@ public class AddOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
             String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();

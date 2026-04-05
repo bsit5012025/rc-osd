@@ -168,7 +168,7 @@ public class AppealCardController {
      * Toggles expansion of the card.
      */
     @FXML
-    private void toggleExpansion() {
+    void toggleExpansion() {
         isExpanded = !isExpanded;
 
         expandedSection.setVisible(isExpanded);
@@ -223,7 +223,7 @@ public class AppealCardController {
      * Handles appeal approval.
      */
     @FXML
-    private void handleAppealApprove() {
+    void handleAppealApprove() {
     showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
 
             String remarks = (commentArea != null
@@ -240,7 +240,7 @@ public class AppealCardController {
      * Handles appeal denial.
      */
     @FXML
-    private void handleAppealDeny() {
+    void handleAppealDeny() {
         if (appeal == null) {
             return;
         }
@@ -288,6 +288,7 @@ public class AppealCardController {
     /**
      * Current appeal status.
      */
+    @FXML
     private String status;
 
     /**

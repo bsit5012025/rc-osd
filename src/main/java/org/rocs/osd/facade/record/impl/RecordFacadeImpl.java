@@ -3,7 +3,7 @@ package org.rocs.osd.facade.record.impl;
 import org.rocs.osd.data.dao.record.RecordDao;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.department.Department;
-import org.rocs.osd.model.disciplinaryAction.DisciplinaryAction;
+import org.rocs.osd.model.disciplinaryaction.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.employee.Employee;
@@ -149,7 +149,7 @@ public class RecordFacadeImpl implements RecordFacade {
             }
             String offense = entry.getKey();
             int offenseCount = entry.getValue();
-            double percentage = (offenseCount * 100.0) / totalViolations;
+            double percentage = offenseCount * 100.0 / totalViolations;
             result.put(offense, percentage);
             count++;
         }

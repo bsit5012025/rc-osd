@@ -1,4 +1,4 @@
-package org.rocs.osd.data.dao.disciplinaryAction;
+package org.rocs.osd.data.dao.disciplinaryaction;
 
 import java.util.List;
 

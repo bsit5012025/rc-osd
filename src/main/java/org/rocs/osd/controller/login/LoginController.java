@@ -62,7 +62,7 @@ public class LoginController {
      * and hides it if currently visible.
      */
     @FXML
-    private void togglePasswordVisibility() {
+    void togglePasswordVisibility() {
         if (passwordField == null
                 ||
                 passwordTextField == null

@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CenterDashboardController {
@@ -144,9 +145,9 @@ public class CenterDashboardController {
         DateTimeFormatter week = DateTimeFormatter.ofPattern("EEE");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("hh:mm a");
 
-        monthLabel.setText(now.format(month).toUpperCase());
+        monthLabel.setText(now.format(month).toUpperCase(Locale.ROOT));
         dayLabel.setText(now.format(day));
-        weekLabel.setText(now.format(week).toUpperCase());
+        weekLabel.setText(now.format(week).toUpperCase(Locale.ROOT));
         timeLabel.setText(now.format(time));
     }
     /**

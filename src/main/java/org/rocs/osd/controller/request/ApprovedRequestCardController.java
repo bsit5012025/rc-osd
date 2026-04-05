@@ -56,6 +56,7 @@ public class ApprovedRequestCardController {
     private boolean isExpanded = false;
 
     /** ID of the current request. */
+    @FXML
     private long cardId;
 
     /**
@@ -92,7 +93,7 @@ public class ApprovedRequestCardController {
      * Toggles the expansion state of the card.
      */
     @FXML
-    private void toggleExpansion() {
+    void toggleExpansion() {
         isExpanded = !isExpanded;
         expandedSection.setVisible(isExpanded);
         expandedSection.setManaged(isExpanded);

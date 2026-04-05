@@ -5,7 +5,7 @@ import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.guardian.Relationship;
 import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
+import org.rocs.osd.model.person.studentguardian.StudentGuardian;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * DAO implementation for managing guardian information in the Office of
@@ -48,29 +49,29 @@ public class GuardianDaoImpl implements GuardianDao {
 
             ps.setString(1, pStudentId);
 
-            ResultSet rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
+                while (rs.next()) {
 
-                Guardian guardian = new Guardian();
-                guardian.setGuardianID(rs.getLong("guardianID"));
-                guardian.setContactNumber(rs.getString("contactNumber"));
-                guardian.setRelationship(
-                        Relationship.valueOf(rs.getString(
-                                "relationship").toUpperCase())
-                );
-                guardian.setFirstName(rs.getString("firstName"));
-                guardian.setLastName(rs.getString("lastName"));
+                    Guardian guardian = new Guardian();
+                    guardian.setGuardianID(rs.getLong("guardianID"));
+                    guardian.setContactNumber(rs.getString("contactNumber"));
+                    guardian.setRelationship(
+                            Relationship.valueOf(rs.getString(
+                                    "relationship").toUpperCase(Locale.ROOT))
+                    );
+                    guardian.setFirstName(rs.getString("firstName"));
+                    guardian.setLastName(rs.getString("lastName"));
 
-                Student student = new Student();
-                student.setStudentId(rs.getString("studentID"));
+                    Student student = new Student();
+                    student.setStudentId(rs.getString("studentID"));
 
-                StudentGuardian sg = new StudentGuardian();
-                sg.setStudent(student);
-                sg.setGuardian(guardian);
-                sgList.add(sg);
+                    StudentGuardian sg = new StudentGuardian();
+                    sg.setStudent(student);
+                    sg.setGuardian(guardian);
+                    sgList.add(sg);
+                }
             }
-
         } catch (SQLException e) {
             System.out.println("SQL Exception (findGuardianByStudentId): "
                     + e.getMessage());
