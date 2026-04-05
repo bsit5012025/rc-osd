@@ -25,10 +25,12 @@ jobs:
 
     - name: Build and Run Checkstyle
       # Executes the Maven checkstyle:check goal
-      run: mvn checkstyle:check pmd:check -D checkstyle.suppressions.location=src/main/resources/checkstyle-suppressions.xml -D pmd.showViolations=true
+      run: mvn checkstyle:check -D checkstyle.suppressions.location=src/main/resources/checkstyle-suppressions.xml
 
       # Note: For this to work, the Maven Checkstyle Plugin must be configured
       # in your pom.xml to output an XML report.
+    - name: Run PMD Analysis
+      run: mvn pmd:check -D pmd.showViolations=true -D pmd.failOnViolation=true
 
     - name: Push Checkstyle results to GitHub
       # Optional: Use an action to present results as GitHub annotations/checks
