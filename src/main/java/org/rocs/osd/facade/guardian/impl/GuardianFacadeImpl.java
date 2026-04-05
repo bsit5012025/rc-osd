@@ -3,7 +3,7 @@ package org.rocs.osd.facade.guardian.impl;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.data.dao.guardian.impl.GuardianDaoImpl;
 import org.rocs.osd.facade.guardian.GuardianFacade;
-import org.rocs.osd.model.person.studentguardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 
 import java.util.ArrayList;
 import java.util.List;

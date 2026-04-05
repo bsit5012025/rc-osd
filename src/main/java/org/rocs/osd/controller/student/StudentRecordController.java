@@ -19,7 +19,7 @@ import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.guardian.Guardian;
-import org.rocs.osd.model.person.studentguardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.model.record.Record;
 
 import java.sql.Date;

@@ -4,6 +4,7 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.model.request.Request;
 import org.rocs.osd.model.request.RequestStatus;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +21,11 @@ public class RequestDaoImpl implements RequestDao {
 
     /**
      * Adds a new request to the database with status PENDING.
+     *
      * @param employeeID the ID of the employee creating the request.
-     * @param details the details of the request.
-     * @param message the message or reason for the request.
-     * @param type the type/category of the request.
+     * @param details    the details of the request.
+     * @param message    the message or reason for the request.
+     * @param type       the type/category of the request.
      * @return true if the request was successfully added, false otherwise.
      */
     @Override
@@ -37,7 +39,7 @@ public class RequestDaoImpl implements RequestDao {
                         + "status) "
                         + "VALUES (?, ?, ?, ?, ?)";
         try (Connection con = ConnectionHelper.getConnection();
-            PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, employeeID);
             stmt.setString(2, details);
@@ -90,7 +92,7 @@ public class RequestDaoImpl implements RequestDao {
 
         } catch (SQLException e) {
             System.out.println("SQL Exception (getAllRequests): "
-                    + e.getMessage());
+            + e.getMessage());
         }
 
         return requestList;
@@ -98,9 +100,10 @@ public class RequestDaoImpl implements RequestDao {
 
     /**
      * Updates the status of a request in the database.
+     *
      * @param requestID the ID of the request to update.
-     * @param remarks the remarks of user approving or denying the request.
-     * @param status the new status to assign to the request.
+     * @param remarks   the remarks of user approving or denying the request.
+     * @param status    the new status to assign to the request.
      * @return true if the update was successful, false otherwise.
      */
     @Override
@@ -123,8 +126,8 @@ public class RequestDaoImpl implements RequestDao {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception (updateRequestStatus): "
-            + e.getMessage());
+            System.out.println("SQL Exception ("
+                    + "updateRequestStatus): " + e.getMessage());
         }
         return false;
     }

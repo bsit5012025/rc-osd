@@ -5,7 +5,7 @@ import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.guardian.Relationship;
 import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.person.studentguardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
