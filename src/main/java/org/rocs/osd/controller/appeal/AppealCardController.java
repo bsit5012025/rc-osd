@@ -1,5 +1,7 @@
 package org.rocs.osd.controller.appeal;
 
+import java.io.IOException;
+import java.net.URL;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
@@ -21,37 +26,67 @@ import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
-import java.io.IOException;
-
 /**
- * Controller for a single appeal card in the
- * Office of Student Discipline System.
- * This class displays appeal details and handles user actions
- * such as approve or deny.
+ * Controller class for managing the UI behavior of an individual Appeal Card.
+ * This class handles the display of appeal details, toggling expanded views,
+ * and processing approval or denial actions with confirmation dialogs.
  */
 public class AppealCardController {
 
-    /**
-     * Expanded section container.
-     */
-    @FXML
-    private VBox expandedSection;
+    /** The section of the card that is hidden until expanded. */
+    @FXML private VBox expandedSection;
+
+    /** The container for action buttons (Approve/Deny). */
+    @FXML private HBox actionBar;
+
+    /** The container for the post-action success popup. */
+    @FXML private VBox popupBox;
+
+    /** Label displaying the student's unique identification number. */
+    @FXML private Label studentIdLabel;
+
+    /** Label displaying the full name of the student. */
+    @FXML private Label studentNameLabel;
+
+    /** Label describing the offense being appealed. */
+    @FXML private Label offenseLabel;
+
+    /** Label displaying the reason or message provided in the appeal. */
+    @FXML private Label reasonLabel;
+
+    /** Icon indicating whether the card is collapsed or expanded. */
+    @FXML private ImageView arrowIcon;
+
+    /** Text area for the administrator to input remarks or comments. */
+    @FXML private TextArea commentArea;
+
+    /** Label used to display success messages in the popup box. */
+    @FXML private Label popupLabel;
+
+    /** Label used to display validation or error messages. */
+    @FXML private Label errorLabel;
+
+    /** The data model representing the appeal. */
+    private Appeal appeal;
+
+    /** Callback action to run after
+     * an appeal is successfully processed. */
+    private Runnable onActionComplete;
+
+    /** Tracks the current expansion state of the card. */
+    private boolean isExpanded = false;
+
+    /** The current status string of the appeal. */
+    private String status;
+
+    /** Facade used to communicate with the appeal business logic. */
+    private AppealFacade appealFacade = new AppealFacadeImpl();
 
     /**
-     * Action buttons container.
-     */
-    @FXML
-    private HBox actionBar;
-
-    /**
-     * Popup container.
-     */
-    @FXML
-    private VBox popupBox;
-
-    /**
-     * Initializes the card controller.
-     * Sets default visibility for expandable and popup sections.
+     * Initializes the controller.
+     * Sets default visibility and managed states
+     * for UI components to ensure
+     * a collapsed state on load.
      */
     @FXML
     public void initialize() {
@@ -69,209 +104,123 @@ public class AppealCardController {
     }
 
     /**
-     * Current appeal data.
+     * Sets the status of the appeal.
+     * @param pStatus The status string
+     *    (e.g., "PENDING", "APPROVED").
      */
-    private Appeal appeal;
+    public void setStatus(String pStatus) {
+        this.status = pStatus;
+    }
 
     /**
-     * Sets the appeal data to display in the card.
-     * @param appealData the Appeal object containing details to display.
+     * Injects the appeal data into the
+     * controller and updates the UI labels.
+     * @param pAppeal The Appeal
+     * object containing data to display.
      */
-    public void setAppeal(Appeal appealData) {
-        this.appeal = appealData;
+    public void setAppeal(Appeal pAppeal) {
+        this.appeal = pAppeal;
         loadAppealData();
     }
 
     /**
-     * Callback after action.
+     * Configures a callback to be
+     * executed once the user
+     * finishes an action on this card.
+     * @param pAction A Runnable task
+     *(typically used to refresh the main list).
      */
-    private Runnable onActionComplete;
-
-    /**
-     * Sets a callback to be executed after an action
-     * (approve/deny) is completed.
-     * @param callback a Runnable to run when the action is complete.
-     */
-    public void setOnActionComplete(Runnable callback) {
-        this.onActionComplete = callback;
+    public void setOnActionComplete(Runnable pAction) {
+        this.onActionComplete = pAction;
     }
 
     /**
-     * Student ID label.
-     */
-    @FXML
-    private Label studentIdLabel;
-
-    /**
-     * Student name label.
-     */
-    @FXML
-    private Label studentNameLabel;
-
-    /**
-     * Offense label.
-     */
-    @FXML
-    private Label offenseLabel;
-
-    /**
-     * Reason label.
-     */
-    @FXML
-    private Label reasonLabel;
-
-    /**
-     * Loads and displays appeal-related data into the UI components.
-     */
-    private void loadAppealData() {
-        if (appeal == null) {
-            return;
-           }
-
-            Enrollment enrollment = appeal.getEnrollment();
-            Record record = appeal.getRecord();
-            Student student = enrollment.getStudent();
-
-            if (studentIdLabel != null) {
-                studentIdLabel.setText(student.getStudentId());
-            }
-
-            if (studentNameLabel != null) {
-                studentNameLabel.setText(
-                        student.getFirstName() + " " + student.getLastName()
-                );
-            }
-
-            if (offenseLabel != null) {
-                offenseLabel.setText(record.getRemarks());
-            }
-
-            if (reasonLabel != null) {
-                if ("DENIED".equals(appeal.getStatus())) {
-                    reasonLabel.setText(
-                            appeal.getMessage() + "\n\nRemarks: "
-                                    + appeal.getRemarks()
-                    );
-                } else {
-                    reasonLabel.setText(appeal.getMessage());
-                }
-            }
-        }
-
-
-    /**
-     * Expansion state flag.
-     */
-    private boolean isExpanded = false;
-
-    /**
-     * Toggles expansion of the card.
-     */
-    @FXML
-    private void toggleExpansion() {
-        isExpanded = !isExpanded;
-
-        expandedSection.setVisible(isExpanded);
-        expandedSection.setManaged(isExpanded);
-
-        if ("PENDING".equals(appeal.getStatus())) {
-            actionBar.setVisible(isExpanded);
-            actionBar.setManaged(isExpanded);
-        }
-
-        updateIcon();
-    }
-
-    /**
-     * Arrow icon image.
-     */
-    @FXML
-    private ImageView arrowIcon;
-
-    /**
-     * Updates the arrow icon based on expansion state.
-     */
-    private void updateIcon() {
-        if (arrowIcon == null) {
-            return;
-            }
-
-        String imgPath = isExpanded
-                ? "/assets/downButton.png"
-                : "/assets/rightButton.png";
-
-        try {
-            Image newImg = new Image(getClass().getResourceAsStream(imgPath));
-            arrowIcon.setImage(newImg);
-        } catch (Exception e) {
-            arrowIcon.setRotate(isExpanded ? 90 : 0);
-        }
-    }
-
-    /**
-     * Optional remarks input.
-     */
-    @FXML
-    private TextArea commentArea;
-
-    /**
-     * Facade for appeal operations.
-     */
-    private AppealFacade appealFacade = new AppealFacadeImpl();
-
-    /**
-     * Handles appeal approval.
+     * Handles the Approve button click. Opens a confirmation dialog.
+     * If confirmed, updates the appeal status to approved.
      */
     @FXML
     private void handleAppealApprove() {
-    showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
-
-            String remarks = (commentArea != null
-                    && !commentArea.getText().trim().isEmpty())
-                    ? commentArea.getText()
-                    : null;
-
-            appealFacade.approveAppeal(appeal.getAppealID(), remarks);
-            showPopupAndRemoveCard("Appeal approved!");
-        });
+        showConfirmation("Are you sure you want to", "approve this appeal?",
+                "Approve", "Cancel", () -> {
+                    String remarks = (
+                            commentArea != null
+                                    && !commentArea.getText().trim().isEmpty())
+                            ? commentArea.getText() : null;
+                    appealFacade.approveAppeal(appeal.getAppealID(), remarks);
+                    showPopupAndRemoveCard("Appeal approved!");
+                });
     }
 
     /**
-     * Handles appeal denial.
+     * Handles the Deny button click. Validates that remarks are provided
+     * before opening a confirmation dialog.
      */
     @FXML
     private void handleAppealDeny() {
-        if (appeal == null) {
+        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+            showError("Please enter remarks before denying.");
             return;
         }
+        showConfirmation("Are you sure you want to", "deny this appeal?",
+                "Deny", "Cancel", () -> {
+                    appealFacade.denyAppeal(
+                            appeal.getAppealID(), commentArea.getText());
+                    showPopupAndRemoveCard("Appeal denied!");
+                });
+    }
 
-            if (commentArea == null || commentArea.getText().trim().isEmpty()) {
-                showError("Please enter remarks before denying.");
-                return;
+    /**
+     * Loads and displays the universal confirmation dialog.
+     * @param l1 First line of the message.
+     * @param l2 Second line of the message.
+     * @param confirmTxt Text for the confirm button.
+     * @param cancelTxt Text for the cancel button.
+     * @param action The logic to execute if the user confirms.
+     */
+    private void showConfirmation(
+            String l1, String l2, String confirmTxt,
+            String cancelTxt, Runnable action) {
+        try {
+            String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+            URL resource = getClass().getResource(path);
+
+            if (resource == null) {
+                path = "/view/dialogs/confirmation.fxml";
+                resource = getClass().getResource(path);
             }
 
-            String remarks = commentArea.getText();
+            FXMLLoader loader = new FXMLLoader(resource);
+            StackPane rootNode = loader.load();
 
-    showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
-                appealFacade.denyAppeal(appeal.getAppealID(), remarks);
-                showPopupAndRemoveCard("Appeal denied!");
-            });
+            ConfirmationDialogController controller = loader.getController();
+
+            if (controller != null) {
+                controller.setMessage(l1, l2);
+                controller.setButtonLabels(confirmTxt, cancelTxt);
+                controller.setOnConfirm(action);
+            }
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(rootNode));
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            System.err.println("Popup Error: Could not load confirmation.fxml");
+            e.printStackTrace();
         }
+    }
 
     /**
-     * Popup label.
+     * Displays a success popup message and triggers the completion callback.
+     * @param msg The message to display (e.g., "Appeal approved!").
      */
-    @FXML
-    private Label popupLabel;
-
-    /**
-     * Shows popup and removes card after delay.
-     * @param message remove card and show message.
-     */
-    private void showPopupAndRemoveCard(String message) {
+    private void showPopupAndRemoveCard(String msg) {
         if (popupLabel != null) {
-            popupLabel.setText(message);
+            popupLabel.setText(msg);
         }
+
         if (popupBox != null) {
             popupBox.setVisible(true);
         }
@@ -286,56 +235,12 @@ public class AppealCardController {
     }
 
     /**
-     * Current appeal status.
+     * Displays an error message temporarily on the card.
+     * @param msg The error message to show.
      */
-    private String status;
-
-    /**
-     * Sets the appeal status.
-     * @param pstatus current status of the appeal
-     */
-    public void setStatus(String pstatus) {
-        this.status = pstatus;
-    }
-
-    /**
-     * Displays a confirmation popup before performing an action.
-     * @param fxmlPath path to the confirmation dialog FXML file
-     * @param onConfirmAction action to execute when confirmed
-     */
-    private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource(fxmlPath));
-            StackPane popupRoot = loader.load();
-
-            AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(onConfirmAction);
-
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(popupRoot));
-            stage.setResizable(false);
-            stage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Error label.
-     */
-    @FXML
-    private Label errorLabel;
-
-    /**
-     * Displays an error message temporarily.
-     * @param message show error message.
-     */
-    private void showError(String message) {
+    private void showError(String msg) {
         if (errorLabel != null) {
-            errorLabel.setText(message);
+            errorLabel.setText(msg);
             errorLabel.setVisible(true);
         }
 
@@ -346,5 +251,76 @@ public class AppealCardController {
             }
         });
         delay.play();
+    }
+
+    /**
+     * Extracts data from the appeal model and populates the UI labels.
+     */
+    private void loadAppealData() {
+        if (appeal != null) {
+            Enrollment e = appeal.getEnrollment();
+            Record r = appeal.getRecord();
+            Student s = e.getStudent();
+
+            if (studentIdLabel != null) {
+                studentIdLabel.setText(s.getStudentId());
+            }
+
+            if (studentNameLabel != null) {
+                studentNameLabel.setText(
+                        s.getFirstName() + " " + s.getLastName());
+            }
+
+            if (offenseLabel != null) {
+                offenseLabel.setText(r.getRemarks());
+            }
+
+            if (reasonLabel != null) {
+                reasonLabel.setText(appeal.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Toggles the card's visibility between collapsed and expanded states.
+     * The action bar is only shown if the appeal status is "PENDING".
+     */
+    @FXML
+    private void toggleExpansion() {
+        isExpanded = !isExpanded;
+
+        if (expandedSection != null) {
+            expandedSection.setVisible(isExpanded);
+            expandedSection.setManaged(isExpanded);
+        }
+
+        if (appeal != null && "PENDING".equals(appeal.getStatus())) {
+            if (actionBar != null) {
+                actionBar.setVisible(isExpanded);
+                actionBar.setManaged(isExpanded);
+            }
+        }
+
+        updateIcon();
+    }
+
+    /**
+     * Updates the toggle button icon based on the current expansion state.
+     */
+    private void updateIcon() {
+        if (arrowIcon != null) {
+            String path = isExpanded ? "/assets/downButton.png"
+                    : "/assets/rightButton.png";
+            try {
+                arrowIcon.setImage(
+                        new Image(getClass().getResourceAsStream(path)));
+            } catch (Exception e) {
+                if (isExpanded) {
+                    arrowIcon.setRotate(90);
+                } else {
+                    arrowIcon.setRotate(0);
+                }
+            }
+        }
     }
 }
