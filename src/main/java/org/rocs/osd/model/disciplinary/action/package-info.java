@@ -4,4 +4,4 @@
  *
  * Represents a disciplinary action with an ID, name, and description.
  */
-package org.rocs.osd.model.disciplinaryAction;
+package org.rocs.osd.model.disciplinary.action;

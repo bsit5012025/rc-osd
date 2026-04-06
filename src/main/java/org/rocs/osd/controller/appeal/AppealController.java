@@ -113,7 +113,7 @@ public class AppealController {
      * Handles pending tab click.
      */
     @FXML
-    private void handlePendingTab() {
+    void handlePendingTab() {
         loadAppealsByStatus("PENDING");
     }
 
@@ -121,7 +121,7 @@ public class AppealController {
      * Handles approved tab click.
      */
     @FXML
-    private void handleApprovedTab() {
+    void handleApprovedTab() {
         loadAppealsByStatus("APPROVED");
     }
 
@@ -129,7 +129,7 @@ public class AppealController {
      * Handles denied tab click.
      */
     @FXML
-    private void handleDeniedTab() {
+    void handleDeniedTab() {
         loadAppealsByStatus("DENIED");
     }
 }

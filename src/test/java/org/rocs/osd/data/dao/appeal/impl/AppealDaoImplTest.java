@@ -37,7 +37,7 @@ class AppealDaoImplTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        connectionHelper = Mockito.mockStatic(ConnectionHelper.class);
+        connectionHelper = mockStatic(ConnectionHelper.class);
         connectionHelper.when(ConnectionHelper::getConnection).thenReturn(connection);
 
         appealDao = new AppealDaoImpl();

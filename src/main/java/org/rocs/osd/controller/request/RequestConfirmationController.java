@@ -40,7 +40,7 @@ public class RequestConfirmationController {
      * Handles approve confirmation.
      */
     @FXML
-    private void handleConfirmApprove() {
+    void handleConfirmApprove() {
         if (onConfirm != null) {
             onConfirm.run();
         }
@@ -51,7 +51,7 @@ public class RequestConfirmationController {
      * Handles deny confirmation.
      */
     @FXML
-    private void handleConfirmDeny() {
+    void handleConfirmDeny() {
         if (onConfirm != null) {
             onConfirm.run();
         }

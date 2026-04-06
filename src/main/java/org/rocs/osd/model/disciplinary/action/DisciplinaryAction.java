@@ -1,4 +1,4 @@
-package org.rocs.osd.model.disciplinaryAction;
+package org.rocs.osd.model.disciplinary.action;
 
 /**
  * Represents a disciplinary action in the Office
@@ -18,6 +18,7 @@ public class DisciplinaryAction {
 
     /** Default constructor, creates an empty DisciplinaryAction object. */
     public DisciplinaryAction() {
+        // Default constructor
     }
 
     /**
