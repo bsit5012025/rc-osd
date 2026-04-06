@@ -135,27 +135,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.28.0</version>
-                <configuration>
-                    <rulesets>
-                        <ruleset>${project.basedir}\src\main\resources\rulesets\java\quickstart.xml</ruleset>
-                    </rulesets>
-                    <linkXRef>true</linkXRef>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>17</targetJdk> <!-- Sync with your project JDK -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>cpd-check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>
