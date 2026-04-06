@@ -207,7 +207,7 @@ public class OffenseController {
      * Handles row click to open edit modal.
      */
     @FXML
-    private void onLoadJuniorHS() {
+    void onLoadJuniorHS() {
         loadRecordsOfViolation(Department.JHS);
         departmentLabel.setText("Junior HS Violations");
         refreshRecord();
@@ -216,7 +216,7 @@ public class OffenseController {
      * Loads Senior High School violations.
      */
     @FXML
-    private void onLoadSeniorHS() {
+    void onLoadSeniorHS() {
         loadRecordsOfViolation(Department.SHS);
         departmentLabel.setText("Senior HS Violations");
     }
@@ -224,7 +224,7 @@ public class OffenseController {
      * Loads College violations.
      */
     @FXML
-    private void onLoadCollege() {
+    void onLoadCollege() {
         loadRecordsOfViolation(Department.COLLEGE);
         departmentLabel.setText("College Violations");
     }

@@ -20,6 +20,7 @@ public class Offense {
 
     /** Default constructor. */
     public Offense() {
+        // Default constructor
     }
 
     /**

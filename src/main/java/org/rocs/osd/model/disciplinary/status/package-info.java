@@ -5,5 +5,5 @@
  * Represents a status for a student record with an ID,
  * name, and description.
  */
-package org.rocs.osd.model.disciplinaryStatus;
+package org.rocs.osd.model.disciplinary.status;
 

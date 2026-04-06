@@ -62,7 +62,7 @@ public class LoginController {
      * and hides it if currently visible.
      */
     @FXML
-    private void togglePasswordVisibility() {
+    void togglePasswordVisibility() {
         if (passwordField == null
                 ||
                 passwordTextField == null
@@ -91,6 +91,14 @@ public class LoginController {
      * Facade used to retrieve login data from backend.
      */
     private LoginFacade loginFacade;
+
+    /**
+     * Handles the mock process of loginControllerTest.
+     * @param pLoginFacade set loginFacade on loginControllerTest to mock db.
+     */
+    public void setLoginFacade(LoginFacade pLoginFacade) {
+        this.loginFacade = pLoginFacade;
+    }
 
     /**
      * Handles the login process when the Login button is clicked.

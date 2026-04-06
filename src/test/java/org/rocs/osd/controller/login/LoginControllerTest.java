@@ -5,9 +5,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.rocs.osd.facade.login.LoginFacade;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -16,19 +17,26 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.verifyThat;
 
 @ExtendWith(ApplicationExtension.class)
-@Tag("gui")
 public class LoginControllerTest {
+
+    private LoginFacade mockLoginFacade;
 
     @Start
     public void start(Stage stage) throws IOException {
+
+        mockLoginFacade = Mockito.mock(LoginFacade.class);
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/view/login/login.fxml")
         );
 
         Scene scene = new Scene(loader.load());
+        LoginController controller = loader.getController();
+        controller.setLoginFacade(mockLoginFacade);
         stage.setScene(scene);
         stage.show();
     }
@@ -36,6 +44,7 @@ public class LoginControllerTest {
     @Test
     public void testValidLoginInput(FxRobot robot) throws InterruptedException {
 
+        when(mockLoginFacade.login("admin", "admin")).thenReturn(true);
         robot.clickOn("#username");
         robot.write("admin");
 
@@ -47,16 +56,19 @@ public class LoginControllerTest {
         Thread.sleep(1000);
 
         robot.clickOn("#loginButton");
+        verifyThat(".dashboardRoot", NodeMatchers.isVisible());
     }
 
     @Test
     public void testEmptyFields(FxRobot robot) {
         robot.clickOn("#loginButton");
+        verifyThat("#loginButton", NodeMatchers.isVisible());
     }
 
     @Test
     public void testInvalidLogin(FxRobot robot) {
 
+        when(mockLoginFacade.login("wrong", "wrong")).thenReturn(false);
         robot.clickOn("#username");
         robot.write("wrong");
 
@@ -64,29 +76,35 @@ public class LoginControllerTest {
         robot.write("wrong");
 
         robot.clickOn("#loginButton");
+        verifyThat("#loginButton", NodeMatchers.isVisible());
     }
 
     @Test
     public void testEmptyPassword(FxRobot robot) {
 
+        when(mockLoginFacade.login("admin", " ")).thenReturn(false);
         robot.clickOn("#username");
         robot.write("admin");
 
         robot.clickOn("#loginButton");
+        verifyThat("#loginButton", NodeMatchers.isVisible());
     }
 
     @Test
     public void testEmptyUsername(FxRobot robot) {
 
+        when(mockLoginFacade.login(" ", "admin")).thenReturn(false);
         robot.clickOn("#password");
         robot.write("admin");
 
         robot.clickOn("#loginButton");
+        verifyThat("#loginButton", NodeMatchers.isVisible());
     }
 
     @Test
     public void testInvalidPassword(FxRobot robot) {
 
+        when(mockLoginFacade.login("admin", "wrong")).thenReturn(false);
         robot.clickOn("#username");
         robot.write("admin");
 
@@ -94,6 +112,7 @@ public class LoginControllerTest {
         robot.write("wrong");
 
         robot.clickOn("#loginButton");
+        verifyThat("#loginButton", NodeMatchers.isVisible());
     }
     @Test
     public void testTogglePasswordVisibility(FxRobot robot) throws InterruptedException {

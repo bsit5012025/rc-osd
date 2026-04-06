@@ -40,10 +40,6 @@ public class LoginFacadeImpl implements LoginFacade {
 
         Login login = loginDao.findLoginByUsername(inputUserName);
 
-        if (login == null) {
-            return false;
-        }
-
-        return inputPassword.equals(login.getPassword());
+        return login != null && inputPassword.equals(login.getPassword());
     }
 }
