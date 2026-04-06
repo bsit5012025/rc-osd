@@ -72,7 +72,6 @@ public class StudentDaoImpl implements StudendDao {
 
     /**
      * Finds a student and their record by full name.
-     *
      * @param lastName   the student's last name.
      * @param firstName  the student's first name.
      * @param middleName the student's middle name.

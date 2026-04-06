@@ -23,9 +23,9 @@ public class RequestDaoImpl implements RequestDao {
      * Adds a new request to the database with status PENDING.
      *
      * @param employeeID the ID of the employee creating the request.
-     * @param details    the details of the request.
-     * @param message    the message or reason for the request.
-     * @param type       the type/category of the request.
+     * @param details the details of the request.
+     * @param message the message or reason for the request.
+     * @param type the type/category of the request.
      * @return true if the request was successfully added, false otherwise.
      */
     @Override
@@ -102,8 +102,8 @@ public class RequestDaoImpl implements RequestDao {
      * Updates the status of a request in the database.
      *
      * @param requestID the ID of the request to update.
-     * @param remarks   the remarks of user approving or denying the request.
-     * @param status    the new status to assign to the request.
+     * @param remarks the remarks of user approving or denying the request.
+     * @param status the new status to assign to the request.
      * @return true if the update was successful, false otherwise.
      */
     @Override

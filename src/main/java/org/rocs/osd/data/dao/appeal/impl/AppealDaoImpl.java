@@ -33,27 +33,27 @@ public class AppealDaoImpl implements AppealDao {
         List<Appeal> list = new ArrayList<>();
 
         String sql = """
-                SELECT a.appealID,
-                       a.recordID,
-                       a.enrollmentID,
-                       a.message,
-                       a.dateFiled,
-                       a.status,
-                       a.dateProcessed,
-                       a.remarks,
-                       s.studentID,
-                       p.firstName,
-                       p.lastName,
-                       o.offense
-                FROM appeal a
-                JOIN record r ON a.recordID = r.recordID
-                JOIN offense o ON r.offenseID = o.offenseID
-                JOIN enrollment e ON a.enrollmentID = e.enrollmentID
-                JOIN student s ON e.studentID = s.studentID
-                JOIN person p ON s.personID = p.personID
-                WHERE a.status = ?
-                ORDER BY a.dateFiled DESC
-                """;
+               SELECT a.appealID,
+                      a.recordID,
+                      a.enrollmentID,
+                      a.message,
+                      a.dateFiled,
+                      a.status,
+                      a.dateProcessed,
+                      a.remarks,
+                      s.studentID,
+                      p.firstName,
+                      p.lastName,
+                      o.offense
+               FROM appeal a
+               JOIN record r ON a.recordID = r.recordID
+               JOIN offense o ON r.offenseID = o.offenseID
+               JOIN enrollment e ON a.enrollmentID = e.enrollmentID
+               JOIN student s ON e.studentID = s.studentID
+               JOIN person p ON s.personID = p.personID
+               WHERE a.status = ?
+               ORDER BY a.dateFiled DESC
+               """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -107,12 +107,12 @@ public class AppealDaoImpl implements AppealDao {
     @Override
     public void processAppeal(long appealId, String status, String remarks) {
         String sql = """
-                    UPDATE appeal
-                    SET status = ?,
-                    remarks = ?,
-                    dateProcessed = CURRENT_DATE
-                    WHERE appealID = ?
-                    """;
+                   UPDATE appeal
+                   SET status = ?,
+                   remarks = ?,
+                   dateProcessed = CURRENT_DATE
+                   WHERE appealID = ?
+                   """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

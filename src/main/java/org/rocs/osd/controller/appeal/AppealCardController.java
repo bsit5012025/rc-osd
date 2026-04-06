@@ -288,8 +288,14 @@ public class AppealCardController {
     /**
      * Current appeal status.
      */
-    @FXML
     private String status;
+    /**
+     * Getter for status.
+     * @return the current status of the appeal.
+     * */
+    public String getStatus() {
+        return status;
+    }
 
     /**
      * Sets the appeal status.
