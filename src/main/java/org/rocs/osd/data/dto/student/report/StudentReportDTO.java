@@ -1,4 +1,4 @@
-package org.rocs.osd.data.dto.studentReport;
+package org.rocs.osd.data.dto.student.report;
 
 /**
  * Data Transfer Object representing a comprehensive student report.
