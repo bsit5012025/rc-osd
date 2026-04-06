@@ -5,11 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.rocs.osd.controller.sms.SmsService;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
@@ -125,6 +121,7 @@ public class AddOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+        disableDateValidation();
     }
 
     /**
@@ -229,7 +226,6 @@ public class AddOffenseModalController {
             }
 
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
             LocalDate getDateOfViolation = datePicker.getValue();
             LocalDate dateToday = LocalDate.now();
             LocalDate dateLimit = dateToday.minusMonths(2);
@@ -315,5 +311,22 @@ public class AddOffenseModalController {
             e.printStackTrace();
         }
         System.out.println("Violation recorded!");
+    }
+
+    private void disableDateValidation() {
+
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                LocalDate twoMonthsAgo = today.minusMonths(2);
+
+                if (date.isAfter(today) || date.isBefore(twoMonthsAgo)) {
+                    setDisable(true);
+                }
+            }
+        });
+        datePicker.setValue(LocalDate.now());
     }
 }
