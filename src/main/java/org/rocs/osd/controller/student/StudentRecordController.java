@@ -250,11 +250,12 @@ public class StudentRecordController {
                 parameters.put("grade", gradeComboBox.getValue());
                 parameters.put("section", sectionTextField.getText());
                 parameters.put("academicYear", academicYearTextField.getText());
+                parameters.put("studentAddress", addressTextField.getText());
                 parameters.put("guardianName", guardianTextField.getText());
                 parameters.put("contactNumber",
                         contactNumberTextField.getText());
-                parameters.put("studentAddress", addressTextField.getText());
                 parameters.put("guardianAddress", addressTextField.getText());
+                parameters.put("status", statusComboBox.getValue());
                 parameters.put("internCheckBox",
                         internCheckBox.isSelected() ? "X" : "");
                 parameters.put("externCheckBox",
