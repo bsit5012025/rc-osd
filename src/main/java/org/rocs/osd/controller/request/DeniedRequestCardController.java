@@ -57,8 +57,15 @@ public class DeniedRequestCardController {
     private boolean isExpanded = false;
 
     /** ID of the current request. */
-    @FXML
     private long cardId;
+
+    /**
+     * Getter for cardId.
+     * @return cardId.
+     * */
+    public long getCardId() {
+        return cardId;
+    }
 
     /**
      * Sets the data for the request card.
