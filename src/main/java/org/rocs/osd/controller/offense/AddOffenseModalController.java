@@ -244,7 +244,9 @@ public class AddOffenseModalController {
                         "Date is in the future, kindly double check the date.");
                 return;
             }
-            if (datePicker.getValue().isBefore(LocalDate.now().minusMonths(2))) {
+            if (datePicker.getValue()
+                    .isBefore(LocalDate.now()
+                            .minusMonths(2))) {
                 System.out.println(
                         "Violations older than 2 months cannot be recorded.");
                 return;
@@ -322,7 +324,8 @@ public class AddOffenseModalController {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
 
-                if (date.isAfter(LocalDate.now()) || date.isBefore(LocalDate.now().minusMonths(2))) {
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
                     setDisable(true);
                 }
             }
