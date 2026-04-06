@@ -1,78 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane prefHeight="482.0" prefWidth="546.0" styleClass="studentOffenseContainer" stylesheets="@../../styles/offense/viewStudentOffense.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rocs.osd.controller.offense.ViewOffenseModalController">
-    <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0">
-            <center>
-                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <GridPane hgap="10.0" prefHeight="214.0" prefWidth="476.0" styleClass="viewStudentGrid" VBox.vgrow="NEVER">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <VBox prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Label styleClass="viewStudentLabel" text="Student ID:" />
-                                        <TextArea fx:id="studentIdField" editable="false" styleClass="viewStudentTextArea" />
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="10.0" layoutY="4.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                                    <children>
-                                        <Label styleClass="viewStudentLabel" text="Student Name:" />
-                                        <TextArea fx:id="studentNameField" editable="false" prefHeight="200.0" prefWidth="200.0" styleClass="viewStudentTextArea" />
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="10.0" layoutY="81.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
-                                    <children>
-                                        <Label styleClass="viewStudentLabel" text="Date:" />
-                                        <DatePicker fx:id="datePicker" editable="false" styleClass="viewStudentTextArea" />
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="10.0" layoutY="152.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
-                                    <children>
-                                        <Label styleClass="viewStudentLabel" text="Offense Type:" />
-                                        <ComboBox fx:id="offenseTypeField" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="253.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <children>
-                                        <Label styleClass="viewStudentLabel" text="Level of Offense:" />
-                                        <ComboBox fx:id="offenseLevelField" prefWidth="150.0" styleClass="viewStudentTextArea" VBox.vgrow="NEVER" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </GridPane>
-                        <Label styleClass="viewStudentLabel" text="Remarks:" />
-                        <TextField fx:id="remarksField" alignment="TOP_LEFT" editable="false" maxHeight="141.0" maxWidth="486.0" prefHeight="141.0" prefWidth="486.0">
-                            <VBox.margin>
-                                <Insets bottom="5.0" />
-                            </VBox.margin></TextField>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="486.0" styleClass="buttonBar">
-                            <children>
-                                <Button fx:id="editButton"
-                                        text="Edit"
-                                        styleClass="editButton"
-                                        onAction="#onEdit"/>
+<StackPane fx:id="viewStudentOffenseModal"
+           styleClass="modalContainer"
+           stylesheets="@../../styles/offense/addOffenseModal.css"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.rocs.osd.controller.offense.ViewOffenseModalController">
 
-                                <Button fx:id="resolveButton"
-                                        text="Resolve"
-                                        styleClass="resolveButton"
-                                        onAction="#onResolve"/>
-                            </children>
-                        </HBox>
-                    </children>
+    <BorderPane>
+        <center>
+            <VBox spacing="10.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="50.0">
+                    <Label text="View Violation" styleClass="subLabelForModal"/>
+                </HBox>
+                <Pane minHeight="2.0" styleClass="linePaneColorGray"/>
+                <GridPane hgap="20.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Student ID:" styleClass="lightLabelForTextField"/>
+                        <TextField fx:id="studentIdField"
+                                   editable="false"
+                                   maxWidth="Infinity"
+                                   styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Student Name:" styleClass="lightLabelForTextField"/>
+                        <TextField fx:id="studentNameField"
+                                   editable="false"
+                                   maxWidth="Infinity"
+                                   styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Date:" styleClass="lightLabelForTextField"/>
+                        <DatePicker fx:id="datePicker"
+                                    editable="false"
+                                    maxWidth="Infinity"
+                                    styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Offense Type:" styleClass="lightLabelForTextField"/>
+                        <ComboBox fx:id="offenseTypeField"
+                                  editable="false"
+                                  maxWidth="Infinity"
+                                  styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Level of Offense:" styleClass="lightLabelForTextField"/>
+                        <TextField fx:id="offenseLevelField"
+                                   editable="false"
+                                   maxWidth="Infinity"
+                                   styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Action:" styleClass="lightLabelForTextField"/>
+                        <TextField fx:id="actionField"
+                                   editable="false"
+                                   maxWidth="Infinity"
+                                   styleClass="inputTextFieldOffense"/>
+                    </VBox>
+                </GridPane>
+                <VBox spacing="5.0">
+                    <Label text="Remarks:" styleClass="lightLabelForTextField"/>
+                    <TextArea fx:id="remarksField"
+                              editable="false"
+                              wrapText="true"
+                              maxWidth="Infinity"
+                              styleClass="inputTextArea"/>
                 </VBox>
-            </center></BorderPane>
-    </children>
+
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editButton"
+                            text="Edit"
+                            styleClass="cancelButton"
+                            onAction="#onEdit"/>
+
+                    <Button fx:id="resolveButton"
+                            text="Resolve"
+                            styleClass="submitOffenseButton"
+                            onAction="#onResolve"/>
+                    <padding>
+                        <Insets top="10.0"/>
+                    </padding>
+                </HBox>
+            </VBox>
+        </center>
+    </BorderPane>
 </StackPane>

@@ -59,6 +59,14 @@ public class ApprovedRequestCardController {
     private long cardId;
 
     /**
+     * Getter for cardId.
+     * @return cardId.
+     * */
+    public long getCardId() {
+        return cardId;
+    }
+
+    /**
      * Sets the data for the request card.
      * @param pDept the department name.
      * @param pName the requester name.
@@ -92,7 +100,7 @@ public class ApprovedRequestCardController {
      * Toggles the expansion state of the card.
      */
     @FXML
-    private void toggleExpansion() {
+    void toggleExpansion() {
         isExpanded = !isExpanded;
         expandedSection.setVisible(isExpanded);
         expandedSection.setManaged(isExpanded);

@@ -12,8 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.rocs.osd.controller.sms.SmsService;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -28,7 +28,7 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
@@ -51,15 +51,15 @@ public class AddOffenseModalController {
     @FXML
     private ComboBox<String> offenseTypeComboBox;
     /**
-     * Dropdown for displaying offense level.
-     */
-    @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
-    /**
      * Dropdown for selecting disciplinary action.
      */
     @FXML
     private ComboBox<String> actionComboBox;
+    /**
+     * Text field for displaying offense level.
+     */
+    @FXML
+    private TextField levelOfOffense;
     /**
      * Input field for student ID.
      */
@@ -164,7 +164,7 @@ public class AddOffenseModalController {
                 Offense offense = offenseDao.findByName(selected);
 
                 if (offense != null) {
-                    levelOfOffenseComboBox.setValue(offense.getType());
+                    levelOfOffense.setText(offense.getType());
                 }
             }
         });
@@ -228,10 +228,7 @@ public class AddOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
-            LocalDate getDateOfViolation = datePicker.getValue();
-            LocalDate dateToday = LocalDate.now();
-            LocalDate dateLimit = dateToday.minusMonths(2);
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
             String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();

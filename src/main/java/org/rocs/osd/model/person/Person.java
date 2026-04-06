@@ -21,6 +21,7 @@ public class Person {
 
     /** Default constructor. */
     public Person() {
+        // Default constructor
     }
 
     /**

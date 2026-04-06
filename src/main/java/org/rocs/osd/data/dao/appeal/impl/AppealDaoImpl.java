@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * Implementation of AppealDao that handles database operations for Appeal
  * records in the Office of Student Discipline System.
- *
  * Provides methods to retrieve pending appeals and update appeal statuses.
  */
 public class AppealDaoImpl implements AppealDao {
@@ -25,6 +24,7 @@ public class AppealDaoImpl implements AppealDao {
     /**
      * Retrieves all appeals by its status along with related
      * student, enrollment, and record details.
+     *
      * @param status the appeal status (PENDING, APPROVED, DENIED)
      * @return list of appeals
      */
@@ -33,59 +33,61 @@ public class AppealDaoImpl implements AppealDao {
         List<Appeal> list = new ArrayList<>();
 
         String sql = """
-            SELECT a.appealID,
-                   a.recordID,
-                   a.enrollmentID,
-                   a.message,
-                   a.dateFiled,
-                   a.status,
-                   a.dateProcessed,
-                   a.remarks,
-                   s.studentID,
-                   p.firstName,
-                   p.lastName,
-                   o.offense
-              FROM appeal a
-              JOIN record r ON a.recordID = r.recordID
-              JOIN offense o ON r.offenseID = o.offenseID
-              JOIN enrollment e ON a.enrollmentID = e.enrollmentID
-              JOIN student s ON e.studentID = s.studentID
-              JOIN person p ON s.personID = p.personID
-             WHERE a.status = ?
-             ORDER BY a.dateFiled DESC
-        """;
+               SELECT a.appealID,
+                      a.recordID,
+                      a.enrollmentID,
+                      a.message,
+                      a.dateFiled,
+                      a.status,
+                      a.dateProcessed,
+                      a.remarks,
+                      s.studentID,
+                      p.firstName,
+                      p.lastName,
+                      o.offense
+               FROM appeal a
+               JOIN record r ON a.recordID = r.recordID
+               JOIN offense o ON r.offenseID = o.offenseID
+               JOIN enrollment e ON a.enrollmentID = e.enrollmentID
+               JOIN student s ON e.studentID = s.studentID
+               JOIN person p ON s.personID = p.personID
+               WHERE a.status = ?
+               ORDER BY a.dateFiled DESC
+               """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-             ps.setString(1, status);
-             ResultSet rs = ps.executeQuery();
+            ps.setString(1, status);
 
-            while (rs.next()) {
-                Appeal appeal = new Appeal();
-                appeal.setAppealID(rs.getLong("appealID"));
-                appeal.setMessage(rs.getString("message"));
-                appeal.setDateFiled(rs.getDate("dateFiled"));
-                appeal.setStatus(rs.getString("status"));
-                appeal.setRemarks(rs.getString("remarks"));
-                appeal.setDateProcessed(rs.getDate("dateProcessed"));
+            try (ResultSet rs = ps.executeQuery()) {
 
-                Record record = new Record();
-                record.setRecordId(rs.getLong("recordID"));
-                record.setRemarks(rs.getString("offense"));
-                appeal.setRecord(record);
+                while (rs.next()) {
+                    Appeal appeal = new Appeal();
+                    appeal.setAppealID(rs.getLong("appealID"));
+                    appeal.setMessage(rs.getString("message"));
+                    appeal.setDateFiled(rs.getDate("dateFiled"));
+                    appeal.setStatus(rs.getString("status"));
+                    appeal.setRemarks(rs.getString("remarks"));
+                    appeal.setDateProcessed(rs.getDate("dateProcessed"));
 
-                Enrollment enrollment = new Enrollment();
-                enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
+                    Record record = new Record();
+                    record.setRecordId(rs.getLong("recordID"));
+                    record.setRemarks(rs.getString("offense"));
+                    appeal.setRecord(record);
 
-                Student student = new Student();
-                student.setStudentId(rs.getString("studentID"));
-                student.setFirstName(rs.getString("firstName"));
-                student.setLastName(rs.getString("lastName"));
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setEnrollmentId(rs.getLong("enrollmentID"));
 
-                enrollment.setStudent(student);
-                appeal.setEnrollment(enrollment);
+                    Student student = new Student();
+                    student.setStudentId(rs.getString("studentID"));
+                    student.setFirstName(rs.getString("firstName"));
+                    student.setLastName(rs.getString("lastName"));
 
-                list.add(appeal);
+                    enrollment.setStudent(student);
+                    appeal.setEnrollment(enrollment);
+
+                    list.add(appeal);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching appeal by status", e);
@@ -99,18 +101,18 @@ public class AppealDaoImpl implements AppealDao {
      * Also saves remarks and sets the processed date.
      *
      * @param appealId ID of the appeal to update
-     * @param status new status (APPROVED / DENIED)
-     * @param remarks optional remarks for the appeal
+     * @param status   new status (APPROVED / DENIED)
+     * @param remarks  optional remarks for the appeal
      */
     @Override
     public void processAppeal(long appealId, String status, String remarks) {
         String sql = """
-    UPDATE appeal
-    SET status = ?,
-        remarks = ?,
-        dateProcessed = CURRENT_DATE
-    WHERE appealID = ?
-    """;
+                   UPDATE appeal
+                   SET status = ?,
+                   remarks = ?,
+                   dateProcessed = CURRENT_DATE
+                   WHERE appealID = ?
+                   """;
 
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -10,8 +10,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -40,12 +40,16 @@ public class EditOffenseModalController {
      */
     @FXML
     private ComboBox<String> offenseTypeComboBox;
-
     /**
-     * ComboBox for displaying offense level.
+     * Text field for displaying offense level.
      */
     @FXML
-    private ComboBox<String> levelOfOffenseComboBox;
+    private TextField levelOfOffense;
+    /**
+     * Dropdown for selecting disciplinary action.
+     */
+    @FXML
+    private ComboBox<String> actionComboBox;
     /**
      * TextField for student ID input.
      */
@@ -143,11 +147,13 @@ public class EditOffenseModalController {
                 String.valueOf(record.getDateOfViolation())));
         offenseTypeComboBox.setValue(
                 record.getOffense().getOffense());
-        levelOfOffenseComboBox.setValue(
+        levelOfOffense.setText(
                 record.getOffense().getType());
         remarksTextArea.setWrapText(true);
         remarksTextArea.setText(
                 record.getRemarks());
+        actionComboBox.setValue(
+                record.getAction().getActionName());
     }
     /**
      * Loads offense names into the ComboBox.
@@ -159,6 +165,7 @@ public class EditOffenseModalController {
             ObservableList<String> actionList = FXCollections.
             observableArrayList(disciplinaryActionDao.findAllAction());
             offenseTypeComboBox.setItems(offenseList);
+            actionComboBox.setItems(actionList);
         } catch (Exception e) {
             System.err.println("Database Error: Could not fetch "
                     + "offense names from the database.");
@@ -178,7 +185,7 @@ public class EditOffenseModalController {
                 Offense offense = offenseDao.findByName(selected);
 
                 if (offense != null) {
-                    levelOfOffenseComboBox.setValue(offense.getType());
+                    levelOfOffense.setText(offense.getType());
                 }
             }
         });
@@ -216,7 +223,7 @@ public class EditOffenseModalController {
      * @param event action event from cancel button
      */
     @FXML
-    private void onCancel(ActionEvent event) {
+    void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -227,12 +234,14 @@ public class EditOffenseModalController {
      * @param event action event from submit button.
      */
     @FXML
-    private void onSubmit(ActionEvent event) {
+    void onSubmit(ActionEvent event) {
         try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
             String offenseName = offenseTypeComboBox.getValue();
-            String offenseType = levelOfOffenseComboBox.getValue();
+            String offenseType = levelOfOffense.getText();
+            String actionName = actionComboBox.getValue();
+
             String remarks = remarksTextArea.getText();
 
             if (studentId == null
@@ -255,7 +264,7 @@ public class EditOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
 
             long enrollmentID = enrollmentDao.
             findEnrollmentIdByStudentId(studentId);
@@ -264,6 +273,10 @@ public class EditOffenseModalController {
             long actionId = disciplinaryActionDao.
             findActionIdByName(record.getAction().getActionName());
             record.getAction().setActionId(actionId);
+
+            long actionID = disciplinaryActionDao.
+                    findActionIdByName(actionName);
+            record.getAction().setActionId(actionID);
 
             Offense offenseObj = offenseDao.findByName(offenseName);
             record.setOffense(offenseObj);

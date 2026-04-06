@@ -12,8 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -35,16 +35,16 @@ import java.sql.Date;
 public class ViewOffenseModalController {
 
     /**
-     * TextArea for student ID.
+     * TextField for student ID.
      */
     @FXML
-    private TextArea studentIdField;
+    private TextField studentIdField;
 
     /**
-     * TextArea for student name.
+     * TextField for student name.
      */
     @FXML
-    private TextArea studentNameField;
+    private TextField studentNameField;
 
     /**
      * DatePicker for violation date.
@@ -59,29 +59,38 @@ public class ViewOffenseModalController {
     private ComboBox<String> offenseTypeField;
 
     /**
-     * ComboBox for offense level.
+     * Text field for displaying offense level.
      */
     @FXML
-    private ComboBox<String> offenseLevelField;
+    private TextField offenseLevelField;
+
+    /**
+     * TextField for action.
+     */
+    @FXML
+    private TextField actionField;
 
     /**
      * TextArea for remarks.
      */
     @FXML
-    private TextField remarksField;
+    private TextArea remarksField;
 
     /**
      * Facade for record operations.
      */
     private RecordFacade recordFacade;
+
     /**
      * DAO for offense operations.
      */
     private OffenseDao offenseDao;
+
     /**
      * DAO for enrollment operations.
      */
     private EnrollmentDao enrollmentDao;
+
     /**
      * DAO for disciplinary actions.
      */
@@ -114,7 +123,6 @@ public class ViewOffenseModalController {
         loadRecordData();
     }
 
-
     /**
      * Loads record data into UI fields.
      */
@@ -138,8 +146,12 @@ public class ViewOffenseModalController {
                 record.getOffense().getOffense()
         );
 
-        offenseLevelField.setValue(
+        offenseLevelField.setText(
                 record.getOffense().getType()
+        );
+
+        actionField.setText(
+                record.getAction().getActionName()
         );
 
         remarksField.setText(record.getRemarks());
@@ -151,7 +163,7 @@ public class ViewOffenseModalController {
      * @param event button click event
      */
     @FXML
-    private void onEdit(ActionEvent event) {
+    void onEdit(ActionEvent event) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
@@ -183,13 +195,13 @@ public class ViewOffenseModalController {
      * @param event button click event
      */
     @FXML
-    private void onResolve(ActionEvent event) {
+    void onResolve(ActionEvent event) {
 
         try {
             String studentId = studentIdField.getText();
             String studentName = studentNameField.getText();
             String offenseName = offenseTypeField.getValue();
-            String offenseType = offenseLevelField.getValue();
+            String offenseType = offenseLevelField.getText();
             String remarks = remarksField.getText();
 
             if (studentId == null
@@ -212,7 +224,7 @@ public class ViewOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
 
             long enrollmentID = enrollmentDao.
                     findEnrollmentIdByStudentId(studentId);

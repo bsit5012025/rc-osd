@@ -22,6 +22,7 @@ public class Login {
 
     /** Default constructor. */
     public Login() {
+        // Default constructor
     }
 
     /**

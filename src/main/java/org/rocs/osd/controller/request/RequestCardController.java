@@ -167,7 +167,7 @@ public class RequestCardController {
      * Toggles the expansion state of the card.
      */
     @FXML
-    private void toggleExpansion() {
+    void toggleExpansion() {
         isExpanded = !isExpanded;
         expandedSection.setVisible(isExpanded);
         actionBar.setVisible(isExpanded);
@@ -199,7 +199,7 @@ public class RequestCardController {
      * Approving the request status and add comments.
      */
     @FXML
-    private void onApprove() {
+    void onApprove() {
         showConfirmation(
                 "/view/dialogs/approvedRequestConfirmation.fxml", () -> {
 
@@ -218,7 +218,7 @@ public class RequestCardController {
      * Denied the request status and add comments.
      */
     @FXML
-    private void onDeny() {
+    void onDeny() {
         if (commentArea == null || commentArea.getText().trim().isEmpty()) {
             showError("Please enter remarks before denying.");
             return;

@@ -1,6 +1,6 @@
 package org.rocs.osd.facade.guardian;
 
-import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 
 import java.util.List;
 

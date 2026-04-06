@@ -9,14 +9,10 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.rocs.osd.data.connection.ConnectionHelper;
 
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.model.offense.Offense;
-import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.record.Record;
 
 import java.sql.*;
 import java.util.ArrayList;

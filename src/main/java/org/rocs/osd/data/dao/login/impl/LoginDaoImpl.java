@@ -27,31 +27,31 @@ public class LoginDaoImpl implements LoginDao {
     public Login findLoginByUsername(String username) {
         Login login = new Login();
 
-        try (Connection conn = ConnectionHelper.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(
-                    "SELECT l.id, l.username, l.password, l.personID, "
-                            + "p.lastname, p.firstname, p.middleName "
-                            + "FROM Login l "
-                            + "JOIN person p ON l.personID = p.personID "
-                            + "WHERE l.username = ?"
-            );
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement statement = conn.prepareStatement(
+                     "SELECT l.id, l.username, l.password, l.personID, "
+                             + "p.lastname, p.firstname, p.middleName "
+                             + "FROM Login l "
+                             + "JOIN person p ON l.personID = p.personID "
+                             + "WHERE l.username = ?"
+             )) {
 
             statement.setString(1, username);
-            ResultSet rs = statement.executeQuery();
+            try (ResultSet rs = statement.executeQuery()) {
 
-            if (rs.next()) {
-                Person person = new Person();
-                person.setPersonID(rs.getLong("personID"));
-                person.setLastName(rs.getString("lastname"));
-                person.setFirstName(rs.getString("firstname"));
-                person.setMiddleName(rs.getString("middleName"));
+                if (rs.next()) {
+                    Person person = new Person();
+                    person.setPersonID(rs.getLong("personID"));
+                    person.setLastName(rs.getString("lastname"));
+                    person.setFirstName(rs.getString("firstname"));
+                    person.setMiddleName(rs.getString("middleName"));
 
-                login.setId(rs.getLong("id"));
-                login.setUsername(rs.getString("username"));
-                login.setPassword(rs.getString("password"));
-                login.setPerson(person);
+                    login.setId(rs.getLong("id"));
+                    login.setUsername(rs.getString("username"));
+                    login.setPassword(rs.getString("password"));
+                    login.setPerson(person);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
