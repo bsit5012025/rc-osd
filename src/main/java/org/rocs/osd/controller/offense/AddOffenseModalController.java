@@ -231,9 +231,6 @@ public class AddOffenseModalController {
             }
 
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
-            LocalDate getDateOfViolation = datePicker.getValue();
-            LocalDate dateToday = LocalDate.now();
-            LocalDate dateLimit = dateToday.minusMonths(2);
             String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
@@ -242,12 +239,12 @@ public class AddOffenseModalController {
             long enrollmentId = enrollmentDao.
                     findEnrollmentIdByStudentId(studentId);
 
-            if (getDateOfViolation.isAfter(dateToday)) {
+            if (datePicker.getValue().isAfter(LocalDate.now())) {
                 System.out.println(
                         "Date is in the future, kindly double check the date.");
                 return;
             }
-            if (getDateOfViolation.isBefore(dateLimit)) {
+            if (datePicker.getValue().isBefore(LocalDate.now().minusMonths(2))) {
                 System.out.println(
                         "Violations older than 2 months cannot be recorded.");
                 return;
@@ -324,10 +321,8 @@ public class AddOffenseModalController {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                LocalDate today = LocalDate.now();
-                LocalDate twoMonthsAgo = today.minusMonths(2);
 
-                if (date.isAfter(today) || date.isBefore(twoMonthsAgo)) {
+                if (date.isAfter(LocalDate.now()) || date.isBefore(LocalDate.now().minusMonths(2))) {
                     setDisable(true);
                 }
             }
