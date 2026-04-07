@@ -93,19 +93,31 @@ public class CenterDashboardController {
      * Object for record facade.
      * */
     private RecordFacade recordFacade;
+
+    /**
+     * Setter for injecting the CenterDashboardController
+     */
+    public void setRecordFacade(RecordFacade recordFacade) {
+        this.recordFacade = recordFacade;
+    }
     /**
      * Initializes the center dashboard controller.
      * */
     @FXML
     public void initialize() {
-        recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
-        appealFacade = new AppealFacadeImpl();
+        if (recordFacade == null) {
+            recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
+        }
+        if (appealFacade == null) {
+            appealFacade = new AppealFacadeImpl();
+        }
         loadWidgetsOnDashboard();
         loadTime();
         loadDataToTable();
         loadRecentViolations(getCurrentSchoolYear());
         loadFrequentOffense();
     }
+
     /**
      * Loads the data on fxml components using record facade.
      * */
@@ -202,6 +214,12 @@ public class CenterDashboardController {
      * */
     private AppealFacade appealFacade;
 
+    /**
+     * Setter for injecting the CenterDashboardController
+     */
+    public void setAppealFacade(AppealFacade appealFacade) {
+        this.appealFacade = appealFacade;
+    }
     /**
      * Loads the data on fxml components using appeal facade.
      * */

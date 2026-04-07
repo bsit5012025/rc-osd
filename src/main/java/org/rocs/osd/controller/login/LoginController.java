@@ -17,6 +17,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.rocs.osd.controller.dashboard.CenterDashboardController;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
@@ -55,6 +56,18 @@ public class LoginController {
      */
     @FXML
     private javafx.scene.control.Button togglePasswordButton;
+
+    /**
+     * Controller used for setCenterDashboardController.
+     */
+    private CenterDashboardController centerDashboardController;
+
+    /**
+     * Setter for injecting the CenterDashboardController
+     */
+    public void setCenterDashboardController(CenterDashboardController controller) {
+        this.centerDashboardController = controller;
+    }
 
     /**
      * Toggles the visibility of the password input.
@@ -134,7 +147,7 @@ public class LoginController {
 
     }
 
-    private void loadDashboard(ActionEvent event) {
+    void loadDashboard(ActionEvent event) {
         try {
             if (errorStage != null) {
                 errorStage.close();
