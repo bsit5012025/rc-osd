@@ -1,6 +1,7 @@
 package org.rocs.osd.controller.login;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -58,7 +59,7 @@ public class LoginControllerTest {
     }
 
     @BeforeEach
-    public void setupDashboardMocks() {
+    public void setupDashboardMocks() throws Exception {
         RecordFacade mockRecordFacade = Mockito.mock(RecordFacade.class);
         Mockito.when(mockRecordFacade.getTotalViolations(Mockito.anyString())).thenReturn(5);
         Mockito.when(mockRecordFacade.getMostFrequentOffense(Mockito.anyString())).thenReturn(Map.of("Late", 50.0));
@@ -71,10 +72,12 @@ public class LoginControllerTest {
                 .thenReturn(List.of());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/centerDashboard.fxml"));
-        CenterDashboardController dashboardController = new CenterDashboardController();
+        Parent root = loader.load();
+        CenterDashboardController dashboardController = loader.getController()  ;
         dashboardController.setRecordFacade(mockRecordFacade);
         dashboardController.setAppealFacade(mockAppealFacade);
-        loader.setController(dashboardController);
+        dashboardController.initialize();
+
     }
 
     @Test

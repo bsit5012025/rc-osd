@@ -63,17 +63,18 @@ public class LoginController {
     private CenterDashboardController centerDashboardController;
 
     /**
-     * Getter for injecting the CenterDashboardController
+     * @return Getter for injecting the CenterDashboardController.
      */
     public CenterDashboardController getCenterDashboardController() {
         return centerDashboardController;
     }
 
     /**
-     * Setter for injecting the CenterDashboardController
+     * @param pController sets the controller for CenterDashboardController.
      */
-    public void setCenterDashboardController(CenterDashboardController controller) {
-        this.centerDashboardController = controller;
+    public void setCenterDashboardController
+    (CenterDashboardController pController) {
+        this.centerDashboardController = pController;
     }
 
     /**

@@ -95,10 +95,10 @@ public class CenterDashboardController {
     private RecordFacade recordFacade;
 
     /**
-     * Setter for injecting the CenterDashboardController
+     * @param pRecordFacade sets the controller for CenterDashboardController.
      */
-    public void setRecordFacade(RecordFacade recordFacade) {
-        this.recordFacade = recordFacade;
+    public void setRecordFacade(RecordFacade pRecordFacade) {
+        this.recordFacade = pRecordFacade;
     }
     /**
      * Initializes the center dashboard controller.
@@ -215,10 +215,10 @@ public class CenterDashboardController {
     private AppealFacade appealFacade;
 
     /**
-     * Setter for injecting the CenterDashboardController
+     * @param pAppealFacade sets the controller for CenterDashboardController.
      */
-    public void setAppealFacade(AppealFacade appealFacade) {
-        this.appealFacade = appealFacade;
+    public void setAppealFacade(AppealFacade pAppealFacade) {
+        this.appealFacade = pAppealFacade;
     }
     /**
      * Loads the data on fxml components using appeal facade.
