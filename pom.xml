@@ -89,10 +89,16 @@
         </dependency>
 
         <dependency>
+<<<<<<< OSDA-316-Create-Unit-Test-For-Login-Functionality
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
             <version>4.0.17</version>
             <scope>test</scope>
+=======
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.20.6</version>
+>>>>>>> master
         </dependency>
 
 
