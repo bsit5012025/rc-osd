@@ -63,6 +63,13 @@ public class LoginController {
     private CenterDashboardController centerDashboardController;
 
     /**
+     * Getter for injecting the CenterDashboardController
+     */
+    public CenterDashboardController getCenterDashboardController() {
+        return centerDashboardController;
+    }
+
+    /**
      * Setter for injecting the CenterDashboardController
      */
     public void setCenterDashboardController(CenterDashboardController controller) {
