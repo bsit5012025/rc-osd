@@ -121,7 +121,7 @@
 
             <HBox styleClass="buttonBar">
                 <Button mnemonicParsing="false" styleClass="backButton" text="Back" onAction="#onCancel" />
-                <Button mnemonicParsing="false" styleClass="downloadButton" text="Download" />
+                <Button mnemonicParsing="false" styleClass="downloadButton" text="Download" onAction="#onDownload" />
             </HBox>
         </VBox>
     </center>
