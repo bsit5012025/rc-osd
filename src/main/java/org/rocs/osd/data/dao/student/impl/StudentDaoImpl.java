@@ -42,7 +42,7 @@ public class StudentDaoImpl implements StudendDao {
                              + " r.recordID "
                              + " FROM student s "
                              + " JOIN person p ON s.personID = p.personID "
-                             + " LEFT JOIN enrollment e "
+                             + " JOIN enrollment e "
                              + " ON s.studentID = e.studentID "
                              + " LEFT JOIN record r "
                              + " ON e.enrollmentID = r.enrollmentID "
