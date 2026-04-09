@@ -204,6 +204,8 @@ public class AddOffenseModalController {
             studentNameTextField.setText("STUDENT NOT FOUND!");
         }
     }
+
+
     /**
      * Closes the modal when cancel button is clicked.
      *
