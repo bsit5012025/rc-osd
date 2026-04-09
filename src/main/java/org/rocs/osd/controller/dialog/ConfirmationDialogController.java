@@ -77,6 +77,7 @@ public class ConfirmationDialogController {
     }
 
     @FXML
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void handleConfirm() {
         if (onConfirmAction != null) {
             onConfirmAction.run();
@@ -85,6 +86,7 @@ public class ConfirmationDialogController {
     }
 
     @FXML
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void handleCancel() {
         close();
     }

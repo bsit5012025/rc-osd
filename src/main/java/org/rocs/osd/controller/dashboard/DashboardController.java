@@ -58,7 +58,7 @@ public class DashboardController {
                 "want to logout?",
                 "Logout",
                 "Cancel",
-                () -> performLogout()
+                this::performLogout
         );
     }
 

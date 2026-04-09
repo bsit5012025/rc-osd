@@ -20,6 +20,7 @@ import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Controller responsible for handling user interactions in
@@ -60,7 +61,8 @@ public class LoginController {
      * and hides it if currently visible.
      */
     @FXML
-    void togglePasswordVisibility() {
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void togglePasswordVisibility() {
         if (passwordField == null
                 ||
                 passwordTextField == null
@@ -146,8 +148,8 @@ public class LoginController {
             /*
               This will load the Dashboard screen from the FXML file.
              */
-            Parent root = FXMLLoader.load(getClass()
-                    .getResource("/view/dashboard/dashboard.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass()
+                    .getResource("/view/dashboard/dashboard.fxml")));
             /*
               This will get the current window from the button click event.
              */
@@ -224,4 +226,3 @@ public class LoginController {
     }
 
 }
-
