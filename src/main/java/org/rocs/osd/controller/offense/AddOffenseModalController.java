@@ -113,6 +113,10 @@ public class AddOffenseModalController {
      * Handles the population of offense type and level ComboBoxes and
      * automatically selects the level of offense based on
      * the selected offense type.
+     * ".textProperty().addListener((obs, oldVal, newVal)"
+     * to automatically display student full name
+     * (note: did not use newVal because already
+     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -122,9 +126,13 @@ public class AddOffenseModalController {
         recordFacade = new RecordFacadeImpl(dao);
         enrollmentDao = new EnrollmentDaoImpl();
         guardianFacade = new GuardianFacadeImpl();
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
-        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+
+        studentIdTextField.textProperty().addListener((obs, oldVal, newVal) -> {
+            autoDisplayStudentName();
+        });
     }
 
     /**
@@ -193,7 +201,7 @@ public class AddOffenseModalController {
             studentNameTextField.setText(fullName);
         } else {
             studentNameTextField.clear();
-            System.out.println("STUDENT NOT FOUND!");
+            studentNameTextField.setText("STUDENT NOT FOUND!");
         }
     }
     /**

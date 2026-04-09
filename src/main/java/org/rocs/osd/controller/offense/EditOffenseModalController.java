@@ -102,6 +102,10 @@ public class EditOffenseModalController {
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
+     * ".textProperty().addListener((obs, oldVal, newVal)"
+     * to automatically display student full name
+     * (note: did not use newVal because already
+     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -113,7 +117,10 @@ public class EditOffenseModalController {
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
-        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+
+        studentIdTextField.textProperty().addListener((obs, oldVal, newVal) -> {
+            autoDisplayStudentName();
+        });
     }
     /**
      * Sets the prev stage and record data to be edited.
@@ -214,7 +221,7 @@ public class EditOffenseModalController {
             studentNameTextField.setText(fullName);
         } else {
             studentNameTextField.clear();
-            System.out.println("STUDENT NOT FOUND!");
+            studentNameTextField.setText("STUDENT NOT FOUND!");
         }
     }
     /**

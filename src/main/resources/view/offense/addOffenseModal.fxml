@@ -32,7 +32,7 @@
 
                     <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <Label styleClass="lightLabelForTextField" text="Student Name:" />
-                        <TextField fx:id="studentNameTextField" onAction="#autoDisplayStudentName" styleClass="inputTextFieldOffense" />
+                        <TextField fx:id="studentNameTextField" editable="false" onAction="#autoDisplayStudentName" styleClass="inputTextFieldOffense" />
                     </VBox>
 
                     <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
