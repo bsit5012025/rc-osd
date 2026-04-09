@@ -26,8 +26,11 @@ import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.request.RequestStatus;
 
+import java.io.IOException;
+
 /**
  * Controller for handling request card UI behavior.
+ * This handles displaying request information.
  */
 public class RequestCardController {
 
@@ -114,7 +117,6 @@ public class RequestCardController {
             actionBar.setVisible(false);
             actionBar.setManaged(false);
         }
-
         if (popupBox != null) {
             popupBox.setVisible(false);
         }

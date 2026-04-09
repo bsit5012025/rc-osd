@@ -39,6 +39,7 @@ public class DashboardController {
     private VBox sidebar;
 
     /** Flag indicating if the sidebar is currently collapsed. */
+    @FXML
     private boolean sidebarCollapsed = false;
 
     /** Initializes the dashboard controller. */
