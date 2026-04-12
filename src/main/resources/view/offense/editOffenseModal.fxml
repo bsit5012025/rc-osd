@@ -23,7 +23,6 @@
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.rocs.osd.controller.offense.EditOffenseModalController">
-
    <BorderPane>
       <center>
          <VBox spacing="10.0">
@@ -46,7 +45,12 @@
                </VBox>
 
                <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                  <Label styleClass="lightLabelForTextField" text="Student Name:" />
+                  <HBox prefHeight="0.0" prefWidth="230.0">
+                     <children>
+                        <Label prefHeight="20.0" prefWidth="162.0" styleClass="lightLabelForTextField" text="Student Name:" />
+                        <Label fx:id="studentResultLabel" prefHeight="20.0" prefWidth="181.0" />
+                     </children>
+                  </HBox>
                   <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
                </VBox>
 

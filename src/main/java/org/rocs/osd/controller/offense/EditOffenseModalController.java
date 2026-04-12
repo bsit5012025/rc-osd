@@ -6,9 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
@@ -70,6 +71,13 @@ public class EditOffenseModalController {
      */
     @FXML
     private TextArea remarksTextArea;
+    /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
     /**
      * DAO for student operations.
      */
@@ -202,26 +210,40 @@ public class EditOffenseModalController {
      */
     @FXML
     private void autoDisplayStudentName() {
+        try {
+            String studentId = studentIdTextField.getText();
 
-        String studentId = studentIdTextField.getText();
+            if (studentId.isBlank()) {
+                return;
+            }
 
-        if (studentId.isEmpty()) {
-            return;
-        }
+            Student student = studentDao.findStudentWithRecordById(studentId);
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
 
-        if (student.getStudentId() != null) {
-            String fullName = student.getFirstName()
-                    + " "
-                    + student.getMiddleName()
-                    + " "
-                    + student.getLastName();
+                studentResultLabel.setText("");
+                studentNameTextField.setText(fullName);
+            } else {
+                studentNameTextField.clear();
 
-            studentNameTextField.setText(fullName);
-        } else {
+                studentResultLabel.getStyleClass().remove("error");
+                studentResultLabel.setText("Student Not Found!");
+            }
+        } catch (Exception e) {
             studentNameTextField.clear();
-            studentNameTextField.setText("STUDENT NOT FOUND!");
+
+            if (!studentResultLabel.getStyleClass().contains("error")) {
+                studentResultLabel.getStyleClass().add("error");
+            }
+
+            studentResultLabel.setText("Error loading student data");
+
+            e.printStackTrace();
         }
     }
     /**

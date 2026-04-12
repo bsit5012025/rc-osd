@@ -26,12 +26,11 @@ public class StudentDaoImpl implements StudendDao {
      */
     @Override
     public Student findStudentWithRecordById(String pStudentId) {
-        Student student = new Student();
-
+        Student student = null;
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "SELECT s.studentID, "
-                             + " + s.personID, "
+                             + " s.personID, "
                              + " s.address, "
                              + " s.studentType, "
                              + " s.department, "
@@ -54,6 +53,7 @@ public class StudentDaoImpl implements StudendDao {
             try (ResultSet rs = statement.executeQuery()) {
 
                 while (rs.next()) {
+                    student = new Student();
                     student.setStudentId(rs.getString("studentID"));
                     student.setPersonID(rs.getLong("personID"));
                     student.setAddress(rs.getString("address"));
