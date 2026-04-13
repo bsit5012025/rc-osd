@@ -102,8 +102,8 @@ public class StudentController {
     }
 
     /**
-     * Initialize row for the record so only the
-     * rows from the table view is clickable.
+     * Allows clicking only on rows of the table view,
+     * Ignores clicks on empty areas and column titles.
      */
     private void selectStudentRecord() {
         studentTable.setRowFactory(wholeRow -> {
