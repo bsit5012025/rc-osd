@@ -49,12 +49,12 @@
                   <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
                </VBox>
 
-               <VBox spacing="5.0" GridPane.rowIndex="1">
+               <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
                   <Label prefHeight="20.0" prefWidth="162.0" styleClass="lightLabelForTextField" text="Student Name:" />
                   <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
                </VBox>
 
-               <VBox spacing="5.0" GridPane.rowIndex="2">
+               <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
                   <Label styleClass="lightLabelForTextField" text="Date:" />
                   <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
                </VBox>
