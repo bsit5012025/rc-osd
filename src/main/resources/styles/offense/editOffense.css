@@ -144,9 +144,5 @@
 }
 
 #studentResultLabel {
-    -fx-text-fill: gray;
-}
-
-.error {
     -fx-text-fill: red;
 }

@@ -23,6 +23,11 @@
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.rocs.osd.controller.offense.EditOffenseModalController">
+   <Pane prefHeight="282.0" prefWidth="197.0">
+      <children>
+         <Label fx:id="studentResultLabel" layoutX="72.0" layoutY="133.0" prefHeight="20.0" prefWidth="144.0" textAlignment="CENTER" />
+      </children>
+   </Pane>
    <BorderPane>
       <center>
          <VBox spacing="10.0">
@@ -44,17 +49,12 @@
                   <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
                </VBox>
 
-               <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                  <HBox prefHeight="0.0" prefWidth="230.0">
-                     <children>
-                        <Label prefHeight="20.0" prefWidth="162.0" styleClass="lightLabelForTextField" text="Student Name:" />
-                        <Label fx:id="studentResultLabel" prefHeight="20.0" prefWidth="181.0" />
-                     </children>
-                  </HBox>
+               <VBox spacing="5.0" GridPane.rowIndex="1">
+                  <Label prefHeight="20.0" prefWidth="162.0" styleClass="lightLabelForTextField" text="Student Name:" />
                   <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
                </VBox>
 
-               <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+               <VBox spacing="5.0" GridPane.rowIndex="2">
                   <Label styleClass="lightLabelForTextField" text="Date:" />
                   <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
                </VBox>

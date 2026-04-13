@@ -213,6 +213,18 @@ public class EditOffenseModalController {
         try {
             String studentId = studentIdTextField.getText();
 
+            if (!checkStudentIdLength(studentId)) {
+                studentResultLabel.setText("");
+                studentNameTextField.setText("");
+                return;
+            }
+
+            if (!isLast4Digits(studentId)) {
+                studentResultLabel.setText("ID might contain letters!");
+                studentNameTextField.setText("");
+                return;
+            }
+
             if (studentId.isBlank()) {
                 return;
             }
@@ -231,20 +243,51 @@ public class EditOffenseModalController {
             } else {
                 studentNameTextField.clear();
 
-                studentResultLabel.getStyleClass().remove("error");
                 studentResultLabel.setText("Student Not Found!");
             }
         } catch (Exception e) {
             studentNameTextField.clear();
-
-            if (!studentResultLabel.getStyleClass().contains("error")) {
-                studentResultLabel.getStyleClass().add("error");
-            }
-
             studentResultLabel.setText("Error loading student data");
 
             e.printStackTrace();
         }
+    }
+    /**
+     * Checks if the student ID length matches the expected
+     * length for its department. Returns true only when the
+     * user input meets the required format.
+     *
+     * @param studentId id of the student
+     * @return return if student is on expected length
+     */
+    private boolean checkStudentIdLength(String studentId) {
+        return (studentId.startsWith("JHS")
+                && studentId.trim().length() == 8)
+               || (studentId.startsWith("SHS")
+                && studentId.trim().length() == 8)
+               || (studentId.startsWith("CT23")
+                && studentId.trim().length() == 9);
+    }
+    /**
+     * Checks if the student ID last 4
+     * letters may contain a Character value.
+     *
+     * @param studentId id of the student
+     * @return return if it contains a Digit
+     */
+    private boolean isLast4Digits(String studentId) {
+        if (studentId.length() >= 4) {
+            char char1 = studentId.charAt(studentId.length() - 4);
+            char char2 = studentId.charAt(studentId.length() - 3);
+            char char3 = studentId.charAt(studentId.length() - 2);
+            char char4 = studentId.charAt(studentId.length() - 1);
+
+            return Character.isDigit(char1)
+                    && Character.isDigit(char2)
+                    && Character.isDigit(char3)
+                    && Character.isDigit(char4);
+        }
+        return false;
     }
     /**
      * Closes the modal when cancel button is clicked.
