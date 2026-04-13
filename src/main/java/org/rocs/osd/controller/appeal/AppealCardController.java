@@ -81,8 +81,8 @@ public class AppealCardController {
      * Facade used to communicate
      * with the appeal business logic.
      */
-    @SuppressWarnings("PMD.UnusedPrivateField")
-    private final AppealFacade appealFacade = new AppealFacadeImpl();
+
+    private AppealFacade appealFacade = new AppealFacadeImpl();
 
     /**
      * Initializes the controller.
@@ -91,7 +91,6 @@ public class AppealCardController {
      * a collapsed state on load.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     public void initialize() {
         if (expandedSection != null) {
             expandedSection.setVisible(false);
@@ -134,8 +133,7 @@ public class AppealCardController {
      * If confirmed, updates the appeal status to approved.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleAppealApprove() {
+    public void handleAppealApprove() {
         showConfirmation("Are you sure you want to", "approve this appeal?",
                 "Approve", "Cancel", () -> {
                     String remarks = (
@@ -152,8 +150,7 @@ public class AppealCardController {
      * before opening a confirmation dialog.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleAppealDeny() {
+    public void handleAppealDeny() {
         if (commentArea == null || commentArea.getText().trim().isEmpty()) {
             showError("Please enter remarks before denying.");
             return;
@@ -283,8 +280,7 @@ public class AppealCardController {
      * The action bar is only shown if the appeal status is "PENDING".
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void toggleExpansion() {
+    public   void toggleExpansion() {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {

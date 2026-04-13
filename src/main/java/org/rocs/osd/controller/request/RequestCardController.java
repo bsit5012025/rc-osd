@@ -162,8 +162,7 @@ public class RequestCardController {
      * Handles approve action.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void onApprove() {
+    public void onApprove() {
         showConfirmation(
                 "Are you sure you want to",
                 "approve this request?",
@@ -192,8 +191,7 @@ public class RequestCardController {
      * Handles deny action.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void onDeny() {
+    public void onDeny() {
         if (commentArea == null
                 || commentArea.getText().trim().isEmpty()) {
 
@@ -332,8 +330,7 @@ public class RequestCardController {
      * Toggles expansion of the card.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void toggleExpansion() {
+    public void toggleExpansion() {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
