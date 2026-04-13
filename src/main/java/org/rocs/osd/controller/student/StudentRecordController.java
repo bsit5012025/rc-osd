@@ -157,14 +157,15 @@ public class StudentRecordController {
         contactNumberTextField.setText(primaryGuardian.getContactNumber());
         statusComboBox.setValue(enrollment.getDisciplinaryStatus().getStatus());
 
+        internCheckBox.setMouseTransparent(true);
+        externCheckBox.setMouseTransparent(true);
+
         if ("Intern".equalsIgnoreCase(studentType)) {
             internCheckBox.setSelected(true);
             externCheckBox.setSelected(false);
-            externCheckBox.setDisable(true);
         } else if ("Extern".equalsIgnoreCase(studentType)) {
-            externCheckBox.setSelected(true);
             internCheckBox.setSelected(false);
-            internCheckBox.setDisable(true);
+            externCheckBox.setSelected(true);
         }
     }
     /**
