@@ -76,8 +76,6 @@ public class AppealCardController {
     /** Tracks the current expansion state of the card. */
     private boolean isExpanded = false;
 
-    /** The current status string of the appeal. */
-    public String status;
 
     /** Facade used to communicate with the appeal business logic. */
     private AppealFacade appealFacade = new AppealFacadeImpl();
@@ -104,14 +102,6 @@ public class AppealCardController {
         }
     }
 
-    /**
-     * Sets the status of the appeal.
-     * @param pStatus The status string
-     *    (e.g., "PENDING", "APPROVED").
-     */
-    public void setStatus(String pStatus) {
-        this.status = pStatus;
-    }
 
     /**
      * Injects the appeal data into the
@@ -121,7 +111,6 @@ public class AppealCardController {
      */
     public void setAppeal(Appeal pAppeal) {
         this.appeal = pAppeal;
-        this.status = pAppeal.getStatus();
         loadAppealData();
     }
 
