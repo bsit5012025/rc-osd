@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 /**
  * DAO implementation for managing Login records in the Office of Student
@@ -56,7 +57,8 @@ public class LoginDaoImpl implements LoginDao {
                     employee.setEmployeeId(empId);
                     String dept = rs.getString("department");
                     employee.setDepartment(
-                                    Department.valueOf(dept.toUpperCase()));
+                                    Department.valueOf(
+                                            dept.toUpperCase(Locale.ROOT)));
                     employee.setEmployeeRole(rs.getString("employeeRole"));
                     login.setEmployee(employee);
 
