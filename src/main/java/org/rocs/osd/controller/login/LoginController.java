@@ -16,13 +16,14 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import javafx.util.Duration;
-import org.rocs.osd.controller.dashboard.CenterDashboardController;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
 import java.io.IOException;
+import java.util.function.Supplier;
 
 /**
  * Controller responsible for handling user interactions in
@@ -56,26 +57,6 @@ public class LoginController {
      */
     @FXML
     private javafx.scene.control.Button togglePasswordButton;
-
-    /**
-     * Controller used for setCenterDashboardController.
-     */
-    private CenterDashboardController centerDashboardController;
-
-    /**
-     * @return Getter for injecting the CenterDashboardController.
-     */
-    public CenterDashboardController getCenterDashboardController() {
-        return centerDashboardController;
-    }
-
-    /**
-     * @param pController sets the controller for CenterDashboardController.
-     */
-    public void setCenterDashboardController
-    (CenterDashboardController pController) {
-        this.centerDashboardController = pController;
-    }
 
     /**
      * Toggles the visibility of the password input.
@@ -155,6 +136,49 @@ public class LoginController {
 
     }
 
+    /**
+     * @return Factory for creating dashboard Parent node (testing only).
+     */
+    private Supplier<Parent> dashboardFactory;
+
+    /**
+     *  @return Dashboard factory for test injection (testing only).
+     */
+    public Supplier<Parent> getDashboardFactory() {
+        return dashboardFactory;
+    }
+
+    /**
+     * Controller factory for dashboard FXML (used for testing).
+     */
+    private Callback<Class<?>, Object> dashboardControllerFactory;
+
+    /**
+     * @return DashboardController factory for test injection (used for testing).
+     */
+    public Callback<Class<?>, Object> getDashboardControllerFactory() {
+        return dashboardControllerFactory;
+    }
+
+    /**
+     * Sets factory for creating dashboard Parent (testing only).
+     *
+     * @param factory supplier that provides dashboard root node
+     */
+    public void setDashboardFactory( Supplier<Parent> factory) {
+        this.dashboardFactory = factory;
+    }
+
+    /**
+     * Sets controller factory for dashboard FXML (testing only).
+     *
+     * @param factory callback that creates dashboard controllers
+     */
+    public void setDashboardControllerFactory(
+            Callback<Class<?>, Object> factory) {
+        this.dashboardControllerFactory = factory;
+    }
+
     void loadDashboard(ActionEvent event) {
         try {
             if (errorStage != null) {
@@ -162,11 +186,20 @@ public class LoginController {
                 errorStage = null;
             }
 
-            Parent root = FXMLLoader.load(getClass()
-            .getResource("/view/dashboard/dashboard.fxml"));
+            Parent root;
+            if (dashboardFactory != null) {
+                root = dashboardFactory.get();
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/view/dashboard/dashboard.fxml"));
+                if (dashboardControllerFactory != null) {
+                    loader.setControllerFactory(dashboardControllerFactory);
+                }
+                root = loader.load();
+            }
 
             Stage stage = (Stage) ((Node)
-            event.getSource()).getScene().getWindow();
+                    event.getSource()).getScene().getWindow();
 
             double width = stage.getWidth();
             double height = stage.getHeight();
