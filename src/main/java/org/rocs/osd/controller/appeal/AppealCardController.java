@@ -77,6 +77,7 @@ public class AppealCardController {
     private boolean isExpanded = false;
 
     /** The current status string of the appeal. */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private String status;
 
     /** Facade used to communicate with the appeal business logic. */
@@ -137,7 +138,7 @@ public class AppealCardController {
     }
 
     /**
-     * Handles the Approve button click. Opens a confirmation dialog.
+     * Handles the Approval button click. Opens a confirmation dialog.
      * If confirmed, updates the appeal status to approved.
      */
     @FXML
@@ -299,7 +300,7 @@ public class AppealCardController {
             expandedSection.setManaged(isExpanded);
         }
 
-        if ("PENDING".equals(status)) {
+        if (appeal != null && "PENDING".equals(appeal.getStatus())) {
             if (actionBar != null) {
                 actionBar.setVisible(isExpanded);
                 actionBar.setManaged(isExpanded);
