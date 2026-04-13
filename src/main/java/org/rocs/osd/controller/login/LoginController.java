@@ -154,7 +154,7 @@ public class LoginController {
     private Callback<Class<?>, Object> dashboardControllerFactory;
 
     /**
-     * @return DashboardController factory for test injection (used for testing).
+     * @return DashboardController factory for test injection (for testing).
      */
     public Callback<Class<?>, Object> getDashboardControllerFactory() {
         return dashboardControllerFactory;
@@ -165,7 +165,7 @@ public class LoginController {
      *
      * @param factory supplier that provides dashboard root node
      */
-    public void setDashboardFactory( Supplier<Parent> factory) {
+    public void setDashboardFactory(Supplier<Parent> factory) {
         this.dashboardFactory = factory;
     }
 
