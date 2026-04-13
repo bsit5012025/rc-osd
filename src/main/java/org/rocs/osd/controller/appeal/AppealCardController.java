@@ -77,8 +77,12 @@ public class AppealCardController {
     private boolean isExpanded = false;
 
 
-    /** Facade used to communicate with the appeal business logic. */
-    private AppealFacade appealFacade = new AppealFacadeImpl();
+    /**
+     * Facade used to communicate
+     * with the appeal business logic.
+     */
+    @SuppressWarnings("PMD.UnusedPrivateField")
+    private final AppealFacade appealFacade = new AppealFacadeImpl();
 
     /**
      * Initializes the controller.
