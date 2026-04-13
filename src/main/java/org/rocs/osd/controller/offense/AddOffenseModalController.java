@@ -290,6 +290,8 @@ public class AddOffenseModalController {
             e.printStackTrace();
         }
     }
+
+
     /**
      * Sends SMS to guardians if the notify checkbox is checked.
      *
