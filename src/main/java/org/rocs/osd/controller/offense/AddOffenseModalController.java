@@ -31,6 +31,7 @@ import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
+import org.rocs.osd.session.Session;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.sql.Date;
@@ -216,6 +217,8 @@ public class AddOffenseModalController {
      * @param event action event from submit button.
      */
     public void onSubmit(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event
+                .getSource()).getScene().getWindow();
         try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
@@ -233,7 +236,6 @@ public class AddOffenseModalController {
             }
 
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
-            String employeeId = "EMP-002";
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
             long actionID = disciplinaryActionDao.
@@ -255,14 +257,14 @@ public class AddOffenseModalController {
             }
                 boolean record = recordFacade.createStudentRecord(
                         enrollmentId,
-                        employeeId,
+                        Session.getEmployeeId(),
                         offenseId,
                         dateOfViolation,
                         actionID,
                         remarks
                 );
-                if (record) {
-                    if (notifyParentsCheckBox.isSelected()) {
+                if (record && notifyParentsCheckBox.isSelected()) {
+
                         try {
                             var studentGuardians =
                                     guardianFacade.getGuardianByStudentId(
@@ -308,15 +310,12 @@ public class AddOffenseModalController {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                    Stage stage = (Stage) ((Node) event
-                            .getSource()).getScene().getWindow();
-                    stage.close();
                 }
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("Violation recorded!");
+        stage.close();
     }
 
     private void disableDateValidation() {

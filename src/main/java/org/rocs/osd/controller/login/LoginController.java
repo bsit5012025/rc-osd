@@ -21,6 +21,9 @@ import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
+import org.rocs.osd.model.login.Login;
+import org.rocs.osd.session.Session;
+
 import java.io.IOException;
 
 /**
@@ -93,21 +96,6 @@ public class LoginController {
      * @param event the action event triggered by clicking the login button.
      */
     public void onLogin(ActionEvent event) {
-
-        /*
-          Initialize DAO and Facade for login process.
-         */
-        LoginFacade loginFacade;
-        LoginDao loginDao = new LoginDaoImpl();
-        loginFacade = new LoginFacadeImpl(loginDao);
-
-        /*
-          This will check if the entered username
-          and password are correct.
-         */
-        boolean loginCheck = loginFacade.login(
-        usernameTextField.getText(), passwordField.getText());
-
         /*
           This will check if the username or password fields are empty
           and informs the user to fill them up.
@@ -115,16 +103,34 @@ public class LoginController {
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
 
-        if (user.isBlank() || pass.isBlank()) {
+        if (user == null || user.isBlank() || pass == null || pass.isBlank()) {
             showErrorPopup("Enter both username and password!");
             return;
         }
+        /*
+          Initialize DAO and Facade for login process.
+         */
+        LoginDao loginDao = new LoginDaoImpl();
+        LoginFacade loginFacade = new LoginFacadeImpl(loginDao);
+
+        Login login = loginDao.findLoginByUsername(user);
+
+        if (login == null || login.getEmployee() == null) {
+            showErrorPopup("Invalid username or password!");
+            return;
+        }
+        /*
+          This will check if the entered username
+          and password are correct.
+         */
+        boolean loginCheck = loginFacade.login(user, pass);
         try {
             /*
               If the login credentials are correct,
               Dashboard screen will be loaded.
              */
             if (loginCheck) {
+                Session.setEmployeeId(login.getEmployee().getEmployeeId());
                 loadDashboard(event);
             } else {
                 /*
