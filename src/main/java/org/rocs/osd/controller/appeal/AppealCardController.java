@@ -77,8 +77,7 @@ public class AppealCardController {
     private boolean isExpanded = false;
 
     /** The current status string of the appeal. */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private String status;
+    public String status;
 
     /** Facade used to communicate with the appeal business logic. */
     private AppealFacade appealFacade = new AppealFacadeImpl();
@@ -122,7 +121,7 @@ public class AppealCardController {
      */
     public void setAppeal(Appeal pAppeal) {
         this.appeal = pAppeal;
-        this.status = pAppeal.getStatus(); // ← ADD THIS
+        this.status = pAppeal.getStatus();
         loadAppealData();
     }
 
