@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -81,13 +82,11 @@ public class StudentController {
             );
         });
 
-
         gradeCourseColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
                         cellData.getValue().getStudentLevel()
                 )
         );
-
 
         sectionColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
@@ -101,37 +100,52 @@ public class StudentController {
                 )
         );
     }
-        private void selectStudentRecord() {
-            studentTable.setOnMouseClicked(event -> {
-                Enrollment enrollment = studentTable.
-                        getSelectionModel().getSelectedItem();
-                if (enrollment != null) {
+
+    /**
+     * Initialize row for the record so only the
+     * rows from the table view is clickable.
+     */
+    private void selectStudentRecord() {
+        studentTable.setRowFactory(wholeRow -> {
+            TableRow<Enrollment> row = new TableRow<>();
+            row.setOnMouseClicked(evenClickOnRow -> {
+                if (!row.isEmpty()) {
+                    Enrollment enrollment = studentTable.
+                            getSelectionModel().getSelectedItem();
                     loadStudentRecord(enrollment);
                 }
             });
+            return row;
+        });
+    }
+
+    /**
+     * Opens the student Record with selected info
+     * of the student.
+     *
+     * @param enrollment student info to be displayed.
+     */
+    private void loadStudentRecord(Enrollment enrollment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/view/student/studentRecord.fxml"));
+            Parent root = loader.load();
+
+            StudentRecordController studentRecordController
+                    = loader.getController();
+            studentRecordController.setStudentData(enrollment);
+
+            Stage studentStage = new Stage();
+
+            studentStage.initModality(Modality.APPLICATION_MODAL);
+            studentStage.initStyle(StageStyle.UNDECORATED);
+            studentStage.setResizable(false);
+            studentStage.setScene(new Scene(root));
+            studentStage.centerOnScreen();
+            studentStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        private void loadStudentRecord(Enrollment enrollment) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass()
-                        .getResource("/view/student/studentRecord.fxml"));
-                Parent root = loader.load();
-
-                StudentRecordController studentRecordController
-                        = loader.getController();
-                studentRecordController.setStudentData(enrollment);
-
-                Stage studentStage = new Stage();
-
-                studentStage.initModality(Modality.APPLICATION_MODAL);
-                studentStage.initStyle(StageStyle.UNDECORATED);
-                studentStage.setResizable(false);
-                studentStage.setScene(new Scene(root));
-                studentStage.centerOnScreen();
-                studentStage.showAndWait();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    }
 }
