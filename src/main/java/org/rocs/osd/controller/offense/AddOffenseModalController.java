@@ -196,6 +196,8 @@ public class AddOffenseModalController {
             System.out.println("STUDENT NOT FOUND!");
         }
     }
+
+
     /**
      * Closes the modal when cancel button is clicked.
      *
