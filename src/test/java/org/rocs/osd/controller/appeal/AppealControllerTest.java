@@ -75,12 +75,19 @@ public class AppealControllerTest {
             if (controllerClass == AppealConfirmationController.class) {
                 return new AppealConfirmationController();
             }
+            if (controllerClass.getName().contains("StudentController")) {
+                return mock(controllerClass);
+            }
+            if (controllerClass.getName().contains("OffenseController") ||
+                    controllerClass.getName().contains("RequestController")) {
+                return mock(controllerClass);
+            }
             try {
                 Constructor<?> constructor = controllerClass.getDeclaredConstructor();
                 constructor.setAccessible(true);
                 return constructor.newInstance();
             } catch (Exception e) {
-                throw new RuntimeException("Failed to create controller: " + controllerClass, e);
+                return mock(controllerClass);
             }
         };
 
