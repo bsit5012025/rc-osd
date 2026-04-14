@@ -42,10 +42,10 @@ public class AppealController {
      * Sets the appeal facade for dependency injection.
      * Used for testing to inject mock facades.
      *
-     * @param appealFacade the facade to use
+     * @param pAppealFacade the facade to use
      */
-    public void setAppealFacade(AppealFacade appealFacade) {
-        this.appealFacade = appealFacade;
+    public void setAppealFacade(AppealFacade pAppealFacade) {
+        this.appealFacade = pAppealFacade;
     }
 
     /**

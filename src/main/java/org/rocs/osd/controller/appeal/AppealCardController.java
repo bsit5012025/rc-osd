@@ -235,10 +235,10 @@ public class AppealCardController {
      * Sets the appeal facade for dependency injection.
      * Used for testing to inject mock facades.
      *
-     * @param appealFacade the facade to use
+     * @param pAppealFacade the facade to use
      */
-    public void setAppealFacade(AppealFacade appealFacade) {
-        this.appealFacade = appealFacade;
+    public void setAppealFacade(AppealFacade pAppealFacade) {
+        this.appealFacade = pAppealFacade;
     }
 
     /**
@@ -366,14 +366,12 @@ public class AppealCardController {
         if (errorLabel != null) {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
-            errorLabel.setManaged(true);
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(e -> {
             if (errorLabel != null) {
                 errorLabel.setVisible(false);
-                errorLabel.setManaged(false);
             }
         });
         delay.play();
