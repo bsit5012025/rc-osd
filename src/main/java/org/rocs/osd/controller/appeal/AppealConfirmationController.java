@@ -16,6 +16,13 @@ public class AppealConfirmationController {
     private Runnable onConfirm;
 
     /**
+     * @return the cancel.
+     */
+    public Runnable getOnCancel() {
+        return onCancel;
+    }
+
+    /**
      * Callback executed when cancel is clicked.
      */
     private Runnable onCancel;
@@ -47,6 +54,9 @@ public class AppealConfirmationController {
      */
     @FXML
     private void closePopup() {
+        if (onCancel != null) {
+            onCancel.run();
+        }
         if (root == null || root.getScene() == null) {
             return;
         }

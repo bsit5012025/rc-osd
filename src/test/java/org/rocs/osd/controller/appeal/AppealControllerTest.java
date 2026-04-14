@@ -211,6 +211,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(200);
 
         Node expandedSection = robot.from(firstCard).lookup("#expandedSection").query();
         assertTrue(expandedSection.isVisible());
@@ -229,6 +230,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(200);
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
         assertEquals("Please enter remarks before denying.", errorLabel.getText());
@@ -254,11 +256,12 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        Thread.sleep(500);
+        WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         robot.clickOn("Confirm");
-        Thread.sleep(500);
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
@@ -289,11 +292,12 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        Thread.sleep(500);
+        WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         robot.clickOn("Confirm");
-        Thread.sleep(500);
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         verify(mockAppealFacade, timeout(3000)).denyAppeal(eq(1L), eq("Test Denied"));
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
@@ -327,10 +331,12 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        Thread.sleep(500);
+        WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         robot.clickOn("Cancel");
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals(initialCount, pendingAppeals.size());
@@ -349,10 +355,12 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        Thread.sleep(500);
+        WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         robot.clickOn("Cancel");
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
         assertEquals(initialCount, pendingAppeals.size());

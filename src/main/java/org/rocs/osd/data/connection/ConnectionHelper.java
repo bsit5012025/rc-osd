@@ -23,7 +23,7 @@ public final class ConnectionHelper {
     /**
      * Database username.
      */
-    public static final String USERNAME = "rcosd";
+    public static final String USERNAME = " ";
 
     /**
      * Database password.

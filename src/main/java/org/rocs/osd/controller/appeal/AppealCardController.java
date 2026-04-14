@@ -278,6 +278,7 @@ public class AppealCardController {
                 getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
                 showPopupAndRemoveCard("Appeal denied!");
             });
+
         }
 
     /**
@@ -339,22 +340,14 @@ public class AppealCardController {
             StackPane popupRoot = loader.load();
 
             AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(() -> {
-                onConfirmAction.run();
-                Stage stage = (Stage) popupRoot.getScene().getWindow();
-                stage.close();
-            });
-
-            controller.setOnCancel(() -> {
-                Stage stage = (Stage) popupRoot.getScene().getWindow();
-                stage.close();
-            });
+            controller.setOnConfirm(onConfirmAction);
+            controller.setOnCancel(() -> {});
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(popupRoot));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
