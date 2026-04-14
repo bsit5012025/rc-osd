@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
@@ -232,7 +233,12 @@ public class CenterDashboardController {
             progressBar.setMaxWidth(Double.MAX_VALUE);
             HBox.setHgrow(progressBar, javafx.scene.layout.Priority.ALWAYS);
 
-            row.getChildren().addAll(nameLabel, progressBar);
+            Label percentLabel = new Label(String.format("%.0f%%", percentage));
+            percentLabel.getStyleClass().add("offenseProgress-bar");
+            percentLabel.setMinWidth(20);
+            percentLabel.setAlignment(Pos.CENTER);
+
+            row.getChildren().addAll(nameLabel, progressBar, percentLabel);
             frequentOffenseContainer.getChildren().add(row);
         }
     }
