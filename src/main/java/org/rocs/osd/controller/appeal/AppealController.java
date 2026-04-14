@@ -25,17 +25,39 @@ public class AppealController {
     private VBox listContainer;
 
     /**
-     * Facade used to retrieve appeal data from backend.
-     */
-    private AppealFacade appealFacade = new AppealFacadeImpl();
-
-    /**
      * Initializes the controller.
      * Clears the list and loads appeals from the database.
      */
     @FXML
     public void initialize() {
         loadAppealsByStatus("PENDING");
+    }
+
+    /**
+     * Facade used to retrieve appeal data from backend.
+     */
+    private AppealFacade appealFacade;
+
+    /**
+     * Sets the appeal facade for dependency injection.
+     * Used for testing to inject mock facades.
+     *
+     * @param appealFacade the facade to use
+     */
+    public void setAppealFacade(AppealFacade appealFacade) {
+        this.appealFacade = appealFacade;
+    }
+
+    /**
+     * Gets the appeal facade, creating default implementation if not set.
+     *
+     * @return the appeal facade
+     */
+    public AppealFacade getAppealFacade() {
+        if (appealFacade == null) {
+            appealFacade = new AppealFacadeImpl();
+        }
+        return appealFacade;
     }
 
     /**
@@ -51,7 +73,7 @@ public class AppealController {
 
             listContainer.getChildren().clear();
 
-            List<Appeal> appeals = appealFacade.getAppealsByStatus(status);
+            List<Appeal> appeals = getAppealFacade().getAppealsByStatus(status);
 
             if (appeals == null) {
                 return;
@@ -79,8 +101,9 @@ public class AppealController {
                         AppealCardController controller =
                                 loader.getController();
 
-                        controller.setAppeal(appeal);
+                        controller.setAppealFacade(getAppealFacade());
 
+                        controller.setAppeal(appeal);
                         controller.setStatus(status);
 
                         controller.setOnActionComplete(() ->

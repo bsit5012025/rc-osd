@@ -217,7 +217,29 @@ public class AppealCardController {
     /**
      * Facade for appeal operations.
      */
-    private AppealFacade appealFacade = new AppealFacadeImpl();
+    private AppealFacade appealFacade;
+
+    /**
+     * Gets the appeal facade, creating default implementation if not set.
+     *
+     * @return the appeal facade
+     */
+    private AppealFacade getAppealFacade() {
+        if (appealFacade == null) {
+            appealFacade = new AppealFacadeImpl();
+        }
+        return appealFacade;
+    }
+
+    /**
+     * Sets the appeal facade for dependency injection.
+     * Used for testing to inject mock facades.
+     *
+     * @param appealFacade the facade to use
+     */
+    public void setAppealFacade(AppealFacade appealFacade) {
+        this.appealFacade = appealFacade;
+    }
 
     /**
      * Handles appeal approval.
@@ -231,7 +253,7 @@ public class AppealCardController {
                     ? commentArea.getText()
                     : null;
 
-            appealFacade.approveAppeal(appeal.getAppealID(), remarks);
+            getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal approved!");
         });
     }
@@ -253,7 +275,7 @@ public class AppealCardController {
             String remarks = commentArea.getText();
 
     showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
-                appealFacade.denyAppeal(appeal.getAppealID(), remarks);
+                getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
                 showPopupAndRemoveCard("Appeal denied!");
             });
         }
