@@ -166,7 +166,7 @@ public class AppealControllerTest {
 
     @Test
     public void testPendingTabDisplaysPendingAppeals(FxRobot robot) {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("PENDING");
 
@@ -176,7 +176,7 @@ public class AppealControllerTest {
 
     @Test
     public void testApprovedTabDisplaysApprovedAppeals(FxRobot robot) {
-        robot.clickOn("#approvedTab");
+        robot.clickOn("Approved");
         WaitForAsyncUtils.waitForFxEvents();
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("APPROVED");
 
@@ -186,7 +186,7 @@ public class AppealControllerTest {
 
     @Test
     public void testDeniedTabDisplaysDeniedAppeals(FxRobot robot) {
-        robot.clickOn("#deniedTab");
+        robot.clickOn("Denied");
         WaitForAsyncUtils.waitForFxEvents();
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("DENIED");
 
@@ -196,7 +196,7 @@ public class AppealControllerTest {
 
     @Test
     public void testCardExpansionShowsAllInputs(FxRobot robot) {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -211,7 +211,7 @@ public class AppealControllerTest {
 
     @Test
     public void testDenyWithoutRemarksShowsError(FxRobot robot) {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -236,7 +236,7 @@ public class AppealControllerTest {
             return null;
         }).when(mockAppealFacade).approveAppeal(eq(1L), any());
 
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -267,7 +267,7 @@ public class AppealControllerTest {
             return null;
         }).when(mockAppealFacade).denyAppeal(eq(1L), anyString());
 
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -296,7 +296,7 @@ public class AppealControllerTest {
     public void testEmptyPendingAppealsShowsMessage(FxRobot robot) {
         when(mockAppealFacade.getAppealsByStatus("PENDING")).thenReturn(new ArrayList<>());
 
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -305,7 +305,7 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelDenyConfirmation(FxRobot robot) throws InterruptedException {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -331,7 +331,7 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelApproveConfirmation(FxRobot robot) throws InterruptedException {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
@@ -353,7 +353,7 @@ public class AppealControllerTest {
 
     @Test
     public void testMultipleAppealsInPendingTab(FxRobot robot) {
-        robot.clickOn("#pendingTab");
+        robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
