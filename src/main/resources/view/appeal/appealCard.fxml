@@ -35,7 +35,7 @@
                     <Label styleClass="boldLabel" text="Comment:" />
                     <Label fx:id="errorLabel" text="Error here" visible="false" styleClass="errorLabel" />
                     <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
-                    </VBox>
+                        </VBox>
 
                 <HBox fx:id="actionBar" alignment="CENTER_RIGHT" styleClass="actionBarContainer">
                     <HBox styleClass="actionBar">
