@@ -339,7 +339,16 @@ public class AppealCardController {
             StackPane popupRoot = loader.load();
 
             AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(onConfirmAction);
+            controller.setOnConfirm(() -> {
+                onConfirmAction.run();
+                Stage stage = (Stage) popupRoot.getScene().getWindow();
+                stage.close();
+            });
+
+            controller.setOnCancel(() -> {
+                Stage stage = (Stage) popupRoot.getScene().getWindow();
+                stage.close();
+            });
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);

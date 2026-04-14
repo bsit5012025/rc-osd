@@ -16,11 +16,24 @@ public class AppealConfirmationController {
     private Runnable onConfirm;
 
     /**
+     * Callback executed when cancel is clicked.
+     */
+    private Runnable onCancel;
+
+    /**
      * Sets confirm action callback.
      * @param pOnConfirm action to execute on confirm
      */
     public void setOnConfirm(Runnable pOnConfirm) {
         this.onConfirm = pOnConfirm;
+    }
+
+    /**
+     * Sets cancel action callback.
+     * @param pOnCancel action to execute on confirm
+     */
+    public void setOnCancel(Runnable pOnCancel) {
+        this.onCancel = pOnCancel;
     }
 
     /**
@@ -34,6 +47,9 @@ public class AppealConfirmationController {
      */
     @FXML
     private void closePopup() {
+        if (root == null || root.getScene() == null) {
+            return;
+        }
         Stage stage = (Stage) root.getScene().getWindow();
         stage.close();
     }
