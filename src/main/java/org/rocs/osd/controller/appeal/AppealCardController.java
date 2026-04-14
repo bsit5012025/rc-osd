@@ -341,7 +341,7 @@ public class AppealCardController {
 
             AppealConfirmationController controller = loader.getController();
             controller.setOnConfirm(onConfirmAction);
-            controller.setOnCancel(() -> {});
+            controller.setOnCancel(() -> { });
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
