@@ -345,7 +345,7 @@ public class AppealCardController {
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(popupRoot));
             stage.setResizable(false);
-            stage.showAndWait();
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

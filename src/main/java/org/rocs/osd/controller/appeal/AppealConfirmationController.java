@@ -34,9 +34,6 @@ public class AppealConfirmationController {
      */
     @FXML
     private void closePopup() {
-        if (root == null || root.getScene() == null) {
-            return;
-        }
         Stage stage = (Stage) root.getScene().getWindow();
         stage.close();
     }
