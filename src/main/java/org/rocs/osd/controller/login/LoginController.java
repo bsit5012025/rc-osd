@@ -130,7 +130,7 @@ public class LoginController {
               Dashboard screen will be loaded.
              */
             if (loginCheck) {
-                Session.setEmployeeId(login.getEmployee().getEmployeeId());
+                Session.setEmployee(login.getEmployee());
                 loadDashboard(event);
             } else {
                 /*

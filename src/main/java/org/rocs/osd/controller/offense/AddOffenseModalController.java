@@ -257,7 +257,7 @@ public class AddOffenseModalController {
             }
                 boolean record = recordFacade.createStudentRecord(
                         enrollmentId,
-                        Session.getEmployeeId(),
+                        Session.getEmployee().getEmployeeId(),
                         offenseId,
                         dateOfViolation,
                         actionID,
