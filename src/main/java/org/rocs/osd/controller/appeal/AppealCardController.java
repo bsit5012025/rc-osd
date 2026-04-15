@@ -405,7 +405,8 @@ public class AppealCardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource(fxmlPath));
-            loader.setControllerFactory(DashboardController.getStaticControllerFactory());
+            loader.setControllerFactory
+                    (DashboardController.getStaticControllerFactory());
             StackPane popupRoot = loader.load();
 
             Stage stage = new Stage();
