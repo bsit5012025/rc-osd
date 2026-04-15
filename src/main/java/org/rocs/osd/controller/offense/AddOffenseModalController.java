@@ -5,12 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.DateCell;
 import javafx.stage.Stage;
 import org.rocs.osd.controller.sms.SmsService;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
@@ -88,13 +88,6 @@ public class AddOffenseModalController {
     @FXML
     private CheckBox notifyParentsCheckBox;
     /**
-     * Label to Show if student is
-     * found or there are any unexpected
-     * error.
-     */
-    @FXML
-    private Label studentResultLabel;
-    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -122,10 +115,6 @@ public class AddOffenseModalController {
      * Handles the population of offense type and level ComboBoxes and
      * automatically selects the level of offense based on
      * the selected offense type.
-     * ".textProperty().addListener((obs, oldVal, newVal)"
-     * to automatically display student full name
-     * (note: did not use newVal because already
-     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -138,13 +127,14 @@ public class AddOffenseModalController {
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
+        disableDateValidation();
 
         studentIdTextField.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                autoDisplayStudentName();
-            }
-        });
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+                });
     }
 
     /**
@@ -192,38 +182,32 @@ public class AddOffenseModalController {
     /**
      * Displays student name based on entered student ID.
      */
+    @FXML
     private void autoDisplayStudentName() {
-        try {
-            String studentId = studentIdTextField.getText();
 
-            if (studentId.isBlank()) {
-                studentResultLabel.setText("Student ID is blank!");
-                studentNameTextField.clear();
-                return;
-            }
+        String studentId = studentIdTextField.getText();
 
-            Student student = studentDao.findStudentWithRecordById(studentId);
+        if (studentId.isEmpty()) {
+            return;
+        }
 
-            if (student != null) {
-                String fullName = student.getFirstName()
-                        + " "
-                        + student.getMiddleName()
-                        + " "
-                        + student.getLastName();
+        Student student = studentDao.findStudentWithRecordById(studentId);
 
-                studentResultLabel.setText("");
-                studentNameTextField.setText(fullName);
-            } else {
-                studentResultLabel.setText("Student Not Found!");
-                studentNameTextField.clear();
-            }
-        } catch (Exception e) {
+        if (student.getStudentId() != null) {
+            String fullName = student.getFirstName()
+                    + " "
+                    + student.getMiddleName()
+                    + " "
+                    + student.getLastName();
+
+            studentNameTextField.setText(fullName);
+        } else {
             studentNameTextField.clear();
-            studentResultLabel.setText("Error loading student data");
-
-            e.printStackTrace();
+            System.out.println("STUDENT NOT FOUND!");
         }
     }
+
+
     /**
      * Closes the modal when cancel button is clicked.
      *
