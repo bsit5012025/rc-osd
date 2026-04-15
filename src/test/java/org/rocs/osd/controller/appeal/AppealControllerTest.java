@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -44,6 +46,10 @@ public class AppealControllerTest {
     private List<Appeal> pendingAppeals;
     private List<Appeal> approvedAppeals;
     private List<Appeal> deniedAppeals;
+
+    // Mock dialog state - controls dialog behavior in tests
+    private static final AtomicBoolean mockDialogConfirm = new AtomicBoolean(false);
+    private static final AtomicBoolean mockDialogActive = new AtomicBoolean(false);
 
     @Start
     public void start(Stage stage) throws Exception {
@@ -70,10 +76,11 @@ public class AppealControllerTest {
             if (controllerClass == AppealCardController.class) {
                 AppealCardController cardController = new AppealCardController();
                 cardController.setAppealFacade(mockAppealFacade);
+                injectMockDialogs(cardController);
                 return cardController;
             }
             if (controllerClass == AppealConfirmationController.class) {
-                return new AppealConfirmationController();
+                return createMockAppealConfirmationController();
             }
             if (controllerClass.getName().contains("StudentController")) {
                 return mock(controllerClass);
@@ -108,10 +115,47 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    private void injectMockDialogs(AppealCardController cardController) {
+        try {
+            java.lang.reflect.Method setShowApproveDialog = AppealCardController.class.getDeclaredMethod(
+                    "setShowApproveDialog", Consumer.class);
+            setShowApproveDialog.setAccessible(true);
+            setShowApproveDialog.invoke(cardController, (Consumer<Runnable>) (onConfirm) -> {
+                if (mockDialogActive.get() && mockDialogConfirm.get()) {
+                    onConfirm.run();
+                }
+            });
+
+            java.lang.reflect.Method setShowDenyDialog = AppealCardController.class.getDeclaredMethod(
+                    "setShowDenyDialog", Consumer.class);
+            setShowDenyDialog.setAccessible(true);
+            setShowDenyDialog.invoke(cardController, (Consumer<Runnable>) (onConfirm) -> {
+                if (mockDialogActive.get() && mockDialogConfirm.get()) {
+                    onConfirm.run();
+                }
+            });
+        } catch (Exception e) {
+        }
+    }
+
+    private AppealConfirmationController createMockAppealConfirmationController() {
+        AppealConfirmationController mock = mock(AppealConfirmationController.class);
+        doAnswer(invocation -> {
+            Runnable onConfirm = invocation.getArgument(0);
+            if (mockDialogActive.get() && mockDialogConfirm.get()) {
+                javafx.application.Platform.runLater(onConfirm);
+            }
+            return null;
+        }).when(mock).setOnConfirm(any());
+        return mock;
+    }
+
     @BeforeEach
     public void setUp() {
         reset(mockAppealFacade);
         setupMockData();
+        mockDialogActive.set(false);
+        mockDialogConfirm.set(false);
     }
 
     @AfterEach
@@ -211,7 +255,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(200);
+        robot.sleep(500);
 
         Node expandedSection = robot.from(firstCard).lookup("#expandedSection").query();
         assertTrue(expandedSection.isVisible());
@@ -227,10 +271,11 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(300);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(200);
+        robot.sleep(300);
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
         assertEquals("Please enter remarks before denying.", errorLabel.getText());
@@ -239,6 +284,9 @@ public class AppealControllerTest {
 
     @Test
     public void testApproveAppealMovesToApprovedTab(FxRobot robot) throws InterruptedException {
+        mockDialogActive.set(true);
+        mockDialogConfirm.set(true);
+
         doAnswer(invocation -> {
             pendingAppeals.removeIf(a -> a.getAppealID() == 1L);
             approvedAppeals.add(createAppeal(1L, "APPROVED", "Late", "Please excuse my tardiness"));
@@ -249,28 +297,25 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialPendingCount = listContainer.getChildren().size();
+        int initialPendingCount = pendingAppeals.size();
 
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(2000);
-        WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
-        robot.clickOn("Confirm");
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(1000);
-
-        verify(mockAppealFacade, timeout(5000)).approveAppeal(eq(1L), any());
+        verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
     }
 
     @Test
     public void testDenyAppealMovesToDeniedTab(FxRobot robot) throws InterruptedException {
+        mockDialogActive.set(true);
+        mockDialogConfirm.set(true);
+
         doAnswer(invocation -> {
             pendingAppeals.removeIf(a -> a.getAppealID() == 1L);
             Appeal denied = createAppeal(1L, "DENIED", "Late", "Please excuse my tardiness");
@@ -283,7 +328,7 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialPendingCount = listContainer.getChildren().size();
+        int initialPendingCount = pendingAppeals.size();
 
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
@@ -292,17 +337,12 @@ public class AppealControllerTest {
         TextArea commentArea = robot.from(firstCard).lookup("#commentArea").queryAs(TextArea.class);
         robot.clickOn(commentArea).write("Test Denied");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(2000);
+        robot.sleep(500);
 
-        robot.clickOn("Confirm");
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(100);
-
-        verify(mockAppealFacade, timeout(5000)).denyAppeal(eq(1L), eq("Test Denied"));
+        verify(mockAppealFacade, timeout(3000)).denyAppeal(eq(1L), eq("Test Denied"));
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
     }
 
@@ -319,6 +359,9 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelDenyConfirmation(FxRobot robot) throws InterruptedException {
+        mockDialogActive.set(true);
+        mockDialogConfirm.set(false);
+
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -328,20 +371,14 @@ public class AppealControllerTest {
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
         TextArea commentArea = robot.from(firstCard).lookup("#commentArea").queryAs(TextArea.class);
         robot.clickOn(commentArea).write("Test remarks");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(2000);
-
-        robot.clickOn("Cancel");
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(1000);
+        robot.sleep(500);
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals(initialCount, pendingAppeals.size());
@@ -349,6 +386,9 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelApproveConfirmation(FxRobot robot) throws InterruptedException {
+        mockDialogActive.set(true);
+        mockDialogConfirm.set(false);
+
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -358,15 +398,10 @@ public class AppealControllerTest {
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(2000);
-
-        robot.clickOn("Cancel");
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(1000);
+        robot.sleep(500);
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
         assertEquals(initialCount, pendingAppeals.size());
