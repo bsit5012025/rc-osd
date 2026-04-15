@@ -304,11 +304,7 @@ public class AppealCardController {
             showPopupAndRemoveCard("Appeal approved!");
         };
 
-        if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(() -> javafx.application.Platform.runLater(onConfirm));
-        } else {
-            onConfirm.run();
-        }
+        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
     }
 
     /**
@@ -332,11 +328,7 @@ public class AppealCardController {
             showPopupAndRemoveCard("Appeal denied!");
         };
 
-        if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(() -> javafx.application.Platform.runLater(onConfirm));
-        } else {
-            onConfirm.run();
-        }
+        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
     }
     /**
      * Popup label.
@@ -404,7 +396,11 @@ public class AppealCardController {
             stage.setResizable(false);
 
             AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(onConfirmAction);
+            controller.setOnConfirm(() -> {
+                onConfirmAction.run();
+                stage.close();
+            });
+
             controller.setOnCancel(stage::close);
 
             stage.show();
