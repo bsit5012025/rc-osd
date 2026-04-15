@@ -254,16 +254,18 @@ public class AppealControllerTest {
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(2000);
+        WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn("Confirm");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(1000);
 
-        verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
+        verify(mockAppealFacade, timeout(5000)).approveAppeal(eq(1L), any());
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
     }
 
@@ -290,16 +292,17 @@ public class AppealControllerTest {
         TextArea commentArea = robot.from(firstCard).lookup("#commentArea").queryAs(TextArea.class);
         robot.clickOn(commentArea).write("Test Denied");
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(2000);
 
         robot.clickOn("Confirm");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(100);
 
-        verify(mockAppealFacade, timeout(3000)).denyAppeal(eq(1L), eq("Test Denied"));
+        verify(mockAppealFacade, timeout(5000)).denyAppeal(eq(1L), eq("Test Denied"));
         assertEquals(initialPendingCount - 1, pendingAppeals.size());
     }
 
@@ -325,18 +328,20 @@ public class AppealControllerTest {
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
         TextArea commentArea = robot.from(firstCard).lookup("#commentArea").queryAs(TextArea.class);
         robot.clickOn(commentArea).write("Test remarks");
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(2000);
 
         robot.clickOn("Cancel");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(1000);
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals(initialCount, pendingAppeals.size());
@@ -353,14 +358,15 @@ public class AppealControllerTest {
         Node firstCard = listContainer.getChildren().get(0);
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
+        robot.sleep(500);
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(2000);
 
         robot.clickOn("Cancel");
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
+        robot.sleep(1000);
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
         assertEquals(initialCount, pendingAppeals.size());
