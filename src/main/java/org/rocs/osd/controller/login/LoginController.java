@@ -22,6 +22,9 @@ import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
+import org.rocs.osd.model.login.Login;
+import org.rocs.osd.session.Session;
+
 import java.io.IOException;
 import java.util.function.Supplier;
 
@@ -114,18 +117,22 @@ public class LoginController {
             loginFacade = new LoginFacadeImpl(loginDao);
         }
 
-        boolean loginCheck = loginFacade.login(
-        usernameTextField.getText(), passwordField.getText());
-
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
 
-        if (user.isBlank() || pass.isBlank()) {
+        if (user == null || user.isBlank() || pass == null || pass.isBlank()) {
             showErrorPopup("Enter both username and password!");
             return;
         }
+        /*
+          This will check if the entered username
+          and password are correct.
+         */
+        boolean loginCheck = loginFacade.login(user, pass);
         try {
+            Login login = loginFacade.getByUsername(user);
             if (loginCheck) {
+                Session.setEmployee(login.getEmployee());
                 loadDashboard(event);
             } else {
                 showErrorPopup("Invalid username or password!");
