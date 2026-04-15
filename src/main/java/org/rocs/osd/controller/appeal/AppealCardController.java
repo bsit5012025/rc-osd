@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.rocs.osd.controller.dashboard.DashboardController;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
@@ -304,7 +305,9 @@ public class AppealCardController {
         };
 
         if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(onConfirm);
+            mockShowApproveDialog.accept(() -> {
+                javafx.application.Platform.runLater(onConfirm);
+            });
         } else {
             showConfirmation(
                     "/view/dialogs/approvedAppealConfirmation.fxml",
@@ -335,7 +338,9 @@ public class AppealCardController {
         };
 
         if (mockShowDenyDialog != null) {
-            mockShowDenyDialog.accept(onConfirm);
+            mockShowDenyDialog.accept(() -> {
+                javafx.application.Platform.runLater(onConfirm);
+            });
         } else {
             showConfirmation(
                     "/view/dialogs/deniedAppealConfirmation.fxml",
@@ -400,17 +405,19 @@ public class AppealCardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource(fxmlPath));
+            loader.setControllerFactory(DashboardController.getStaticControllerFactory());
             StackPane popupRoot = loader.load();
-
-            AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(onConfirmAction);
-            controller.setOnCancel(() -> { });
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(popupRoot));
             stage.setResizable(false);
-            stage.showAndWait();
+
+            AppealConfirmationController controller = loader.getController();
+            controller.setOnConfirm(onConfirmAction);
+            controller.setOnCancel(stage::close);
+
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
