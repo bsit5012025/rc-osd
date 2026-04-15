@@ -22,6 +22,7 @@ import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * Controller for a single appeal card in the
@@ -242,12 +243,57 @@ public class AppealCardController {
     }
 
     /**
+     * Gets the mock dialog.
+     *
+     * @return the mock dialog
+     */
+    public Consumer<Runnable> getMockShowApproveDialog() {
+        return mockShowApproveDialog;
+    }
+
+    /**
+     * Mock approve dialog for testing.
+     */
+    private Consumer<Runnable> mockShowApproveDialog;
+
+    /**
+     * Gets the mock dialog.
+     *
+     * @return the mock dialog
+     */
+    public Consumer<Runnable> getMockShowDenyDialog() {
+        return mockShowDenyDialog;
+    }
+
+    /**
+     * Mock deny dialog for testing.
+     */
+    private Consumer<Runnable> mockShowDenyDialog;
+
+    /**
+     * Sets mock approve dialog for testing.
+     *
+     * @param pCallback the callback to use
+     */
+    public void setShowApproveDialog(Consumer<Runnable> pCallback) {
+        this.mockShowApproveDialog = pCallback;
+    }
+
+    /**
+     * Sets mock deny dialog for testing.
+     *
+     * @param pCallback the callback to use
+     */
+    public void setShowDenyDialog(Consumer<Runnable> pCallback) {
+        this.mockShowDenyDialog = pCallback;
+    }
+
+    /**
      * Handles appeal approval.
      */
     @FXML
     void handleAppealApprove() {
-    showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
-
+        Runnable onConfirm = () -> {
             String remarks = (commentArea != null
                     && !commentArea.getText().trim().isEmpty())
                     ? commentArea.getText()
@@ -255,7 +301,16 @@ public class AppealCardController {
 
             getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal approved!");
-        });
+        };
+
+        if (mockShowApproveDialog != null) {
+            mockShowApproveDialog.accept(onConfirm);
+        } else {
+            showConfirmation(
+                    "/view/dialogs/approvedAppealConfirmation.fxml",
+                    onConfirm
+            );
+        }
     }
 
     /**
@@ -267,19 +322,27 @@ public class AppealCardController {
             return;
         }
 
-            if (commentArea == null || commentArea.getText().trim().isEmpty()) {
-                showError("Please enter remarks before denying.");
-                return;
-            }
-
-            String remarks = commentArea.getText();
-
-    showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
-                getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
-                showPopupAndRemoveCard("Appeal denied!");
-            });
-
+        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+            showError("Please enter remarks before denying.");
+            return;
         }
+
+        String remarks = commentArea.getText();
+
+        Runnable onConfirm = () -> {
+            getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
+            showPopupAndRemoveCard("Appeal denied!");
+        };
+
+        if (mockShowDenyDialog != null) {
+            mockShowDenyDialog.accept(onConfirm);
+        } else {
+            showConfirmation(
+                    "/view/dialogs/deniedAppealConfirmation.fxml",
+                    onConfirm
+            );
+        }
+    }
 
     /**
      * Popup label.
