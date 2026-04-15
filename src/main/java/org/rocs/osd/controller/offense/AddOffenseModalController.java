@@ -138,8 +138,11 @@ public class AddOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
 
-        studentIdTextField.textProperty().addListener((obs, oldVal, newVal) -> {
-            autoDisplayStudentName();
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                autoDisplayStudentName();
+            }
         });
     }
 
@@ -188,24 +191,13 @@ public class AddOffenseModalController {
     /**
      * Displays student name based on entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
         try {
             String studentId = studentIdTextField.getText();
 
-            if (!checkStudentIdLength(studentId)) {
-                studentResultLabel.setText("");
-                studentNameTextField.setText("");
-                return;
-            }
-
-            if (!isLast4Digits(studentId)) {
-                studentResultLabel.setText("ID might contain letters!");
-                studentNameTextField.setText("");
-                return;
-            }
-
             if (studentId.isBlank()) {
+                studentResultLabel.setText("Student ID is blank!");
+                studentNameTextField.clear();
                 return;
             }
 
@@ -221,8 +213,8 @@ public class AddOffenseModalController {
                 studentResultLabel.setText("");
                 studentNameTextField.setText(fullName);
             } else {
-                studentNameTextField.clear();
                 studentResultLabel.setText("Student Not Found!");
+                studentNameTextField.clear();
             }
         } catch (Exception e) {
             studentNameTextField.clear();
@@ -230,43 +222,6 @@ public class AddOffenseModalController {
 
             e.printStackTrace();
         }
-    }
-    /**
-     * Checks if the student ID length matches the expected
-     * length for its department. Returns true only when the
-     * user input meets the required format.
-     *
-     * @param studentId id of the student
-     * @return return if student is on expected length
-     */
-    private boolean checkStudentIdLength(String studentId) {
-        return (studentId.startsWith("JHS")
-                && studentId.trim().length() == 8)
-                || (studentId.startsWith("SHS")
-                && studentId.trim().length() == 8)
-                || (studentId.startsWith("CT")
-                && studentId.trim().length() == 9);
-    }
-    /**
-     * Checks if the student ID last 4
-     * letters may contain a Character value.
-     *
-     * @param studentId id of the student
-     * @return return if it contains a Digit
-     */
-    private boolean isLast4Digits(String studentId) {
-        if (studentId.length() >= 4) {
-            char char1 = studentId.charAt(studentId.length() - 4);
-            char char2 = studentId.charAt(studentId.length() - 3);
-            char char3 = studentId.charAt(studentId.length() - 2);
-            char char4 = studentId.charAt(studentId.length() - 1);
-
-            return Character.isDigit(char1)
-                    && Character.isDigit(char2)
-                    && Character.isDigit(char3)
-                    && Character.isDigit(char4);
-        }
-        return false;
     }
     /**
      * Closes the modal when cancel button is clicked.
