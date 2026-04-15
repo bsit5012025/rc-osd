@@ -81,6 +81,7 @@ public class AppealCardController {
      */
     public void setAppeal(Appeal appealData) {
         this.appeal = appealData;
+        this.status = appealData.getStatus();
         loadAppealData();
     }
 
@@ -171,13 +172,12 @@ public class AppealCardController {
      */
     @FXML
     void toggleExpansion() {
-        if (appeal == null) return;
         isExpanded = !isExpanded;
 
         expandedSection.setVisible(isExpanded);
         expandedSection.setManaged(isExpanded);
 
-        if ("PENDING".equals(status)){
+        if ("PENDING".equals(status)) {
             actionBar.setVisible(isExpanded);
             actionBar.setManaged(isExpanded);
         }
@@ -426,10 +426,11 @@ public class AppealCardController {
      * @param message show error message.
      */
     private void showError(String message) {
-        if (errorLabel == null) return;
+        if (errorLabel != null) {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
             errorLabel.setManaged(true);
+        }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(e -> {
