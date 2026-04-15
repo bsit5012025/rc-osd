@@ -255,6 +255,12 @@ public class AddOffenseModalController {
                         "Violations older than 2 months cannot be recorded.");
                 return;
             }
+            if (Session.getEmployee() == null
+                    || Session.getEmployee().getEmployeeId() == null) {
+                System.out.println(
+                        "User account is not eligible to add violation.");
+                return;
+            }
                 boolean record = recordFacade.createStudentRecord(
                         enrollmentId,
                         Session.getEmployee().getEmployeeId(),

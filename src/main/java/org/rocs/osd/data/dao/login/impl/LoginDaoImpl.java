@@ -54,13 +54,20 @@ public class LoginDaoImpl implements LoginDao {
 
                     Employee employee = new Employee();
                     String empId = rs.getString("employeeID");
-                    employee.setEmployeeId(empId);
-                    String dept = rs.getString("department");
-                    employee.setDepartment(
+                    if (empId != null) {
+                        employee.setEmployeeId(empId);
+
+                        String dept = rs.getString("department");
+                        if (dept != null) {
+                            employee.setDepartment(
                                     Department.valueOf(
-                                            dept.toUpperCase(Locale.ROOT)));
-                    employee.setEmployeeRole(rs.getString("employeeRole"));
-                    login.setEmployee(employee);
+                                            dept.toUpperCase(Locale.ROOT))
+                            );
+                        }
+
+                        employee.setEmployeeRole(rs.getString("employeeRole"));
+                        login.setEmployee(employee);
+                    }
 
                     login.setId(rs.getLong("id"));
                     login.setUsername(rs.getString("username"));

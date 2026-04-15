@@ -125,23 +125,12 @@ public class LoginController {
             return;
         }
         /*
-          Initialize DAO and Facade for login process.
-         */
-        LoginDao loginDao = new LoginDaoImpl();
-        loginFacade = new LoginFacadeImpl(loginDao);
-
-        Login login = loginDao.findLoginByUsername(user);
-
-        if (login == null || login.getEmployee() == null) {
-            showErrorPopup("Invalid username or password!");
-            return;
-        }
-        /*
           This will check if the entered username
           and password are correct.
          */
         boolean loginCheck = loginFacade.login(user, pass);
         try {
+            Login login = loginFacade.getByUsername(user);
             if (loginCheck) {
                 Session.setEmployee(login.getEmployee());
                 loadDashboard(event);
