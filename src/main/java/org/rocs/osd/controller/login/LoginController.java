@@ -117,9 +117,6 @@ public class LoginController {
             loginFacade = new LoginFacadeImpl(loginDao);
         }
 
-        boolean loginCheck = loginFacade.login(
-        usernameTextField.getText(), passwordField.getText());
-
         String user = usernameTextField.getText();
         String pass = passwordField.getText();
 
@@ -131,7 +128,7 @@ public class LoginController {
           Initialize DAO and Facade for login process.
          */
         LoginDao loginDao = new LoginDaoImpl();
-        LoginFacade loginFacade = new LoginFacadeImpl(loginDao);
+        loginFacade = new LoginFacadeImpl(loginDao);
 
         Login login = loginDao.findLoginByUsername(user);
 
