@@ -171,12 +171,13 @@ public class AppealCardController {
      */
     @FXML
     void toggleExpansion() {
+        if (appeal == null) return;
         isExpanded = !isExpanded;
 
         expandedSection.setVisible(isExpanded);
         expandedSection.setManaged(isExpanded);
 
-        if ("PENDING".equals(appeal.getStatus())) {
+        if ("PENDING".equals(status)){
             actionBar.setVisible(isExpanded);
             actionBar.setManaged(isExpanded);
         }
@@ -305,15 +306,10 @@ public class AppealCardController {
         };
 
         if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(() -> {
-                javafx.application.Platform.runLater(onConfirm);
-            });
-        } else {
-            showConfirmation(
-                    "/view/dialogs/approvedAppealConfirmation.fxml",
-                    onConfirm
-            );
+            mockShowApproveDialog.accept(onConfirm);
+            return;
         }
+        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
     }
 
     /**
@@ -338,17 +334,11 @@ public class AppealCardController {
         };
 
         if (mockShowDenyDialog != null) {
-            mockShowDenyDialog.accept(() -> {
-                javafx.application.Platform.runLater(onConfirm);
-            });
-        } else {
-            showConfirmation(
-                    "/view/dialogs/deniedAppealConfirmation.fxml",
-                    onConfirm
-            );
+            mockShowDenyDialog.accept(onConfirm);
+            return;
         }
+        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
     }
-
     /**
      * Popup label.
      */
@@ -405,8 +395,8 @@ public class AppealCardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource(fxmlPath));
-            loader.setControllerFactory
-                    (DashboardController.getStaticControllerFactory());
+            loader.setControllerFactory(
+                    DashboardController.getStaticControllerFactory());
             StackPane popupRoot = loader.load();
 
             Stage stage = new Stage();
@@ -436,11 +426,10 @@ public class AppealCardController {
      * @param message show error message.
      */
     private void showError(String message) {
-        if (errorLabel != null) {
+        if (errorLabel == null) return;
             errorLabel.setText(message);
             errorLabel.setVisible(true);
             errorLabel.setManaged(true);
-        }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(e -> {
