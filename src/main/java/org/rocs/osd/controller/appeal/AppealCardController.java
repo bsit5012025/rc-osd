@@ -81,7 +81,6 @@ public class AppealCardController {
      */
     public void setAppeal(Appeal appealData) {
         this.appeal = appealData;
-        this.status = appealData.getStatus();
         loadAppealData();
     }
 
@@ -177,7 +176,7 @@ public class AppealCardController {
         expandedSection.setVisible(isExpanded);
         expandedSection.setManaged(isExpanded);
 
-        if ("PENDING".equals(status)) {
+        if ("PENDING".equals(appeal.getStatus())) {
             actionBar.setVisible(isExpanded);
             actionBar.setManaged(isExpanded);
         }
@@ -306,10 +305,10 @@ public class AppealCardController {
         };
 
         if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(onConfirm);
-            return;
+            mockShowApproveDialog.accept(() -> javafx.application.Platform.runLater(onConfirm));
+        } else {
+            onConfirm.run();
         }
-        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
     }
 
     /**
@@ -333,11 +332,11 @@ public class AppealCardController {
             showPopupAndRemoveCard("Appeal denied!");
         };
 
-        if (mockShowDenyDialog != null) {
-            mockShowDenyDialog.accept(onConfirm);
-            return;
+        if (mockShowApproveDialog != null) {
+            mockShowApproveDialog.accept(() -> javafx.application.Platform.runLater(onConfirm));
+        } else {
+            onConfirm.run();
         }
-        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
     }
     /**
      * Popup label.
