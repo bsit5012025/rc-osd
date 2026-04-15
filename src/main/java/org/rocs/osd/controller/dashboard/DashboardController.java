@@ -15,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -40,7 +42,7 @@ public class DashboardController {
     @FXML
     private boolean sidebarCollapsed = false;
 
-    /** Initializes the dashboard controller. */
+    /** Initializes the empty dashboard controller. */
     @FXML
     public void initialize() {
         loadModule("/view/dashboard/centerDashboard.fxml");
@@ -102,13 +104,48 @@ public class DashboardController {
     }
 
     /**
+     * Static factory for creating controllers (used for testing).
+     * If set, overrides default instantiation.
+     */
+    private static Callback<Class<?>, Object> staticControllerFactory;
+
+    /**
+     *  @return Controller factory for module FXMLs (testing only).
+     */
+    public static Callback<Class<?>, Object> getStaticControllerFactory() {
+        return staticControllerFactory;
+    }
+
+    /**
+     * Sets static controller factory for testing.
+     *
+     * @param factory the factory to use.
+     */
+    public static void setStaticControllerFactory(
+            final Callback<Class<?>, Object> factory) {
+        staticControllerFactory = factory;
+    }
+
+    /**
+     * Clears static controller factory.
+     */
+    public static void clearStaticControllerFactory() {
+        staticControllerFactory = null;
+    }
+
+    /**
      * Helper method to load different FXML modules into the center wrapper.
      * @param fxmlPath The path to the FXML file.
      */
     private void loadModule(String fxmlPath) {
         try {
-            Parent view = FXMLLoader.load(Objects.requireNonNull(
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(
                     getClass().getResource(fxmlPath)));
+            if (staticControllerFactory != null) {
+                loader.setControllerFactory(staticControllerFactory);
+            }
+
+            Parent view = loader.load();
             mainContentWrapper.getChildren().clear();
             mainContentWrapper.getChildren().add(view);
         } catch (NullPointerException e) {
