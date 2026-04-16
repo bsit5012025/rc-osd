@@ -54,6 +54,8 @@ public class AppealControllerTest {
 
         setupMockData();
 
+        setupConfirmMocks();
+
         javafx.util.Callback<Class<?>, Object> controllerFactory = controllerClass -> {
             if (controllerClass == CenterDashboardController.class) {
                 CenterDashboardController controller = new CenterDashboardController();
@@ -72,14 +74,6 @@ public class AppealControllerTest {
             if (controllerClass == AppealCardController.class) {
                 AppealCardController cardController = new AppealCardController();
                 cardController.setAppealFacade(mockAppealFacade);
-
-                Consumer<Runnable> mockConfirmDialog = (onConfirm) -> {
-                    Platform.runLater(onConfirm);
-                };
-
-                cardController.setShowApproveDialog(mockConfirmDialog);
-                cardController.setShowDenyDialog(mockConfirmDialog);
-
                 return cardController;
             }
             if (controllerClass == AppealConfirmationController.class) {
@@ -117,15 +111,33 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    private void setupConfirmMocks() {
+        Consumer<Runnable> confirmMock = (onConfirm) -> {
+            Platform.runLater(onConfirm);
+        };
+        AppealController.setStaticMockApproveDialog(confirmMock);
+        AppealController.setStaticMockDenyDialog(confirmMock);
+    }
+
+    private void setupCancelMocks() {
+        Consumer<Runnable> cancelMock = (onConfirm) -> {
+
+        };
+        AppealController.setStaticMockApproveDialog(cancelMock);
+        AppealController.setStaticMockDenyDialog(cancelMock);
+    }
+
     @BeforeEach
     public void setUp() {
         reset(mockAppealFacade);
         setupMockData();
+        setupConfirmMocks();
     }
 
     @AfterEach
     public void tearDown() {
         DashboardController.clearStaticControllerFactory();
+        AppealController.clearStaticMockDialogs();
     }
 
     private void setupMockData() {
@@ -202,14 +214,12 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox list = robot.lookup("#listContainer").queryAs(VBox.class);
-
         Node card = list.getChildren().get(0);
+
         robot.clickOn(robot.from(card).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#approveButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
@@ -239,8 +249,6 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#denyButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, timeout(3000)).denyAppeal(eq(1L), eq("Test Denied"));
@@ -295,12 +303,11 @@ public class AppealControllerTest {
         int initialPendingCount = pendingAppeals.size();
 
         Node firstCard = listContainer.getChildren().get(0);
+
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
@@ -324,6 +331,7 @@ public class AppealControllerTest {
         int initialPendingCount = pendingAppeals.size();
 
         Node firstCard = listContainer.getChildren().get(0);
+
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -332,8 +340,6 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, timeout(3000)).denyAppeal(eq(1L), eq("Test Denied"));
@@ -353,47 +359,8 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelDenyConfirmation(FxRobot robot) throws Exception {
-        javafx.util.Callback<Class<?>, Object> cancelControllerFactory = controllerClass -> {
-            if (controllerClass == AppealCardController.class) {
-                AppealCardController cardController = new AppealCardController();
-                cardController.setAppealFacade(mockAppealFacade);
+        setupCancelMocks();
 
-                Consumer<Runnable> mockCancelDialog = (onConfirm) -> {
-
-                };
-
-                cardController.setShowApproveDialog(mockCancelDialog);
-                cardController.setShowDenyDialog(mockCancelDialog);
-
-                return cardController;
-            }
-            if (controllerClass == CenterDashboardController.class) {
-                CenterDashboardController controller = new CenterDashboardController();
-                controller.setRecordFacade(mockRecordFacade);
-                controller.setAppealFacade(mockAppealFacade);
-                return controller;
-            }
-            if (controllerClass == DashboardController.class) {
-                return new DashboardController();
-            }
-            if (controllerClass == AppealController.class) {
-                AppealController appealController = new AppealController();
-                appealController.setAppealFacade(mockAppealFacade);
-                return appealController;
-            }
-            if (controllerClass == AppealConfirmationController.class) {
-                return new AppealConfirmationController();
-            }
-            try {
-                Constructor<?> constructor = controllerClass.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                return constructor.newInstance();
-            } catch (Exception e) {
-                return mock(controllerClass);
-            }
-        };
-
-        DashboardController.setStaticControllerFactory(cancelControllerFactory);
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -415,47 +382,7 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelApproveConfirmation(FxRobot robot) throws Exception {
-        javafx.util.Callback<Class<?>, Object> cancelControllerFactory = controllerClass -> {
-            if (controllerClass == AppealCardController.class) {
-                AppealCardController cardController = new AppealCardController();
-                cardController.setAppealFacade(mockAppealFacade);
-
-                Consumer<Runnable> mockCancelDialog = (onConfirm) -> {
-
-                };
-
-                cardController.setShowApproveDialog(mockCancelDialog);
-                cardController.setShowDenyDialog(mockCancelDialog);
-
-                return cardController;
-            }
-            if (controllerClass == CenterDashboardController.class) {
-                CenterDashboardController controller = new CenterDashboardController();
-                controller.setRecordFacade(mockRecordFacade);
-                controller.setAppealFacade(mockAppealFacade);
-                return controller;
-            }
-            if (controllerClass == DashboardController.class) {
-                return new DashboardController();
-            }
-            if (controllerClass == AppealController.class) {
-                AppealController appealController = new AppealController();
-                appealController.setAppealFacade(mockAppealFacade);
-                return appealController;
-            }
-            if (controllerClass == AppealConfirmationController.class) {
-                return new AppealConfirmationController();
-            }
-            try {
-                Constructor<?> constructor = controllerClass.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                return constructor.newInstance();
-            } catch (Exception e) {
-                return mock(controllerClass);
-            }
-        };
-
-        DashboardController.setStaticControllerFactory(cancelControllerFactory);
+        setupCancelMocks();
 
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();

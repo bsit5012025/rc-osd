@@ -128,37 +128,37 @@ public class AppealCardController {
     private void loadAppealData() {
         if (appeal == null) {
             return;
-           }
+        }
 
-            Enrollment enrollment = appeal.getEnrollment();
-            Record record = appeal.getRecord();
-            Student student = enrollment.getStudent();
+        Enrollment enrollment = appeal.getEnrollment();
+        Record record = appeal.getRecord();
+        Student student = enrollment.getStudent();
 
-            if (studentIdLabel != null) {
-                studentIdLabel.setText(student.getStudentId());
-            }
+        if (studentIdLabel != null) {
+            studentIdLabel.setText(student.getStudentId());
+        }
 
-            if (studentNameLabel != null) {
-                studentNameLabel.setText(
-                        student.getFirstName() + " " + student.getLastName()
+        if (studentNameLabel != null) {
+            studentNameLabel.setText(
+                    student.getFirstName() + " " + student.getLastName()
+            );
+        }
+
+        if (offenseLabel != null) {
+            offenseLabel.setText(record.getRemarks());
+        }
+
+        if (reasonLabel != null) {
+            if ("DENIED".equals(appeal.getStatus())) {
+                reasonLabel.setText(
+                        appeal.getMessage() + "\n\nRemarks: "
+                                + appeal.getRemarks()
                 );
-            }
-
-            if (offenseLabel != null) {
-                offenseLabel.setText(record.getRemarks());
-            }
-
-            if (reasonLabel != null) {
-                if ("DENIED".equals(appeal.getStatus())) {
-                    reasonLabel.setText(
-                            appeal.getMessage() + "\n\nRemarks: "
-                                    + appeal.getRemarks()
-                    );
-                } else {
-                    reasonLabel.setText(appeal.getMessage());
-                }
+            } else {
+                reasonLabel.setText(appeal.getMessage());
             }
         }
+    }
 
 
     /**
@@ -196,7 +196,7 @@ public class AppealCardController {
     private void updateIcon() {
         if (arrowIcon == null) {
             return;
-            }
+        }
 
         String imgPath = isExpanded
                 ? "/assets/downButton.png"
