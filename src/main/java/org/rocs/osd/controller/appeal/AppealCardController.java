@@ -236,12 +236,14 @@ public class AppealCardController {
         if (errorLabel != null) {
             errorLabel.setText(msg);
             errorLabel.setVisible(true);
+            errorLabel.setManaged(true);
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(e -> {
             if (errorLabel != null) {
                 errorLabel.setVisible(false);
+                errorLabel.setManaged(false);
             }
         });
         delay.play();

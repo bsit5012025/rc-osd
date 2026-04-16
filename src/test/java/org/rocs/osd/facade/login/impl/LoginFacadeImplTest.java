@@ -10,8 +10,8 @@ import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.model.login.Login;
 import org.rocs.osd.model.person.Person;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginFacadeImplTest
@@ -33,13 +33,35 @@ class LoginFacadeImplTest
     }
 
     @Test
-    public void testLogin ()
+    void testLogin()
     {
         when(loginDao.findLoginByUsername("user")).thenReturn(login);
 
         boolean result = loginFacade.login("user", "1234");
 
-        assert(result);
-        verify(loginDao, times(1)).findLoginByUsername(anyString());
+        assertTrue(result);
+        verify(loginDao, times(1)).findLoginByUsername("user");
+    }
+
+    @Test
+    void testLoginInvalidPassword() {
+        when(loginDao.findLoginByUsername("user")).thenReturn(login);
+
+        assertFalse(loginFacade.login("user", "wrong"));
+    }
+
+    @Test
+    void testLoginNonexistentUser() {
+        when(loginDao.findLoginByUsername("unknown")).thenReturn(null);
+
+        assertFalse(loginFacade.login("unknown", "1234"));
+    }
+
+    @Test
+    void testLoginBlankUsernameOrPassword() {
+        assertFalse(loginFacade.login("", "1234"));
+        assertFalse(loginFacade.login("user", ""));
+        assertFalse(loginFacade.login("", ""));
+        assertFalse(loginFacade.login(null, null));
     }
 }
