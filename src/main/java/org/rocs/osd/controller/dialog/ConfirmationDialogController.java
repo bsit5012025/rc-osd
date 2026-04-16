@@ -73,21 +73,29 @@ public class ConfirmationDialogController {
      * @param action The logic to run when the user clicks confirm.
      */
     public void setOnConfirm(Runnable action) {
+
         this.onConfirmAction = action;
     }
 
+    /**
+     * Handles the confirm button action.
+     * Executes the assigned confirmation logic, if available,
+     * and then closes the dialog window.
+     */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleConfirm() {
+    public void handleConfirm() {
         if (onConfirmAction != null) {
             onConfirmAction.run();
         }
         close();
     }
 
+    /**
+     * Handles the cancel button action.
+     * Closes the dialog without executing any additional logic.
+     */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleCancel() {
+    public void handleCancel() {
         close();
     }
 

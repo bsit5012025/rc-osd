@@ -86,7 +86,6 @@ public class DashboardController {
             String cancelTxt, Runnable action) {
         try {
             String path = "/view/dialogs/confirmation.fxml";
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
             if (loader.getLocation() == null) {
