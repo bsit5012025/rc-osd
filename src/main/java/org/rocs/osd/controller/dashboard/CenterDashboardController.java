@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
@@ -93,19 +94,31 @@ public class CenterDashboardController {
      * Object for record facade.
      * */
     private RecordFacade recordFacade;
+
+    /**
+     * @param pRecordFacade sets the controller for CenterDashboardController.
+     */
+    public void setRecordFacade(RecordFacade pRecordFacade) {
+        this.recordFacade = pRecordFacade;
+    }
     /**
      * Initializes the center dashboard controller.
      * */
     @FXML
     public void initialize() {
-        recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
-        appealFacade = new AppealFacadeImpl();
+        if (recordFacade == null) {
+            recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
+        }
+        if (appealFacade == null) {
+            appealFacade = new AppealFacadeImpl();
+        }
         loadWidgetsOnDashboard();
         loadTime();
         loadDataToTable();
         loadRecentViolations(getCurrentSchoolYear());
         loadFrequentOffense();
     }
+
     /**
      * Loads the data on fxml components using record facade.
      * */
@@ -203,6 +216,12 @@ public class CenterDashboardController {
     private AppealFacade appealFacade;
 
     /**
+     * @param pAppealFacade sets the controller for CenterDashboardController.
+     */
+    public void setAppealFacade(AppealFacade pAppealFacade) {
+        this.appealFacade = pAppealFacade;
+    }
+    /**
      * Loads the data on fxml components using appeal facade.
      * */
     private void loadPendingAppeals() {
@@ -232,7 +251,12 @@ public class CenterDashboardController {
             progressBar.setMaxWidth(Double.MAX_VALUE);
             HBox.setHgrow(progressBar, javafx.scene.layout.Priority.ALWAYS);
 
-            row.getChildren().addAll(nameLabel, progressBar);
+            Label percentLabel = new Label(String.format("%.0f%%", percentage));
+            percentLabel.getStyleClass().add("offenseProgress-bar");
+            percentLabel.setMinWidth(20);
+            percentLabel.setAlignment(Pos.CENTER);
+
+            row.getChildren().addAll(nameLabel, progressBar, percentLabel);
             frequentOffenseContainer.getChildren().add(row);
         }
     }

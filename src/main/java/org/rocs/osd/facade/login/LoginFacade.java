@@ -1,6 +1,7 @@
 package org.rocs.osd.facade.login;
 
 
+import org.rocs.osd.model.login.Login;
 
 /**
  * Facade interface for managing user login operations in the Office of Student
@@ -18,4 +19,11 @@ public interface LoginFacade {
      * the password matches, false otherwise.
      */
     boolean login(String inputUserName, String inputPassword);
+    /**
+     * Retrieves a login record by its username.
+     *
+     * @param username the username to search for
+     * @return the Login object if found, or null if not found
+     */
+    Login getByUsername(String username);
 }

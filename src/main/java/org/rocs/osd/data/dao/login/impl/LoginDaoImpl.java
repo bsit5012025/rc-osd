@@ -2,13 +2,16 @@ package org.rocs.osd.data.dao.login.impl;
 
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.login.LoginDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.login.Login;
 import org.rocs.osd.model.person.Person;
+import org.rocs.osd.model.person.employee.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 /**
  * DAO implementation for managing Login records in the Office of Student
@@ -30,9 +33,12 @@ public class LoginDaoImpl implements LoginDao {
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "SELECT l.id, l.username, l.password, l.personID, "
-                             + "p.lastname, p.firstname, p.middleName "
+                             + "p.lastname, p.firstname, p.middleName, "
+                             + "e.employeeID, e.department, e.employeeRole "
                              + "FROM Login l "
                              + "JOIN person p ON l.personID = p.personID "
+                             + "LEFT JOIN employee e "
+                             + "ON p.personID = e.personID "
                              + "WHERE l.username = ?"
              )) {
 
@@ -45,6 +51,23 @@ public class LoginDaoImpl implements LoginDao {
                     person.setLastName(rs.getString("lastname"));
                     person.setFirstName(rs.getString("firstname"));
                     person.setMiddleName(rs.getString("middleName"));
+
+                    Employee employee = new Employee();
+                    String empId = rs.getString("employeeID");
+                    if (empId != null) {
+                        employee.setEmployeeId(empId);
+
+                        String dept = rs.getString("department");
+                        if (dept != null) {
+                            employee.setDepartment(
+                                    Department.valueOf(
+                                            dept.toUpperCase(Locale.ROOT))
+                            );
+                        }
+
+                        employee.setEmployeeRole(rs.getString("employeeRole"));
+                        login.setEmployee(employee);
+                    }
 
                     login.setId(rs.getLong("id"));
                     login.setUsername(rs.getString("username"));
