@@ -1,6 +1,7 @@
 package org.rocs.osd.controller.offense;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,10 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.DateCell;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.rocs.osd.controller.dialog.ConfirmationDialogController;
@@ -36,103 +36,73 @@ import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
-import org.rocs.osd.session.Session;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
+
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
-
 
 /**
- * Controller for the "Add Offense" modal in the Office of
- * Student Discipline System.
- * This class handles the population of offense type
- * and level ComboBoxes and automatically selects the
- * level of offense based on the selected offense type.
+ * Controller for the "Add Offense"
+ * modal in the Office of Student Discipline System.
+ * This class handles the population of
+ * offense type and level ComboBoxes and
+ * manages the recording of student violations including SMS notifications.
  */
 public class AddOffenseModalController {
 
-    /**
-     * Dropdown for selecting the type of offense.
-     */
+    /** Dropdown for selecting offense type. */
     @FXML
     private ComboBox<String> offenseTypeComboBox;
 
-    /**
-     * Dropdown for selecting the disciplinary action to be taken.
-     */
+    /** Dropdown for selecting disciplinary action. */
     @FXML
     private ComboBox<String> actionComboBox;
 
-    /**
-     * Display field for the severity level of the selected offense.
-     */
+    /** Text field for displaying offense level. */
     @FXML
     private TextField levelOfOffense;
 
-    /**
-     * Input field for the student's unique identification number.
-     */
+    /** Input field for student ID. */
     @FXML
     private TextField studentIdTextField;
 
-    /**
-     * Display field for the full name of the student.
-     */
+    /** Input field for student name. */
     @FXML
     private TextField studentNameTextField;
 
-    /**
-     * Selection tool for the date the violation occurred.
-     */
+    /** Date picker for selecting violation date. */
     @FXML
     private DatePicker datePicker;
 
-    /**
-     * Text area for providing additional details or context about the offense.
-     */
+    /** Text area for remarks input. */
     @FXML
     private TextArea remarksTextArea;
 
-    /**
-     * Option to trigger an automated SMS
-     * notification to the student's guardian.
-     */
+    /** Checkbox for notifying parents/guardian. */
     @FXML
     private CheckBox notifyParentsCheckBox;
 
-    /**
-     * Data Access Object for student-related database operations.
-     */
+    /** DAO for student operations. */
     private StudendDao studentDao;
 
-    /**
-     * Data Access Object for offense-related database operations.
-     */
+    /** DAO for offense operations. */
     private OffenseDao offenseDao;
 
-    /**
-     * Facade providing high-level operations for offense records.
-     */
+    /** Facade for record operations. */
     private RecordFacade recordFacade;
 
-    /**
-     * Data Access Object for disciplinary action database operations.
-     */
+    /** DAO for disciplinary actions. */
     private DisciplinaryActionDao disciplinaryActionDao;
 
-    /**
-     * Data Access Object for student enrollment database operations.
-     */
+    /** DAO for enrollment operations. */
     private EnrollmentDao enrollmentDao;
 
-    /**
-     * Facade providing high-level operations for guardian-related actions.
-     */
+    /** Facade for guardian actions. */
     private GuardianFacade guardianFacade;
 
     /**
-     * Initializes DAOs, Facades, and UI listeners.
+     * Initializes the controller, sets up DAOs and Facades, and
+     * triggers initial data loading.
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -145,79 +115,31 @@ public class AddOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
-        disableDateValidation();
     }
 
     /**
-     * Populates ComboBoxes with data from the database.
+     * Loads all offense names and disciplinary actions from the database
+     * into their respective ComboBoxes.
      */
     public void loadComboBoxData() {
         try {
-            offenseTypeComboBox.setItems(
-                    FXCollections.observableArrayList(
-                            offenseDao.findAllOffenseName()));
-            actionComboBox.setItems(
-                    FXCollections.observableArrayList(
-                            disciplinaryActionDao.findAllAction()));
+            ObservableList<String>
+                    offenseList = FXCollections.observableArrayList(
+                    offenseDao.findAllOffenseName());
+            ObservableList<String>
+                    actionList = FXCollections.observableArrayList(
+                    disciplinaryActionDao.findAllAction());
+            offenseTypeComboBox.setItems(offenseList);
+            actionComboBox.setItems(actionList);
         } catch (Exception e) {
             System.err.println(
-                    "Database Error: Could not fetch ComboBox data.");
+                    "Database Error: Could not fetch offense names.");
         }
     }
 
     /**
-     * Fetches and displays student name based on the ID entered.
-     */
-    @FXML
-    private void autoDisplayStudentName() {
-        String studentId = studentIdTextField.getText();
-        if (studentId.isEmpty()) {
-            return;
-        }
-        Student student = studentDao.findStudentWithRecordById(studentId);
-        if (student != null && student.getStudentId() != null) {
-            String fullName = student.getFirstName()
-                    + " " + student.getMiddleName()
-                    + " " + student.getLastName();
-            studentNameTextField.setText(fullName);
-        } else {
-            studentNameTextField.clear();
-        }
-    }
-
-    /**
-     * Helper method to launch the reusable confirmation dialog.
-     *
-     * @param line1  The first line of the prompt message.
-     * @param line2  The second line of the prompt message.
-     * @param action The logic to execute if the user confirms.
-     */
-    private void showConfirmation(
-            String line1, String line2, Runnable action) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/dialogs/confirmation.fxml"));
-            Parent root = loader.load();
-
-            ConfirmationDialogController controller = loader.getController();
-            controller.setMessage(line1, line2);
-            controller.setButtonLabels("Submit", "Cancel");
-            controller.setOnConfirm(action);
-
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Updates the offense level text field when a type is selected.
+     * Automatically selects the level of
+     * offense based on the offense type chosen by the user.
      */
     public void autoSelectLevelOfOffense() {
         offenseTypeComboBox.setOnAction(event -> {
@@ -232,23 +154,36 @@ public class AddOffenseModalController {
     }
 
     /**
-     * Closes the modal window without saving any changes.
-     *
-     * @param event The action event triggered by the cancel button.
+     * Displays the student name based on the entered student ID.
      */
-    public void onCancel(ActionEvent event) {
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+    @FXML
+    private void autoDisplayStudentName() {
+        String studentId = studentIdTextField.getText();
+        if (studentId.isEmpty()) {
+            return;
+        }
+
+        Student student = studentDao.findStudentWithRecordById(studentId);
+        if (student.getStudentId() != null) {
+            studentNameTextField.setText(student.getFirstName() + " "
+                    + student.getMiddleName() + " " + student.getLastName());
+        } else {
+            studentNameTextField.clear();
+        }
     }
 
     /**
-     * Validates input fields and triggers the confirmation dialog.
+     * Handles submission of the offense form. Validates input and
+     * opens a confirmation dialog before saving.
      *
-     * @param event The action event triggered by the submit button.
+     * @param event the action event triggered by the submit button.
      */
     @FXML
     public void onSubmit(ActionEvent event) {
         if (studentIdTextField.getText().isEmpty()
+                || studentNameTextField.getText().isEmpty()
                 || offenseTypeComboBox.getValue() == null
+                || actionComboBox.getValue() == null
                 || datePicker.getValue() == null) {
             System.out.println("Fill out missing fields!");
             return;
@@ -262,7 +197,8 @@ public class AddOffenseModalController {
     }
 
     /**
-     * Saves the offense record and triggers SMS notification.
+     * Performs the actual database save operation for the offense record.
+     * Executes after the user confirms the action in the dialog.
      */
     private void saveOffenseRecord() {
         try {
@@ -286,7 +222,10 @@ public class AddOffenseModalController {
             );
 
             if (success) {
-                handleSmsNotification(sId, sName, oType);
+                if (notifyParentsCheckBox.isSelected()) {
+                    handleSmsNotification(sId, sName, oType);
+                }
+                System.out.println("Violation recorded!");
                 ((Stage) studentIdTextField.getScene().getWindow()).close();
             }
         } catch (Exception e) {
@@ -294,62 +233,82 @@ public class AddOffenseModalController {
         }
     }
 
-
     /**
-     * Sends SMS to guardians if the notify checkbox is checked.
-     *
+     * Handles fetching guardian contact information
+     * and sending an asynchronous SMS notification.
      * @param studentId   The ID of the student.
      * @param studentName The full name of the student.
-     * @param offenseType The type of offense committed.
+     * @param offenseType The name of the offense committed.
      */
-    public void onCancel(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
-    }
-    /**
-     * Handles submission of offense form.
-     * Validates input and creates a new record.
-     *
-     * @param event action event from submit button.
-     */
-    public void onSubmit(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event
-                .getSource()).getScene().getWindow();
+    private void handleSmsNotification(String studentId,
+                                       String studentName, String offenseType) {
         try {
-            var guardians = guardianFacade.getGuardianByStudentId(studentId);
-            if (guardians == null) {
+            var studentGuardians = guardianFacade
+                    .getGuardianByStudentId(studentId);
+            if (studentGuardians == null || studentGuardians.isEmpty()) {
+                System.out.println("No guardians found.");
                 return;
             }
 
-            for (StudentGuardian sg : guardians) {
-                Guardian g = sg.getGuardian();
-                if (g != null && g.getContactNumber() != null) {
-                    String msg = "Discipline Office: Your child, "
-                            + studentName + ", committed: " + offenseType + ".";
-                    SmsService.sendSMSAsync(
-                            formatPhone(g.getContactNumber()), msg);
+            for (StudentGuardian sg : studentGuardians) {
+                Guardian guardian = sg.getGuardian();
+                if (guardian == null || guardian.getContactNumber()
+                        == null) {
+                    continue;
                 }
+
+                String phone = formatPhone(guardian.getContactNumber());
+                String message
+                        = "Good day!\nI am the Discipline Officer "
+                        + "from Rogationist College. "
+                        + "This is to inform you that your child " + studentName
+                        + ", committed an offense: \n\n" + offenseType
+                        + "\n\nPlease coordinate with us "
+                        + "thru call or in-person. "
+                        + "Thank you!";
+
+                SmsService.sendSMSAsync(phone, message);
+                System.out.println("SMS sent to: " + phone);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Violation recorded!");
-        stage.close();
     }
 
-    private void disableDateValidation() {
+    /**
+     * Helper method to launch the reusable confirmation dialog.
+     * @param line1  The first line of the prompt message.
+     * @param line2  The second line of the prompt message.
+     * @param action The logic to execute if the user confirms.
+     */
+    private void showConfirmation(String line1, String line2, Runnable action) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/view/dialogs/confirmation.fxml"));
+            Parent root = loader.load();
+            ConfirmationDialogController controller = loader.getController();
+            controller.setMessage(line1, line2);
+            controller.setButtonLabels("Submit", "Cancel");
+            controller.setOnConfirm(action);
 
-        datePicker.setDayCellFactory(dp -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                if (date.isAfter(LocalDate.now())
-                        || date.isBefore(LocalDate.now().minusMonths(2))) {
-                    setDisable(true);
-                }
-            }
-        });
-        datePicker.setValue(LocalDate.now());
+    /**
+     * Closes the modal when the cancel button is clicked.
+     * @param event action event from the cancel button.
+     */
+    public void onCancel(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

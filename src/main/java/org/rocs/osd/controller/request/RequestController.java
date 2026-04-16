@@ -107,8 +107,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handlePendingTab() {
+    public void handlePendingTab() {
         loadPendingRequestData();
     }
 
@@ -177,8 +176,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleApproveTab() {
+    public void handleApproveTab() {
         loadApproveRequestData();
     }
 
@@ -246,8 +244,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private void handleDeniedTab() {
+    public void handleDeniedTab() {
         loadDeniedRequestData();
     }
 
