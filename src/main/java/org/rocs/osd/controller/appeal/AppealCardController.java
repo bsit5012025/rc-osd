@@ -303,8 +303,11 @@ public class AppealCardController {
             getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal approved!");
         };
-
-        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
+        if (mockShowApproveDialog != null) {
+            mockShowApproveDialog.accept(onConfirm);
+        } else {
+            showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
+        }
     }
 
     /**
@@ -384,10 +387,7 @@ public class AppealCardController {
      */
     private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource(fxmlPath));
-            loader.setControllerFactory(
-                    DashboardController.getStaticControllerFactory());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             StackPane popupRoot = loader.load();
 
             Stage stage = new Stage();
