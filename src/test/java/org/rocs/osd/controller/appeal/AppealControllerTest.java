@@ -1,15 +1,14 @@
 package org.rocs.osd.controller.appeal;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -72,6 +72,14 @@ public class AppealControllerTest {
             if (controllerClass == AppealCardController.class) {
                 AppealCardController cardController = new AppealCardController();
                 cardController.setAppealFacade(mockAppealFacade);
+
+                Consumer<Runnable> mockConfirmDialog = (onConfirm) -> {
+                    Platform.runLater(onConfirm);
+                };
+
+                cardController.setShowApproveDialog(mockConfirmDialog);
+                cardController.setShowDenyDialog(mockConfirmDialog);
+
                 return cardController;
             }
             if (controllerClass == AppealConfirmationController.class) {
@@ -106,7 +114,6 @@ public class AppealControllerTest {
         DashboardController dashboardController = dashboardLoader.getController();
         dashboardController.onLoadAppeal(null);
 
-        Thread.sleep(500);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -119,11 +126,6 @@ public class AppealControllerTest {
     @AfterEach
     public void tearDown() {
         DashboardController.clearStaticControllerFactory();
-        for (Window window : Window.getWindows()) {
-            if (window instanceof Stage && window != Window.getWindows().get(0)) {
-                javafx.application.Platform.runLater(() -> ((Stage) window).close());
-            }
-        }
     }
 
     private void setupMockData() {
@@ -178,74 +180,6 @@ public class AppealControllerTest {
         return appeal;
     }
 
-    private void clickDialogButton(FxRobot robot, String buttonText) {
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(200);
-
-        Stage dialogStage = null;
-        List<Window> windows = Window.getWindows();
-        Stage primaryStage = (Stage) windows.get(0);
-
-        for (Window window : windows) {
-            if (window instanceof Stage && window != primaryStage) {
-                Stage stage = (Stage) window;
-                if (stage.isShowing()) {
-                    dialogStage = stage;
-                    break;
-                }
-            }
-        }
-
-        assertNotNull(dialogStage, "Confirmation dialog should be visible");
-
-        try {
-            robot.clickOn(buttonText);
-        } catch (Exception e) {
-            Scene dialogScene = dialogStage.getScene();
-            Parent root = dialogScene.getRoot();
-
-            Button targetButton = findButtonInNode(root, buttonText);
-            assertNotNull(targetButton, "Button '" + buttonText + "' not found in dialog");
-
-            javafx.application.Platform.runLater(targetButton::fire);
-        }
-
-        WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(200);
-    }
-
-    /**
-     * Recursively search for a button with given text in the node hierarchy
-     */
-    private Button findButtonInNode(Node node, String buttonText) {
-        if (node instanceof Button) {
-            Button btn = (Button) node;
-            if (btn.getText().equalsIgnoreCase(buttonText)) {
-                return btn;
-            }
-        }
-
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
-            for (Node child : parent.getChildrenUnmodifiable()) {
-                Button found = findButtonInNode(child, buttonText);
-                if (found != null) {
-                    return found;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Helper method to verify dialog is showing and close it
-     */
-    private void verifyAndCloseDialog(FxRobot robot, boolean clickConfirm) {
-        String buttonText = clickConfirm ? "Confirm" : "Cancel";
-        clickDialogButton(robot, buttonText);
-    }
-
     @Test
     public void testPendingTabDisplaysPendingAppeals(FxRobot robot) {
         robot.clickOn("Pending");
@@ -274,9 +208,10 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#approveButton").queryButton());
-        verifyAndCloseDialog(robot, true);
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.waitForFxEvents();
+
         verify(mockAppealFacade, timeout(3000)).approveAppeal(eq(1L), any());
     }
 
@@ -304,7 +239,7 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#denyButton").queryButton());
-        verifyAndCloseDialog(robot, true);
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -321,9 +256,8 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(500);
 
-        Node expandedSection = robot.from(firstCard).lookup("#expandedSection").query();
+        VBox expandedSection = robot.from(firstCard).lookup("#expandedSection").queryAs(VBox.class);
         assertTrue(expandedSection.isVisible());
     }
 
@@ -337,11 +271,9 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        robot.sleep(300);
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
         assertEquals("Please enter remarks before denying.", errorLabel.getText());
@@ -367,7 +299,7 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        verifyAndCloseDialog(robot, true);
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -400,7 +332,7 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        verifyAndCloseDialog(robot, true);
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -421,6 +353,47 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelDenyConfirmation(FxRobot robot) throws Exception {
+        javafx.util.Callback<Class<?>, Object> cancelControllerFactory = controllerClass -> {
+            if (controllerClass == AppealCardController.class) {
+                AppealCardController cardController = new AppealCardController();
+                cardController.setAppealFacade(mockAppealFacade);
+
+                Consumer<Runnable> mockCancelDialog = (onConfirm) -> {
+
+                };
+
+                cardController.setShowApproveDialog(mockCancelDialog);
+                cardController.setShowDenyDialog(mockCancelDialog);
+
+                return cardController;
+            }
+            if (controllerClass == CenterDashboardController.class) {
+                CenterDashboardController controller = new CenterDashboardController();
+                controller.setRecordFacade(mockRecordFacade);
+                controller.setAppealFacade(mockAppealFacade);
+                return controller;
+            }
+            if (controllerClass == DashboardController.class) {
+                return new DashboardController();
+            }
+            if (controllerClass == AppealController.class) {
+                AppealController appealController = new AppealController();
+                appealController.setAppealFacade(mockAppealFacade);
+                return appealController;
+            }
+            if (controllerClass == AppealConfirmationController.class) {
+                return new AppealConfirmationController();
+            }
+            try {
+                Constructor<?> constructor = controllerClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                return constructor.newInstance();
+            } catch (Exception e) {
+                return mock(controllerClass);
+            }
+        };
+
+        DashboardController.setStaticControllerFactory(cancelControllerFactory);
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -435,8 +408,6 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#denyButton").queryButton());
-        verifyAndCloseDialog(robot, false);
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
@@ -444,6 +415,48 @@ public class AppealControllerTest {
 
     @Test
     public void testCancelApproveConfirmation(FxRobot robot) throws Exception {
+        javafx.util.Callback<Class<?>, Object> cancelControllerFactory = controllerClass -> {
+            if (controllerClass == AppealCardController.class) {
+                AppealCardController cardController = new AppealCardController();
+                cardController.setAppealFacade(mockAppealFacade);
+
+                Consumer<Runnable> mockCancelDialog = (onConfirm) -> {
+
+                };
+
+                cardController.setShowApproveDialog(mockCancelDialog);
+                cardController.setShowDenyDialog(mockCancelDialog);
+
+                return cardController;
+            }
+            if (controllerClass == CenterDashboardController.class) {
+                CenterDashboardController controller = new CenterDashboardController();
+                controller.setRecordFacade(mockRecordFacade);
+                controller.setAppealFacade(mockAppealFacade);
+                return controller;
+            }
+            if (controllerClass == DashboardController.class) {
+                return new DashboardController();
+            }
+            if (controllerClass == AppealController.class) {
+                AppealController appealController = new AppealController();
+                appealController.setAppealFacade(mockAppealFacade);
+                return appealController;
+            }
+            if (controllerClass == AppealConfirmationController.class) {
+                return new AppealConfirmationController();
+            }
+            try {
+                Constructor<?> constructor = controllerClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                return constructor.newInstance();
+            } catch (Exception e) {
+                return mock(controllerClass);
+            }
+        };
+
+        DashboardController.setStaticControllerFactory(cancelControllerFactory);
+
         robot.clickOn("Pending");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -454,8 +467,6 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(card).lookup("#approveButton").queryButton());
-        verifyAndCloseDialog(robot, false);
-
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());

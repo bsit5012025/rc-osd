@@ -330,8 +330,11 @@ public class AppealCardController {
             getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal denied!");
         };
-
-        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
+        if (mockShowDenyDialog != null) {
+            mockShowDenyDialog.accept(onConfirm);
+        } else {
+            showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
+        }
     }
     /**
      * Popup label.
