@@ -83,7 +83,8 @@ public class RequestController {
      * @param requestId the unique identifier for the request
      */
     private void addPendingRequestCard(String dept, String name,
-                                String type, String reason, long requestId) {
+                                       String type, String reason,
+                                       long requestId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/view/request/RequestCard.fxml"));
@@ -106,7 +107,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    void handlePendingTab() {
+    public void handlePendingTab() {
         loadPendingRequestData();
     }
 
@@ -175,7 +176,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    void handleApproveTab() {
+    public void handleApproveTab() {
         loadApproveRequestData();
     }
 
@@ -243,7 +244,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    void handleDeniedTab() {
+    public void handleDeniedTab() {
         loadDeniedRequestData();
     }
 
