@@ -8,12 +8,13 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.DateCell;
 import javafx.stage.Stage;
 import org.rocs.osd.controller.sms.SmsService;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -28,12 +29,13 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.Student;
-import org.rocs.osd.model.person.studentGuardian.StudentGuardian;
+import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
+import org.rocs.osd.session.Session;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.sql.Date;
-
+import java.time.LocalDate;
 
 
 /**
@@ -125,6 +127,7 @@ public class AddOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+        disableDateValidation();
     }
 
     /**
@@ -196,6 +199,8 @@ public class AddOffenseModalController {
             System.out.println("STUDENT NOT FOUND!");
         }
     }
+
+
     /**
      * Closes the modal when cancel button is clicked.
      *
@@ -212,6 +217,8 @@ public class AddOffenseModalController {
      * @param event action event from submit button.
      */
     public void onSubmit(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event
+                .getSource()).getScene().getWindow();
         try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
@@ -228,8 +235,7 @@ public class AddOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
-            String employeeId = "EMP-002";
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
             Offense offense = offenseDao.findByName(offenseType);
             long offenseId = offense.getOffenseId();
             long actionID = disciplinaryActionDao.
@@ -237,28 +243,46 @@ public class AddOffenseModalController {
             long enrollmentId = enrollmentDao.
                     findEnrollmentIdByStudentId(studentId);
 
-            boolean record = recordFacade.createStudentRecord(
-                    enrollmentId,
-                    employeeId,
-                    offenseId,
-                    dateOfViolation,
-                    actionID,
-                    remarks
-            );
-            if (record) {
-                if (notifyParentsCheckBox.isSelected()) {
-                    try {
-                        var studentGuardians =
-                                guardianFacade.getGuardianByStudentId(
-                                        studentId);
+            if (datePicker.getValue().isAfter(LocalDate.now())) {
+                System.out.println(
+                        "Date is in the future, kindly double check the date.");
+                return;
+            }
+            if (datePicker.getValue()
+                    .isBefore(LocalDate.now()
+                            .minusMonths(2))) {
+                System.out.println(
+                        "Violations older than 2 months cannot be recorded.");
+                return;
+            }
+            if (Session.getEmployee() == null
+                    || Session.getEmployee().getEmployeeId() == null) {
+                System.out.println(
+                        "User account is not eligible to add violation.");
+                return;
+            }
+                boolean record = recordFacade.createStudentRecord(
+                        enrollmentId,
+                        Session.getEmployee().getEmployeeId(),
+                        offenseId,
+                        dateOfViolation,
+                        actionID,
+                        remarks
+                );
+                if (record && notifyParentsCheckBox.isSelected()) {
 
-                        if (studentGuardians == null
-                                || studentGuardians.isEmpty()) {
-                            System.out.println("No guardians found.");
-                            return;
-                        }
+                        try {
+                            var studentGuardians =
+                                    guardianFacade.getGuardianByStudentId(
+                                            studentId);
 
-                        for (StudentGuardian sg : studentGuardians) {
+                            if (studentGuardians == null
+                                    || studentGuardians.isEmpty()) {
+                                System.out.println("No guardians found.");
+                                return;
+                            }
+
+                            for (StudentGuardian sg : studentGuardians) {
 
                             Guardian guardian = sg.getGuardian();
                             if (guardian == null
@@ -266,39 +290,53 @@ public class AddOffenseModalController {
                                 continue;
                             }
 
-                            String phone = guardian.getContactNumber();
-                            phone = formatPhone(phone);
+                                String phone = guardian.getContactNumber();
+                                phone = formatPhone(phone);
 
-                            String message = "Good day!\nI am (NAME) "
-                                    + "Discipline Officer from "
-                                    + "Rogationist College. This is to inform "
-                                    + "you that your child "
-                                    + studentName
-                                    + ", committed an offense: \n\n"
-                                    + offenseType
-                                    + "\n \n"
-                                    + "Please coordinate with us thru call or "
-                                    + "in-person to settle this matter. "
-                                    + "Thank you!";
+                                String message = "Good day!\nI am (NAME) "
+                                        + "Discipline Officer from "
+                                        + "Rogationist College. "
+                                        + "This is to inform "
+                                        + "you that your child "
+                                        + studentName
+                                        + ", committed an offense: \n\n"
+                                        + offenseType
+                                        + "\n \n"
+                                        + "Please coordinate with us "
+                                        + "thru call or "
+                                        + "in-person to settle this matter. "
+                                        + "Thank you!";
 
-                            SmsService.sendSMSAsync(phone, message);
+                                SmsService.sendSMSAsync(phone, message);
 
-                            System.out.println("SMS sent to: "
-                                    + phone);
+                                System.out.println("SMS sent to: "
+                                        + phone);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
-                Stage stage = (Stage) ((Node) event
-                        .getSource()).getScene().getWindow();
-                stage.close();
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("Violation recorded!");
+        stage.close();
+    }
+
+    private void disableDateValidation() {
+
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
+                    setDisable(true);
+                }
+            }
+        });
+        datePicker.setValue(LocalDate.now());
     }
 }

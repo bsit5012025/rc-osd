@@ -106,7 +106,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    private void handlePendingTab() {
+    void handlePendingTab() {
         loadPendingRequestData();
     }
 
@@ -175,7 +175,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    private void handleApproveTab() {
+    void handleApproveTab() {
         loadApproveRequestData();
     }
 
@@ -243,7 +243,7 @@ public class RequestController {
      * with corresponding request cards.
      * */
     @FXML
-    private void handleDeniedTab() {
+    void handleDeniedTab() {
         loadDeniedRequestData();
     }
 

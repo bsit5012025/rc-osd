@@ -1,6 +1,7 @@
 package org.rocs.osd.model.login;
 
 import org.rocs.osd.model.person.Person;
+import org.rocs.osd.model.person.employee.Employee;
 
 /**
  * Represents a user's login credentials in the OSD System.
@@ -20,8 +21,12 @@ public class Login {
     /** Person linked to this login. */
     private Person person;
 
+    /** Employee linked to this login. */
+    private Employee employee;
+
     /** Default constructor. */
     public Login() {
+        // Default constructor
     }
 
     /**
@@ -77,4 +82,15 @@ public class Login {
     public void setPerson(Person pPerson) {
         this.person = pPerson;
     }
+
+    /** @param emp sets the person associated with this login. */
+    public void setEmployee(Employee emp) {
+        this.employee = emp;
+    }
+
+    /** @return the employee associated with this login. */
+    public Employee getEmployee() {
+        return employee;
+    }
+
 }

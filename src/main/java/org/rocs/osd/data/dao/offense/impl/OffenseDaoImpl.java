@@ -35,15 +35,15 @@ public class OffenseDaoImpl implements OffenseDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, offenseID);
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
 
-            if (rs.next()) {
-                offense.setOffenseId(rs.getLong("offenseID"));
-                offense.setOffense(rs.getString("offense"));
-                offense.setType(rs.getString("type"));
-                offense.setDescription(rs.getString("description"));
+                if (rs.next()) {
+                    offense.setOffenseId(rs.getLong("offenseID"));
+                    offense.setOffense(rs.getString("offense"));
+                    offense.setType(rs.getString("type"));
+                    offense.setDescription(rs.getString("description"));
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,11 +63,11 @@ public class OffenseDaoImpl implements OffenseDao {
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                offenses.add(rs.getString("offense"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    offenses.add(rs.getString("offense"));
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,15 +91,15 @@ public class OffenseDaoImpl implements OffenseDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, offenseName);
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
 
-            if (rs.next()) {
-                offense = new Offense();
-                offense.setOffenseId(rs.getLong("offenseID"));
-                offense.setOffense(rs.getString("offense"));
-                offense.setType(rs.getString("type"));
+                if (rs.next()) {
+                    offense = new Offense();
+                    offense.setOffenseId(rs.getLong("offenseID"));
+                    offense.setOffense(rs.getString("offense"));
+                    offense.setType(rs.getString("type"));
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

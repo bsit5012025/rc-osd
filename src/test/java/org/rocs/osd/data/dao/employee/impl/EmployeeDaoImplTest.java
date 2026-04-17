@@ -9,8 +9,6 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
-import org.rocs.osd.data.dao.employee.EmployeeDao;
-import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.person.employee.Employee;
 

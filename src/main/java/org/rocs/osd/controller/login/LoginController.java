@@ -16,12 +16,17 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.data.dao.login.impl.LoginDaoImpl;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
+import org.rocs.osd.model.login.Login;
+import org.rocs.osd.session.Session;
+
 import java.io.IOException;
+import java.util.function.Supplier;
 
 /**
  * Controller responsible for handling user interactions in
@@ -62,7 +67,7 @@ public class LoginController {
      * and hides it if currently visible.
      */
     @FXML
-    private void togglePasswordVisibility() {
+    void togglePasswordVisibility() {
         if (passwordField == null
                 ||
                 passwordTextField == null
@@ -86,6 +91,20 @@ public class LoginController {
             togglePasswordButton.getStyleClass().remove("show-icon");
         }
     }
+
+    /**
+     * Facade used to retrieve login data from backend.
+     */
+    private LoginFacade loginFacade;
+
+    /**
+     * Handles the mock process of loginControllerTest.
+     * @param pLoginFacade set loginFacade on loginControllerTest to mock db.
+     */
+    public void setLoginFacade(LoginFacade pLoginFacade) {
+        this.loginFacade = pLoginFacade;
+    }
+
     /**
      * Handles the login process when the Login button is clicked.
      * This method validates the entered username and
@@ -93,44 +112,29 @@ public class LoginController {
      * @param event the action event triggered by clicking the login button.
      */
     public void onLogin(ActionEvent event) {
+        if (loginFacade == null) {
+            LoginDao loginDao = new LoginDaoImpl();
+            loginFacade = new LoginFacadeImpl(loginDao);
+        }
 
-        /*
-          Initialize DAO and Facade for login process.
-         */
-        LoginFacade loginFacade;
-        LoginDao loginDao = new LoginDaoImpl();
-        loginFacade = new LoginFacadeImpl(loginDao);
+        String user = usernameTextField.getText();
+        String pass = passwordField.getText();
 
+        if (user == null || user.isBlank() || pass == null || pass.isBlank()) {
+            showErrorPopup("Enter both username and password!");
+            return;
+        }
         /*
           This will check if the entered username
           and password are correct.
          */
-        boolean loginCheck = loginFacade.login(
-        usernameTextField.getText(), passwordField.getText());
-
-        /*
-          This will check if the username or password fields are empty
-          and informs the user to fill them up.
-         */
-        String user = usernameTextField.getText();
-        String pass = passwordField.getText();
-
-        if (user.isBlank() || pass.isBlank()) {
-            showErrorPopup("Enter both username and password!");
-            return;
-        }
+        boolean loginCheck = loginFacade.login(user, pass);
         try {
-            /*
-              If the login credentials are correct,
-              Dashboard screen will be loaded.
-             */
+            Login login = loginFacade.getByUsername(user);
             if (loginCheck) {
+                Session.setEmployee(login.getEmployee());
                 loadDashboard(event);
             } else {
-                /*
-                  If the login fails, "Invalid username or password!
-                  will be displayed".
-                 */
                 showErrorPopup("Invalid username or password!");
             }
         } catch (Exception e) {
@@ -139,45 +143,84 @@ public class LoginController {
 
     }
 
-    private void loadDashboard(ActionEvent event) {
+    /**
+     * @return Factory for creating dashboard Parent node (testing only).
+     */
+    private Supplier<Parent> dashboardFactory;
+
+    /**
+     *  @return Dashboard factory for test injection (testing only).
+     */
+    public Supplier<Parent> getDashboardFactory() {
+        return dashboardFactory;
+    }
+
+    /**
+     * Controller factory for dashboard FXML (used for testing).
+     */
+    private Callback<Class<?>, Object> dashboardControllerFactory;
+
+    /**
+     * @return DashboardController factory for test injection (for testing).
+     */
+    public Callback<Class<?>, Object> getDashboardControllerFactory() {
+        return dashboardControllerFactory;
+    }
+
+    /**
+     * Sets factory for creating dashboard Parent (testing only).
+     *
+     * @param factory supplier that provides dashboard root node
+     */
+    public void setDashboardFactory(Supplier<Parent> factory) {
+        this.dashboardFactory = factory;
+    }
+
+    /**
+     * Sets controller factory for dashboard FXML (testing only).
+     *
+     * @param factory callback that creates dashboard controllers
+     */
+    public void setDashboardControllerFactory(
+            Callback<Class<?>, Object> factory) {
+        this.dashboardControllerFactory = factory;
+    }
+
+    void loadDashboard(ActionEvent event) {
         try {
             if (errorStage != null) {
                 errorStage.close();
                 errorStage = null;
             }
-            /*
-              This will load the Dashboard screen from the FXML file.
-             */
-            Parent root = FXMLLoader.load(getClass()
-            .getResource("/view/dashboard/dashboard.fxml"));
-            /*
-              This will get the current window from the button click event.
-             */
+
+            Parent root;
+            if (dashboardFactory != null) {
+                root = dashboardFactory.get();
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/view/dashboard/dashboard.fxml"));
+                if (dashboardControllerFactory != null) {
+                    loader.setControllerFactory(dashboardControllerFactory);
+                }
+                root = loader.load();
+            }
+
             Stage stage = (Stage) ((Node)
-            event.getSource()).getScene().getWindow();
-            /*
-              This will display the Dashboard screen in the window.
-             */
+                    event.getSource()).getScene().getWindow();
+
             double width = stage.getWidth();
             double height = stage.getHeight();
             stage.setScene(new Scene(root, width, height));
-            /*
-              This will make the window full screen.
-             */
+
             stage.setMaximized(true);
             stage.show();
-            /*
-              Throw an exception if the Dashboard screen cannot be loaded.
-             */
+
         } catch (LoadException e) {
             System.err.println("Error loading Dashboard");
             e.printStackTrace();
         } catch (NullPointerException e) {
             System.err.println("A UI component has not been initialized");
         } catch (IOException e) {
-            /*
-              Throw an exception if the Dashboard screen cannot be loaded.
-             */
             throw new RuntimeException(e);
         }
     }
@@ -190,10 +233,6 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
             "/view/dialogs/loginError.fxml"));
             Parent root = loader.load();
-            /*
-              Sets the login error banner to the bottom-center
-              of the window on different screen sizes.
-              */
             errorStage = new Stage();
 
             Label label = (Label) root.lookup(
@@ -226,12 +265,10 @@ public class LoginController {
             );
             delay.play();
 
-
         } catch (IOException ioe) {
             System.err.println("Could not load Error Popup: "
             + ioe.getMessage());
             ioe.printStackTrace();
         }
     }
-
 }

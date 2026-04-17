@@ -23,6 +23,7 @@ public class Student extends Person {
      * Default constructor.
      */
     public Student() {
+        // Default constructor
     }
 
     /**

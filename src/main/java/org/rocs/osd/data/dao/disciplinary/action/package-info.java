@@ -7,4 +7,4 @@
  * such as retrieving action names, finding actions by ID,
  * and looking up action IDs by name.
  */
-package org.rocs.osd.data.dao.disciplinaryAction;
+package org.rocs.osd.data.dao.disciplinary.action;

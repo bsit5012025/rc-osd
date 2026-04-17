@@ -5,6 +5,9 @@ module org.rocs.osd {
     requires java.sql;
     requires com.oracle.database.jdbc;
     requires org.slf4j;
+    requires jasperreports;
+    requires commons.beanutils;
+    requires java.desktop;
 
     opens org.rocs.osd.controller.login to javafx.fxml;
     opens org.rocs.osd.controller.dashboard to javafx.fxml;
@@ -12,7 +15,9 @@ module org.rocs.osd {
     opens org.rocs.osd.controller.appeal to javafx.fxml;
     opens org.rocs.osd.controller.student to javafx.fxml;
     opens org.rocs.osd.controller.request to javafx.fxml;
+    opens org.rocs.osd.data.dto.student.report to jasperreports, commons.beanutils;
 
     exports org.rocs.osd;
+   
 }
 

@@ -10,8 +10,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.rocs.osd.data.dao.disciplinaryAction.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinaryAction.impl.DisciplinaryActionImpl;
+import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
+import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
@@ -223,7 +223,7 @@ public class EditOffenseModalController {
      * @param event action event from cancel button
      */
     @FXML
-    private void onCancel(ActionEvent event) {
+    void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -234,7 +234,7 @@ public class EditOffenseModalController {
      * @param event action event from submit button.
      */
     @FXML
-    private void onSubmit(ActionEvent event) {
+    void onSubmit(ActionEvent event) {
         try {
             String studentId = studentIdTextField.getText();
             String studentName = studentNameTextField.getText();
@@ -264,7 +264,7 @@ public class EditOffenseModalController {
                 return;
             }
 
-            Date dateOfViolation = java.sql.Date.valueOf(datePicker.getValue());
+            Date dateOfViolation = Date.valueOf(datePicker.getValue());
 
             long enrollmentID = enrollmentDao.
             findEnrollmentIdByStudentId(studentId);

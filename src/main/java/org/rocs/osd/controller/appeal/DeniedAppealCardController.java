@@ -37,7 +37,7 @@ public class DeniedAppealCardController {
      * Toggles the expansion state of the card.
      */
     @FXML
-    private void toggleExpansion() {
+    void toggleExpansion() {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {

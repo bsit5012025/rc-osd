@@ -61,6 +61,9 @@ public class LoginDaoImplTest {
         when(resultSet.getString("lastname")).thenReturn("LName");
         when(resultSet.getString("firstname")).thenReturn("FName");
         when(resultSet.getString("middleName")).thenReturn("MName");
+        when(resultSet.getString("department")).thenReturn("SHS");
+        when(resultSet.getString("employeeID")).thenReturn("EMP002");
+        when(resultSet.getString("employeeRole")).thenReturn("ADMIN");
 
         LoginDao dao = new LoginDaoImpl();
         Login login = dao.findLoginByUsername("test");

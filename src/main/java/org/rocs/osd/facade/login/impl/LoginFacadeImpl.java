@@ -33,15 +33,30 @@ public class LoginFacadeImpl implements LoginFacade {
      */
     @Override
     public boolean login(String inputUserName, String inputPassword) {
-        // Retrieve the login details from the database using the username
-        Login login = loginDao.findLoginByUsername(inputUserName);
-
-        // Return false if the username does not exist
-        if (login == null) {
+        if (inputUserName == null || inputPassword == null
+                || inputUserName.isBlank() || inputPassword.isBlank()) {
             return false;
         }
 
-        // Check if the entered password matches the stored password
-        return inputPassword.equals(login.getPassword());
+        Login login = loginDao.findLoginByUsername(inputUserName);
+
+        return login != null && inputPassword.equals(login.getPassword());
+    }
+    /**
+     * Retrieves a Login object by username.
+     *
+     * If the provided username is null or blank, this method returns null.
+     * Otherwise, it delegates the lookup to the LoginDao.
+     *
+     * @param username the username to search for
+     * @return the Login object associated with the given username,
+     *         or null if the username is null, blank, or not found
+     */
+    @Override
+    public Login getByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return null;
+        }
+        return loginDao.findLoginByUsername(username);
     }
 }

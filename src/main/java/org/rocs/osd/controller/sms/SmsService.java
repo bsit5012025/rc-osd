@@ -1,6 +1,7 @@
 package org.rocs.osd.controller.sms;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -99,24 +100,25 @@ public final class SmsService {
              * Read the response stream (input if success,
              * error stream if failed)
              * */
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                            responseCode == 200
-                                    ?
-                                    conn.getInputStream()
-                                    :
-                                    conn.getErrorStream()
-                    )
-            );
-
-            String line;
             StringBuilder response = new StringBuilder();
 
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            responseCode == 200
+                                    ? conn.getInputStream()
+                                    : conn.getErrorStream()
+                    ))) {
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            reader.close();
+            System.out.println("Response: " + response.toString());
 
             if (responseCode == 200) {
                 System.out.println("SMS SENT SUCCESSFULLY: " + response);
