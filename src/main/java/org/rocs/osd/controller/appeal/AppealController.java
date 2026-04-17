@@ -9,7 +9,6 @@ import org.rocs.osd.model.appeal.Appeal;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Controller for managing and displaying appeal records
@@ -40,16 +39,6 @@ public class AppealController {
     private AppealFacade appealFacade;
 
     /**
-     * Static mock for approve dialog (for testing).
-     */
-    private static Consumer<Runnable> staticMockApproveDialog;
-
-    /**
-     * Static mock for deny dialog (for testing).
-     */
-    private static Consumer<Runnable> staticMockDenyDialog;
-
-    /**
      * Sets the appeal facade for dependency injection.
      * Used for testing to inject mock facades.
      *
@@ -69,50 +58,6 @@ public class AppealController {
             appealFacade = new AppealFacadeImpl();
         }
         return appealFacade;
-    }
-
-    /**
-     * Sets static mock approve dialog for testing.
-     *
-     * @param pCallback the callback to use
-     */
-    public static void setStaticMockApproveDialog(Consumer<Runnable> pCallback) {
-        staticMockApproveDialog = pCallback;
-    }
-
-    /**
-     * Sets static mock deny dialog for testing.
-     *
-     * @param pCallback the callback to use
-     */
-    public static void setStaticMockDenyDialog(Consumer<Runnable> pCallback) {
-        staticMockDenyDialog = pCallback;
-    }
-
-    /**
-     * Clears static mock dialogs.
-     */
-    public static void clearStaticMockDialogs() {
-        staticMockApproveDialog = null;
-        staticMockDenyDialog = null;
-    }
-
-    /**
-     * Gets the static mock approve dialog.
-     *
-     * @return the mock dialog
-     */
-    public static Consumer<Runnable> getStaticMockApproveDialog() {
-        return staticMockApproveDialog;
-    }
-
-    /**
-     * Gets the static mock deny dialog.
-     *
-     * @return the mock dialog
-     */
-    public static Consumer<Runnable> getStaticMockDenyDialog() {
-        return staticMockDenyDialog;
     }
 
     /**
@@ -163,9 +108,6 @@ public class AppealController {
 
                     controller.setOnActionComplete(() ->
                             loadAppealsByStatus("PENDING"));
-
-                    controller.setShowApproveDialog(staticMockApproveDialog);
-                    controller.setShowDenyDialog(staticMockDenyDialog);
 
                 } else if ("APPROVED".equals(status)) {
                     ApprovedAppealCardController controller =

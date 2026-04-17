@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.rocs.osd.controller.dashboard.DashboardController;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
@@ -23,7 +22,6 @@ import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /**
  * Controller for a single appeal card in the
@@ -244,57 +242,12 @@ public class AppealCardController {
     }
 
     /**
-     * Gets the mock dialog.
-     *
-     * @return the mock dialog
-     */
-    public Consumer<Runnable> getMockShowApproveDialog() {
-        return mockShowApproveDialog;
-    }
-
-    /**
-     * Mock approve dialog for testing.
-     */
-    private Consumer<Runnable> mockShowApproveDialog;
-
-    /**
-     * Gets the mock dialog.
-     *
-     * @return the mock dialog
-     */
-    public Consumer<Runnable> getMockShowDenyDialog() {
-        return mockShowDenyDialog;
-    }
-
-    /**
-     * Mock deny dialog for testing.
-     */
-    private Consumer<Runnable> mockShowDenyDialog;
-
-    /**
-     * Sets mock approve dialog for testing.
-     *
-     * @param pCallback the callback to use
-     */
-    public void setShowApproveDialog(Consumer<Runnable> pCallback) {
-        this.mockShowApproveDialog = pCallback;
-    }
-
-    /**
-     * Sets mock deny dialog for testing.
-     *
-     * @param pCallback the callback to use
-     */
-    public void setShowDenyDialog(Consumer<Runnable> pCallback) {
-        this.mockShowDenyDialog = pCallback;
-    }
-
-    /**
      * Handles appeal approval.
      */
     @FXML
     void handleAppealApprove() {
-        Runnable onConfirm = () -> {
+        showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", () -> {
+
             String remarks = (commentArea != null
                     && !commentArea.getText().trim().isEmpty())
                     ? commentArea.getText()
@@ -302,12 +255,7 @@ public class AppealCardController {
 
             getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal approved!");
-        };
-        if (mockShowApproveDialog != null) {
-            mockShowApproveDialog.accept(onConfirm);
-        } else {
-            showConfirmation("/view/dialogs/approvedAppealConfirmation.fxml", onConfirm);
-        }
+        });
     }
 
     /**
@@ -326,16 +274,12 @@ public class AppealCardController {
 
         String remarks = commentArea.getText();
 
-        Runnable onConfirm = () -> {
+        showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", () -> {
             getAppealFacade().denyAppeal(appeal.getAppealID(), remarks);
             showPopupAndRemoveCard("Appeal denied!");
-        };
-        if (mockShowDenyDialog != null) {
-            mockShowDenyDialog.accept(onConfirm);
-        } else {
-            showConfirmation("/view/dialogs/deniedAppealConfirmation.fxml", onConfirm);
-        }
+        });
     }
+
     /**
      * Popup label.
      */
@@ -390,23 +334,18 @@ public class AppealCardController {
      */
     private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource(fxmlPath));
             StackPane popupRoot = loader.load();
+
+            AppealConfirmationController controller = loader.getController();
+            controller.setOnConfirm(onConfirmAction);
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(popupRoot));
             stage.setResizable(false);
-
-            AppealConfirmationController controller = loader.getController();
-            controller.setOnConfirm(() -> {
-                onConfirmAction.run();
-                stage.close();
-            });
-
-            controller.setOnCancel(stage::close);
-
-            stage.show();
+            stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -427,14 +366,12 @@ public class AppealCardController {
         if (errorLabel != null) {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
-            errorLabel.setManaged(true);
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(e -> {
             if (errorLabel != null) {
                 errorLabel.setVisible(false);
-                errorLabel.setManaged(false);
             }
         });
         delay.play();
