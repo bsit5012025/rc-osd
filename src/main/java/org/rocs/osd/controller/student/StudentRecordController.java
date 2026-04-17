@@ -31,7 +31,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StudentRecordController {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(StudentRecordController.class);
     /**
      * Text field for full name.
      */
@@ -297,8 +305,9 @@ public class StudentRecordController {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error downloading student report.", e);
+                }
             }
         }
     }

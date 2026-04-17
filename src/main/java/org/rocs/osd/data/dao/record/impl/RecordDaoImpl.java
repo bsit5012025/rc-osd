@@ -22,13 +22,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * DAO implementation for managing student records in the Office of
  * Student Discipline System.
- *
  * Handles student record data from the database.
  */
 public class RecordDaoImpl implements RecordDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(RecordDaoImpl.class);
 
     /**
      * Finds student records by school year.
@@ -38,6 +45,7 @@ public class RecordDaoImpl implements RecordDao {
      */
     @Override
     public List<Record> findAllBySchoolYear(String schoolYear) {
+        LOGGER.debug("Fetching all records for school year: {}", schoolYear);
         List<Record> records = new ArrayList<>();
 
         String sql = """
@@ -142,10 +150,8 @@ public class RecordDaoImpl implements RecordDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println(
-                    "SQL Exception (findAllBySchoolYear): "
-                            + e.getMessage()
-            );
+            LOGGER.error("Failed to find records for school year: {}",
+                    schoolYear, e);
         }
         return records;
     }
@@ -159,6 +165,8 @@ public class RecordDaoImpl implements RecordDao {
                                     long offenseID, Date dateOfViolation,
                                     long actionID, String remarks,
                                     RecordStatus status) {
+        LOGGER.debug("Adding student record for enrollmentID: {}",
+                enrollmentID);
         String sql =
                 "INSERT INTO record (enrollmentID, employeeID, "
                         + "offenseID, dateOfViolation, actionID, remarks, "
@@ -179,10 +187,8 @@ public class RecordDaoImpl implements RecordDao {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(
-                    "SQL Exception (addStudentRecord): "
-                            + e.getMessage()
-            );
+            LOGGER.error("Error adding student record for enrollment: {}",
+                    enrollmentID, e);
             return false;
         }
     }
@@ -234,12 +240,13 @@ public class RecordDaoImpl implements RecordDao {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(
-                    "SQL Exception (updateRecord): "
-                            + e.getMessage()
-            );
-            return false;
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to update record ID: {}",
+                        record.getRecordId(), e);
+
+            }
         }
+        return false;
     }
 
     @Override
@@ -349,8 +356,8 @@ public class RecordDaoImpl implements RecordDao {
                     total = rs.getInt(1);
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            LOGGER.error("Error counting total: {}", schoolYear, e);
         }
 
         return total;
@@ -375,8 +382,8 @@ public class RecordDaoImpl implements RecordDao {
                     total = rs.getInt(1);
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            LOGGER.error("Error retrieving today's violation count", e);
         }
 
         return total;
@@ -406,7 +413,8 @@ public class RecordDaoImpl implements RecordDao {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Error fetching most frequent offenses "
+                    + "for year: {}", schoolYear, e);
         }
 
         return offenses;
@@ -486,7 +494,8 @@ public class RecordDaoImpl implements RecordDao {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error finding records for student ID: {}",
+                    studentId, e);
         }
         return records;
 

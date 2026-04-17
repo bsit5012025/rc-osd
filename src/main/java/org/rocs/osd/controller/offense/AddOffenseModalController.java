@@ -37,6 +37,8 @@ import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -49,12 +51,19 @@ import java.sql.Date;
  * manages the recording of student violations including SMS notifications.
  */
 public class AddOffenseModalController {
-
-    /** Dropdown for selecting offense type. */
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AddOffenseModalController.class);
+    /**
+     * Dropdown for selecting offense type.
+     */
     @FXML
     private ComboBox<String> offenseTypeComboBox;
-
-    /** Dropdown for selecting disciplinary action. */
+    /**
+     * Dropdown for selecting disciplinary action.
+     */
     @FXML
     private ComboBox<String> actionComboBox;
 
@@ -136,7 +145,6 @@ public class AddOffenseModalController {
                     "Database Error: Could not fetch offense names.");
         }
     }
-
     /**
      * Automatically selects the level of
      * offense based on the offense type chosen by the user.
@@ -152,7 +160,6 @@ public class AddOffenseModalController {
             }
         });
     }
-
     /**
      * Displays the student name based on the entered student ID.
      */
@@ -310,5 +317,6 @@ public class AddOffenseModalController {
     public void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+        LOGGER.info("Violation recorded!");
     }
 }

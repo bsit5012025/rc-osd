@@ -25,6 +25,8 @@ import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller class for managing the UI behavior of an individual Appeal Card.
@@ -32,6 +34,16 @@ import org.rocs.osd.model.record.Record;
  * and processing approval or denial actions with confirmation dialogs.
  */
 public class AppealCardController {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AppealCardController.class);
+    /**
+     * Expanded section container.
+     */
+    @FXML
+    private VBox expandedSection;
 
     /** The section of the card that is hidden until expanded. */
     @FXML private VBox expandedSection;

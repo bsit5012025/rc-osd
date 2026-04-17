@@ -15,13 +15,21 @@ import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.facade.enrollment.EnrollmentFacade;
 import org.rocs.osd.facade.enrollment.impl.EnrollmentFacadeImpl;
 import org.rocs.osd.model.enrollment.Enrollment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Controller for managing student records in the table view.
  * Handles loading student enrollment data and displaying it.
  */
 public class StudentController {
-
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(StudentController.class);
     /** Table view displaying student enrollments. */
     @FXML
     private TableView<Enrollment> studentTable;
@@ -144,8 +152,15 @@ public class StudentController {
             studentStage.centerOnScreen();
             studentStage.showAndWait();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                 if (LOGGER.isErrorEnabled()) {
+                     LOGGER.error("Failed to load studentRecord.fxml", e);
+                 }
+            } catch (RuntimeException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Initializing student record view for "
+                            + "ID failed:", e);
+                }
+            }
         }
-    }
 }

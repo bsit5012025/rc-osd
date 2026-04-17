@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Service class responsible for handling SMS
@@ -16,6 +18,11 @@ import java.nio.charset.StandardCharsets;
  * utilizing a REST-based GET API.
  */
 public final class SmsService {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SmsService.class);
     /**
      * Private constructor to prevent instantiation.
      * */
@@ -53,7 +60,11 @@ public final class SmsService {
      * @param pMessage The text content of the SMS.
      */
     public static void sendSMS(String pPhone, String pMessage) {
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Attempting to send SMS to: {} "
+                    + "with message length: {}",
+                    pPhone, pMessage.length());
+        }
         try {
             /*
               Standardize phone format before sending.
@@ -69,8 +80,9 @@ public final class SmsService {
               Checks if getBaseUrl is null and returns a message if it is null
               */
             if (getBaseUrl() == null) {
-                throw new Exception(
-                        "Configuration missing! Check config.properties file.");
+                throw new IllegalStateException(
+                        "Configuration missing! "
+                        + "Check config.properties file.");
             }
 
             String urlString = getBaseUrl()
@@ -115,20 +127,49 @@ public final class SmsService {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error reading SMS gateway response: {}",
+                            e.getMessage());
+                }
             }
 
-            System.out.println("Response: " + response.toString());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("SMS gateway response body: {}", response);
+            }
 
             if (responseCode == 200) {
-                System.out.println("SMS SENT SUCCESSFULLY: " + response);
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("SMS SENT SUCCESSFULLY: {}", response);
+                }
             } else {
-                System.err.println("SMS FAILED: " + response);
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("SMS FAILED: {}", response);
+                }
             }
 
+        } catch (java.net.SocketTimeoutException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("SMS TIMEOUT: The gateway took "
+                        + "too long to respond.");
+            }
+        } catch (java.net.UnknownHostException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("SMS NETWORK ERROR: Could not resolve gateway "
+                        + "host. Check internet connection.");
+            }
+        } catch (IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("SMS I/O ERROR: Problem connecting to the "
+                        + "SMS service: {}", e.getMessage());
+            }
+        } catch (IllegalStateException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("SMS CONFIG ERROR: {}", e.getMessage());
+            }
         } catch (Exception e) {
-            System.err.println("SMS ERROR: " + e.getMessage());
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("SMS UNEXPECTED ERROR: ", e);
+            }
         }
     }
 

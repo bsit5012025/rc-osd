@@ -25,7 +25,10 @@ import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Date;
 
 /**
@@ -33,7 +36,11 @@ import java.sql.Date;
  * Allows user to either edit or resolve the record.
  */
 public class ViewOffenseModalController {
-
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ViewOffenseModalController.class);
     /**
      * TextField for student ID.
      */
@@ -184,8 +191,15 @@ public class ViewOffenseModalController {
 
             stage.show();
 
+        } catch (IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to load editOffenseModal.fxml.", e);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to edit offense: {}",
+                        record != null ? record.getRecordId() : "NULL", e);
+            }
         }
     }
 
@@ -211,7 +225,7 @@ public class ViewOffenseModalController {
                     || offenseName == null
                     || offenseType == null
                     || datePicker.getValue() == null) {
-                System.out.println("Fill out all required fields!");
+                LOGGER.info("Fill out all required fields!");
                 return;
             }
 
@@ -219,7 +233,7 @@ public class ViewOffenseModalController {
                     || record.getEnrollment() == null
                     || record.getAction() == null
                     || record.getEnrollment().getStudent() == null) {
-                System.out.println("Record, Enrollment, "
+                LOGGER.info("Record, Enrollment, "
                         + "Action or student are missing or null!");
                 return;
             }
@@ -244,15 +258,23 @@ public class ViewOffenseModalController {
             boolean status = recordFacade.resolveRecord(record);
 
             if (status) {
-                System.out.println("Record Resolved");
+                LOGGER.info("Record Resolved");
 
                 Stage stage = (Stage) ((Node) event.getSource())
                         .getScene().getWindow();
                 stage.close();
             }
 
+        } catch (IllegalArgumentException e) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Validation failed during resolution: {}",
+                        e.getMessage());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Critical error while resolving Record ID: {}.",
+                        record != null ? record.getRecordId() : "Unknown", e);
+            }
         }
     }
 }

@@ -22,12 +22,20 @@ import org.rocs.osd.model.department.Department;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Controller for managing offenses in the
  * Office of Student Discipline System.
  * This class handles opening the "Add Offense" modal.
  */
 public class OffenseController {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(OffenseController.class);
     /**
      * Table displaying list of violations.
      */
@@ -90,13 +98,16 @@ public class OffenseController {
             refreshRecord();
 
         } catch (IOException e) {
-            System.err.println("UI Error: Could not find or load "
-                    + "AddOffenseModal.fxml. "
-                    + "Check the file path and Controller names.");
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("UI Error: Could not find or load "
+                        + "AddOffenseModal.fxml. "
+                        + "Check the file path and Controller names.", e);
+
+            }
         } catch (Exception e) {
-            System.err.println("Unexpected Error while opening modal: "
-            + e.getMessage());
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Unexpected Error while opening modal: ", e);
+            }
         }
     }
     /**
@@ -121,8 +132,15 @@ public class OffenseController {
 
             modalStage.show();
 
+        } catch (IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to load viewOffenseModal.fxml.", e);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to view Offense Modal: {}",
+                        record != null ? record.getRecordId() : "NULL", e);
+            }
         }
     }
     /**

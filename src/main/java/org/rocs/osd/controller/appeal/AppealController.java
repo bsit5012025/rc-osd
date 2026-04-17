@@ -6,6 +6,8 @@ import javafx.scene.layout.VBox;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +19,11 @@ import java.util.List;
  * in the UI.
  */
 public class AppealController {
-
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AppealController.class);
     /**
      * Container that holds all appeal cards in the UI.
      */
@@ -97,12 +103,15 @@ public class AppealController {
                     listContainer.getChildren().add(card);
 
                 } catch (IOException e) {
-                    System.err.println("Error loading Appeal Card: "
-                            + e.getMessage());
-                    e.printStackTrace();
+                    LOGGER.error("Error loading Appeal Card: ", e);
+                } catch (Exception e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("Unexpected error displaying appeal ID"
+                                + ": ", e);
                     }
                 }
             }
+    }
 
 
 

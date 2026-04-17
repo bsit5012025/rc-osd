@@ -10,13 +10,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * DAO implementation for managing disciplinary actions in the Office of Student
  * Discipline System. Provides methods to find actions by ID or name and
  * retrieve all actions.
  */
 public class DisciplinaryActionImpl implements DisciplinaryActionDao {
-
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DisciplinaryActionImpl.class);
     /**
      * Finds the name of a disciplinary action by its ID.
      *
@@ -25,6 +32,7 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
      */
     @Override
     public String findActionById(long actionId) {
+        LOGGER.debug("Attempting to find action name for ID: {}", actionId);
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT action FROM disciplinaryAction WHERE actionId = ?"
@@ -38,7 +46,10 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot fetch action by ID due "
+                    + "to a database error: {}", actionId, e);
+            throw new RuntimeException(
+                    "Error querying disciplinary action by ID", e);
         }
 
         return null;
@@ -52,6 +63,7 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
      */
     @Override
     public List<String> findAllAction() {
+        LOGGER.debug("Retrieving all disciplinary actions from database.");
         List<String> actions = new ArrayList<>();
 
         try (Connection conn = ConnectionHelper.getConnection();
@@ -63,9 +75,16 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
                 while (rs.next()) {
                     actions.add(rs.getString("action"));
                 }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Successfully retrieved {} disciplinary "
+                            + "actions.", actions.size());
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(
+                    "Failed to retrieve disciplinary actions from database", e);
+            throw new RuntimeException(
+                    "Error fetching all disciplinary actions", e);
         }
 
         return actions;
@@ -79,6 +98,7 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
      */
     @Override
     public long findActionIdByName(String action) {
+        LOGGER.debug("Searching for action ID with name: {}", action);
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT actionId FROM disciplinaryAction WHERE action = ?"
@@ -90,9 +110,11 @@ public class DisciplinaryActionImpl implements DisciplinaryActionDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Searching for action name'{}'"
+                        + " has failed: {}", action, e.getMessage(), e);
+            }
         }
-
         return -1;
     }
 }

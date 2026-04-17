@@ -14,12 +14,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of the EnrollmentDao interface.
  * Handles retrieval of student enrollment information from the
  * database in the Office of Student Discipline System.
  */
 public class EnrollmentDaoImpl implements EnrollmentDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EnrollmentDaoImpl.class);
 
     /**
      * Finds all enrollments of a student by their student ID.
@@ -88,7 +96,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Finding enrollments for student ID has failed: {}",
+                    studentId, e);
         }
 
         return enrollmentList;
@@ -120,7 +129,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Fetching enrollment ID for student has failed: {}",
+                    studentId, e);
         }
         return -1;
     }
@@ -200,7 +210,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while retrieving global enrollment list", e);
         }
 
         return enrollmentList;
