@@ -25,6 +25,11 @@ public class AppealController {
     private VBox listContainer;
 
     /**
+     * Facade used to retrieve appeal data from backend.
+     */
+    private AppealFacade appealFacade;
+
+    /**
      * Initializes the controller.
      * Clears the list and loads appeals from the database.
      */
@@ -32,11 +37,6 @@ public class AppealController {
     public void initialize() {
         loadAppealsByStatus("PENDING");
     }
-
-    /**
-     * Facade used to retrieve appeal data from backend.
-     */
-    private AppealFacade appealFacade;
 
     /**
      * Sets the appeal facade for dependency injection.
@@ -100,11 +100,8 @@ public class AppealController {
                 if ("PENDING".equals(status)) {
                     AppealCardController controller =
                             loader.getController();
-
-                    controller.setAppealFacade(getAppealFacade());
-
                     controller.setAppeal(appeal);
-                    controller.setStatus(status);
+                    controller.setAppealFacade(getAppealFacade());
 
                     controller.setOnActionComplete(() ->
                             loadAppealsByStatus("PENDING"));
@@ -129,8 +126,6 @@ public class AppealController {
             }
         }
     }
-
-
 
     /**
      * Handles pending tab click.

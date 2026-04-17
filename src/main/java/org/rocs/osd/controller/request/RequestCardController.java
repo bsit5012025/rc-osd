@@ -1,5 +1,7 @@
 package org.rocs.osd.controller.request;
 
+import java.io.IOException;
+import java.net.URL;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,16 +14,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
 import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.request.RequestStatus;
-
-import java.io.IOException;
 
 /**
  * Controller for handling request card UI behavior.
@@ -29,103 +32,85 @@ import java.io.IOException;
  */
 public class RequestCardController {
 
-    /**
-     * ID for the whole fxml card.
-     */
+    /** Root container of the request card. */
     @FXML
     private VBox cardRoot;
-    /**
-     * Labels for displaying request details:
-     * department, name, type, and reason.
-     */
+
+    /** Label displaying department. */
     @FXML
     private Label deptLabel;
-    /**
-     * Label displaying the name of the requester.
-     */
+
+    /** Label displaying name. */
     @FXML
     private Label nameLabel;
-    /**
-     * Label displaying the type of the request.
-     */
+
+    /** Label displaying request type. */
     @FXML
     private Label typeLabel;
-    /**
-     * Label displaying the reason for the request.
-     */
+
+    /** Label displaying reason. */
     @FXML
     private Label reasonLabel;
-    /**
-     * Section that becomes visible when the card is expanded.
-     */
+
+    /** Expanded section container. */
     @FXML
     private VBox expandedSection;
-    /**
-     * Container for action buttons (e.g., approve/deny).
-     */
+
+    /** Action bar container. */
     @FXML
     private HBox actionBar;
-    /**
-     * Arrow icon used to indicate expand/collapse state.
-     */
+
+    /** Arrow icon for expand/collapse. */
     @FXML
     private ImageView arrowIcon;
-    /**
-     * Holder of the popup label.
-     */
+
+    /** Popup container. */
     @FXML
     private VBox popupBox;
-    /**
-     * For the state of the request if the
-     * request is successfully approved or deny.
-     */
+
+    /** Popup message label. */
     @FXML
     private Label popupLabel;
-    /**
-     * Holder for user comments where it will be
-     * stored on the remarks when approving or denying.
-     */
+
+    /** Text area for comments. */
     @FXML
     private TextArea commentArea;
-    /**
-     * Error label.
-     */
+
+    /** Error message label. */
     @FXML
     private Label errorLabel;
 
-
-    /**
-     * Callback after action.
-     */
+    /** Callback after action completion. */
     private Runnable onActionComplete;
-    /**
-     * Tracks whether the card is expanded or collapsed.
-     */
+
+    /** Flag indicating expanded state. */
     private boolean isExpanded = false;
 
-    /** Facade for handling request operations. */
+    /** Request facade instance. */
     private RequestFacade requestFacade;
 
-    /** ID of the current request. */
+    /** ID of the request card. */
     private long cardId;
 
     /**
-     * Sets a callback to be executed after an action
-     * (approve/deny) is completed.
-     * @param callback a Runnable to run when the action is complete.
+     * Sets the callback after an action is completed.
+     *
+     * @param callback the callback to execute
      */
     public void setOnActionComplete(Runnable callback) {
         this.onActionComplete = callback;
     }
 
-
-    /** Initializes the dashboard controller and loads request data. */
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize() {
         if (expandedSection != null) {
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
         }
+
         if (actionBar != null) {
             actionBar.setVisible(false);
             actionBar.setManaged(false);
@@ -140,171 +125,251 @@ public class RequestCardController {
 
     /**
      * Sets the data for the request card.
-     * @param pDept the department name.
-     * @param pName the requester name.
-     * @param pType the request type.
-     * @param pReason the reason for the request.
-     * @param requestId the number for the specific cards
+     *
+     * @param pDept department name
+     * @param pName requester name
+     * @param pType request type
+     * @param pReason request reason
+     * @param requestId request ID
      */
-    public void setData(String pDept, String pName,
-    String pType, String pReason, long requestId) {
+    public void setData(
+            String pDept,
+            String pName,
+            String pType,
+            String pReason,
+            long requestId) {
+
         if (deptLabel != null) {
             deptLabel.setText(pDept);
         }
+
         if (nameLabel != null) {
             nameLabel.setText(pName);
         }
+
         if (typeLabel != null) {
             typeLabel.setText(pType);
         }
+
         if (reasonLabel != null) {
             reasonLabel.setText(pReason);
         }
 
         cardId = requestId;
     }
-    /**
-     * Toggles the expansion state of the card.
-     */
-    @FXML
-    void toggleExpansion() {
-        isExpanded = !isExpanded;
-        expandedSection.setVisible(isExpanded);
-        actionBar.setVisible(isExpanded);
-        expandedSection.setManaged(isExpanded);
-        actionBar.setManaged(isExpanded);
-        updateIcon();
-    }
 
     /**
-     * Updates the arrow icon based on expansion state.
-     * Prints an error message if the image is missing.
-     */
-    private void updateIcon() {
-        if (arrowIcon == null) {
-            return;
-        }
-        String imgPath = isExpanded
-                ?
-        "/assets/downButton.png" : "/assets/rightButton.png";
-        try {
-            Image newImg = new Image(getClass().getResourceAsStream(imgPath));
-            arrowIcon.setImage(newImg);
-        } catch (Exception e) {
-            System.out.println("Wait, missing icon: " + imgPath);
-        }
-    }
-
-    /**
-     * Approving the request status and add comments.
+     * Handles approve action.
      */
     @FXML
-    void onApprove() {
+    public void onApprove() {
         showConfirmation(
-                "/view/dialogs/approvedRequestConfirmation.fxml", () -> {
+                "Are you sure you want to",
+                "approve this request?",
+                "Approve",
+                "Cancel",
+                () -> {
+                    String remarks = null;
 
-            String remarks = (commentArea != null
-                    && !commentArea.getText().trim().isEmpty())
-                    ? commentArea.getText()
-                    : null;
+                    if (commentArea != null
+                            && !commentArea.getText().trim().isEmpty()) {
+                        remarks = commentArea.getText();
+                    }
 
-            requestFacade.updateRequestStatus(cardId,
-                 remarks, RequestStatus.APPROVED);
-            showPopupAndRemoveCard("Request approved!");
-        });
+                    requestFacade.updateRequestStatus(
+                            cardId,
+                            remarks,
+                            RequestStatus.APPROVED
+                    );
+
+                    showPopupAndRemoveCard("Request approved!");
+                }
+        );
     }
 
     /**
-     * Denied the request status and add comments.
+     * Handles deny action.
      */
     @FXML
-    void onDeny() {
-        if (commentArea == null || commentArea.getText().trim().isEmpty()) {
+    public void onDeny() {
+        if (commentArea == null
+                || commentArea.getText().trim().isEmpty()) {
+
             showError("Please enter remarks before denying.");
             return;
         }
 
         showConfirmation(
-                "/view/dialogs/deniedRequestConfirmation.fxml", () -> {
+                "Are you sure you want to",
+                "deny this request?",
+                "Deny",
+                "Cancel",
+                () -> {
+                    requestFacade.updateRequestStatus(
+                            cardId,
+                            commentArea.getText(),
+                            RequestStatus.DENIED
+                    );
 
-                requestFacade.updateRequestStatus(cardId,
-                        commentArea.getText(), RequestStatus.DENIED);
-                showPopupAndRemoveCard("Request denied!");
-        });
+                    showPopupAndRemoveCard("Request denied!");
+                }
+        );
     }
 
-
     /**
-     * Show a message for a moment, then run any
-     * extra actions and remove the card from the screen.
+     * Displays confirmation dialog.
      *
-     * @param message the message to display in the popup.
+     * @param l1 first line
+     * @param l2 second line
+     * @param confirmTxt confirm button text
+     * @param cancelTxt cancel button text
+     * @param action action to execute
      */
-    private void showPopupAndRemoveCard(String message) {
-        if (popupLabel != null) {
-            popupLabel.setText(message);
-        }
-        if (popupBox != null) {
-            popupBox.setVisible(true);
-        }
+    private void showConfirmation(
+            String l1,
+            String l2,
+            String confirmTxt,
+            String cancelTxt,
+            Runnable action) {
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
-        delay.setOnFinished(e -> {
-            if (onActionComplete != null) {
-                onActionComplete.run();
-            }
-            if (cardRoot != null
-                    && cardRoot.getParent() instanceof Pane parent) {
-                parent.getChildren().remove(cardRoot);
-            }
-        });
-        delay.play();
-    }
-
-    /**
-     * Displays a confirmation popup before performing an action.
-     * @param fxmlPath path to the confirmation dialog FXML file
-     * @param onConfirmAction action to execute when confirmed
-     */
-    private void showConfirmation(String fxmlPath, Runnable onConfirmAction) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(fxmlPath));
+            String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+            URL resource = getClass().getResource(path);
+
+            if (resource == null) {
+                path = "/view/dialogs/confirmation.fxml";
+                resource = getClass().getResource(path);
+            }
+
+            if (resource == null) {
+                throw new IllegalStateException(
+                        "FXML file not found at " + path
+                );
+            }
+
+            FXMLLoader loader = new FXMLLoader(resource);
             StackPane popupRoot = loader.load();
 
-            RequestConfirmationController controller = loader.getController();
-            controller.setOnConfirm(onConfirmAction);
+            ConfirmationDialogController controller =
+                    loader.getController();
+
+            if (controller != null) {
+                controller.setMessage(l1, l2);
+                controller.setButtonLabels(confirmTxt, cancelTxt);
+                controller.setOnConfirm(action);
+            }
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(popupRoot));
-            stage.setResizable(false);
             stage.showAndWait();
 
-        } catch (IOException e) {
+        } catch (IOException | IllegalStateException e) {
+            System.err.println("Popup Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * Displays an error message temporarily.
-     * @param message show error message.
+     * Shows success popup and removes card.
+     *
+     * @param message message to display
+     */
+    private void showPopupAndRemoveCard(String message) {
+        if (popupLabel != null) {
+            popupLabel.setText(message);
+        }
+
+        if (popupBox != null) {
+            popupBox.setVisible(true);
+        }
+
+        PauseTransition delay =
+                new PauseTransition(Duration.seconds(1.5));
+
+        delay.setOnFinished(e -> {
+            if (onActionComplete != null) {
+                onActionComplete.run();
+            }
+
+            if (cardRoot != null
+                    && cardRoot.getParent() instanceof Pane parent) {
+
+                parent.getChildren().remove(cardRoot);
+            }
+        });
+
+        delay.play();
+    }
+
+    /**
+     * Displays error message temporarily.
+     *
+     * @param message error message
      */
     private void showError(String message) {
         if (errorLabel != null) {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
-            errorLabel.setManaged(true);
         }
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        PauseTransition delay =
+                new PauseTransition(Duration.seconds(3));
+
         delay.setOnFinished(e -> {
             if (errorLabel != null) {
                 errorLabel.setVisible(false);
-                errorLabel.setManaged(false);
             }
         });
+
         delay.play();
     }
 
+    /**
+     * Toggles expansion of the card.
+     */
+    @FXML
+    public void toggleExpansion() {
+        isExpanded = !isExpanded;
+
+        if (expandedSection != null) {
+            expandedSection.setVisible(isExpanded);
+            expandedSection.setManaged(isExpanded);
+        }
+
+        if (actionBar != null) {
+            actionBar.setVisible(isExpanded);
+            actionBar.setManaged(isExpanded);
+        }
+
+        updateIcon();
+    }
+
+    /**
+     * Updates arrow icon based on state.
+     */
+    private void updateIcon() {
+        if (arrowIcon == null) {
+            return;
+        }
+
+        String imgPath = isExpanded
+                ? "/assets/downButton.png"
+                : "/assets/rightButton.png";
+
+        try {
+            URL url = getClass().getResource(imgPath);
+
+            if (url != null) {
+                arrowIcon.setImage(
+                        new Image(url.toExternalForm())
+                );
+            } else {
+                System.err.println("Image resource not found: " + imgPath);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
