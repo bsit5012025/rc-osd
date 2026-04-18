@@ -380,12 +380,13 @@ public class RequestCardController {
             }
         } catch (IllegalArgumentException e) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("The image at {} is corrupted or has an invalid format.",
-                        imgPath, e);
+                LOGGER.error("The image at {} is corrupted or has an "
+                                + "invalid format.", imgPath, e);
             }
         } catch (Exception e) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Unexpected failure while updating Appeal Card icon.",
+                LOGGER.error("Unexpected failure while updating "
+                                + "Appeal Card icon.",
                         e);
             }
         }
