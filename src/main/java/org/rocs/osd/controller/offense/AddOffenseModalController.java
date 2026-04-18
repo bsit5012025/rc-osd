@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.NoSuchElementException;
 
 /**
  * Controller for the "Add Offense"
@@ -235,8 +236,19 @@ public class AddOffenseModalController {
                 System.out.println("Violation recorded!");
                 ((Stage) studentIdTextField.getScene().getWindow()).close();
             }
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Validation error during save: {}",
+                        e.getMessage());
+            }
+        } catch (NullPointerException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Data mapping error: ", e);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to save offense record: ", e);
+            }
         }
     }
 
@@ -278,7 +290,10 @@ public class AddOffenseModalController {
                 System.out.println("SMS sent to: " + phone);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to notify parent for student {}",
+                        studentId, e);
+            }
         }
     }
 
@@ -306,7 +321,15 @@ public class AddOffenseModalController {
             stage.initStyle(StageStyle.TRANSPARENT);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("UI Error: Failed to load confirmation "
+                        + "dialog FXML.", e);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Unexpected error in showConfirmation: ",
+                        e);
+            }
         }
     }
 

@@ -25,13 +25,18 @@ import org.rocs.osd.data.dao.request.impl.RequestDaoImpl;
 import org.rocs.osd.facade.request.RequestFacade;
 import org.rocs.osd.facade.request.impl.RequestFacadeImpl;
 import org.rocs.osd.model.request.RequestStatus;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Controller for handling request card UI behavior.
  * This handles displaying request information.
  */
 public class RequestCardController {
-
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(RequestCardController.class);
     /** Root container of the request card. */
     @FXML
     private VBox cardRoot;
@@ -266,8 +271,13 @@ public class RequestCardController {
             stage.showAndWait();
 
         } catch (IOException | IllegalStateException e) {
-            System.err.println("Popup Error: " + e.getMessage());
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Popup Error: ", e);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to show confimation", e);
+            }
         }
     }
 
@@ -366,10 +376,18 @@ public class RequestCardController {
                         new Image(url.toExternalForm())
                 );
             } else {
-                System.err.println("Image resource not found: " + imgPath);
+                LOGGER.error("Image resource not found: {}", imgPath);
+            }
+        } catch (IllegalArgumentException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("The image at {} is corrupted or has an invalid format.",
+                        imgPath, e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Unexpected failure while updating Appeal Card icon.",
+                        e);
+            }
         }
     }
 }

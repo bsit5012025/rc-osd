@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JRException;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.data.dao.guardian.impl.GuardianDaoImpl;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
@@ -24,6 +25,7 @@ import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.model.record.Record;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -303,6 +305,16 @@ public class StudentRecordController {
                     if (java.awt.Desktop.isDesktopSupported()) {
                         java.awt.Desktop.getDesktop().open(outputFile);
                     }
+                }
+            } catch (JRException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Failed to fill or export the Jasper "
+                                    + "report for Student ID: {}",
+                            enrollment.getStudent().getStudentId(), e);
+                }
+            } catch (IOException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Could not save or open the PDF file.", e);
                 }
             } catch (Exception e) {
                 if (LOGGER.isErrorEnabled()) {

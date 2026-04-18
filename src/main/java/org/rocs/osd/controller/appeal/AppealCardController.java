@@ -45,9 +45,6 @@ public class AppealCardController {
     @FXML
     private VBox expandedSection;
 
-    /** The section of the card that is hidden until expanded. */
-    @FXML private VBox expandedSection;
-
     /** The container for action buttons (Approve/Deny). */
     @FXML private HBox actionBar;
 
@@ -213,8 +210,14 @@ public class AppealCardController {
             stage.showAndWait();
 
         } catch (IOException e) {
-            System.err.println("Popup Error: Could not load confirmation.fxml");
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Popup Error: Could not load confirmation.fxml",
+                        e);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to show confirmation", e);
+            }
         }
     }
 
