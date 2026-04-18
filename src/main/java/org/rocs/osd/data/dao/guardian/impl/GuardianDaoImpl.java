@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * DAO implementation for managing guardian information in the Office of
  * Student Discipline System.
@@ -22,6 +25,11 @@ import java.util.Locale;
  * Provides methods to retrieve guardians associated with students.
  */
 public class GuardianDaoImpl implements GuardianDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(GuardianDaoImpl.class);
 
     /**
      * Finds guardians for a given student by student ID.
@@ -73,8 +81,8 @@ public class GuardianDaoImpl implements GuardianDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("SQL Exception (findGuardianByStudentId): "
-                    + e.getMessage());
+            LOGGER.error("SQL Exception occurred while finding guardian"
+                    + " for student ID: {}", pStudentId, e);
         }
 
         return sgList;

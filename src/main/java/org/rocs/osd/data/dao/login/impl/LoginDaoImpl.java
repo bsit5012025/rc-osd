@@ -13,11 +13,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * DAO implementation for managing Login records in the Office of Student
  * Discipline System.
  */
 public class LoginDaoImpl implements LoginDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LoginDaoImpl.class);
 
     /**
      * Finds and retrieves a Login object from the database by username.
@@ -76,7 +84,8 @@ public class LoginDaoImpl implements LoginDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Error occurred while finding login for username: {}",
+                    username, e);
         }
 
         return login;

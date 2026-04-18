@@ -25,6 +25,8 @@ import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller class for managing the UI behavior of an individual Appeal Card.
@@ -32,9 +34,16 @@ import org.rocs.osd.model.record.Record;
  * and processing approval or denial actions with confirmation dialogs.
  */
 public class AppealCardController {
-
-    /** The section of the card that is hidden until expanded. */
-    @FXML private VBox expandedSection;
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AppealCardController.class);
+    /**
+     * Expanded section container.
+     */
+    @FXML
+    private VBox expandedSection;
 
     /** The container for action buttons (Approve/Deny). */
     @FXML private HBox actionBar;
@@ -201,8 +210,14 @@ public class AppealCardController {
             stage.showAndWait();
 
         } catch (IOException e) {
-            System.err.println("Popup Error: Could not load confirmation.fxml");
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Popup Error: Could not load confirmation.fxml",
+                        e);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to show confirmation", e);
+            }
         }
     }
 

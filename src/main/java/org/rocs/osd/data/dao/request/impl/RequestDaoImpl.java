@@ -4,6 +4,8 @@ import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.request.RequestDao;
 import org.rocs.osd.model.request.Request;
 import org.rocs.osd.model.request.RequestStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +20,11 @@ import java.util.List;
  * adding a new request, fetching all requests, and updating request status.
  */
 public class RequestDaoImpl implements RequestDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(RequestDaoImpl.class);
 
     /**
      * Adds a new request to the database with status PENDING.
@@ -31,6 +38,7 @@ public class RequestDaoImpl implements RequestDao {
     @Override
     public boolean addRequest(String employeeID, String details, String message,
                               String type) {
+        LOGGER.debug("Adding new request for employee: {}", employeeID);
         String sql =
                 "INSERT INTO request (employeeID, "
                         + "details, "
@@ -50,7 +58,8 @@ public class RequestDaoImpl implements RequestDao {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("An SQL Exception occurred. " + e.getMessage());
+            LOGGER.error("Adding request for employee has failed: {}",
+                    employeeID, e);
         }
 
         return false;
@@ -65,6 +74,7 @@ public class RequestDaoImpl implements RequestDao {
      */
     @Override
     public List<Request> findAllRequestsByStatus(RequestStatus status) {
+        LOGGER.debug("Fetching all requests with status: {}", status);
         List<Request> requestList = new ArrayList<>();
 
         String sql = "SELECT * FROM REQUEST WHERE status = ?";
@@ -89,10 +99,12 @@ public class RequestDaoImpl implements RequestDao {
                     requestList.add(r);
                 }
             }
-
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Found {} requests", requestList.size());
+            }
         } catch (SQLException e) {
-            System.out.println("SQL Exception (getAllRequests): "
-            + e.getMessage());
+            LOGGER.error("SQL Exception retrieving requests "
+                    + "with status: {}", status, e);
         }
 
         return requestList;
@@ -110,6 +122,8 @@ public class RequestDaoImpl implements RequestDao {
     public boolean updateRequestStatus(long requestID,
                                        String remarks,
                                        RequestStatus status) {
+        LOGGER.debug("Updating status of request ID {} to {}",
+                requestID, status);
         String sql = "UPDATE REQUEST SET "
                 + "status = ?, "
                 + "remarks = ?, "
@@ -126,8 +140,8 @@ public class RequestDaoImpl implements RequestDao {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception ("
-                    + "updateRequestStatus): " + e.getMessage());
+            LOGGER.error("SQL Exception updating status for"
+                    + " request ID: {}", requestID, e);
         }
         return false;
     }

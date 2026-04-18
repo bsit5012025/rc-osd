@@ -37,9 +37,12 @@ import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.facade.guardian.GuardianFacade;
 import static org.rocs.osd.controller.sms.SmsService.formatPhone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.NoSuchElementException;
 
 /**
  * Controller for the "Add Offense"
@@ -49,12 +52,19 @@ import java.sql.Date;
  * manages the recording of student violations including SMS notifications.
  */
 public class AddOffenseModalController {
-
-    /** Dropdown for selecting offense type. */
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AddOffenseModalController.class);
+    /**
+     * Dropdown for selecting offense type.
+     */
     @FXML
     private ComboBox<String> offenseTypeComboBox;
-
-    /** Dropdown for selecting disciplinary action. */
+    /**
+     * Dropdown for selecting disciplinary action.
+     */
     @FXML
     private ComboBox<String> actionComboBox;
 
@@ -136,7 +146,6 @@ public class AddOffenseModalController {
                     "Database Error: Could not fetch offense names.");
         }
     }
-
     /**
      * Automatically selects the level of
      * offense based on the offense type chosen by the user.
@@ -152,7 +161,6 @@ public class AddOffenseModalController {
             }
         });
     }
-
     /**
      * Displays the student name based on the entered student ID.
      */
@@ -228,8 +236,19 @@ public class AddOffenseModalController {
                 System.out.println("Violation recorded!");
                 ((Stage) studentIdTextField.getScene().getWindow()).close();
             }
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Validation error during save: {}",
+                        e.getMessage());
+            }
+        } catch (NullPointerException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Data mapping error: ", e);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to save offense record: ", e);
+            }
         }
     }
 
@@ -271,7 +290,10 @@ public class AddOffenseModalController {
                 System.out.println("SMS sent to: " + phone);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to notify parent for student {}",
+                        studentId, e);
+            }
         }
     }
 
@@ -299,7 +321,15 @@ public class AddOffenseModalController {
             stage.initStyle(StageStyle.TRANSPARENT);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("UI Error: Failed to load confirmation "
+                        + "dialog FXML.", e);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Unexpected error in showConfirmation: ",
+                        e);
+            }
         }
     }
 
@@ -310,5 +340,6 @@ public class AddOffenseModalController {
     public void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+        LOGGER.info("Violation recorded!");
     }
 }

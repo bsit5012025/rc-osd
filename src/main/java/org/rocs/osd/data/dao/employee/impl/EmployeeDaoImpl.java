@@ -11,10 +11,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EmployeeDaoImpl implements EmployeeDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
     @Override
     public Employee findEmployeeByEmployeeID(String employeeID) {
+        LOGGER.debug("Fetching employee data for ID: {}", employeeID);
         try (Connection conn = ConnectionHelper.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "SELECT "
@@ -52,10 +61,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     employee.setMiddleName(person.getMiddleName());
 
                     return employee;
+                } else {
+                    LOGGER.warn("Employee not found: {}", employeeID);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Database error occurred while finding"
+                    + " employee by ID: {}", employeeID, e);
         }
         return null;
     }

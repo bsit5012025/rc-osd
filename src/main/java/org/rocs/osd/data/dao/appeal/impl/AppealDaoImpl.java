@@ -14,12 +14,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of AppealDao that handles database operations for Appeal
  * records in the Office of Student Discipline System.
  * Provides methods to retrieve pending appeals and update appeal statuses.
  */
 public class AppealDaoImpl implements AppealDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AppealDaoImpl.class);
 
     /**
      * Retrieves all appeals by its status along with related
@@ -30,6 +38,9 @@ public class AppealDaoImpl implements AppealDao {
      */
     @Override
     public List<Appeal> findAppealsByStatus(String status) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fetching appeals with status: {}", status);
+        }
         List<Appeal> list = new ArrayList<>();
 
         String sql = """
@@ -90,7 +101,10 @@ public class AppealDaoImpl implements AppealDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching appeal by status", e);
+            LOGGER.error("Error while fetching appeals for status '{}': {}",
+                    status, e);
+            throw new RuntimeException("Error fetching appeal "
+                    + "by status", e);
         }
 
         return list;
@@ -106,6 +120,8 @@ public class AppealDaoImpl implements AppealDao {
      */
     @Override
     public void processAppeal(long appealId, String status, String remarks) {
+        LOGGER.info("Processing appeal ID: {} with new status: {}",
+                appealId, status);
         String sql = """
                    UPDATE appeal
                    SET status = ?,
@@ -124,6 +140,8 @@ public class AppealDaoImpl implements AppealDao {
             ps.executeUpdate();
 
         } catch (SQLException e) {
+            LOGGER.error("Failed to process appeal ID {}: {}",
+                    appealId, e);
             throw new RuntimeException("Error processing appeal", e);
         }
     }

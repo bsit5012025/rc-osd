@@ -10,11 +10,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of the StudentDao interface.
  * This class handles database operations related to Student entities.
  */
 public class StudentDaoImpl implements StudendDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            StudentDaoImpl.class);
 
     /**
      * Finds a student and their record by student ID.
@@ -64,7 +72,8 @@ public class StudentDaoImpl implements StudendDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Searching for student ID has failed: {}",
+                    pStudentId, e);
         }
 
         return student;
@@ -81,6 +90,8 @@ public class StudentDaoImpl implements StudendDao {
     public Student findStudentWithRecordByName(String lastName,
                                                String firstName,
                                                String middleName) {
+        LOGGER.debug("Searching for student record by name: {} {} {}",
+                firstName, middleName, lastName);
         Student student = new Student();
 
         try (Connection conn = ConnectionHelper.getConnection();
@@ -121,10 +132,12 @@ public class StudentDaoImpl implements StudendDao {
                     student.setMiddleName(rs.getString("middleName"));
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.info("No name match found for: {} {} {}",
+                        firstName, middleName, lastName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during name search for: {} {}, {}",
+                    firstName, lastName, e);
         }
         return student;
     }
