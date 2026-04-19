@@ -157,7 +157,7 @@ public class LoginController {
                     (Node) event.getSource()).getScene().getWindow();
 
             double width = stage.getWidth();
-            double height = stage.getHeight();
+            double height = stage.getHeight() - 38;
             stage.setScene(new Scene(root, width, height));
 
             stage.setMaximized(true);
