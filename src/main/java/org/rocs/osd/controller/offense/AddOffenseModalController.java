@@ -8,11 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -40,6 +42,7 @@ import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Controller for the "Add Offense"
@@ -82,6 +85,14 @@ public class AddOffenseModalController {
     @FXML
     private CheckBox notifyParentsCheckBox;
 
+    /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
+
     /** DAO for student operations. */
     private StudendDao studentDao;
 
@@ -112,9 +123,18 @@ public class AddOffenseModalController {
         recordFacade = new RecordFacadeImpl(dao);
         enrollmentDao = new EnrollmentDaoImpl();
         guardianFacade = new GuardianFacadeImpl();
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
-        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+                });
+
+        disableDateValidation();
     }
 
     /**
@@ -158,17 +178,35 @@ public class AddOffenseModalController {
      */
     @FXML
     private void autoDisplayStudentName() {
-        String studentId = studentIdTextField.getText();
-        if (studentId.isEmpty()) {
-            return;
-        }
+        try {
+            String studentId = studentIdTextField.getText();
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
-        if (student.getStudentId() != null) {
-            studentNameTextField.setText(student.getFirstName() + " "
-                    + student.getMiddleName() + " " + student.getLastName());
-        } else {
+            if (studentId.isBlank()) {
+                studentResultLabel.setText("Student ID is Blank!");
+                studentNameTextField.clear();
+                return;
+            }
+
+            Student student = studentDao.findStudentWithRecordById(studentId);
+
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
+
+                studentResultLabel.setText("");
+                studentNameTextField.setText(fullName);
+            } else {
+                studentResultLabel.setText("Student Not Found!");
+                studentNameTextField.clear();
+            }
+        } catch (Exception e) {
             studentNameTextField.clear();
+            studentResultLabel.setText("Error loading student data");
+
+            e.printStackTrace();
         }
     }
 
@@ -310,5 +348,21 @@ public class AddOffenseModalController {
     public void onCancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    private void disableDateValidation() {
+
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
+                    setDisable(true);
+                }
+            }
+        });
+        datePicker.setValue(LocalDate.now());
     }
 }

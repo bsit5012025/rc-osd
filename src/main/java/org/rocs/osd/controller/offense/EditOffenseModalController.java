@@ -6,9 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
@@ -71,6 +72,13 @@ public class EditOffenseModalController {
     @FXML
     private TextArea remarksTextArea;
     /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
+    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -98,10 +106,13 @@ public class EditOffenseModalController {
      *  Reference to the parent (viewOffenseModal) stage.
      */
     private Stage viewOffenseModalStage;
-
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
+     * ".textProperty().addListener((obs, oldVal, newVal)"
+     * to automatically display student full name
+     * (note: did not use newVal because already
+     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -113,7 +124,13 @@ public class EditOffenseModalController {
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
-        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+        });
     }
     /**
      * Sets the prev stage and record data to be edited.
@@ -193,28 +210,36 @@ public class EditOffenseModalController {
     /**
      * Displays student name based on entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
+        try {
+            String studentId = studentIdTextField.getText();
 
-        String studentId = studentIdTextField.getText();
+            if (studentId.isBlank()) {
+                studentResultLabel.setText("Student ID is Blank!");
+                studentNameTextField.clear();
+                return;
+            }
 
-        if (studentId.isEmpty()) {
-            return;
-        }
+            Student student = studentDao.findStudentWithRecordById(studentId);
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
 
-        if (student.getStudentId() != null) {
-            String fullName = student.getFirstName()
-                    + " "
-                    + student.getMiddleName()
-                    + " "
-                    + student.getLastName();
-
-            studentNameTextField.setText(fullName);
-        } else {
+                studentResultLabel.setText("");
+                studentNameTextField.setText(fullName);
+            } else {
+                studentResultLabel.setText("Student Not Found!");
+                studentNameTextField.clear();
+            }
+        } catch (Exception e) {
             studentNameTextField.clear();
-            System.out.println("STUDENT NOT FOUND!");
+            studentResultLabel.setText("Error loading student data");
+
+            e.printStackTrace();
         }
     }
     /**

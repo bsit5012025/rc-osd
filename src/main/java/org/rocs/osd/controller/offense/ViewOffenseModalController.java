@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -56,7 +55,7 @@ public class ViewOffenseModalController {
      * ComboBox for offense type.
      */
     @FXML
-    private ComboBox<String> offenseTypeField;
+    private TextField offenseTypeField;
 
     /**
      * Text field for displaying offense level.
@@ -142,7 +141,7 @@ public class ViewOffenseModalController {
                 new Date(record.getDateOfViolation().getTime()).toLocalDate()
         );
 
-        offenseTypeField.setValue(
+        offenseTypeField.setText(
                 record.getOffense().getOffense()
         );
 
@@ -200,7 +199,7 @@ public class ViewOffenseModalController {
         try {
             String studentId = studentIdField.getText();
             String studentName = studentNameField.getText();
-            String offenseName = offenseTypeField.getValue();
+            String offenseName = offenseTypeField.getText();
             String offenseType = offenseLevelField.getText();
             String remarks = remarksField.getText();
 
