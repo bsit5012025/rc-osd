@@ -155,7 +155,7 @@ public class AppealCardController {
                                     && !commentArea.getText().trim().isEmpty())
                             ? commentArea.getText() : null;
                     getAppealFacade().approveAppeal(
-                            appeal.getAppealID(),remarks);
+                            appeal.getAppealID(), remarks);
                     showPopupAndRemoveCard("Appeal approved!");
                 });
     }
