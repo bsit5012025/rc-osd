@@ -290,11 +290,11 @@ public class AppealCardController {
             expandedSection.setManaged(isExpanded);
         }
 
-        if (appeal != null && "PENDING".equals(appeal.getStatus())) {
-            if (actionBar != null) {
+        if (appeal != null
+                && "PENDING".equals(appeal.getStatus())
+                && actionBar != null) {
                 actionBar.setVisible(isExpanded);
                 actionBar.setManaged(isExpanded);
-            }
         }
 
         updateIcon();
