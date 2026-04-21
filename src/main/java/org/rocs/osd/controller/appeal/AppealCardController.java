@@ -69,20 +69,14 @@ public class AppealCardController {
     /** The data model representing the appeal. */
     private Appeal appeal;
 
-    /** Callback action to run after
-     * an appeal is successfully processed. */
+    /** Callback action to run after an appeal is successfully processed. */
     private Runnable onActionComplete;
 
     /** Tracks the current expansion state of the card. */
     private boolean isExpanded = false;
 
-
-    /**
-     * Facade used to communicate
-     * with the appeal business logic.
-     */
-
-    private AppealFacade appealFacade = new AppealFacadeImpl();
+    /** Facade used to communicate with the appeal business logic. */
+    private AppealFacade appealFacade;
 
     /**
      * Initializes the controller.
@@ -105,6 +99,27 @@ public class AppealCardController {
         }
     }
 
+    /**
+     * Sets the appeal facade for dependency injection.
+     * Used for testing to inject mock facades.
+     *
+     * @param pAppealFacade the facade to use
+     */
+    public void setAppealFacade(AppealFacade pAppealFacade) {
+        this.appealFacade = pAppealFacade;
+    }
+
+    /**
+     * Gets the appeal facade, creating default implementation if not set.
+     *
+     * @return the appeal facade
+     */
+    private AppealFacade getAppealFacade() {
+        if (appealFacade == null) {
+            appealFacade = new AppealFacadeImpl();
+        }
+        return appealFacade;
+    }
 
     /**
      * Injects the appeal data into the
@@ -122,7 +137,6 @@ public class AppealCardController {
      * executed once the user
      * finishes an action on this card.
      * @param pAction A Runnable task
-     *(typically used to refresh the main list).
      */
     public void setOnActionComplete(Runnable pAction) {
         this.onActionComplete = pAction;
@@ -140,7 +154,8 @@ public class AppealCardController {
                             commentArea != null
                                     && !commentArea.getText().trim().isEmpty())
                             ? commentArea.getText() : null;
-                    appealFacade.approveAppeal(appeal.getAppealID(), remarks);
+                    getAppealFacade().approveAppeal(
+                            appeal.getAppealID(), remarks);
                     showPopupAndRemoveCard("Appeal approved!");
                 });
     }
@@ -157,7 +172,7 @@ public class AppealCardController {
         }
         showConfirmation("Are you sure you want to", "deny this appeal?",
                 "Deny", "Cancel", () -> {
-                    appealFacade.denyAppeal(
+                    getAppealFacade().denyAppeal(
                             appeal.getAppealID(), commentArea.getText());
                     showPopupAndRemoveCard("Appeal denied!");
                 });
@@ -177,15 +192,12 @@ public class AppealCardController {
         try {
             String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
             URL resource = getClass().getResource(path);
-
             if (resource == null) {
                 path = "/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
             }
-
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane rootNode = loader.load();
-
             ConfirmationDialogController controller = loader.getController();
 
             if (controller != null) {
@@ -195,11 +207,19 @@ public class AppealCardController {
             }
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(rootNode));
-            stage.showAndWait();
 
+            stage.setMinWidth(300);
+            stage.setMinHeight(150);
+
+            Scene scene = new Scene(rootNode);
+            stage.setScene(scene);
+
+            rootNode.applyCss();
+            rootNode.layout();
+
+            stage.showAndWait();
         } catch (IOException e) {
             System.err.println("Popup Error: Could not load confirmation.fxml");
             e.printStackTrace();
@@ -237,6 +257,8 @@ public class AppealCardController {
             errorLabel.setText(msg);
             errorLabel.setVisible(true);
             errorLabel.setManaged(true);
+            errorLabel.applyCss();
+            errorLabel.layout();
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
@@ -282,21 +304,24 @@ public class AppealCardController {
      * The action bar is only shown if the appeal status is "PENDING".
      */
     @FXML
-    public   void toggleExpansion() {
+    public void toggleExpansion() {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
-            expandedSection.setVisible(isExpanded);
             expandedSection.setManaged(isExpanded);
+            expandedSection.setVisible(isExpanded);
+            expandedSection.applyCss();
+            expandedSection.layout();
         }
 
         if (appeal != null && "PENDING".equals(appeal.getStatus())) {
             if (actionBar != null) {
-                actionBar.setVisible(isExpanded);
                 actionBar.setManaged(isExpanded);
+                actionBar.setVisible(isExpanded);
+                actionBar.applyCss();
+                actionBar.layout();
             }
         }
-
         updateIcon();
     }
 
