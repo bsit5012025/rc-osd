@@ -3,10 +3,10 @@ package org.rocs.osd.controller.appeal;
 import java.io.IOException;
 import java.net.URL;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -178,6 +178,9 @@ public class AppealCardController {
                 });
     }
 
+    @FXML
+    private Button arrowButton;
+
     /**
      * Loads and displays the universal confirmation dialog.
      * @param l1 First line of the message.
@@ -190,14 +193,14 @@ public class AppealCardController {
             String l1, String l2, String confirmTxt,
             String cancelTxt, Runnable action) {
         try {
-            URL resource = getClass().getResource("/view/dialogs/confirmation.fxml");
-
+            String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+            URL resource = getClass().getResource(path);
             if (resource == null) {
-                throw new IllegalStateException("confirmation.fxml not found");
+                path = "/view/dialogs/confirmation.fxml";
+                resource = getClass().getResource(path);
             }
-
             FXMLLoader loader = new FXMLLoader(resource);
-            StackPane rootNode = loader.load(); 
+            StackPane rootNode = loader.load();
             ConfirmationDialogController controller = loader.getController();
 
             if (controller != null) {
@@ -209,20 +212,14 @@ public class AppealCardController {
             Stage stage = new Stage();
             stage.initStyle(StageStyle.TRANSPARENT);
             stage.initModality(Modality.APPLICATION_MODAL);
-            if (popupBox != null && popupBox.getScene() != null) {
-                stage.initOwner((Stage) popupBox.getScene().getWindow());
-            }
-            stage.setScene(new Scene(rootNode));
-            stage.show();
-            stage.toFront();
-            stage.requestFocus();
-            Thread.sleep(50);
 
+            Scene scene = new Scene(rootNode);
+            scene.setFill(null);
+            stage.setScene(scene);
+            stage.showAndWait();
         } catch (IOException e) {
             System.err.println("Popup Error: Could not load confirmation.fxml");
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
     }
 
