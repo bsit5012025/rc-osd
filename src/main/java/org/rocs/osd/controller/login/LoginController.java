@@ -5,12 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -141,6 +143,8 @@ public class LoginController {
 
     /**
      * Loads the Dashboard screen from the FXML file.
+     * Get User available screen Height and width, then apply
+     * those sizes to the UI.
      * @param event the action event used to identify the current stage.
      */
     void loadDashboard(ActionEvent event) {
@@ -156,11 +160,13 @@ public class LoginController {
             Stage stage = (Stage) (
                     (Node) event.getSource()).getScene().getWindow();
 
-            double width = stage.getWidth();
-            double height = stage.getHeight() - 38;
-            stage.setScene(new Scene(root, width, height));
+            Rectangle2D availableScreen = Screen.getPrimary().getVisualBounds();
+            stage.setWidth(availableScreen.getWidth());
+            stage.setHeight(availableScreen.getHeight());
 
-            stage.setMaximized(true);
+            Scene scene = new Scene(root);
+
+            stage.setScene(scene);
             stage.show();
 
         } catch (LoadException e) {
