@@ -67,6 +67,14 @@
                     onAction="#onLogin"
                     defaultButton="true"
                     styleClass="loginButton"/>
+
+            <Button fx:id="logoutButton"
+                    text="Logout"
+                    onAction="#handleLogout"
+                    styleClass="loginButton"/>
+
         </VBox>
     </StackPane>
 </AnchorPane>
+
+
