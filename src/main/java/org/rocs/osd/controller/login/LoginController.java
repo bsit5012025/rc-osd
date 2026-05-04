@@ -175,7 +175,8 @@ public class LoginController {
             }
         } catch (NullPointerException e) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("A UI component has not been initialized {}", e.getMessage());
+                LOGGER.error("A UI component has not been initialized {}",
+                        e.getMessage());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
