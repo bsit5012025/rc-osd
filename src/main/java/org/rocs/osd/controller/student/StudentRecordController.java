@@ -313,13 +313,9 @@ public class StudentRecordController {
                             enrollment.getStudent().getStudentId(), e);
                 }
             } catch (IOException e) {
-                if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Could not save or open the PDF file.", e);
-                }
             } catch (Exception e) {
-                if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Error downloading student report.", e);
-                }
             }
         }
     }

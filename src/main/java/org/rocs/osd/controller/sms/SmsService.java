@@ -130,7 +130,7 @@ public final class SmsService {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Error reading SMS gateway response: {}",
                             e.getMessage());
-                }
+                    }
             }
 
             if (LOGGER.isDebugEnabled()) {
@@ -138,20 +138,14 @@ public final class SmsService {
             }
 
             if (responseCode == 200) {
-                if (LOGGER.isInfoEnabled()) {
                     LOGGER.info("SMS SENT SUCCESSFULLY: {}", response);
-                }
             } else {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("SMS FAILED: {}", response);
-                }
+                LOGGER.error("SMS FAILED: {}", response);
             }
 
         } catch (java.net.SocketTimeoutException e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("SMS TIMEOUT: The gateway took "
                         + "too long to respond.");
-            }
         } catch (java.net.UnknownHostException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("SMS NETWORK ERROR: Could not resolve gateway "
@@ -167,9 +161,7 @@ public final class SmsService {
                 LOGGER.error("SMS CONFIG ERROR: {}", e.getMessage());
             }
         } catch (Exception e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("SMS UNEXPECTED ERROR: ", e);
-            }
         }
     }
 

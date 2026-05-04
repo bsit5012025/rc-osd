@@ -271,13 +271,9 @@ public class RequestCardController {
             stage.showAndWait();
 
         } catch (IOException | IllegalStateException e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Popup Error: ", e);
-            }
         } catch (Exception e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Failed to show confimation", e);
-            }
         }
     }
 
@@ -379,16 +375,13 @@ public class RequestCardController {
                 LOGGER.error("Image resource not found: {}", imgPath);
             }
         } catch (IllegalArgumentException e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("The image at {} is corrupted or has an "
                                 + "invalid format.", imgPath, e);
-            }
+
         } catch (Exception e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Unexpected failure while updating "
                                 + "Appeal Card icon.",
                         e);
-            }
         }
     }
 }

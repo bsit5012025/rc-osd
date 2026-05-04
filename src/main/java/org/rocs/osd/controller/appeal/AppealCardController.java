@@ -210,10 +210,8 @@ public class AppealCardController {
             stage.showAndWait();
 
         } catch (IOException e) {
-            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Popup Error: Could not load confirmation.fxml",
                         e);
-            }
         } catch (Exception e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Failed to show confirmation", e);

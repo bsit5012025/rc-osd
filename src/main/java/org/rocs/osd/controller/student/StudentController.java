@@ -153,14 +153,10 @@ public class StudentController {
             studentStage.showAndWait();
 
             } catch (IOException e) {
-                 if (LOGGER.isErrorEnabled()) {
                      LOGGER.error("Failed to load studentRecord.fxml", e);
-                 }
             } catch (RuntimeException e) {
-                if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Initializing student record view for "
                             + "ID failed:", e);
-                }
             }
         }
 }
