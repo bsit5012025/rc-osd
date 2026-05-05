@@ -23,6 +23,8 @@ import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.login.impl.LoginFacadeImpl;
 import org.rocs.osd.model.login.Login;
 import org.rocs.osd.session.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -35,7 +37,11 @@ import java.util.Objects;
  * navigation to the Dashboard view.
  */
 public class LoginController {
-
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LoginController.class);
     /**
      * Stage used to display login error popups.
      */
@@ -170,10 +176,14 @@ public class LoginController {
             stage.show();
 
         } catch (LoadException e) {
-            System.err.println("Error loading Dashboard");
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Error loading Dashboard {}", e.getMessage());
+            }
         } catch (NullPointerException e) {
-            System.err.println("A UI component has not been initialized");
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("A UI component has not been initialized {}",
+                        e.getMessage());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -223,7 +233,9 @@ public class LoginController {
             delay.play();
 
         } catch (IOException e) {
-            System.err.println("Could not load Error Popup: " + e.getMessage());
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Could not load Error Popup: {} ", e.getMessage());
+            }
         }
     }
 }

@@ -11,12 +11,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of the OffenseDao interface.
  * This class handles offense data from the database, including
  * retrieval, addition, and lookup by ID or name.
  */
 public class OffenseDaoImpl implements OffenseDao {
+    /**
+     * Logger for logging errors and debug.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(OffenseDaoImpl.class);
 
     /**
      * Finds and retrieves an Offense object from the database by offense ID.
@@ -26,6 +34,7 @@ public class OffenseDaoImpl implements OffenseDao {
      */
     @Override
     public Offense findOffenseById(String offenseID) {
+        LOGGER.debug("Finding offense ID: {}", offenseID);
         Offense offense = new Offense();
 
         String sql = "SELECT o.offenseID, o.offense, o.type, o.description "
@@ -45,7 +54,7 @@ public class OffenseDaoImpl implements OffenseDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Error finding offense by ID: {}", offenseID, e);
         }
 
         return offense;
@@ -57,6 +66,7 @@ public class OffenseDaoImpl implements OffenseDao {
      */
     @Override
     public List<String> findAllOffenseName() {
+        LOGGER.debug("Fetching all offense names from the database...");
         List<String> offenses = new ArrayList<>();
         String sql = "SELECT offense FROM offense ORDER BY offense";
 
@@ -67,9 +77,13 @@ public class OffenseDaoImpl implements OffenseDao {
                 while (rs.next()) {
                     offenses.add(rs.getString("offense"));
                 }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Total offenses retrieved: {}",
+                            offenses.size());
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to retrieve all offense names", e);
         }
 
         return offenses;
@@ -82,6 +96,7 @@ public class OffenseDaoImpl implements OffenseDao {
      */
     @Override
     public Offense findByName(String offenseName) {
+        LOGGER.debug("Searching for offense by name: '{}'", offenseName);
         Offense offense = null;
         String sql = "SELECT offenseID, "
                 + "offense, "
@@ -101,7 +116,7 @@ public class OffenseDaoImpl implements OffenseDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to insert new offense: {}", offenseName, e);
         }
 
         return offense;
@@ -114,6 +129,10 @@ public class OffenseDaoImpl implements OffenseDao {
      */
     @Override
     public boolean addNewOffense(Offense offense) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Attempting to insert new offense: {}",
+                    offense.getOffense());
+        }
         String sql = "INSERT INTO offense "
                 + "(offense, "
                 + "type, "
@@ -130,7 +149,10 @@ public class OffenseDaoImpl implements OffenseDao {
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Failed to insert new offense: {}",
+                        offense.getOffense(), e);
+            }
         }
 
         return false;

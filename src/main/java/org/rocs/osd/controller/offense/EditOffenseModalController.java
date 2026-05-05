@@ -26,6 +26,8 @@ import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.RecordStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -35,6 +37,11 @@ import java.time.LocalDate;
  * Handles loading, updating, and validating record data.
  */
 public class EditOffenseModalController {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EditOffenseModalController.class);
     /**
      * ComboBox for selecting offense type.
      */
@@ -95,7 +102,7 @@ public class EditOffenseModalController {
      */
     private Record record;
     /**
-     *  Reference to the parent (viewOffenseModal) stage.
+     * Reference to the parent (viewOffenseModal) stage.
      */
     private Stage viewOffenseModalStage;
 
@@ -115,18 +122,20 @@ public class EditOffenseModalController {
         autoSelectLevelOfOffense();
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
     }
+
     /**
      * Sets the prev stage and record data to be edited.
      *
      * @param pRecord the record to load into the form.
-     * @param pStage the parent stage (ViewOffenseModal)
-     *               that will be closed after submitting edits.
+     * @param pStage  the parent stage (ViewOffenseModal)
+     *                that will be closed after submitting edits.
      */
     public void setRecordData(Record pRecord, Stage pStage) {
         this.record = pRecord;
         this.viewOffenseModalStage = pStage;
         loadStudentRecordInfo();
     }
+
     /**
      * Loads student and record details into the UI fields.
      */
@@ -155,22 +164,26 @@ public class EditOffenseModalController {
         actionComboBox.setValue(
                 record.getAction().getActionName());
     }
+
     /**
      * Loads offense names into the ComboBox.
      */
     private void loadComboBoxData() {
         try {
             ObservableList<String> offenseList = FXCollections.
-            observableArrayList(offenseDao.findAllOffenseName());
+                    observableArrayList(offenseDao.findAllOffenseName());
             ObservableList<String> actionList = FXCollections.
-            observableArrayList(disciplinaryActionDao.findAllAction());
+                    observableArrayList(disciplinaryActionDao.findAllAction());
             offenseTypeComboBox.setItems(offenseList);
             actionComboBox.setItems(actionList);
         } catch (Exception e) {
-            System.err.println("Database Error: Could not fetch "
-                    + "offense names from the database.");
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Could not fetch offense names "
+                        + "from the database", e);
+            }
         }
     }
+
     /**
      * Automatically sets offense level when offense type is selected.
      */
@@ -190,6 +203,7 @@ public class EditOffenseModalController {
             }
         });
     }
+
     /**
      * Displays student name based on entered student ID.
      */
@@ -214,9 +228,10 @@ public class EditOffenseModalController {
             studentNameTextField.setText(fullName);
         } else {
             studentNameTextField.clear();
-            System.out.println("STUDENT NOT FOUND!");
+            LOGGER.info("STUDENT NOT FOUND!");
         }
     }
+
     /**
      * Closes the modal when cancel button is clicked.
      *
@@ -227,6 +242,7 @@ public class EditOffenseModalController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
     /**
      * Handles submission of updated offense record.
      * Validates inputs and updates the record in database.
@@ -251,7 +267,7 @@ public class EditOffenseModalController {
                     || offenseName == null
                     || offenseType == null
                     || datePicker.getValue() == null) {
-                System.out.println("Fill out all required fields!");
+                LOGGER.info("Fill out all required fields!");
                 return;
             }
 
@@ -259,7 +275,7 @@ public class EditOffenseModalController {
                     || record.getEnrollment() == null
                     || record.getAction() == null
                     || record.getEnrollment().getStudent() == null) {
-                System.out.println("Record, Enrollment, "
+                LOGGER.info("Record, Enrollment, "
                         + "Action or student are missing or null!");
                 return;
             }
@@ -267,11 +283,11 @@ public class EditOffenseModalController {
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
 
             long enrollmentID = enrollmentDao.
-            findEnrollmentIdByStudentId(studentId);
+                    findEnrollmentIdByStudentId(studentId);
             record.getEnrollment().setEnrollmentId(enrollmentID);
 
             long actionId = disciplinaryActionDao.
-            findActionIdByName(record.getAction().getActionName());
+                    findActionIdByName(record.getAction().getActionName());
             record.getAction().setActionId(actionId);
 
             long actionID = disciplinaryActionDao.
@@ -294,10 +310,10 @@ public class EditOffenseModalController {
                     record.getAction(),
                     record.getRemarks(),
                     record.getStatus()
-                    );
+            );
 
             if (status) {
-                System.out.println("Violation Updated!");
+                LOGGER.info("Violation Updated!");
 
                 Stage stage = (Stage) ((Node) event.getSource())
                         .getScene().getWindow();
@@ -305,8 +321,17 @@ public class EditOffenseModalController {
                 viewOffenseModalStage.close();
             }
 
+        } catch (NullPointerException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Data mapping error", e);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Unexpected error updating Record ID: "
+                                + "{}. Error: {}",
+                        record != null ? record.getRecordId() : "Unknown",
+                        e.getMessage(), e);
+            }
         }
     }
 }

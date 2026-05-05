@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Utility class responsible for loading and
  * providing access to application configuration.
@@ -14,6 +17,11 @@ import java.util.Properties;
  * where the config.properties file is
  */
 public final class ConfigLoader {
+    /**
+     * Logger instance of this class.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ConfigLoader.class);
     /**
      * Private constructor to prevent instantiation.
      * */
@@ -48,14 +56,21 @@ public final class ConfigLoader {
         if (Files.exists(path)) {
             try (InputStream fIs = Files.newInputStream(path)) {
                 PROPERTIES.load(fIs);
-                System.out.println("Config loaded from: "
-                        + path.toAbsolutePath());
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("Config loaded from: {}",
+                            path.toAbsolutePath());
+                }
             } catch (IOException e) {
-                System.err.println("Failed to load config from: "
-                        + path.toAbsolutePath());
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Failed to load config from: {}",
+                            path.toAbsolutePath());
+                }
             }
         }  else {
-            System.err.println("Config found at: " + path.toAbsolutePath());
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Config found at: {}",
+                        path.toAbsolutePath());
+            }
         }
     }
     /**
