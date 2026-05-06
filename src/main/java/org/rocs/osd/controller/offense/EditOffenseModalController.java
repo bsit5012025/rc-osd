@@ -249,15 +249,23 @@ public class EditOffenseModalController {
      */
     @FXML
     void onSubmit(ActionEvent event) {
-        if (studentIdTextField.getText().isEmpty()
+
+        if (studentIdTextField == null
+                || studentNameTextField == null
+                || offenseTypeComboBox == null
+                || actionComboBox == null
+                || datePicker == null
+                || studentIdTextField.getText() == null
+                || studentIdTextField.getText().isEmpty()
+                || studentNameTextField.getText() == null
                 || studentNameTextField.getText().isEmpty()
                 || offenseTypeComboBox.getValue() == null
                 || actionComboBox.getValue() == null
                 || datePicker.getValue() == null) {
+
             System.out.println("Fill out all required fields!");
             return;
         }
-
         showConfirmation(
                 "Do you want to ",
                 "save changes?",
