@@ -149,16 +149,7 @@
                 <configuration>
                     <argLine>
                         --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                        --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-                        --add-opens=javafx.graphics/com.sun.glass.ui.monocle=ALL-UNNAMED
-                        -Dtestfx.robot=glass
-                        -Dtestfx.headless=true
-                        -Dglass.platform=Monocle
-                        -Dmonocle.platform=Headless
-                        -Dprism.order=sw
-                        -Dprism.text=t2k
-                        -Djava.awt.headless=true
-                        -Dtestfx.setup.timeout=15000
+                        --add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>
