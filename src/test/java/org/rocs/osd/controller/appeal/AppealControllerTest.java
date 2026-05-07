@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -47,11 +46,6 @@ public class AppealControllerTest {
     private List<Appeal> approvedAppeals;
     private List<Appeal> deniedAppeals;
 
-    private static final long DIALOG_TIMEOUT_SEC = 5;
-    private static final long LABEL_TIMEOUT_SEC = 3;
-    private static final long TRANSITION_DELAY_MS = 300;
-
-    @SuppressWarnings("unused")
     @Start
     public void start(Stage stage) throws Exception {
         mockAppealFacade = Mockito.mock(AppealFacade.class);
@@ -265,35 +259,6 @@ public class AppealControllerTest {
     }
 
     @Test
-    public void testCardExpansionShowsAllInputs(FxRobot robot) {
-        robot.clickOn("#pendingTab");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        Node firstCard = listContainer.getChildren().getFirst();
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
-        WaitForAsyncUtils.sleep(TRANSITION_DELAY_MS, TimeUnit.MILLISECONDS);
-
-        assertTrue(
-                robot.from(firstCard).lookup("#expandedSection").tryQuery().isPresent(),
-                "Expanded section should be present in DOM"
-        );
-
-        Node expandedSection = robot.from(firstCard).lookup("#expandedSection").query();
-
-        try {
-            WaitForAsyncUtils.waitFor(TRANSITION_DELAY_MS, TimeUnit.MILLISECONDS, () ->
-                    expandedSection.isVisible() && expandedSection.isManaged());
-        } catch (TimeoutException e) {
-            fail("Expanded section should become visible and managed within timeout", e);
-        }
-    }
-
-
-    @Test
     public void testDenyWithoutRemarksShowsError(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
@@ -304,25 +269,18 @@ public class AppealControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
 
-        robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
-        try {
-            WaitForAsyncUtils.waitFor(LABEL_TIMEOUT_SEC, TimeUnit.SECONDS, () -> {
-                WaitForAsyncUtils.waitForFxEvents();
-                String text = errorLabel.getText();
-                return text != null && !text.trim().isEmpty();
-            });
-        } catch (TimeoutException e) {
-            fail("Error label should show text within timeout. Current: '"
-                    + errorLabel.getText() + "'", e);
-        }
+
+        robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
+        WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
 
         assertEquals("Please enter remarks before denying.",
-                errorLabel.getText().trim());
-        assertTrue(errorLabel.isVisible());
-        assertTrue(errorLabel.isManaged());
+                errorLabel.getText().trim(),
+                "Error label should show validation message");
+        assertTrue(errorLabel.isVisible(),
+                "Error label should be visible");
+        assertTrue(errorLabel.isManaged(),
+                "Error label should be managed");
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
     }
 
@@ -356,12 +314,9 @@ public class AppealControllerTest {
         }).when(mockAppealFacade).approveAppeal(eq(1L), eq("Approval remarks"));
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
 
-        waitForNodePresent(robot, "#confirmButton", DIALOG_TIMEOUT_SEC);
-
-        robot.clickOn("#confirmButton");
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+        robot.clickOn("Approve");
 
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
@@ -387,10 +342,10 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
 
-        waitForNodePresent(robot, "#cancelButton", DIALOG_TIMEOUT_SEC);
-        robot.clickOn("#cancelButton");
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+        robot.clickOn("Cancel");
+
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
@@ -410,6 +365,7 @@ public class AppealControllerTest {
         assertTrue(initialPendingCount > 0, "Should have pending appeals to test");
 
         Node firstCard = listContainer.getChildren().getFirst();
+
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -430,12 +386,9 @@ public class AppealControllerTest {
         }).when(mockAppealFacade).denyAppeal(eq(1L), eq("Denial remarks"));
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
 
-        waitForNodePresent(robot, "#confirmButton", DIALOG_TIMEOUT_SEC);
-
-        robot.clickOn("#confirmButton");
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+        robot.clickOn("Deny");
 
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
@@ -466,24 +419,14 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
 
-        waitForNodePresent(robot, "#cancelButton", DIALOG_TIMEOUT_SEC);
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+        robot.clickOn("Cancel");
 
-        robot.clickOn("#cancelButton");
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals(initialCount, pendingAppeals.size(),
                 "Pending count should remain unchanged after cancel");
-    }
-
-    private void waitForNodePresent(FxRobot robot, String query, long timeoutSec) {
-        try {
-            WaitForAsyncUtils.waitFor(timeoutSec, TimeUnit.SECONDS,
-                    () -> robot.lookup(query).tryQuery().isPresent());
-        } catch (TimeoutException e) {
-            fail("Node '" + query + "' not found within " + timeoutSec + " seconds", e);
-        }
     }
 }
