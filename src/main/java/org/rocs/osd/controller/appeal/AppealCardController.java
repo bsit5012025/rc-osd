@@ -3,6 +3,7 @@ package org.rocs.osd.controller.appeal;
 import java.io.IOException;
 import java.net.URL;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -199,6 +200,11 @@ public class AppealCardController {
                 path = "/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
             }
+            if (resource == null) {
+                throw new IOException("confirmation.fxml not found in classpath. " +
+                        "Tried: /org/rocs/osd/view/dialogs/confirmation.fxml " +
+                        "and /view/dialogs/confirmation.fxml");
+            }
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane rootNode = loader.load();
             ConfirmationDialogController controller = loader.getController();
@@ -218,8 +224,7 @@ public class AppealCardController {
             stage.setScene(scene);
             stage.showAndWait();
         } catch (IOException e) {
-            System.err.println("Popup Error: Could not load confirmation.fxml");
-            e.printStackTrace();
+            throw new RuntimeException("Failed to load confirmation dialog", e);
         }
     }
 
@@ -330,8 +335,11 @@ public class AppealCardController {
             String path = isExpanded ? "/assets/downButton.png"
                     : "/assets/rightButton.png";
             try {
-                arrowIcon.setImage(
-                        new Image(getClass().getResourceAsStream(path)));
+                Image newImage = new Image(getClass().getResourceAsStream(path));
+                if (newImage.isError()) {
+                    throw new RuntimeException("Image load error");
+                }
+                arrowIcon.setImage(newImage);
             } catch (Exception e) {
                 if (isExpanded) {
                     arrowIcon.setRotate(90);
@@ -339,6 +347,10 @@ public class AppealCardController {
                     arrowIcon.setRotate(0);
                 }
             }
+        }
+        if (arrowButton != null) {
+            arrowButton.setMinSize(30, 30);
+            arrowButton.setPrefSize(30, 30);
         }
     }
 }

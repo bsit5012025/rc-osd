@@ -3,6 +3,7 @@ package org.rocs.osd.controller.appeal;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
 import org.rocs.osd.model.appeal.Appeal;
@@ -28,6 +29,27 @@ public class AppealController {
      * Facade used to retrieve appeal data from backend.
      */
     private AppealFacade appealFacade;
+
+    /**
+     * Static controller factory for dependency injection in nested FXML loads.
+     * Set by tests to ensure mock facades are injected into card controllers.
+     */
+    private static Callback<Class<?>, Object> controllerFactory;
+
+    /**
+     * Sets the static controller factory for nested FXML loading.
+     * @param factory the controller factory callback
+     */
+    public static void setControllerFactory(Callback<Class<?>, Object> factory) {
+        controllerFactory = factory;
+    }
+
+    /**
+     * Clears the static controller factory.
+     */
+    public static void clearControllerFactory() {
+        controllerFactory = null;
+    }
 
     /**
      * Initializes the controller.
@@ -93,6 +115,10 @@ public class AppealController {
                 } else {
                     loader = new FXMLLoader(getClass().getResource(
                             "/view/appeal/appealCard.fxml"));
+                }
+
+                if (controllerFactory != null) {
+                    loader.setControllerFactory(controllerFactory);
                 }
 
                 VBox card = loader.load();
