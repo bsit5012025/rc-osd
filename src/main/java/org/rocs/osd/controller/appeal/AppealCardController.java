@@ -154,8 +154,7 @@ public class AppealCardController {
                             commentArea != null
                                     && !commentArea.getText().trim().isEmpty())
                             ? commentArea.getText() : null;
-                    getAppealFacade().approveAppeal(
-                            appeal.getAppealID(), remarks);
+                    getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
                     showPopupAndRemoveCard("Appeal approved!");
                 });
     }
@@ -192,12 +191,15 @@ public class AppealCardController {
         try {
             String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
             URL resource = getClass().getResource(path);
+
             if (resource == null) {
                 path = "/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
             }
+
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane rootNode = loader.load();
+
             ConfirmationDialogController controller = loader.getController();
 
             if (controller != null) {
@@ -207,19 +209,11 @@ public class AppealCardController {
             }
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.TRANSPARENT);
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            stage.setMinWidth(300);
-            stage.setMinHeight(150);
-
-            Scene scene = new Scene(rootNode);
-            stage.setScene(scene);
-
-            rootNode.applyCss();
-            rootNode.layout();
-
+            stage.setScene(new Scene(rootNode));
             stage.showAndWait();
+
         } catch (IOException e) {
             System.err.println("Popup Error: Could not load confirmation.fxml");
             e.printStackTrace();
@@ -257,8 +251,6 @@ public class AppealCardController {
             errorLabel.setText(msg);
             errorLabel.setVisible(true);
             errorLabel.setManaged(true);
-            errorLabel.applyCss();
-            errorLabel.layout();
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
@@ -308,20 +300,17 @@ public class AppealCardController {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
-            expandedSection.setManaged(isExpanded);
             expandedSection.setVisible(isExpanded);
-            expandedSection.applyCss();
-            expandedSection.layout();
+            expandedSection.setManaged(isExpanded);
         }
 
         if (appeal != null && "PENDING".equals(appeal.getStatus())) {
             if (actionBar != null) {
-                actionBar.setManaged(isExpanded);
                 actionBar.setVisible(isExpanded);
-                actionBar.applyCss();
-                actionBar.layout();
+                actionBar.setManaged(isExpanded);
             }
         }
+
         updateIcon();
     }
 
