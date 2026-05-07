@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -177,6 +178,9 @@ public class AppealCardController {
                 });
     }
 
+    @FXML
+    private Button arrowButton;
+
     /**
      * Loads and displays the universal confirmation dialog.
      * @param l1 First line of the message.
@@ -191,15 +195,12 @@ public class AppealCardController {
         try {
             String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
             URL resource = getClass().getResource(path);
-
             if (resource == null) {
                 path = "/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
             }
-
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane rootNode = loader.load();
-
             ConfirmationDialogController controller = loader.getController();
 
             if (controller != null) {
@@ -211,9 +212,11 @@ public class AppealCardController {
             Stage stage = new Stage();
             stage.initStyle(StageStyle.TRANSPARENT);
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(rootNode));
-            stage.showAndWait();
 
+            Scene scene = new Scene(rootNode);
+            scene.setFill(null);
+            stage.setScene(scene);
+            stage.showAndWait();
         } catch (IOException e) {
             System.err.println("Popup Error: Could not load confirmation.fxml");
             e.printStackTrace();
@@ -251,6 +254,8 @@ public class AppealCardController {
             errorLabel.setText(msg);
             errorLabel.setVisible(true);
             errorLabel.setManaged(true);
+            errorLabel.applyCss();
+            errorLabel.layout();
         }
 
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
@@ -300,17 +305,20 @@ public class AppealCardController {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
-            expandedSection.setVisible(isExpanded);
             expandedSection.setManaged(isExpanded);
+            expandedSection.setVisible(isExpanded);
+            expandedSection.applyCss();
+            expandedSection.layout();
         }
 
         if (appeal != null && "PENDING".equals(appeal.getStatus())) {
             if (actionBar != null) {
-                actionBar.setVisible(isExpanded);
                 actionBar.setManaged(isExpanded);
+                actionBar.setVisible(isExpanded);
+                actionBar.applyCss();
+                actionBar.layout();
             }
         }
-
         updateIcon();
     }
 
