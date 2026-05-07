@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
@@ -79,6 +80,13 @@ public class EditOffenseModalController {
     @FXML
     private Label studentResultLabel;
     /**
+     * The container that holds
+     * studentIdTextField and studentResultLabel,
+     * allowing them to be added or removed.
+     */
+    @FXML
+    private VBox studentContainer;
+    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -125,6 +133,8 @@ public class EditOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
 
+        studentContainer.getChildren().remove(studentResultLabel);
+        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
         studentIdTextField.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {
@@ -210,12 +220,13 @@ public class EditOffenseModalController {
     /**
      * Displays student name based on entered student ID.
      */
+
     private void autoDisplayStudentName() {
         try {
             String studentId = studentIdTextField.getText();
 
             if (studentId.isBlank()) {
-                studentResultLabel.setText("Student ID is Blank!");
+                showStudentResult("Student ID is Blank!");
                 studentNameTextField.clear();
                 return;
             }
@@ -229,19 +240,37 @@ public class EditOffenseModalController {
                         + " "
                         + student.getLastName();
 
-                studentResultLabel.setText("");
+                studentContainer.getChildren().remove(studentResultLabel);
                 studentNameTextField.setText(fullName);
             } else {
-                studentResultLabel.setText("Student Not Found!");
                 studentNameTextField.clear();
+                showStudentResult("Student Not Found!");
             }
         } catch (Exception e) {
             studentNameTextField.clear();
-            studentResultLabel.setText("Error loading student data");
+
+            showStudentResult("Error loading student data");
 
             e.printStackTrace();
         }
     }
+
+    /**
+     * Ensures the result label is visible and
+     * displays the provided message without causing errors.
+     *
+     * @param result String Message to display based on
+     *              the action performed.
+     */
+    private void showStudentResult(String result) {
+
+        if (!studentContainer.getChildren().contains(studentResultLabel)) {
+            studentContainer.getChildren().add(studentResultLabel);
+        }
+
+        studentResultLabel.setText(result);
+    }
+
     /**
      * Closes the modal when cancel button is clicked.
      *

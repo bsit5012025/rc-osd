@@ -15,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -84,7 +85,6 @@ public class AddOffenseModalController {
     /** Checkbox for notifying parents/guardian. */
     @FXML
     private CheckBox notifyParentsCheckBox;
-
     /**
      * Label to Show if student is
      * found or there are any unexpected
@@ -92,6 +92,13 @@ public class AddOffenseModalController {
      */
     @FXML
     private Label studentResultLabel;
+    /**
+     * The container that holds
+     * studentIdTextField and studentResultLabel,
+     * allowing them to be added or removed.
+     */
+    @FXML
+    private VBox studentContainer;
 
     /** DAO for student operations. */
     private StudendDao studentDao;
@@ -127,6 +134,8 @@ public class AddOffenseModalController {
         loadComboBoxData();
         autoSelectLevelOfOffense();
 
+        studentContainer.getChildren().remove(studentResultLabel);
+        studentIdTextField.setOnAction(e -> autoDisplayStudentName());
         studentIdTextField.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {
@@ -176,13 +185,13 @@ public class AddOffenseModalController {
     /**
      * Displays the student name based on the entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
         try {
             String studentId = studentIdTextField.getText();
 
             if (studentId.isBlank()) {
-                studentResultLabel.setText("Student ID is Blank!");
+                showStudentResult("Student ID is Blank!");
+
                 studentNameTextField.clear();
                 return;
             }
@@ -196,18 +205,35 @@ public class AddOffenseModalController {
                         + " "
                         + student.getLastName();
 
-                studentResultLabel.setText("");
+                studentContainer.getChildren().remove(studentResultLabel);
                 studentNameTextField.setText(fullName);
             } else {
-                studentResultLabel.setText("Student Not Found!");
                 studentNameTextField.clear();
+                showStudentResult("Student Not Found!");
             }
         } catch (Exception e) {
             studentNameTextField.clear();
-            studentResultLabel.setText("Error loading student data");
+
+            showStudentResult("Error loading student data");
 
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Ensures the result label is visible and
+     * displays the provided message without causing errors.
+     *
+     * @param result String Message to display based on
+     *              the action performed.
+     */
+    private void showStudentResult(String result) {
+
+        if (!studentContainer.getChildren().contains(studentResultLabel)) {
+            studentContainer.getChildren().add(studentResultLabel);
+        }
+
+        studentResultLabel.setText(result);
     }
 
     /**
