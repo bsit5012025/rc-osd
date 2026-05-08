@@ -2,8 +2,6 @@ package org.rocs.osd.controller.appeal;
 
 import java.io.IOException;
 import java.net.URL;
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.facade.appeal.AppealFacade;
@@ -89,25 +86,49 @@ public class AppealCardController {
      */
     @FXML
     public void initialize() {
+
         if (expandedSection != null) {
+
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
+
+            expandedSection.managedProperty().bind(
+                    expandedSection.visibleProperty());
         }
+
         if (actionBar != null) {
+
             actionBar.setVisible(false);
             actionBar.setManaged(false);
+
+            actionBar.managedProperty().bind(
+                    actionBar.visibleProperty());
         }
+
         if (popupBox != null) {
+
             popupBox.setVisible(false);
+            popupBox.setManaged(false);
+
+            popupBox.managedProperty().bind(
+                    popupBox.visibleProperty());
         }
-        if (arrowButton != null) {
-            arrowButton.setMinSize(30, 30);
-            arrowButton.setPrefSize(30, 30);
-        }
+
         if (errorLabel != null) {
+
             errorLabel.setText("");
+
             errorLabel.setVisible(false);
             errorLabel.setManaged(false);
+
+            errorLabel.managedProperty().bind(
+                    errorLabel.visibleProperty());
+        }
+
+        if (arrowButton != null) {
+
+            arrowButton.setMinSize(30, 30);
+            arrowButton.setPrefSize(30, 30);
         }
     }
 
@@ -201,38 +222,72 @@ public class AppealCardController {
      * @param action The logic to execute if the user confirms.
      */
     private void showConfirmation(
-            String l1, String l2, String confirmTxt,
-            String cancelTxt, Runnable action) {
+            String l1,
+            String l2,
+            String confirmTxt,
+            String cancelTxt,
+            Runnable action) {
+
         try {
+
             String path = "/view/dialogs/confirmation.fxml";
+
             URL resource = getClass().getResource(path);
+
             if (resource == null) {
+
                 path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+
                 resource = getClass().getResource(path);
             }
-            if (resource == null) {
-                throw new IOException("confirmation.fxml not found in classpath");
-            }
-            FXMLLoader loader = new FXMLLoader(resource);
-            StackPane rootNode = loader.load();
-            ConfirmationDialogController controller = loader.getController();
 
-            if (controller != null) {
-                controller.setMessage(l1, l2);
-                controller.setButtonLabels(confirmTxt, cancelTxt);
-                controller.setOnConfirm(action);
+            if (resource == null) {
+                throw new IOException(
+                        "confirmation.fxml not found in classpath");
             }
+
+            FXMLLoader loader = new FXMLLoader(resource);
+
+            StackPane rootNode = loader.load();
+
+            ConfirmationDialogController controller =
+                    loader.getController();
+
+            controller.setMessage(l1, l2);
+
+            controller.setButtonLabels(confirmTxt, cancelTxt);
+
+            controller.setOnConfirm(action);
+
+            rootNode.applyCss();
+            rootNode.layout();
 
             Stage stage = new Stage();
+
             stage.initStyle(StageStyle.UNDECORATED);
+
             stage.initModality(Modality.APPLICATION_MODAL);
 
             Scene scene = new Scene(rootNode);
+
             scene.setFill(null);
+
             stage.setScene(scene);
+
+            stage.sizeToScene();
+
+            rootNode.applyCss();
+            rootNode.layout();
+
             stage.show();
+
+            rootNode.requestFocus();
+
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load confirmation dialog", e);
+
+            throw new RuntimeException(
+                    "Failed to load confirmation dialog",
+                    e);
         }
     }
 
@@ -241,21 +296,22 @@ public class AppealCardController {
      * @param msg The message to display (e.g., "Appeal approved!").
      */
     private void showPopupAndRemoveCard(String msg) {
+
         if (popupLabel != null) {
             popupLabel.setText(msg);
         }
 
         if (popupBox != null) {
+
             popupBox.setVisible(true);
+
+            popupBox.applyCss();
+            popupBox.layout();
         }
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
-        delay.setOnFinished(e -> {
-            if (onActionComplete != null) {
-                onActionComplete.run();
-            }
-        });
-        delay.play();
+        if (onActionComplete != null) {
+            onActionComplete.run();
+        }
     }
 
     /**
@@ -264,22 +320,23 @@ public class AppealCardController {
      */
     private void showError(String msg) {
 
-        if (errorLabel != null) {
+        if (errorLabel == null) {
+            return;
+        }
 
-            errorLabel.setText(msg);
+        errorLabel.setText(msg);
 
-            errorLabel.setManaged(true);
-            errorLabel.setVisible(true);
+        errorLabel.setVisible(true);
 
-            errorLabel.requestLayout();
+        errorLabel.applyCss();
+        errorLabel.layout();
 
-            errorLabel.applyCss();
-            errorLabel.layout();
+        Parent parent = errorLabel.getParent();
 
-            Platform.runLater(() -> {
-                errorLabel.applyCss();
-                errorLabel.layout();
-            });
+        if (parent != null) {
+            parent.requestLayout();
+            parent.applyCss();
+            parent.layout();
         }
     }
 
@@ -321,49 +378,40 @@ public class AppealCardController {
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
-
-            expandedSection.setManaged(isExpanded);
             expandedSection.setVisible(isExpanded);
-
-            expandedSection.requestLayout();
-
-            expandedSection.applyCss();
-            expandedSection.layout();
-
-            Parent parent = expandedSection.getParent();
-
-            if (parent != null) {
-                parent.requestLayout();
-            }
         }
 
-        if (appeal != null && "PENDING".equals(appeal.getStatus())) {
+        if (actionBar != null) {
 
-            if (actionBar != null) {
+            boolean shouldShow =
+                    isExpanded
+                            && appeal != null
+                            && "PENDING".equals(appeal.getStatus());
 
-                actionBar.setManaged(isExpanded);
-                actionBar.setVisible(isExpanded);
-
-                actionBar.requestLayout();
-
-                actionBar.applyCss();
-                actionBar.layout();
-            }
+            actionBar.setVisible(shouldShow);
         }
-
-        Platform.runLater(() -> {
-            if (expandedSection != null) {
-                expandedSection.applyCss();
-                expandedSection.layout();
-            }
-
-            if (actionBar != null) {
-                actionBar.applyCss();
-                actionBar.layout();
-            }
-        });
 
         updateIcon();
+
+        if (expandedSection != null) {
+            expandedSection.applyCss();
+            expandedSection.layout();
+        }
+
+        if (actionBar != null) {
+            actionBar.applyCss();
+            actionBar.layout();
+        }
+
+        Parent parent = expandedSection != null
+                ? expandedSection.getParent()
+                : null;
+
+        if (parent != null) {
+            parent.requestLayout();
+            parent.applyCss();
+            parent.layout();
+        }
     }
 
     /**
