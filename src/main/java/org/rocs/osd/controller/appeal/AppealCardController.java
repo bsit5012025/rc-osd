@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -262,12 +263,23 @@ public class AppealCardController {
      * @param msg The error message to show.
      */
     private void showError(String msg) {
+
         if (errorLabel != null) {
+
             errorLabel.setText(msg);
-            errorLabel.setVisible(true);
+
             errorLabel.setManaged(true);
+            errorLabel.setVisible(true);
+
+            errorLabel.requestLayout();
+
             errorLabel.applyCss();
             errorLabel.layout();
+
+            Platform.runLater(() -> {
+                errorLabel.applyCss();
+                errorLabel.layout();
+            });
         }
     }
 
@@ -305,29 +317,51 @@ public class AppealCardController {
      */
     @FXML
     public void toggleExpansion() {
+
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
+
             expandedSection.setManaged(isExpanded);
             expandedSection.setVisible(isExpanded);
 
-            Platform.runLater(() -> {
-                expandedSection.applyCss();
-                expandedSection.layout();
-            });
+            expandedSection.requestLayout();
+
+            expandedSection.applyCss();
+            expandedSection.layout();
+
+            Parent parent = expandedSection.getParent();
+
+            if (parent != null) {
+                parent.requestLayout();
+            }
         }
 
         if (appeal != null && "PENDING".equals(appeal.getStatus())) {
+
             if (actionBar != null) {
+
                 actionBar.setManaged(isExpanded);
                 actionBar.setVisible(isExpanded);
 
-                Platform.runLater(() -> {
-                    actionBar.applyCss();
-                    actionBar.layout();
-                });
+                actionBar.requestLayout();
+
+                actionBar.applyCss();
+                actionBar.layout();
             }
         }
+
+        Platform.runLater(() -> {
+            if (expandedSection != null) {
+                expandedSection.applyCss();
+                expandedSection.layout();
+            }
+
+            if (actionBar != null) {
+                actionBar.applyCss();
+                actionBar.layout();
+            }
+        });
 
         updateIcon();
     }

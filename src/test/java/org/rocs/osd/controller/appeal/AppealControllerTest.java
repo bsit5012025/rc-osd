@@ -485,22 +485,29 @@ public class AppealControllerTest {
     }
 
     private Stage findPopupStage(FxRobot robot) {
+
         for (javafx.stage.Window window : robot.listWindows()) {
 
             if (window instanceof Stage stage) {
 
-                boolean validStyle =
-                        stage.getStyle() == StageStyle.TRANSPARENT
-                                || stage.getStyle() == StageStyle.UNDECORATED;
+                if (!stage.isShowing()) {
+                    continue;
+                }
 
-                if (validStyle
-                        && stage.isShowing()
-                        && stage.getScene() != null) {
+                if (stage.getScene() == null) {
+                    continue;
+                }
+
+                Parent root = stage.getScene().getRoot();
+
+                if (root.lookup("#confirmButton") != null
+                        || root.lookup("#cancelButton") != null) {
 
                     return stage;
                 }
             }
         }
+
         return null;
     }
 
