@@ -486,8 +486,17 @@ public class AppealControllerTest {
 
     private Stage findPopupStage(FxRobot robot) {
         for (javafx.stage.Window window : robot.listWindows()) {
+
             if (window instanceof Stage stage) {
-                if (stage.getStyle() == StageStyle.TRANSPARENT && stage.getScene() != null) {
+
+                boolean validStyle =
+                        stage.getStyle() == StageStyle.TRANSPARENT
+                                || stage.getStyle() == StageStyle.UNDECORATED;
+
+                if (validStyle
+                        && stage.isShowing()
+                        && stage.getScene() != null) {
+
                     return stage;
                 }
             }

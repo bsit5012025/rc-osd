@@ -104,6 +104,7 @@ public class AppealCardController {
             arrowButton.setPrefSize(30, 30);
         }
         if (errorLabel != null) {
+            errorLabel.setText("");
             errorLabel.setVisible(false);
             errorLabel.setManaged(false);
         }
@@ -222,7 +223,7 @@ public class AppealCardController {
             }
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
 
             Scene scene = new Scene(rootNode);
