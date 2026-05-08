@@ -78,10 +78,7 @@ public class AppealController {
                     if ("PENDING".equals(status)) {
                         AppealCardController controller =
                                 loader.getController();
-
                         controller.setAppeal(appeal);
-
-                        controller.setStatus(status);
 
                         controller.setOnActionComplete(() ->
                                 loadAppealsByStatus("PENDING"));

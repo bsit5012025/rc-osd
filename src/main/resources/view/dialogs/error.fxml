@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane alignment="BOTTOM_CENTER"
+           stylesheets="@../../styles/dialog/error.css"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.rocs.osd.controller.dialog.ErrorDialogController">
+
+    <VBox fx:id="errorBanner" alignment="CENTER" styleClass="lgnErrBox"
+          StackPane.alignment="BOTTOM_CENTER">
+
+        <HBox alignment="CENTER" spacing="15">
+
+            <ImageView fitHeight="28" fitWidth="28">
+                <image>
+                    <Image url="@../../assets/alertIcon.png" />
+                </image>
+            </ImageView>
+
+            <Label fx:id="errorText"
+                   styleClass="error-label"
+                   wrapText="true"/>
+        </HBox>
+    </VBox>
+</StackPane>
