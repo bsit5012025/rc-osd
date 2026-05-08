@@ -99,6 +99,14 @@ public class AppealCardController {
         if (popupBox != null) {
             popupBox.setVisible(false);
         }
+        if (arrowButton != null) {
+            arrowButton.setMinSize(30, 30);
+            arrowButton.setPrefSize(30, 30);
+        }
+        if (errorLabel != null) {
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
+        }
     }
 
     /**
@@ -194,16 +202,14 @@ public class AppealCardController {
             String l1, String l2, String confirmTxt,
             String cancelTxt, Runnable action) {
         try {
-            String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+            String path = "/view/dialogs/confirmation.fxml";
             URL resource = getClass().getResource(path);
             if (resource == null) {
-                path = "/view/dialogs/confirmation.fxml";
+                path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
             }
             if (resource == null) {
-                throw new IOException("confirmation.fxml not found in classpath. " +
-                        "Tried: /org/rocs/osd/view/dialogs/confirmation.fxml " +
-                        "and /view/dialogs/confirmation.fxml");
+                throw new IOException("confirmation.fxml not found in classpath");
             }
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane rootNode = loader.load();
@@ -222,7 +228,7 @@ public class AppealCardController {
             Scene scene = new Scene(rootNode);
             scene.setFill(null);
             stage.setScene(scene);
-            stage.showAndWait();
+            stage.show();
         } catch (IOException e) {
             throw new RuntimeException("Failed to load confirmation dialog", e);
         }
@@ -241,7 +247,7 @@ public class AppealCardController {
             popupBox.setVisible(true);
         }
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+        PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
         delay.setOnFinished(e -> {
             if (onActionComplete != null) {
                 onActionComplete.run();
@@ -262,15 +268,6 @@ public class AppealCardController {
             errorLabel.applyCss();
             errorLabel.layout();
         }
-
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
-        delay.setOnFinished(e -> {
-            if (errorLabel != null) {
-                errorLabel.setVisible(false);
-                errorLabel.setManaged(false);
-            }
-        });
-        delay.play();
     }
 
     /**
@@ -312,18 +309,25 @@ public class AppealCardController {
         if (expandedSection != null) {
             expandedSection.setManaged(isExpanded);
             expandedSection.setVisible(isExpanded);
-            expandedSection.applyCss();
-            expandedSection.layout();
+
+            Platform.runLater(() -> {
+                expandedSection.applyCss();
+                expandedSection.layout();
+            });
         }
 
         if (appeal != null && "PENDING".equals(appeal.getStatus())) {
             if (actionBar != null) {
                 actionBar.setManaged(isExpanded);
                 actionBar.setVisible(isExpanded);
-                actionBar.applyCss();
-                actionBar.layout();
+
+                Platform.runLater(() -> {
+                    actionBar.applyCss();
+                    actionBar.layout();
+                });
             }
         }
+
         updateIcon();
     }
 
@@ -347,10 +351,6 @@ public class AppealCardController {
                     arrowIcon.setRotate(0);
                 }
             }
-        }
-        if (arrowButton != null) {
-            arrowButton.setMinSize(30, 30);
-            arrowButton.setPrefSize(30, 30);
         }
     }
 }
