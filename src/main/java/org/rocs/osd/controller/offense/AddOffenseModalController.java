@@ -8,11 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -40,6 +43,7 @@ import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Controller for the "Add Offense"
@@ -81,6 +85,20 @@ public class AddOffenseModalController {
     /** Checkbox for notifying parents/guardian. */
     @FXML
     private CheckBox notifyParentsCheckBox;
+    /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
+    /**
+     * The container that holds
+     * studentIdTextField and studentResultLabel,
+     * allowing them to be added or removed.
+     */
+    @FXML
+    private VBox studentContainer;
 
     /** DAO for student operations. */
     private StudendDao studentDao;
@@ -112,9 +130,20 @@ public class AddOffenseModalController {
         recordFacade = new RecordFacadeImpl(dao);
         enrollmentDao = new EnrollmentDaoImpl();
         guardianFacade = new GuardianFacadeImpl();
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
+
+        studentContainer.getChildren().remove(studentResultLabel);
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+                });
+
+        disableDateValidation();
     }
 
     /**
@@ -156,20 +185,55 @@ public class AddOffenseModalController {
     /**
      * Displays the student name based on the entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
-        String studentId = studentIdTextField.getText();
-        if (studentId.isEmpty()) {
-            return;
+        try {
+            String studentId = studentIdTextField.getText();
+
+            if (studentId.isBlank()) {
+                showStudentResult("Student ID is Blank!");
+
+                studentNameTextField.clear();
+                return;
+            }
+
+            Student student = studentDao.findStudentWithRecordById(studentId);
+
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
+
+                studentContainer.getChildren().remove(studentResultLabel);
+                studentNameTextField.setText(fullName);
+            } else {
+                studentNameTextField.clear();
+                showStudentResult("Student Not Found!");
+            }
+        } catch (Exception e) {
+            studentNameTextField.clear();
+
+            showStudentResult("Error loading student data");
+
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Ensures the result label is visible and
+     * displays the provided message without causing errors.
+     *
+     * @param result String Message to display based on
+     *              the action performed.
+     */
+    private void showStudentResult(String result) {
+
+        if (!studentContainer.getChildren().contains(studentResultLabel)) {
+            studentContainer.getChildren().add(studentResultLabel);
         }
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
-        if (student.getStudentId() != null) {
-            studentNameTextField.setText(student.getFirstName() + " "
-                    + student.getMiddleName() + " " + student.getLastName());
-        } else {
-            studentNameTextField.clear();
-        }
+        studentResultLabel.setText(result);
     }
 
     /**
@@ -331,5 +395,21 @@ public class AddOffenseModalController {
                     stage.close();
                 }
         );
+    }
+
+    private void disableDateValidation() {
+
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
+                    setDisable(true);
+                }
+            }
+        });
+        datePicker.setValue(LocalDate.now());
     }
 }
