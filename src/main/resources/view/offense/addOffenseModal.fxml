@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane fx:id="addViolationModal"
            styleClass="modalContainer"
@@ -19,41 +33,55 @@
 
                 <Pane minHeight="2.0" styleClass="linePaneColorGray" />
 
-                <GridPane hgap="20.0" vgap="15.0">
+                <GridPane hgap="20.0" prefHeight="233.0" prefWidth="563.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                     </columnConstraints>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <Label styleClass="lightLabelForTextField" text="Student ID:" />
-                        <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
-                    </VBox>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                        <Label styleClass="lightLabelForTextField" text="Student Name:" />
-                        <TextField fx:id="studentNameTextField" onAction="#autoDisplayStudentName" styleClass="inputTextFieldOffense" />
-                    </VBox>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                        <Label styleClass="lightLabelForTextField" text="Date:" />
-                        <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                    </VBox>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <Label styleClass="lightLabelForTextField" text="Offense type:" />
-                        <ComboBox fx:id="offenseTypeComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                    </VBox>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <Label styleClass="lightLabelForTextField" text="Level of Offense" />
-                        <TextField fx:id="levelOfOffense" editable="false" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                    </VBox>
-
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                        <Label styleClass="lightLabelForTextField" text="Action" />
-                        <ComboBox fx:id="actionComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                    </VBox>
+               <VBox prefWidth="100.0" spacing="15.0">
+                  <children>
+      
+                          <VBox fx:id="studentContainer" spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Student ID:" />
+                              <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
+                        <Label fx:id="studentResultLabel" prefHeight="15.0" prefWidth="288.0" />
+                          </VBox>
+      
+                             <VBox spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Student Name:" />
+                              <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
+                          </VBox>
+      
+                          <VBox spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Date:" />
+                              <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                          </VBox>
+                  </children>
+               </VBox>
+               <VBox prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1">
+                  <children>
+      
+                          <VBox spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Offense type:" />
+                              <ComboBox fx:id="offenseTypeComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                          </VBox>
+      
+                             <VBox spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Level of Offense" />
+                              <TextField fx:id="levelOfOffense" editable="false" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                          </VBox>
+      
+                          <VBox spacing="5.0">
+                              <Label styleClass="lightLabelForTextField" text="Action" />
+                              <ComboBox fx:id="actionComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                          </VBox>
+                  </children>
+               </VBox>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                  <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+               </rowConstraints>
                 </GridPane>
 
                 <VBox spacing="5.0">
