@@ -4,20 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
@@ -35,7 +27,6 @@ import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.person.student.Student;
 import org.rocs.osd.model.record.RecordStatus;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 /**
@@ -80,20 +71,6 @@ public class EditOffenseModalController {
     @FXML
     private TextArea remarksTextArea;
     /**
-     * Label to Show if student is
-     * found or there are any unexpected
-     * error.
-     */
-    @FXML
-    private Label studentResultLabel;
-    /**
-     * The container that holds
-     * studentIdTextField and studentResultLabel,
-     * allowing them to be added or removed.
-     */
-    @FXML
-    private VBox studentContainer;
-    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -121,13 +98,10 @@ public class EditOffenseModalController {
      *  Reference to the parent (viewOffenseModal) stage.
      */
     private Stage viewOffenseModalStage;
+
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
-     * ".textProperty().addListener((obs, oldVal, newVal)"
-     * to automatically display student full name
-     * (note: did not use newVal because already
-     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -139,23 +113,14 @@ public class EditOffenseModalController {
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
-
-        studentContainer.getChildren().remove(studentResultLabel);
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
-        studentIdTextField.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (!newValue) {
-                        autoDisplayStudentName();
-                    }
-        });
     }
-
     /**
      * Sets the prev stage and record data to be edited.
      *
      * @param pRecord the record to load into the form.
-     * @param pStage  the parent stage (ViewOffenseModal)
-     * that will be closed after submitting edits.
+     * @param pStage the parent stage (ViewOffenseModal)
+     *               that will be closed after submitting edits.
      */
     public void setRecordData(Record pRecord, Stage pStage) {
         this.record = pRecord;
@@ -190,7 +155,6 @@ public class EditOffenseModalController {
         actionComboBox.setValue(
                 record.getAction().getActionName());
     }
-
     /**
      * Loads offense names into the ComboBox.
      */
@@ -207,76 +171,52 @@ public class EditOffenseModalController {
                     + "offense names from the database.");
         }
     }
-
     /**
      * Automatically sets offense level when offense type is selected.
      */
     private void autoSelectLevelOfOffense() {
+
         offenseTypeComboBox.setOnAction(event -> {
+
             String selected = offenseTypeComboBox.getValue();
+
             if (selected != null) {
+
                 Offense offense = offenseDao.findByName(selected);
+
                 if (offense != null) {
                     levelOfOffense.setText(offense.getType());
                 }
             }
         });
     }
-
     /**
      * Displays student name based on entered student ID.
      */
+    @FXML
     private void autoDisplayStudentName() {
-        try {
-            String studentId = studentIdTextField.getText();
 
-            if (studentId.isBlank()) {
-                showStudentResult("Student ID is Blank!");
-                studentNameTextField.clear();
-                return;
-            }
+        String studentId = studentIdTextField.getText();
 
-            Student student = studentDao.findStudentWithRecordById(studentId);
+        if (studentId.isEmpty()) {
+            return;
+        }
 
-            if (student != null) {
-                String fullName = student.getFirstName()
-                        + " "
-                        + student.getMiddleName()
-                        + " "
-                        + student.getLastName();
+        Student student = studentDao.findStudentWithRecordById(studentId);
 
-                studentContainer.getChildren().remove(studentResultLabel);
-                studentNameTextField.setText(fullName);
-            } else {
-                studentNameTextField.clear();
-                showStudentResult("Student Not Found!");
-            }
-        } catch (Exception e) {
+        if (student.getStudentId() != null) {
+            String fullName = student.getFirstName()
+                    + " "
+                    + student.getMiddleName()
+                    + " "
+                    + student.getLastName();
+
+            studentNameTextField.setText(fullName);
+        } else {
             studentNameTextField.clear();
-
-            showStudentResult("Error loading student data");
-
-            e.printStackTrace();
+            System.out.println("STUDENT NOT FOUND!");
         }
     }
-
-
-    /**
-     * Ensures the result label is visible and
-     * displays the provided message without causing errors.
-     *
-     * @param result String Message to display based on
-     *              the action performed.
-     */
-    private void showStudentResult(String result) {
-
-        if (!studentContainer.getChildren().contains(studentResultLabel)) {
-            studentContainer.getChildren().add(studentResultLabel);
-        }
-
-        studentResultLabel.setText(result);
-    }
-
     /**
      * Closes the modal when cancel button is clicked.
      *
@@ -284,17 +224,9 @@ public class EditOffenseModalController {
      */
     @FXML
     void onCancel(ActionEvent event) {
-        showConfirmation(
-                "Are you sure you want ",
-                "to cancel?",
-                () -> {
-                    Stage stage = (Stage) (
-                            (Node) event.getSource()).getScene().getWindow();
-                    stage.close();
-                }
-        );
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
-
     /**
      * Handles submission of updated offense record.
      * Validates inputs and updates the record in database.
@@ -303,58 +235,53 @@ public class EditOffenseModalController {
      */
     @FXML
     void onSubmit(ActionEvent event) {
-
-        if (studentIdTextField == null
-                || studentNameTextField == null
-                || offenseTypeComboBox == null
-                || actionComboBox == null
-                || datePicker == null
-                || studentIdTextField.getText() == null
-                || studentIdTextField.getText().isEmpty()
-                || studentNameTextField.getText() == null
-                || studentNameTextField.getText().isEmpty()
-                || offenseTypeComboBox.getValue() == null
-                || actionComboBox.getValue() == null
-                || datePicker.getValue() == null) {
-
-            System.out.println("Fill out all required fields!");
-            return;
-        }
-        showConfirmation(
-                "Do you want to ",
-                "save changes?",
-                () -> saveUpdatedRecord(event)
-        );
-    }
-
-    /**
-     * Logic to update the student record in the database.
-     * Executes after confirmation.
-     *
-     * @param event the event from the submit button
-     */
-    private void saveUpdatedRecord(ActionEvent event) {
         try {
+            String studentId = studentIdTextField.getText();
+            String studentName = studentNameTextField.getText();
+            String offenseName = offenseTypeComboBox.getValue();
+            String offenseType = levelOfOffense.getText();
+            String actionName = actionComboBox.getValue();
+
+            String remarks = remarksTextArea.getText();
+
+            if (studentId == null
+                    || studentId.isEmpty()
+                    || studentName == null
+                    || studentName.isEmpty()
+                    || offenseName == null
+                    || offenseType == null
+                    || datePicker.getValue() == null) {
+                System.out.println("Fill out all required fields!");
+                return;
+            }
+
             if (record == null
                     || record.getEnrollment() == null
                     || record.getAction() == null
                     || record.getEnrollment().getStudent() == null) {
-                System.out.println("Record parts are missing!");
+                System.out.println("Record, Enrollment, "
+                        + "Action or student are missing or null!");
                 return;
             }
 
             Date dateOfViolation = Date.valueOf(datePicker.getValue());
-            long enrollmentID = enrollmentDao.findEnrollmentIdByStudentId(
-                    studentIdTextField.getText());
-            long actionID = disciplinaryActionDao.findActionIdByName(
-                    actionComboBox.getValue());
-            Offense offenseObj = offenseDao.findByName(
-                    offenseTypeComboBox.getValue());
 
+            long enrollmentID = enrollmentDao.
+                    findEnrollmentIdByStudentId(studentId);
             record.getEnrollment().setEnrollmentId(enrollmentID);
+
+            long actionId = disciplinaryActionDao.
+                    findActionIdByName(record.getAction().getActionName());
+            record.getAction().setActionId(actionId);
+
+            long actionID = disciplinaryActionDao.
+                    findActionIdByName(actionName);
             record.getAction().setActionId(actionID);
+
+            Offense offenseObj = offenseDao.findByName(offenseName);
             record.setOffense(offenseObj);
-            record.setRemarks(remarksTextArea.getText());
+
+            record.setRemarks(remarks);
             record.setDateOfViolation(dateOfViolation);
             record.setStatus(RecordStatus.PENDING);
 
@@ -371,44 +298,14 @@ public class EditOffenseModalController {
 
             if (status) {
                 System.out.println("Violation Updated!");
-                Stage stage = (Stage) (
-                        (Node) event.getSource()).getScene().getWindow();
+
+                Stage stage = (Stage) ((Node) event.getSource())
+                        .getScene().getWindow();
                 stage.close();
-                if (viewOffenseModalStage != null) {
-                    viewOffenseModalStage.close();
-                }
+                viewOffenseModalStage.close();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Helper method to launch the reusable confirmation dialog.
-     *
-     * @param line1  The first line of the prompt message.
-     * @param line2  The second line of the prompt message.
-     * @param action The logic to execute if the user confirms.
-     */
-    private void showConfirmation(String line1, String line2, Runnable action) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/dialogs/confirmation.fxml"));
-            Parent root = loader.load();
-            ConfirmationDialogController controller = loader.getController();
-            controller.setMessage(line1, line2);
-            controller.setButtonLabels("Yes", "No");
-            controller.setOnConfirm(action);
-
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
