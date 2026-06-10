@@ -9,9 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -79,6 +81,20 @@ public class EditOffenseModalController {
     @FXML
     private TextArea remarksTextArea;
     /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
+    /**
+     * The container that holds
+     * studentIdTextField and studentResultLabel,
+     * allowing them to be added or removed.
+     */
+    @FXML
+    private VBox studentContainer;
+    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -106,10 +122,13 @@ public class EditOffenseModalController {
      * Reference to the parent (viewOffenseModal) stage.
      */
     private Stage viewOffenseModalStage;
-
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
+     * ".textProperty().addListener((obs, oldVal, newVal)"
+     * to automatically display student full name
+     * (note: did not use newVal because already
+     * a call a query for it).
      */
     public void initialize() {
         offenseDao = new OffenseDaoImpl();
@@ -121,7 +140,15 @@ public class EditOffenseModalController {
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
+
+        studentContainer.getChildren().remove(studentResultLabel);
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+        });
     }
 
     /**
@@ -201,26 +228,55 @@ public class EditOffenseModalController {
     /**
      * Displays student name based on entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
-        String studentId = studentIdTextField.getText();
-        if (studentId.isEmpty()) {
-            return;
-        }
+        try {
+            String studentId = studentIdTextField.getText();
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
-        if (student.getStudentId() != null) {
-            String fullName = student.getFirstName()
-                    + " "
-                    + student.getMiddleName()
-                    + " "
-                    + student.getLastName();
+            if (studentId.isBlank()) {
+                showStudentResult("Student ID is Blank!");
+                studentNameTextField.clear();
+                return;
+            }
 
-            studentNameTextField.setText(fullName);
-        } else {
+            Student student = studentDao.findStudentWithRecordById(studentId);
+
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
+
+                studentContainer.getChildren().remove(studentResultLabel);
+                studentNameTextField.setText(fullName);
+            } else {
+                studentNameTextField.clear();
+                showStudentResult("Student Not Found!");
+            }
+        } catch (Exception e) {
             studentNameTextField.clear();
-            System.out.println("STUDENT NOT FOUND!");
+
+            showStudentResult("Error loading student data");
+
+            e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Ensures the result label is visible and
+     * displays the provided message without causing errors.
+     *
+     * @param result String Message to display based on
+     *              the action performed.
+     */
+    private void showStudentResult(String result) {
+
+        if (!studentContainer.getChildren().contains(studentResultLabel)) {
+            studentContainer.getChildren().add(studentResultLabel);
+        }
+
+        studentResultLabel.setText(result);
     }
 
     /**
@@ -328,6 +384,36 @@ public class EditOffenseModalController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Helper method to launch the reusable confirmation dialog.
+     *
+     * @param line1  The first line of the prompt message.
+     * @param line2  The second line of the prompt message.
+     * @param action The logic to execute if the user confirms.
+     */
+    private void showConfirmation(String line1, String line2, Runnable action) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/dialogs/confirmation.fxml"));
+            Parent root = loader.load();
+            ConfirmationDialogController controller = loader.getController();
+            controller.setMessage(line1, line2);
+            controller.setButtonLabels("Yes", "No");
+            controller.setOnConfirm(action);
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
     /**
      * Helper method to launch the reusable confirmation dialog.
