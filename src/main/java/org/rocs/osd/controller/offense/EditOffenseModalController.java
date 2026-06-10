@@ -285,7 +285,7 @@ public class EditOffenseModalController {
      * @param event action event from cancel button
      */
     @FXML
-    void onCancel(ActionEvent event) {
+    public void onCancel(ActionEvent event) {
         showConfirmation(
                 "Are you sure you want ",
                 "to cancel?",
@@ -304,7 +304,7 @@ public class EditOffenseModalController {
      * @param event action event from submit button.
      */
     @FXML
-    void onSubmit(ActionEvent event) {
+    public void onSubmit(ActionEvent event) {
 
         if (studentIdTextField == null
                 || studentNameTextField == null
