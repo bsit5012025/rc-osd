@@ -26,4 +26,7 @@ public interface LoginFacade {
      * @return the Login object if found, or null if not found
      */
     Login getByUsername(String username);
+
+
+    boolean logout();
 }
