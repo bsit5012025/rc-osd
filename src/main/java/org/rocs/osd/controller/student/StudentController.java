@@ -5,9 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -42,6 +44,10 @@ public class StudentController {
     @FXML
     private TableColumn<Enrollment, String> sectionColumn;
 
+    /** TextField for searching for Students. **/
+    @FXML
+    private TextField searchField;
+
     /** Facade used to retrieve enrollment data. */
     private EnrollmentFacade enrollmentFacade;
 
@@ -54,15 +60,50 @@ public class StudentController {
         enrollmentFacade = new EnrollmentFacadeImpl(
                 new EnrollmentDaoImpl()
         );
+
+        loadDataToColumns();
+        searchField.setOnAction(e -> searchStudents());
         loadDataToTable();
         selectStudentRecord();
     }
 
     /**
+     * Handles the student search button action.
+     */
+    @FXML
+    public void searchStudentInfo() {
+        searchStudents();
+    }
+
+    /**
+     * Searches for students info on the entered search criteria
+     * and updates the table with the latest students.
+     */
+    private void searchStudents() {
+        studentTable.setItems(
+                javafx.collections.FXCollections.observableArrayList(
+                        enrollmentFacade.getLatestEnrollmentByStudentInfo(
+                                searchField.getText()
+                        )
+                )
+        );
+    }
+
+    /**
      * Loads student data into the table.
+     */
+    private void loadDataToTable() {
+        studentTable.setItems(
+                javafx.collections.FXCollections.observableArrayList(
+                        enrollmentFacade.getAllLatestEnrollments()
+                )
+        );
+    }
+
+    /**
      * Sets cell factories and populates the table.
      */
-    public void loadDataToTable() {
+    private void loadDataToColumns() {
 
         studentIdColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
@@ -72,7 +113,6 @@ public class StudentController {
                 )
         );
 
-        // Displays student full name
         studentNameColumn.setCellValueFactory(cellData -> {
             var student = cellData.getValue().getStudent();
             return new SimpleStringProperty(
@@ -91,12 +131,6 @@ public class StudentController {
         sectionColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
                         cellData.getValue().getSection()
-                )
-        );
-
-        studentTable.setItems(
-                javafx.collections.FXCollections.observableArrayList(
-                        enrollmentFacade.getAllLatestEnrollments()
                 )
         );
     }

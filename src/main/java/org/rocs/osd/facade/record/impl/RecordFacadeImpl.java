@@ -191,6 +191,23 @@ public class RecordFacadeImpl implements RecordFacade {
         return recordDao.findRecordListByDepartment(department, schoolYear);
     }
 
+    /**
+     * Retrieves student records filtered by department, school year
+     * and Student Name.
+     *
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @param studentName the Students Name to filter by.
+     * @return list of records matching the criteria.
+     */
+    @Override
+    public List<Record> getViolationsByDepartmentAndStudentName(
+            Department department, String schoolYear, String studentName) {
+        return recordDao.findRecordListByDepartmentAndStudent(
+                department, schoolYear, studentName);
+    }
+
+
     @Override
     public List<Record> getRecordByStudentId(String studentId) {
         return recordDao.findRecordByStudentId(studentId);
