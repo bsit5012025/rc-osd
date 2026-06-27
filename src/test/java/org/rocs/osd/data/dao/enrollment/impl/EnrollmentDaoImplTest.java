@@ -122,4 +122,49 @@ class EnrollmentDaoImplTest {
         assertEquals("Maria", second.getStudent().getFirstName());
         assertEquals("Santos", second.getStudent().getLastName());
     }
+
+    @Test
+    void testFindLatestEnrollmentsByStudentInfo () throws SQLException{
+        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        when(this.resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+
+        when(this.resultSet.getLong("enrollmentID")).thenReturn(1L, 2L);
+        when(this.resultSet.getString("studentLevel")).thenReturn("Grade-8", "Grade-9");
+        when(this.resultSet.getString("section")).thenReturn("St. Hannibal", "St. Anthony");
+        when(this.resultSet.getString("department")).thenReturn("JHS", "JHS");
+        when(this.resultSet.getString("schoolYear")).thenReturn("2024-2025", "2025-2026");
+
+        when(this.resultSet.getString("studentID")).thenReturn("JHS-0001", "JHS-0002");
+        when(this.resultSet.getLong("personID")).thenReturn(1L, 2L);
+        when(this.resultSet.getString("address")).thenReturn("Address1", "Address2");
+        when(this.resultSet.getString("firstName")).thenReturn("Juan", "Maria");
+        when(this.resultSet.getString("lastName")).thenReturn("Dela Cruz", "Santos");
+        when(this.resultSet.getString("middleName")).thenReturn("A", "B");
+        when(this.resultSet.getString("studentType")).thenReturn("Intern", "Intern");
+        List<Enrollment> result = enrollmentDao.findLatestEnrollmentsByStudentInfo("Juan A Dela Cruz");
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        Enrollment first = result.get(0);
+        assertEquals(1L, first.getEnrollmentId());
+        assertEquals("Grade-8", first.getStudentLevel());
+        assertEquals("St. Hannibal", first.getSection());
+
+        assertNotNull(first.getStudent());
+        assertEquals("JHS-0001", first.getStudent().getStudentId());
+        assertEquals("Juan", first.getStudent().getFirstName());
+        assertEquals("Dela Cruz", first.getStudent().getLastName());
+
+        Enrollment second = result.get(1);
+        assertEquals(2L, second.getEnrollmentId());
+        assertEquals("Grade-9", second.getStudentLevel());
+        assertEquals("St. Anthony", second.getSection());
+
+        assertNotNull(second.getStudent());
+        assertEquals("JHS-0002", second.getStudent().getStudentId());
+        assertEquals("Maria", second.getStudent().getFirstName());
+        assertEquals("Santos", second.getStudent().getLastName());
+    }
+
 }
