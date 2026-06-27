@@ -83,4 +83,19 @@ public interface RecordDao {
      */
     List<Record> findRecordByStudentId(String studentId);
 
+    /**
+     * Retrieves all records that match the specified student
+     * level and student's full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching disciplinary records.
+     */
+    List<Record> findRecordByStudentLevel(String studentLevel,
+                                          String firstName,
+                                          String middleName,
+                                          String lastName);
+
 }

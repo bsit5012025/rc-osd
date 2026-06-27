@@ -59,6 +59,15 @@ public class StudentController {
     }
 
     /**
+     * A method to update the table view
+     * and its contents.
+     */
+    public void refreshTable() {
+        loadDataToTable();
+        selectStudentRecord();
+    }
+
+    /**
      * Loads student data into the table.
      * Sets cell factories and populates the table.
      */
@@ -134,6 +143,7 @@ public class StudentController {
             StudentRecordController studentRecordController
                     = loader.getController();
             studentRecordController.setStudentData(enrollment);
+            studentRecordController.setStudentController(this);
 
             Stage studentStage = new Stage();
 
