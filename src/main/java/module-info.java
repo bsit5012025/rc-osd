@@ -17,6 +17,7 @@ module org.rocs.osd {
     opens org.rocs.osd.controller.request to javafx.fxml;
     opens org.rocs.osd.controller.dialog to javafx.fxml;
 
+    opens org.rocs.osd.data.dto.student.report to commons.beanutils;
 
     exports org.rocs.osd;
 }

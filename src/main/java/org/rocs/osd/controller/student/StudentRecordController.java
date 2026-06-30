@@ -24,6 +24,7 @@ import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.model.record.Record;
 
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -236,8 +237,16 @@ public class StudentRecordController {
         FileChooser fileChooser = getFileChooser();
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
 
+        String downloads = System.getProperty("user.home")
+                + File.separator + "Downloads";
+        File downloadDir = new File(downloads);
+
+        if (downloadDir.exists()) {
+            fileChooser.setInitialDirectory(downloadDir);
+        }
+
         Stage stage = (Stage) fullNameTextField.getScene().getWindow();
-        java.io.File outputFile = fileChooser.showSaveDialog(stage);
+        File outputFile = fileChooser.showSaveDialog(stage);
 
         if (outputFile != null) {
             try (InputStream reportStream = getClass().getResourceAsStream(
