@@ -3,6 +3,7 @@ package org.rocs.osd.controller.request;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import org.rocs.osd.data.dao.employee.EmployeeDao;
 import org.rocs.osd.data.dao.employee.impl.EmployeeDaoImpl;
 import org.rocs.osd.data.dao.request.RequestDao;
@@ -33,16 +34,64 @@ public class RequestController {
     /** Facade for handling employee operations. */
     private EmployeeFacade employeeFacade;
 
+    /**
+     * Static controller factory for dependency injection in nested FXML loads.
+     * Set by tests to ensure mock facades are injected into card controllers.
+     */
+    private static Callback<Class<?>, Object> controllerFactory;
+
+    /**
+     * Sets the static controller factory for nested FXML loading.
+     * @param factory the controller factory callback
+     */
+    public static void setControllerFactory(
+            Callback<Class<?>, Object> factory
+    ) {
+        controllerFactory = factory;
+    }
+
+    /**
+     * Clears the static controller factory.
+     */
+    public static void clearControllerFactory() {
+        controllerFactory = null;
+    }
+
+
     /** Initializes the request view and populates the list. */
     @FXML
     public void initialize() {
-        RequestDao requestDao = new RequestDaoImpl();
-        requestFacade = new RequestFacadeImpl(requestDao);
+        if (requestFacade == null) {
+            RequestDao requestDao = new RequestDaoImpl();
+            requestFacade = new RequestFacadeImpl(requestDao);
+        }
 
-        EmployeeDao employeeDao = new EmployeeDaoImpl();
-        employeeFacade = new EmployeeFacadeImpl(employeeDao);
+        if (employeeFacade == null) {
+            EmployeeDao employeeDao = new EmployeeDaoImpl();
+            employeeFacade = new EmployeeFacadeImpl(employeeDao);
+        }
 
         loadPendingRequestData();
+    }
+
+    /**
+     * Sets the request facade used by this controller to perform
+     * test controller mock operations.
+     *
+     * @param mRequestFacade the facade responsible for handling request data.
+     */
+    public void setRequestFacade(RequestFacade mRequestFacade) {
+        this.requestFacade = mRequestFacade;
+    }
+
+    /**
+     * Sets the Employee facade used by this controller to perform
+     * test controller mock operations.
+     *
+     * @param mEmployeeFacade the facade responsible for handling Employee data
+     */
+    public void setEmployeeFacade(EmployeeFacade mEmployeeFacade) {
+        this.employeeFacade = mEmployeeFacade;
     }
 
 
@@ -88,6 +137,11 @@ public class RequestController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/view/request/RequestCard.fxml"));
+
+            if (controllerFactory != null) {
+                loader.setControllerFactory(controllerFactory);
+            }
+
             VBox card = loader.load();
 
             RequestCardController controller = loader.getController();
@@ -247,5 +301,4 @@ public class RequestController {
     public void handleDeniedTab() {
         loadDeniedRequestData();
     }
-
 }

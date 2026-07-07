@@ -102,6 +102,16 @@ public class RequestCardController {
     }
 
     /**
+     * Sets the request facade used by this controller to perform
+     * test controller mock operations.
+     *
+     * @param mRequestFacade the facade responsible for handling request data.
+     */
+    public void setRequestFacade(RequestFacade mRequestFacade) {
+        this.requestFacade = mRequestFacade;
+    }
+
+    /**
      * Initializes the controller.
      */
     @FXML
@@ -119,8 +129,10 @@ public class RequestCardController {
             popupBox.setVisible(false);
         }
 
-        RequestDao requestDao = new RequestDaoImpl();
-        requestFacade = new RequestFacadeImpl(requestDao);
+        if (requestFacade == null) {
+            RequestDao requestDao = new RequestDaoImpl();
+            requestFacade = new RequestFacadeImpl(requestDao);
+        }
     }
 
     /**
@@ -312,6 +324,7 @@ public class RequestCardController {
         if (errorLabel != null) {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
+            errorLabel.setManaged(true);
         }
 
         PauseTransition delay =
@@ -320,6 +333,7 @@ public class RequestCardController {
         delay.setOnFinished(e -> {
             if (errorLabel != null) {
                 errorLabel.setVisible(false);
+                errorLabel.setManaged(false);
             }
         });
 
