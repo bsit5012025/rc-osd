@@ -243,6 +243,8 @@ public class RequestControllerTest {
 
         verify(mockRequestFacade, atLeastOnce()).getAllRequestByStatus(RequestStatus.PENDING);
 
+        WaitForAsyncUtils.waitForFxEvents();
+
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertTrue(listContainer.getChildren().size() >= 2,
                 "Pending tab should show at least 2 request");
@@ -256,6 +258,8 @@ public class RequestControllerTest {
 
         verify(mockRequestFacade, atLeastOnce()).getAllRequestByStatus(RequestStatus.DENIED);
 
+        WaitForAsyncUtils.waitForFxEvents();
+
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertFalse(listContainer.getChildren().isEmpty(),
                 "Denied tab should not be empty");
@@ -268,6 +272,8 @@ public class RequestControllerTest {
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockRequestFacade, atLeastOnce()).getAllRequestByStatus(RequestStatus.APPROVED);
+
+        WaitForAsyncUtils.waitForFxEvents();
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertFalse(listContainer.getChildren().isEmpty(),
@@ -297,9 +303,10 @@ public class RequestControllerTest {
         robot.clickOn(commentArea).write("Denial remarks");
         WaitForAsyncUtils.waitForFxEvents();
 
+        assertEquals("Denial remarks", commentArea.getText());
+
         doAnswer(invocation -> {
             long requestId = invocation.getArgument(0);
-            System.out.println(requestId);
             pendingRequests.removeIf(a -> a.getRequestID() == requestId);
             deniedRequests.add( createRequest(
                     requestId,
@@ -318,15 +325,19 @@ public class RequestControllerTest {
                 eq(RequestStatus.DENIED)
         );
 
+        WaitForAsyncUtils.waitForFxEvents();
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
+        WaitForAsyncUtils.waitForFxEvents();
 
         clickPopupButton(robot, "#confirmButton");
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn("#deniedTab");
         WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockRequestFacade, atLeastOnce()).updateRequestStatus(
                 eq(1L),
@@ -360,9 +371,10 @@ public class RequestControllerTest {
         robot.clickOn(commentArea).write("Approve remarks");
         WaitForAsyncUtils.waitForFxEvents();
 
+        assertEquals("Approve remarks", commentArea.getText());
+
         doAnswer(invocation -> {
             long requestId = invocation.getArgument(0);
-            System.out.println(requestId);
             pendingRequests.removeIf(a -> a.getRequestID() == requestId);
             approvedRequests.add( createRequest(
                     requestId,
@@ -382,14 +394,17 @@ public class RequestControllerTest {
         );
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
+        WaitForAsyncUtils.waitForFxEvents();
 
         clickPopupButton(robot, "#confirmButton");
+        WaitForAsyncUtils.waitForFxEvents();
 
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn("#approvedTab");
         WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockRequestFacade, atLeastOnce()).updateRequestStatus(
                 eq(1L),
@@ -408,6 +423,8 @@ public class RequestControllerTest {
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertFalse(listContainer.getChildren().isEmpty(), "Should have pending request");
+        WaitForAsyncUtils.waitForFxEvents();
+
 
         Node firstCard = listContainer.getChildren().get(0);
 
@@ -417,6 +434,7 @@ public class RequestControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue(robot.from(firstCard).lookup("#expandedSection").tryQuery().isPresent(),
                 "Expanded section should be present in DOM after click");
@@ -444,6 +462,7 @@ public class RequestControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
@@ -451,6 +470,7 @@ public class RequestControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
+        WaitForAsyncUtils.waitForFxEvents();
 
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
