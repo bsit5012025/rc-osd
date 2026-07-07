@@ -300,7 +300,15 @@ public class RequestControllerTest {
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
-        robot.clickOn(commentArea).write("Denial remarks");
+        robot.interact(() -> commentArea.clear());
+        WaitForAsyncUtils.waitForFxEvents();
+
+        robot.clickOn(commentArea);
+        WaitForAsyncUtils.waitForFxEvents();
+
+        WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
+
+        robot.write("Denial remarks");
         WaitForAsyncUtils.waitForFxEvents();
 
         assertEquals("Denial remarks", commentArea.getText());
@@ -368,7 +376,15 @@ public class RequestControllerTest {
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
-        robot.clickOn(commentArea).write("Approve remarks");
+        robot.interact(() -> commentArea.clear());
+        WaitForAsyncUtils.waitForFxEvents();
+
+        robot.clickOn(commentArea);
+        WaitForAsyncUtils.waitForFxEvents();
+
+        WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
+
+        robot.write("Approve remarks");
         WaitForAsyncUtils.waitForFxEvents();
 
         assertEquals("Approve remarks", commentArea.getText());
