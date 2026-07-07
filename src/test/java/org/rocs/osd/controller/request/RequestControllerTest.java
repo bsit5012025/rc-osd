@@ -308,9 +308,9 @@ public class RequestControllerTest {
 
         WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
 
-        robot.write("Denial remarks");
+        robot.interact(() -> commentArea.setText("Denial remarks"));
         WaitForAsyncUtils.waitForFxEvents();
-
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
         assertEquals("Denial remarks", commentArea.getText());
 
         doAnswer(invocation -> {
@@ -384,9 +384,9 @@ public class RequestControllerTest {
 
         WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
 
-        robot.write("Approve remarks");
+        robot.interact(() -> commentArea.setText("Approve remarks"));
         WaitForAsyncUtils.waitForFxEvents();
-
+        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
         assertEquals("Approve remarks", commentArea.getText());
 
         doAnswer(invocation -> {
