@@ -1,5 +1,6 @@
 package org.rocs.osd.controller.appeal;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -9,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,11 +48,20 @@ public class AppealControllerTest {
     private List<Appeal> approvedAppeals;
     private List<Appeal> deniedAppeals;
 
+    private Runnable capturedConfirmAction;
+    private Runnable capturedCancelAction;
+
     @Start
     public void start(Stage stage) throws Exception {
         mockAppealFacade = Mockito.mock(AppealFacade.class);
         mockRecordFacade = Mockito.mock(RecordFacade.class);
         setupMockData();
+
+        AppealCardController.ConfirmationProvider mockConfirmProvider =
+                (l1, l2, confirmTxt, cancelTxt, onConfirm, onCancel) -> {
+                    capturedConfirmAction = () -> Platform.runLater(onConfirm);
+                    capturedCancelAction = () -> Platform.runLater(onCancel);
+                };
 
         javafx.util.Callback<Class<?>, Object> controllerFactory = controllerClass -> {
             if (controllerClass == CenterDashboardController.class) {
@@ -72,6 +81,7 @@ public class AppealControllerTest {
             if (controllerClass == AppealCardController.class) {
                 AppealCardController cardController = new AppealCardController();
                 cardController.setAppealFacade(mockAppealFacade);
+                cardController.setConfirmationProvider(mockConfirmProvider);
                 return cardController;
             }
             if (controllerClass == org.rocs.osd.controller.student.StudentController.class) {
@@ -141,6 +151,8 @@ public class AppealControllerTest {
         Thread.setDefaultUncaughtExceptionHandler(
                 (t, e) -> e.printStackTrace()
         );
+        capturedConfirmAction = null;
+        capturedCancelAction = null;
     }
 
     @AfterEach
@@ -410,10 +422,10 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        clickPopupButton(robot, "#confirmButton");
-
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
+        assertNotNull(capturedConfirmAction, "Confirm action should be captured");
+        capturedConfirmAction.run();
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, atLeastOnce()).approveAppeal(eq(1L), eq("Approval remarks"));
         assertEquals(initialPendingCount - 1, pendingAppeals.size(),
@@ -442,10 +454,10 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        clickPopupButton(robot, "#cancelButton");
-
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
+        assertNotNull(capturedCancelAction, "Cancel action should be captured");
+        capturedCancelAction.run();
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
         assertEquals(initialCount, pendingAppeals.size(),
@@ -491,10 +503,10 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        clickPopupButton(robot, "#confirmButton");
-
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
+        assertNotNull(capturedConfirmAction, "Confirm action should be captured");
+        capturedConfirmAction.run();
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, atLeastOnce()).denyAppeal(eq(1L), eq("Denial remarks"));
         assertEquals(initialPendingCount - 1, pendingAppeals.size(),
@@ -528,105 +540,13 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        clickPopupButton(robot, "#cancelButton");
-
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
+        assertNotNull(capturedCancelAction, "Cancel action should be captured");
+        capturedCancelAction.run();
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals(initialCount, pendingAppeals.size(),
                 "Pending count should remain unchanged after cancel");
-    }
-
-    private Stage findPopupStage(FxRobot robot) {
-        for (javafx.stage.Window window : robot.listWindows()) {
-            if (window instanceof Stage stage) {
-                if (!stage.isShowing()) continue;
-                if (stage.getScene() == null) continue;
-                if (stage.getStyle() != StageStyle.UNDECORATED) continue;
-
-                Parent root = stage.getScene().getRoot();
-                if (root == null) continue;
-
-                root.applyCss();
-                root.layout();
-
-                Node confirm = root.lookup("#confirmButton");
-                Node cancel = root.lookup("#cancelButton");
-
-                if ((confirm != null) || (cancel != null)) {
-                    return stage;
-                }
-            }
-        }
-        return null;
-    }
-
-    private void clickPopupButton(FxRobot robot, String fxId) {
-        Stage popup = null;
-        long stageDeadline = System.currentTimeMillis() + 20000;
-
-        while (popup == null && System.currentTimeMillis() < stageDeadline) {
-            popup = findPopupStage(robot);
-            if (popup == null) {
-                WaitForAsyncUtils.waitForFxEvents();
-                WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
-            }
-        }
-
-        if (popup == null) {
-            StringBuilder sb = new StringBuilder("Available windows:");
-            for (javafx.stage.Window w : robot.listWindows()) {
-                if (w instanceof Stage s) {
-                    sb.append(" Stage[style=").append(s.getStyle())
-                            .append(",showing=").append(s.isShowing())
-                            .append(",scene=").append(s.getScene() != null)
-                            .append("]");
-                }
-            }
-            fail("Confirmation popup should have appeared." + sb);
-        }
-
-        Node buttonNode = null;
-        long buttonDeadline = System.currentTimeMillis() + 15000;
-        while (buttonNode == null && System.currentTimeMillis() < buttonDeadline) {
-            try {
-                Parent root = popup.getScene().getRoot();
-                if (root != null) {
-                    root.applyCss();
-                    root.layout();
-                    buttonNode = root.lookup(fxId);
-                }
-            } catch (Exception ignored) {}
-            if (buttonNode == null) {
-                WaitForAsyncUtils.waitForFxEvents();
-                WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
-            }
-        }
-
-        if (buttonNode == null) {
-            Parent root = popup.getScene().getRoot();
-            fail("Button " + fxId + " not found in popup. Root: " + root);
-        }
-
-        assertTrue(buttonNode instanceof Button, "Node " + fxId + " is not a Button");
-
-        Stage finalPopup = popup;
-        robot.interact(() -> {
-            finalPopup.toFront();
-            finalPopup.requestFocus();
-            if (finalPopup.getScene() != null && finalPopup.getScene().getRoot() != null) {
-                Parent root = finalPopup.getScene().getRoot();
-                root.requestFocus();
-                root.applyCss();
-                root.layout();
-            }
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
-
-        robot.clickOn(buttonNode);
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
     }
 }
