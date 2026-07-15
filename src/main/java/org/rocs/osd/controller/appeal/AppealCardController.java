@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.facade.appeal.AppealFacade;
@@ -78,6 +79,9 @@ public class AppealCardController {
     /** Facade used to communicate with the appeal business logic. */
     private AppealFacade appealFacade;
 
+    @FXML
+    private Button arrowButton;
+
     /**
      * Initializes the controller.
      * Sets default visibility and managed states
@@ -88,45 +92,27 @@ public class AppealCardController {
     public void initialize() {
 
         if (expandedSection != null) {
-
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
-
-            expandedSection.managedProperty().bind(
-                    expandedSection.visibleProperty());
         }
 
         if (actionBar != null) {
-
             actionBar.setVisible(false);
             actionBar.setManaged(false);
-
-            actionBar.managedProperty().bind(
-                    actionBar.visibleProperty());
         }
 
         if (popupBox != null) {
-
             popupBox.setVisible(false);
             popupBox.setManaged(false);
-
-            popupBox.managedProperty().bind(
-                    popupBox.visibleProperty());
         }
 
         if (errorLabel != null) {
-
             errorLabel.setText("");
-
             errorLabel.setVisible(false);
             errorLabel.setManaged(false);
-
-            errorLabel.managedProperty().bind(
-                    errorLabel.visibleProperty());
         }
 
         if (arrowButton != null) {
-
             arrowButton.setMinSize(30, 30);
             arrowButton.setPrefSize(30, 30);
         }
@@ -210,9 +196,6 @@ public class AppealCardController {
                 });
     }
 
-    @FXML
-    private Button arrowButton;
-
     /**
      * Loads and displays the universal confirmation dialog.
      * @param l1 First line of the message.
@@ -264,6 +247,16 @@ public class AppealCardController {
 
             Stage stage = new Stage();
 
+            Window owner = null;
+            if (arrowButton != null && arrowButton.getScene() != null) {
+                owner = arrowButton.getScene().getWindow();
+            } else if (expandedSection != null && expandedSection.getScene() != null) {
+                owner = expandedSection.getScene().getWindow();
+            }
+            if (owner != null) {
+                stage.initOwner(owner);
+            }
+
             stage.initStyle(StageStyle.UNDECORATED);
 
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -304,6 +297,7 @@ public class AppealCardController {
         if (popupBox != null) {
 
             popupBox.setVisible(true);
+            popupBox.setManaged(true);
 
             popupBox.applyCss();
             popupBox.layout();
@@ -327,6 +321,7 @@ public class AppealCardController {
         errorLabel.setText(msg);
 
         errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
 
         errorLabel.applyCss();
         errorLabel.layout();
@@ -379,6 +374,7 @@ public class AppealCardController {
 
         if (expandedSection != null) {
             expandedSection.setVisible(isExpanded);
+            expandedSection.setManaged(isExpanded);
         }
 
         if (actionBar != null) {
@@ -389,6 +385,7 @@ public class AppealCardController {
                             && "PENDING".equals(appeal.getStatus());
 
             actionBar.setVisible(shouldShow);
+            actionBar.setManaged(shouldShow);
         }
 
         updateIcon();
