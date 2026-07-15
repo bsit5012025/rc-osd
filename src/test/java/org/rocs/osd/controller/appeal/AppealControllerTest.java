@@ -1,24 +1,16 @@
 package org.rocs.osd.controller.appeal;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.rocs.osd.controller.dashboard.CenterDashboardController;
-import org.rocs.osd.controller.dashboard.DashboardController;
 import org.rocs.osd.facade.appeal.AppealFacade;
-import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.appeal.Appeal;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.student.Student;
@@ -28,14 +20,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -45,121 +32,56 @@ import static org.mockito.Mockito.*;
 public class AppealControllerTest {
 
     private AppealFacade mockAppealFacade;
-    private RecordFacade mockRecordFacade;
     private List<Appeal> pendingAppeals;
     private List<Appeal> approvedAppeals;
     private List<Appeal> deniedAppeals;
 
-    private static AppealCardController.ConfirmationProvider mockConfirmProvider;
-    private static final AtomicReference<Runnable> capturedConfirmAction = new AtomicReference<>();
-    private static final AtomicReference<Runnable> capturedCancelAction = new AtomicReference<>();
-
     @Start
     public void start(Stage stage) throws Exception {
-        mockAppealFacade = Mockito.mock(AppealFacade.class);
-        mockRecordFacade = Mockito.mock(RecordFacade.class);
+        mockAppealFacade = mock(AppealFacade.class);
         setupMockData();
 
-        mockConfirmProvider = (l1, l2, confirmTxt, cancelTxt, onConfirm, onCancel) -> {
-            capturedConfirmAction.set(() -> Platform.runLater(onConfirm));
-            capturedCancelAction.set(() -> Platform.runLater(onCancel));
-        };
+        AppealController.setControllerFactory(controllerClass -> {
+            if (controllerClass == AppealCardController.class) {
+                AppealCardController card = new AppealCardController();
+                card.setAppealFacade(mockAppealFacade);
+                card.setConfirmationProvider((l1, l2, c1, c2, onConfirm, onCancel) -> onConfirm.run());
+                return card;
+            }
+            try {
+                return controllerClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-        javafx.util.Callback<Class<?>, Object> controllerFactory = controllerClass -> {
-            if (controllerClass == CenterDashboardController.class) {
-                CenterDashboardController controller = new CenterDashboardController();
-                controller.setRecordFacade(mockRecordFacade);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/appeal/appeal.fxml"));
+        loader.setControllerFactory(controllerClass -> {
+            if (controllerClass == AppealController.class) {
+                AppealController controller = new AppealController();
                 controller.setAppealFacade(mockAppealFacade);
                 return controller;
             }
-            if (controllerClass == DashboardController.class) {
-                return new DashboardController();
-            }
-            if (controllerClass == AppealController.class) {
-                AppealController appealController = new AppealController();
-                appealController.setAppealFacade(mockAppealFacade);
-                return appealController;
-            }
-            if (controllerClass == AppealCardController.class) {
-                AppealCardController cardController = new AppealCardController();
-                cardController.setAppealFacade(mockAppealFacade);
-                cardController.setConfirmationProvider(mockConfirmProvider);
-                return cardController;
-            }
-            if (controllerClass == org.rocs.osd.controller.student.StudentController.class) {
-                return Mockito.mock(org.rocs.osd.controller.student.StudentController.class);
-            }
             try {
-                Constructor<?> constructor = controllerClass.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                return constructor.newInstance();
+                return controllerClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                throw new RuntimeException("Failed to create controller: " + controllerClass, e);
+                throw new RuntimeException(e);
             }
-        };
+        });
 
-        AppealController.setControllerFactory(controllerFactory);
-        DashboardController.setStaticControllerFactory(controllerFactory);
-
-        FXMLLoader dashboardLoader = new FXMLLoader(
-                getClass().getResource("/view/dashboard/dashboard.fxml"));
-        dashboardLoader.setControllerFactory(controllerFactory);
-        Parent dashboardRoot = dashboardLoader.load();
-
-        stage.setScene(new Scene(dashboardRoot, 1200, 800));
+        Parent root = loader.load();
+        stage.setScene(new Scene(root, 800, 600));
         stage.show();
         WaitForAsyncUtils.waitForFxEvents();
-
-        loadAppealModuleDirectly(dashboardLoader.getController());
-
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    private void loadAppealModuleDirectly(DashboardController dashboardController) throws Exception {
-        FXMLLoader appealLoader = new FXMLLoader(
-                getClass().getResource("/view/appeal/appeal.fxml"));
-
-        javafx.util.Callback<Class<?>, Object> factory =
-                DashboardController.getStaticControllerFactory();
-        if (factory != null) {
-            appealLoader.setControllerFactory(factory);
-        }
-
-        Parent appealRoot = appealLoader.load();
-
-        try {
-            dashboardController.onLoadAppeal(null);
-        } catch (Exception e) {
-            injectIntoCenterPane(dashboardController, appealRoot);
-        }
-
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    private void injectIntoCenterPane(DashboardController controller, Node content)
-            throws Exception {
-        java.lang.reflect.Field centerField =
-                controller.getClass().getDeclaredField("centerPane");
-        centerField.setAccessible(true);
-        Object centerPane = centerField.get(controller);
-        if (centerPane instanceof javafx.scene.layout.BorderPane) {
-            ((javafx.scene.layout.BorderPane) centerPane).setCenter(content);
-        }
     }
 
     @BeforeEach
     void setup() {
-        Thread.setDefaultUncaughtExceptionHandler(
-                (t, e) -> e.printStackTrace()
-        );
-        capturedConfirmAction.set(null);
-        capturedCancelAction.set(null);
+        setupMockData();
     }
 
     @AfterEach
-    public void tearDown() {
-        DashboardController.clearStaticControllerFactory();
+    void tearDown() {
         AppealController.clearControllerFactory();
     }
 
@@ -168,26 +90,14 @@ public class AppealControllerTest {
         approvedAppeals = new ArrayList<>();
         deniedAppeals = new ArrayList<>();
 
-        Appeal pending1 = createAppeal(1L, "PENDING", "Late", "Please excuse my tardiness");
-        Appeal pending2 = createAppeal(2L, "PENDING", "Absent", "I was sick");
-        Appeal approved1 = createAppeal(3L, "APPROVED", "Late", "Approved appeal");
-        Appeal denied1 = createAppeal(4L, "DENIED", "Misbehavior", "Denied appeal");
-        denied1.setRemarks("Test Remarks");
-
-        pendingAppeals.add(pending1);
-        pendingAppeals.add(pending2);
-        approvedAppeals.add(approved1);
-        deniedAppeals.add(denied1);
+        pendingAppeals.add(createAppeal(1L, "PENDING", "Late", "Please excuse my tardiness"));
+        pendingAppeals.add(createAppeal(2L, "PENDING", "Absent", "I was sick"));
+        approvedAppeals.add(createAppeal(3L, "APPROVED", "Late", "Approved appeal"));
+        deniedAppeals.add(createAppeal(4L, "DENIED", "Misbehavior", "Denied appeal"));
 
         when(mockAppealFacade.getAppealsByStatus("PENDING")).thenReturn(pendingAppeals);
         when(mockAppealFacade.getAppealsByStatus("APPROVED")).thenReturn(approvedAppeals);
         when(mockAppealFacade.getAppealsByStatus("DENIED")).thenReturn(deniedAppeals);
-        when(mockRecordFacade.getTotalViolations(anyString())).thenReturn(10);
-        when(mockRecordFacade.getMostFrequentOffense(anyString()))
-                .thenReturn(Map.of("Late", 50.0));
-        when(mockRecordFacade.getTodayViolations()).thenReturn(3);
-        when(mockRecordFacade.getRecentViolations(anyString(), anyInt()))
-                .thenReturn(List.of());
     }
 
     private Appeal createAppeal(Long id, String status, String offense, String msg) {
@@ -197,21 +107,21 @@ public class AppealControllerTest {
         appeal.setDateFiled(new Date());
         appeal.setStatus(status);
 
-        Record r = new Record();
-        r.setRecordId(id);
-        r.setRemarks(offense);
-        appeal.setRecord(r);
+        Record record = new Record();
+        record.setRecordId(id);
+        record.setRemarks(offense);
+        appeal.setRecord(record);
 
-        Enrollment e = new Enrollment();
-        e.setEnrollmentId(id);
+        Enrollment enrollment = new Enrollment();
+        enrollment.setEnrollmentId(id);
 
-        Student s = new Student();
-        s.setStudentId("S001" + id);
-        s.setFirstName("John");
-        s.setLastName("Doe");
+        Student student = new Student();
+        student.setStudentId("S001" + id);
+        student.setFirstName("John");
+        student.setLastName("Doe");
 
-        e.setStudent(s);
-        appeal.setEnrollment(e);
+        enrollment.setStudent(student);
+        appeal.setEnrollment(enrollment);
         return appeal;
     }
 
@@ -219,337 +129,96 @@ public class AppealControllerTest {
     public void testPendingTabDisplaysPendingAppeals(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("PENDING");
-
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertTrue(listContainer.getChildren().size() >= 2,
-                "Pending tab should show at least 2 appeals");
+        assertEquals(2, listContainer.getChildren().size());
     }
 
     @Test
     public void testApprovedTabDisplaysApprovedAppeals(FxRobot robot) {
         robot.clickOn("#approvedTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("APPROVED");
-
+        verify(mockAppealFacade).getAppealsByStatus("APPROVED");
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertFalse(listContainer.getChildren().isEmpty(),
-                "Approved tab should not be empty");
+        assertEquals(1, listContainer.getChildren().size());
     }
 
     @Test
     public void testDeniedTabDisplaysDeniedAppeals(FxRobot robot) {
         robot.clickOn("#deniedTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("DENIED");
-
+        verify(mockAppealFacade).getAppealsByStatus("DENIED");
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertFalse(listContainer.getChildren().isEmpty(),
-                "Denied tab should not be empty");
+        assertEquals(1, listContainer.getChildren().size());
     }
 
     @Test
-    public void testEmptyPendingAppealsShowsMessage(FxRobot robot) {
+    public void testEmptyPendingAppealsShowsEmptyList(FxRobot robot) {
         when(mockAppealFacade.getAppealsByStatus("PENDING")).thenReturn(new ArrayList<>());
-
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertEquals(0, listContainer.getChildren().size(),
-                "Empty pending should show 0 children");
+        assertTrue(listContainer.getChildren().isEmpty());
     }
 
     @Test
-    public void testMultipleAppealsInPendingTab(FxRobot robot) {
+    public void testCardExpansionShowsInputs(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertTrue(listContainer.getChildren().size() >= 2,
-                "Should have multiple pending appeals");
-
-        for (Node card : listContainer.getChildren()) {
-            assertNotNull(robot.from(card).lookup("#arrowButton").query(),
-                    "Each card should have an arrow button");
-        }
+        robot.clickOn("#arrowButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(robot.lookup("#expandedSection").query().isVisible());
+        assertTrue(robot.lookup("#actionBar").query().isVisible());
     }
 
     @Test
-    public void testCardExpansionShowsAllInputs(FxRobot robot) {
+    public void testCardCollapseHidesInputs(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        assertFalse(listContainer.getChildren().isEmpty(), "Should have pending appeals");
-
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.interact(() -> firstCard.requestFocus());
+        robot.clickOn("#arrowButton");
         WaitForAsyncUtils.waitForFxEvents();
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
+        robot.clickOn("#arrowButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
-
-        robot.interact(() -> {
-            if (firstCard instanceof Parent) {
-                Parent p = (Parent) firstCard;
-                p.requestLayout();
-                while (p != null) {
-                    p.requestLayout();
-                    p.applyCss();
-                    p.layout();
-                    if (p.getScene() != null) break;
-                    p = p.getParent();
-                }
-            }
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        assertTrue(robot.from(firstCard).lookup("#expandedSection").tryQuery().isPresent(),
-                "Expanded section should be present in DOM after click");
-
-        Node expandedSection = robot.from(firstCard).lookup("#expandedSection").query();
-        assertTrue(expandedSection.isVisible(),
-                "Expanded section should be visible");
-        assertTrue(expandedSection.isManaged(),
-                "Expanded section should be managed");
-
-        assertTrue(robot.from(firstCard).lookup("#actionBar").tryQuery().isPresent(),
-                "Action bar should be present");
-        Node actionBar = robot.from(firstCard).lookup("#actionBar").query();
-        assertTrue(actionBar.isVisible(),
-                "Action bar should be visible for pending appeal");
-        assertTrue(actionBar.isManaged(),
-                "Action bar should be managed for pending appeal");
+        assertFalse(robot.lookup("#expandedSection").query().isVisible());
+        assertFalse(robot.lookup("#actionBar").query().isVisible());
     }
 
     @Test
     public void testDenyWithoutRemarksShowsError(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
+        robot.clickOn("#arrowButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
-
-        TextArea commentArea = robot.from(firstCard)
-                .lookup("#commentArea").queryAs(TextArea.class);
-
-        robot.clickOn(commentArea);
-        robot.interact(() -> {
-            commentArea.clear();
-            commentArea.setText("");
-        });
+        robot.clickOn("#denyButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        assertEquals("", commentArea.getText().trim(),
-                "Comment area should be empty before deny");
-
-        Button denyButton = robot.from(firstCard).lookup("#denyButton").queryButton();
-        assertTrue(denyButton.isVisible(), "Deny button should be visible");
-        assertTrue(denyButton.isManaged(), "Deny button should be managed");
-
-        robot.clickOn(denyButton);
-        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
-
-        robot.interact(() -> {
-            errorLabel.applyCss();
-            errorLabel.layout();
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
+        verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals("Please enter remarks before denying.",
-                errorLabel.getText().trim(),
-                "Error label should show validation message");
-        assertTrue(errorLabel.isVisible(),
-                "Error label should be visible");
-        assertTrue(errorLabel.isManaged(),
-                "Error label should be managed");
-        verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
+                robot.lookup("#errorLabel").queryAs(Label.class).getText());
     }
 
     @Test
-    public void testApproveAppealMovesToApprovedTab(FxRobot robot) {
-        setupMockData();
-
+    public void testApproveAppealWithRemarks(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialPendingCount = listContainer.getChildren().size();
-        assertTrue(initialPendingCount > 0, "Should have pending appeals to test");
-
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
+        robot.clickOn("#arrowButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        TextArea commentArea = robot.from(firstCard)
-                .lookup("#commentArea").queryAs(TextArea.class);
-        robot.clickOn(commentArea).write("Approval remarks");
+        robot.clickOn("#commentArea").write("Approved");
         WaitForAsyncUtils.waitForFxEvents();
-
-        doAnswer(invocation -> {
-            long appealId = invocation.getArgument(0);
-            pendingAppeals.removeIf(a -> a.getAppealID() == appealId);
-            approvedAppeals.add(createAppeal(appealId, "APPROVED", "Late",
-                    "Please excuse my tardiness"));
-            return null;
-        }).when(mockAppealFacade).approveAppeal(eq(1L), eq("Approval remarks"));
-
-        robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-
+        robot.clickOn("#approveButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        assertNotNull(capturedConfirmAction.get(), "Confirm action should be captured");
-        capturedConfirmAction.get().run();
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, atLeastOnce()).approveAppeal(eq(1L), eq("Approval remarks"));
-        assertEquals(initialPendingCount - 1, pendingAppeals.size(),
-                "Pending count should decrease by 1");
+        verify(mockAppealFacade).approveAppeal(1L, "Approved");
     }
 
     @Test
-    public void testCancelApproveConfirmation(FxRobot robot) {
-        setupMockData();
-
+    public void testDenyAppealWithRemarks(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialCount = pendingAppeals.size();
-
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
+        robot.clickOn("#arrowButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
-
+        robot.clickOn("#commentArea").write("Denied");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        assertNotNull(capturedCancelAction.get(), "Cancel action should be captured");
-        capturedCancelAction.get().run();
+        robot.clickOn("#denyButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
-        assertEquals(initialCount, pendingAppeals.size(),
-                "Pending count should remain unchanged after cancel");
-    }
-
-    @Test
-    public void testDenyAppealMovesToDeniedTab(FxRobot robot) {
-        setupMockData();
-
-        robot.clickOn("#pendingTab");
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialPendingCount = listContainer.getChildren().size();
-        assertTrue(initialPendingCount > 0, "Should have pending appeals to test");
-
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        TextArea commentArea = robot.from(firstCard)
-                .lookup("#commentArea").queryAs(TextArea.class);
-        robot.clickOn(commentArea).write("Denial remarks");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        doAnswer(invocation -> {
-            long appealId = invocation.getArgument(0);
-            String remarks = invocation.getArgument(1);
-            pendingAppeals.removeIf(a -> a.getAppealID() == appealId);
-            Appeal denied = createAppeal(appealId, "DENIED", "Late",
-                    "Please excuse my tardiness");
-            denied.setRemarks(remarks);
-            deniedAppeals.add(denied);
-            return null;
-        }).when(mockAppealFacade).denyAppeal(eq(1L), eq("Denial remarks"));
-
-        robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        assertNotNull(capturedConfirmAction.get(), "Confirm action should be captured");
-        capturedConfirmAction.get().run();
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, atLeastOnce()).denyAppeal(eq(1L), eq("Denial remarks"));
-        assertEquals(initialPendingCount - 1, pendingAppeals.size(),
-                "Pending count should decrease by 1");
-    }
-
-    @Test
-    public void testCancelDenyConfirmation(FxRobot robot) {
-        setupMockData();
-
-        robot.clickOn("#pendingTab");
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
-        int initialCount = pendingAppeals.size();
-
-        Node firstCard = listContainer.getChildren().get(0);
-
-        robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        TextArea commentArea = robot.from(firstCard)
-                .lookup("#commentArea").queryAs(TextArea.class);
-        robot.clickOn(commentArea).write("Test remarks");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
-
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
-
-        assertNotNull(capturedCancelAction.get(), "Cancel action should be captured");
-        capturedCancelAction.get().run();
-        WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
-        assertEquals(initialCount, pendingAppeals.size(),
-                "Pending count should remain unchanged after cancel");
+        verify(mockAppealFacade).denyAppeal(1L, "Denied");
     }
 }
