@@ -90,7 +90,6 @@ public class AppealCardController {
      */
     @FXML
     public void initialize() {
-
         if (expandedSection != null) {
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
@@ -169,9 +168,7 @@ public class AppealCardController {
     public void handleAppealApprove() {
         showConfirmation("Are you sure you want to", "approve this appeal?",
                 "Approve", "Cancel", () -> {
-                    String remarks = (
-                            commentArea != null
-                                    && !commentArea.getText().trim().isEmpty())
+                    String remarks = (commentArea != null && !commentArea.getText().trim().isEmpty())
                             ? commentArea.getText() : null;
                     getAppealFacade().approveAppeal(appeal.getAppealID(), remarks);
                     showPopupAndRemoveCard("Appeal approved!");
@@ -190,8 +187,7 @@ public class AppealCardController {
         }
         showConfirmation("Are you sure you want to", "deny this appeal?",
                 "Deny", "Cancel", () -> {
-                    getAppealFacade().denyAppeal(
-                            appeal.getAppealID(), commentArea.getText());
+                    getAppealFacade().denyAppeal(appeal.getAppealID(), commentArea.getText());
                     showPopupAndRemoveCard("Appeal denied!");
                 });
     }
@@ -204,15 +200,9 @@ public class AppealCardController {
      * @param cancelTxt Text for the cancel button.
      * @param action The logic to execute if the user confirms.
      */
-    private void showConfirmation(
-            String l1,
-            String l2,
-            String confirmTxt,
-            String cancelTxt,
-            Runnable action) {
-
+    private void showConfirmation(String l1, String l2, String confirmTxt,
+                                  String cancelTxt, Runnable action) {
         try {
-
             FXMLLoader loader = new FXMLLoader(
                     java.util.Objects.requireNonNull(
                             getClass().getResource("/view/dialogs/confirmation.fxml"),
@@ -222,13 +212,10 @@ public class AppealCardController {
 
             StackPane rootNode = loader.load();
 
-            ConfirmationDialogController controller =
-                    loader.getController();
+            ConfirmationDialogController controller = loader.getController();
 
             controller.setMessage(l1, l2);
-
             controller.setButtonLabels(confirmTxt, cancelTxt);
-
             controller.setOnConfirm(action);
 
             rootNode.applyCss();
@@ -247,15 +234,11 @@ public class AppealCardController {
             }
 
             stage.initStyle(StageStyle.UNDECORATED);
-
             stage.initModality(Modality.APPLICATION_MODAL);
 
             Scene scene = new Scene(rootNode);
-
             scene.setFill(null);
-
             stage.setScene(scene);
-
             stage.sizeToScene();
 
             rootNode.applyCss();
@@ -263,15 +246,14 @@ public class AppealCardController {
 
             stage.show();
 
+            stage.toFront();
             rootNode.requestFocus();
+            rootNode.applyCss();
+            rootNode.layout();
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
-            throw new RuntimeException(
-                    "Failed to load confirmation dialog",
-                    e);
+            throw new RuntimeException("Failed to load confirmation dialog", e);
         }
     }
 
@@ -280,16 +262,13 @@ public class AppealCardController {
      * @param msg The message to display (e.g., "Appeal approved!").
      */
     private void showPopupAndRemoveCard(String msg) {
-
         if (popupLabel != null) {
             popupLabel.setText(msg);
         }
 
         if (popupBox != null) {
-
             popupBox.setVisible(true);
             popupBox.setManaged(true);
-
             popupBox.applyCss();
             popupBox.layout();
         }
@@ -300,17 +279,25 @@ public class AppealCardController {
     }
 
     /**
-     * Displays an error message temporarily on the card.
+     * Displays an error message on the card.
+     * @param msg The error message to show.
+     */
+    /**
+     * Displays an error message on the card.
      * @param msg The error message to show.
      */
     private void showError(String msg) {
-
         if (errorLabel == null) {
+            System.err.println("ERROR: errorLabel is null in showError");
+            return;
+        }
+
+        if (!javafx.application.Platform.isFxApplicationThread()) {
+            javafx.application.Platform.runLater(() -> showError(msg));
             return;
         }
 
         errorLabel.setText(msg);
-
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
 
@@ -318,11 +305,20 @@ public class AppealCardController {
         errorLabel.layout();
 
         Parent parent = errorLabel.getParent();
-
-        if (parent != null) {
+        while (parent != null) {
             parent.requestLayout();
             parent.applyCss();
             parent.layout();
+            if (parent.getScene() != null) {
+                Scene scene = parent.getScene();
+                if (scene.getRoot() != null) {
+                    scene.getRoot().requestLayout();
+                    scene.getRoot().applyCss();
+                    scene.getRoot().layout();
+                }
+                break;
+            }
+            parent = parent.getParent();
         }
     }
 
@@ -340,8 +336,7 @@ public class AppealCardController {
             }
 
             if (studentNameLabel != null) {
-                studentNameLabel.setText(
-                        s.getFirstName() + " " + s.getLastName());
+                studentNameLabel.setText(s.getFirstName() + " " + s.getLastName());
             }
 
             if (offenseLabel != null) {
@@ -360,7 +355,6 @@ public class AppealCardController {
      */
     @FXML
     public void toggleExpansion() {
-
         isExpanded = !isExpanded;
 
         if (expandedSection != null) {
@@ -369,12 +363,8 @@ public class AppealCardController {
         }
 
         if (actionBar != null) {
-
-            boolean shouldShow =
-                    isExpanded
-                            && appeal != null
-                            && "PENDING".equals(appeal.getStatus());
-
+            boolean shouldShow = isExpanded && appeal != null
+                    && "PENDING".equals(appeal.getStatus());
             actionBar.setVisible(shouldShow);
             actionBar.setManaged(shouldShow);
         }
@@ -391,14 +381,15 @@ public class AppealCardController {
             actionBar.layout();
         }
 
-        Parent parent = expandedSection != null
-                ? expandedSection.getParent()
-                : null;
-
-        if (parent != null) {
+        Parent parent = expandedSection != null ? expandedSection.getParent() : null;
+        while (parent != null) {
             parent.requestLayout();
             parent.applyCss();
             parent.layout();
+            if (parent.getScene() != null) {
+                break;
+            }
+            parent = parent.getParent();
         }
     }
 
@@ -407,8 +398,7 @@ public class AppealCardController {
      */
     private void updateIcon() {
         if (arrowIcon != null) {
-            String path = isExpanded ? "/assets/downButton.png"
-                    : "/assets/rightButton.png";
+            String path = isExpanded ? "/assets/downButton.png" : "/assets/rightButton.png";
             try {
                 Image newImage = new Image(getClass().getResourceAsStream(path));
                 if (newImage.isError()) {

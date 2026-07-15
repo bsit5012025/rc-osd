@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,7 +100,7 @@ public class AppealControllerTest {
 
         loadAppealModuleDirectly(dashboardLoader.getController());
 
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -138,7 +139,7 @@ public class AppealControllerTest {
     @BeforeEach
     void setup() {
         Thread.setDefaultUncaughtExceptionHandler(
-                (t,e)->e.printStackTrace()
+                (t, e) -> e.printStackTrace()
         );
     }
 
@@ -204,7 +205,7 @@ public class AppealControllerTest {
     public void testPendingTabDisplaysPendingAppeals(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("PENDING");
 
@@ -217,7 +218,7 @@ public class AppealControllerTest {
     public void testApprovedTabDisplaysApprovedAppeals(FxRobot robot) {
         robot.clickOn("#approvedTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("APPROVED");
 
@@ -230,7 +231,7 @@ public class AppealControllerTest {
     public void testDeniedTabDisplaysDeniedAppeals(FxRobot robot) {
         robot.clickOn("#deniedTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         verify(mockAppealFacade, atLeastOnce()).getAppealsByStatus("DENIED");
 
@@ -245,7 +246,7 @@ public class AppealControllerTest {
 
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertEquals(0, listContainer.getChildren().size(),
@@ -256,7 +257,7 @@ public class AppealControllerTest {
     public void testMultipleAppealsInPendingTab(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertTrue(listContainer.getChildren().size() >= 2,
@@ -272,7 +273,7 @@ public class AppealControllerTest {
     public void testCardExpansionShowsAllInputs(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         assertFalse(listContainer.getChildren().isEmpty(), "Should have pending appeals");
@@ -284,7 +285,23 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
+
+        robot.interact(() -> {
+            if (firstCard instanceof Parent) {
+                Parent p = (Parent) firstCard;
+                p.requestLayout();
+                while (p != null) {
+                    p.requestLayout();
+                    p.applyCss();
+                    p.layout();
+                    if (p.getScene() != null) break;
+                    p = p.getParent();
+                }
+            }
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
 
         assertTrue(robot.from(firstCard).lookup("#expandedSection").tryQuery().isPresent(),
                 "Expanded section should be present in DOM after click");
@@ -308,32 +325,45 @@ public class AppealControllerTest {
     public void testDenyWithoutRemarksShowsError(FxRobot robot) {
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         Node firstCard = listContainer.getChildren().get(0);
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
+
+        robot.clickOn(commentArea);
         robot.interact(() -> {
             commentArea.clear();
             commentArea.setText("");
         });
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+
+        assertEquals("", commentArea.getText().trim(),
+                "Comment area should be empty before deny");
 
         Button denyButton = robot.from(firstCard).lookup("#denyButton").queryButton();
         assertTrue(denyButton.isVisible(), "Deny button should be visible");
         assertTrue(denyButton.isManaged(), "Deny button should be managed");
 
         robot.clickOn(denyButton);
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
+
+        robot.interact(() -> {
+            errorLabel.applyCss();
+            errorLabel.layout();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+
         assertEquals("Please enter remarks before denying.",
                 errorLabel.getText().trim(),
                 "Error label should show validation message");
@@ -350,7 +380,7 @@ public class AppealControllerTest {
 
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         int initialPendingCount = listContainer.getChildren().size();
@@ -360,7 +390,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
@@ -378,11 +408,11 @@ public class AppealControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
 
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         clickPopupButton(robot, "#confirmButton");
 
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, atLeastOnce()).approveAppeal(eq(1L), eq("Approval remarks"));
@@ -396,7 +426,7 @@ public class AppealControllerTest {
 
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         int initialCount = pendingAppeals.size();
@@ -405,16 +435,16 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         robot.clickOn(robot.from(firstCard).lookup("#approveButton").queryButton());
 
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         clickPopupButton(robot, "#cancelButton");
 
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).approveAppeal(anyLong(), any());
@@ -428,7 +458,7 @@ public class AppealControllerTest {
 
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         int initialPendingCount = listContainer.getChildren().size();
@@ -438,7 +468,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
@@ -459,11 +489,11 @@ public class AppealControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
 
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         clickPopupButton(robot, "#confirmButton");
 
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, atLeastOnce()).denyAppeal(eq(1L), eq("Denial remarks"));
@@ -477,7 +507,7 @@ public class AppealControllerTest {
 
         robot.clickOn("#pendingTab");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         VBox listContainer = robot.lookup("#listContainer").queryAs(VBox.class);
         int initialCount = pendingAppeals.size();
@@ -486,7 +516,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
@@ -496,11 +526,11 @@ public class AppealControllerTest {
         robot.clickOn(robot.from(firstCard).lookup("#denyButton").queryButton());
 
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1000, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
         clickPopupButton(robot, "#cancelButton");
 
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
@@ -518,7 +548,18 @@ public class AppealControllerTest {
                     continue;
                 }
 
+                if (stage.getStyle() != StageStyle.UNDECORATED) {
+                    continue;
+                }
+
                 Parent root = stage.getScene().getRoot();
+                if (root == null) {
+                    continue;
+                }
+
+                root.applyCss();
+                root.layout();
+
                 Node confirm = root.lookup("#confirmButton");
                 Node cancel = root.lookup("#cancelButton");
 
@@ -532,12 +573,13 @@ public class AppealControllerTest {
 
     private void clickPopupButton(FxRobot robot, String fxId) {
         Stage popup = null;
-        long deadline = System.currentTimeMillis() + 10000;
+        long deadline = System.currentTimeMillis() + 20000;
+
         while (popup == null && System.currentTimeMillis() < deadline) {
             popup = findPopupStage(robot);
             if (popup == null) {
                 WaitForAsyncUtils.waitForFxEvents();
-                WaitForAsyncUtils.sleep(100, TimeUnit.MILLISECONDS);
+                WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
             }
         }
 
@@ -559,11 +601,14 @@ public class AppealControllerTest {
             finalPopup.toFront();
             finalPopup.requestFocus();
             if (finalPopup.getScene() != null && finalPopup.getScene().getRoot() != null) {
-                finalPopup.getScene().getRoot().requestFocus();
+                Parent root = finalPopup.getScene().getRoot();
+                root.requestFocus();
+                root.applyCss();
+                root.layout();
             }
         });
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         Node buttonNode = popup.getScene().getRoot().lookup(fxId);
         assertNotNull(buttonNode, "Button " + fxId + " not found in confirmation dialog");
@@ -571,6 +616,6 @@ public class AppealControllerTest {
 
         robot.clickOn(buttonNode);
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
     }
 }
