@@ -1,5 +1,6 @@
 package org.rocs.osd.controller.appeal;
 
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -52,15 +53,14 @@ public class AppealCardController {
     /** Default provider that shows a real popup dialog. */
     private static final ConfirmationProvider DEFAULT_PROVIDER =
             (l1, l2, confirmTxt, cancelTxt, onConfirm, onCancel) -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(
-                            java.util.Objects.requireNonNull(
-                                    AppealCardController.class
-                                            .getResource(
-                                                    "/view/dialogs/confirmation.fxml"),
-                                    "Cannot find confirmation.fxml"
-                            )
-                    );
+    try {
+        FXMLLoader loader = new FXMLLoader(
+              java.util.Objects.requireNonNull(
+                   AppealCardController.class
+                           .getResource("/view/dialogs/confirmation.fxml"),
+                      "Cannot find confirmation.fxml"
+                )
+         );
                     StackPane rootNode = loader.load();
                     ConfirmationDialogController controller =
                             loader.getController();

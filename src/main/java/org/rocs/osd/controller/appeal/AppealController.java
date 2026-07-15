@@ -40,7 +40,8 @@ public class AppealController {
      * Sets the static controller factory for nested FXML loading.
      * @param factory the controller factory callback
      */
-    public static void setControllerFactory(Callback<Class<?>,Object> factory){
+    public static void setControllerFactory(
+            Callback<Class<?>, Object> factory) {
         controllerFactory = factory;
     }
 
