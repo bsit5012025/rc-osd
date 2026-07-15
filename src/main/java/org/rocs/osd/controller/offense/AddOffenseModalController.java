@@ -8,11 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -40,6 +43,7 @@ import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Controller for the "Add Offense"
@@ -81,6 +85,20 @@ public class AddOffenseModalController {
     /** Checkbox for notifying parents/guardian. */
     @FXML
     private CheckBox notifyParentsCheckBox;
+    /**
+     * Label to Show if student is
+     * found or there are any unexpected
+     * error.
+     */
+    @FXML
+    private Label studentResultLabel;
+    /**
+     * The container that holds
+     * studentIdTextField and studentResultLabel,
+     * allowing them to be added or removed.
+     */
+    @FXML
+    private VBox studentContainer;
 
     /** DAO for student operations. */
     private StudendDao studentDao;
@@ -112,9 +130,20 @@ public class AddOffenseModalController {
         recordFacade = new RecordFacadeImpl(dao);
         enrollmentDao = new EnrollmentDaoImpl();
         guardianFacade = new GuardianFacadeImpl();
+
         loadComboBoxData();
         autoSelectLevelOfOffense();
+
+        studentContainer.getChildren().remove(studentResultLabel);
         studentIdTextField.setOnAction(e -> autoDisplayStudentName());
+        studentIdTextField.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        autoDisplayStudentName();
+                    }
+                });
+
+        disableDateValidation();
     }
 
     /**
@@ -156,27 +185,64 @@ public class AddOffenseModalController {
     /**
      * Displays the student name based on the entered student ID.
      */
-    @FXML
     private void autoDisplayStudentName() {
-        String studentId = studentIdTextField.getText();
-        if (studentId.isEmpty()) {
-            return;
-        }
+        try {
+            String studentId = studentIdTextField.getText();
 
-        Student student = studentDao.findStudentWithRecordById(studentId);
-        if (student.getStudentId() != null) {
-            studentNameTextField.setText(student.getFirstName() + " "
-                    + student.getMiddleName() + " " + student.getLastName());
-        } else {
+            if (studentId.isBlank()) {
+                showStudentResult("Student ID is Blank!");
+
+                studentNameTextField.clear();
+                return;
+            }
+
+            Student student = studentDao.findStudentWithRecordById(studentId);
+
+            if (student != null) {
+                String fullName = student.getFirstName()
+                        + " "
+                        + student.getMiddleName()
+                        + " "
+                        + student.getLastName();
+
+                studentContainer.getChildren().remove(studentResultLabel);
+                studentNameTextField.setText(fullName);
+            } else {
+                studentNameTextField.clear();
+                showStudentResult("Student Not Found!");
+            }
+        } catch (Exception e) {
             studentNameTextField.clear();
+
+            showStudentResult("Error loading student data");
+
+            e.printStackTrace();
         }
     }
 
     /**
-     * Handles submission of the offense form. Validates input and
-     * opens a confirmation dialog before saving.
+     * Ensures the result label is visible and
+     * displays the provided message without causing errors.
      *
-     * @param event the action event triggered by the submit button.
+     * @param result String Message to display based on
+     *              the action performed.
+     */
+    private void showStudentResult(String result) {
+
+        if (!studentContainer.getChildren().contains(studentResultLabel)) {
+            studentContainer.getChildren().add(studentResultLabel);
+        }
+
+        studentResultLabel.setText(result);
+    }
+
+    /**
+     * Validates required input fields and opens
+     * a confirmation dialog to save the offense.
+     * If all fields are populated, the user is prompted to confirm the action.
+     * The record is only saved to the database
+     * if the user clicks the "Submit" button.
+     * @param event the action event triggered by clicking the submit button.
      */
     @FXML
     public void onSubmit(ActionEvent event) {
@@ -192,6 +258,8 @@ public class AddOffenseModalController {
         showConfirmation(
                 "Are you sure you want to",
                 "add this violation?",
+                "Submit", // Confirm Button
+                "Cancel", // Cancel Button
                 this::saveOffenseRecord
         );
     }
@@ -276,21 +344,26 @@ public class AddOffenseModalController {
     }
 
     /**
-     * Helper method to launch the reusable confirmation dialog.
-     * @param line1  The first line of the prompt message.
-     * @param line2  The second line of the prompt message.
-     * @param action The logic to execute if the user confirms.
+     * Helper method to launch the reusable
+     * confirmation dialog with custom labels.
+     * @param line1        The first line of the prompt message.
+     * @param line2        The second line of the prompt message.
+     * @param confirmLabel The text for the confirm button.
+     * @param cancelLabel  The text for the cancel button.
+     * @param action       The logic to execute if the user confirms.
      */
-    private void showConfirmation(String line1, String line2, Runnable action) {
+    private void showConfirmation(
+            String line1, String line2, String confirmLabel,
+            String cancelLabel, Runnable action) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/view/dialogs/confirmation.fxml"));
             Parent root = loader.load();
             ConfirmationDialogController controller = loader.getController();
             controller.setMessage(line1, line2);
-            controller.setButtonLabels("Submit", "Cancel");
-            controller.setOnConfirm(action);
 
+            controller.setButtonLabels(confirmLabel, cancelLabel);
+            controller.setOnConfirm(action);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
@@ -304,11 +377,39 @@ public class AddOffenseModalController {
     }
 
     /**
-     * Closes the modal when the cancel button is clicked.
-     * @param event action event from the cancel button.
+     * Triggers a confirmation dialog when the cancel button is clicked.
+     * If the user confirms (clicks "Yes"), the current modal is closed
+     * and any unsaved changes are discarded.
+     * @param event the action event triggered by the cancel button.
      */
+    @FXML
     public void onCancel(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        showConfirmation(
+                "Are you sure you want to",
+                "cancel?",
+                "Yes",
+                "No",
+                () -> {
+                    Stage stage = (Stage) (
+                            (Node) event.getSource()).getScene().getWindow();
+                    stage.close();
+                }
+        );
+    }
+
+    private void disableDateValidation() {
+
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
+                    setDisable(true);
+                }
+            }
+        });
+        datePicker.setValue(LocalDate.now());
     }
 }
