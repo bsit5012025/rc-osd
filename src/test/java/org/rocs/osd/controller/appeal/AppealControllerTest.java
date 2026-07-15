@@ -136,8 +136,10 @@ public class AppealControllerTest {
     }
 
     @BeforeEach
-    public void setUp() {
-        setupMockData();
+    void setup() {
+        Thread.setDefaultUncaughtExceptionHandler(
+                (t,e)->e.printStackTrace()
+        );
     }
 
     @AfterEach

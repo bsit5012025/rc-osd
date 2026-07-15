@@ -213,23 +213,12 @@ public class AppealCardController {
 
         try {
 
-            String path = "/view/dialogs/confirmation.fxml";
-
-            URL resource = getClass().getResource(path);
-
-            if (resource == null) {
-
-                path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
-
-                resource = getClass().getResource(path);
-            }
-
-            if (resource == null) {
-                throw new IOException(
-                        "confirmation.fxml not found in classpath");
-            }
-
-            FXMLLoader loader = new FXMLLoader(resource);
+            FXMLLoader loader = new FXMLLoader(
+                    java.util.Objects.requireNonNull(
+                            getClass().getResource("/view/dialogs/confirmation.fxml"),
+                            "Cannot find /view/dialogs/confirmation.fxml"
+                    )
+            );
 
             StackPane rootNode = loader.load();
 
@@ -276,7 +265,9 @@ public class AppealCardController {
 
             rootNode.requestFocus();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+
+            e.printStackTrace();
 
             throw new RuntimeException(
                     "Failed to load confirmation dialog",
