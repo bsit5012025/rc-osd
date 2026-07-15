@@ -34,6 +34,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -48,8 +50,9 @@ public class AppealControllerTest {
     private List<Appeal> approvedAppeals;
     private List<Appeal> deniedAppeals;
 
-    private Runnable capturedConfirmAction;
-    private Runnable capturedCancelAction;
+    private static AppealCardController.ConfirmationProvider mockConfirmProvider;
+    private static final AtomicReference<Runnable> capturedConfirmAction = new AtomicReference<>();
+    private static final AtomicReference<Runnable> capturedCancelAction = new AtomicReference<>();
 
     @Start
     public void start(Stage stage) throws Exception {
@@ -57,11 +60,10 @@ public class AppealControllerTest {
         mockRecordFacade = Mockito.mock(RecordFacade.class);
         setupMockData();
 
-        AppealCardController.ConfirmationProvider mockConfirmProvider =
-                (l1, l2, confirmTxt, cancelTxt, onConfirm, onCancel) -> {
-                    capturedConfirmAction = () -> Platform.runLater(onConfirm);
-                    capturedCancelAction = () -> Platform.runLater(onCancel);
-                };
+        mockConfirmProvider = (l1, l2, confirmTxt, cancelTxt, onConfirm, onCancel) -> {
+            capturedConfirmAction.set(() -> Platform.runLater(onConfirm));
+            capturedCancelAction.set(() -> Platform.runLater(onCancel));
+        };
 
         javafx.util.Callback<Class<?>, Object> controllerFactory = controllerClass -> {
             if (controllerClass == CenterDashboardController.class) {
@@ -151,8 +153,8 @@ public class AppealControllerTest {
         Thread.setDefaultUncaughtExceptionHandler(
                 (t, e) -> e.printStackTrace()
         );
-        capturedConfirmAction = null;
-        capturedCancelAction = null;
+        capturedConfirmAction.set(null);
+        capturedCancelAction.set(null);
     }
 
     @AfterEach
@@ -297,7 +299,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
+        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
 
         robot.interact(() -> {
             if (firstCard instanceof Parent) {
@@ -313,7 +315,7 @@ public class AppealControllerTest {
             }
         });
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         assertTrue(robot.from(firstCard).lookup("#expandedSection").tryQuery().isPresent(),
                 "Expanded section should be present in DOM after click");
@@ -344,7 +346,7 @@ public class AppealControllerTest {
 
         robot.clickOn(robot.from(firstCard).lookup("#arrowButton").queryButton());
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
+        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
 
         TextArea commentArea = robot.from(firstCard)
                 .lookup("#commentArea").queryAs(TextArea.class);
@@ -355,7 +357,7 @@ public class AppealControllerTest {
             commentArea.setText("");
         });
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         assertEquals("", commentArea.getText().trim(),
                 "Comment area should be empty before deny");
@@ -365,7 +367,7 @@ public class AppealControllerTest {
         assertTrue(denyButton.isManaged(), "Deny button should be managed");
 
         robot.clickOn(denyButton);
-        WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
+        WaitForAsyncUtils.sleep(3, TimeUnit.SECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
         Label errorLabel = robot.from(firstCard).lookup("#errorLabel").queryAs(Label.class);
@@ -375,6 +377,7 @@ public class AppealControllerTest {
             errorLabel.layout();
         });
         WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
         assertEquals("Please enter remarks before denying.",
                 errorLabel.getText().trim(),
@@ -422,8 +425,8 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        assertNotNull(capturedConfirmAction, "Confirm action should be captured");
-        capturedConfirmAction.run();
+        assertNotNull(capturedConfirmAction.get(), "Confirm action should be captured");
+        capturedConfirmAction.get().run();
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
@@ -454,8 +457,8 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        assertNotNull(capturedCancelAction, "Cancel action should be captured");
-        capturedCancelAction.run();
+        assertNotNull(capturedCancelAction.get(), "Cancel action should be captured");
+        capturedCancelAction.get().run();
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
@@ -503,8 +506,8 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        assertNotNull(capturedConfirmAction, "Confirm action should be captured");
-        capturedConfirmAction.run();
+        assertNotNull(capturedConfirmAction.get(), "Confirm action should be captured");
+        capturedConfirmAction.get().run();
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
@@ -540,8 +543,8 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(2, TimeUnit.SECONDS);
 
-        assertNotNull(capturedCancelAction, "Cancel action should be captured");
-        capturedCancelAction.run();
+        assertNotNull(capturedCancelAction.get(), "Cancel action should be captured");
+        capturedCancelAction.get().run();
         WaitForAsyncUtils.waitForFxEvents();
         WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
 
