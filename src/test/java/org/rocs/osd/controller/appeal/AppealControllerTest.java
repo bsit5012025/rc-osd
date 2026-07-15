@@ -310,7 +310,7 @@ public class AppealControllerTest {
         assertTrue(expandedSection.isVisible(),
                 "Expanded section should be visible");
         assertTrue(expandedSection.isManaged(),
-                "Expanded section should be managed (participates in layout)");
+                "Expanded section should be managed");
 
         assertTrue(robot.from(firstCard).lookup("#actionBar").tryQuery().isPresent(),
                 "Action bar should be present");
@@ -541,21 +541,12 @@ public class AppealControllerTest {
     private Stage findPopupStage(FxRobot robot) {
         for (javafx.stage.Window window : robot.listWindows()) {
             if (window instanceof Stage stage) {
-                if (!stage.isShowing()) {
-                    continue;
-                }
-                if (stage.getScene() == null) {
-                    continue;
-                }
-
-                if (stage.getStyle() != StageStyle.UNDECORATED) {
-                    continue;
-                }
+                if (!stage.isShowing()) continue;
+                if (stage.getScene() == null) continue;
+                if (stage.getStyle() != StageStyle.UNDECORATED) continue;
 
                 Parent root = stage.getScene().getRoot();
-                if (root == null) {
-                    continue;
-                }
+                if (root == null) continue;
 
                 root.applyCss();
                 root.layout();
@@ -573,9 +564,9 @@ public class AppealControllerTest {
 
     private void clickPopupButton(FxRobot robot, String fxId) {
         Stage popup = null;
-        long deadline = System.currentTimeMillis() + 20000;
+        long stageDeadline = System.currentTimeMillis() + 20000;
 
-        while (popup == null && System.currentTimeMillis() < deadline) {
+        while (popup == null && System.currentTimeMillis() < stageDeadline) {
             popup = findPopupStage(robot);
             if (popup == null) {
                 WaitForAsyncUtils.waitForFxEvents();
@@ -596,6 +587,30 @@ public class AppealControllerTest {
             fail("Confirmation popup should have appeared." + sb);
         }
 
+        Node buttonNode = null;
+        long buttonDeadline = System.currentTimeMillis() + 15000;
+        while (buttonNode == null && System.currentTimeMillis() < buttonDeadline) {
+            try {
+                Parent root = popup.getScene().getRoot();
+                if (root != null) {
+                    root.applyCss();
+                    root.layout();
+                    buttonNode = root.lookup(fxId);
+                }
+            } catch (Exception ignored) {}
+            if (buttonNode == null) {
+                WaitForAsyncUtils.waitForFxEvents();
+                WaitForAsyncUtils.sleep(300, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        if (buttonNode == null) {
+            Parent root = popup.getScene().getRoot();
+            fail("Button " + fxId + " not found in popup. Root: " + root);
+        }
+
+        assertTrue(buttonNode instanceof Button, "Node " + fxId + " is not a Button");
+
         Stage finalPopup = popup;
         robot.interact(() -> {
             finalPopup.toFront();
@@ -608,11 +623,7 @@ public class AppealControllerTest {
             }
         });
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.sleep(1, TimeUnit.SECONDS);
-
-        Node buttonNode = popup.getScene().getRoot().lookup(fxId);
-        assertNotNull(buttonNode, "Button " + fxId + " not found in confirmation dialog");
-        assertTrue(buttonNode instanceof Button, "Node " + fxId + " is not a Button");
+        WaitForAsyncUtils.sleep(500, TimeUnit.MILLISECONDS);
 
         robot.clickOn(buttonNode);
         WaitForAsyncUtils.waitForFxEvents();

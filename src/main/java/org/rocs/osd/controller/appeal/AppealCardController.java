@@ -1,10 +1,7 @@
 package org.rocs.osd.controller.appeal;
 
-import java.io.IOException;
-import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -202,6 +199,15 @@ public class AppealCardController {
      */
     private void showConfirmation(String l1, String l2, String confirmTxt,
                                   String cancelTxt, Runnable action) {
+        showConfirmationDialog(l1, l2, confirmTxt, cancelTxt, action);
+    }
+
+    /**
+     * Protected method to allow tests to override popup behavior.
+     * Creates the actual confirmation dialog stage.
+     */
+    protected void showConfirmationDialog(String l1, String l2, String confirmTxt,
+                                          String cancelTxt, Runnable action) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     java.util.Objects.requireNonNull(
@@ -241,15 +247,9 @@ public class AppealCardController {
             stage.setScene(scene);
             stage.sizeToScene();
 
-            rootNode.applyCss();
-            rootNode.layout();
-
             stage.show();
-
             stage.toFront();
             rootNode.requestFocus();
-            rootNode.applyCss();
-            rootNode.layout();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -282,40 +282,25 @@ public class AppealCardController {
      * Displays an error message on the card.
      * @param msg The error message to show.
      */
-    /**
-     * Displays an error message on the card.
-     * @param msg The error message to show.
-     */
     private void showError(String msg) {
         if (errorLabel == null) {
-            System.err.println("ERROR: errorLabel is null in showError");
-            return;
-        }
-
-        if (!javafx.application.Platform.isFxApplicationThread()) {
-            javafx.application.Platform.runLater(() -> showError(msg));
             return;
         }
 
         errorLabel.setText(msg);
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
-
         errorLabel.applyCss();
         errorLabel.layout();
 
-        Parent parent = errorLabel.getParent();
+        javafx.scene.Parent parent = errorLabel.getParent();
         while (parent != null) {
             parent.requestLayout();
             parent.applyCss();
             parent.layout();
             if (parent.getScene() != null) {
-                Scene scene = parent.getScene();
-                if (scene.getRoot() != null) {
-                    scene.getRoot().requestLayout();
-                    scene.getRoot().applyCss();
-                    scene.getRoot().layout();
-                }
+                parent.getScene().getRoot().applyCss();
+                parent.getScene().getRoot().layout();
                 break;
             }
             parent = parent.getParent();
@@ -381,12 +366,14 @@ public class AppealCardController {
             actionBar.layout();
         }
 
-        Parent parent = expandedSection != null ? expandedSection.getParent() : null;
+        javafx.scene.Parent parent = expandedSection != null ? expandedSection.getParent() : null;
         while (parent != null) {
             parent.requestLayout();
             parent.applyCss();
             parent.layout();
             if (parent.getScene() != null) {
+                parent.getScene().getRoot().applyCss();
+                parent.getScene().getRoot().layout();
                 break;
             }
             parent = parent.getParent();

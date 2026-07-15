@@ -146,18 +146,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
-
                 <configuration>
-
                     <argLine>
                         --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
                         --add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                        -Dtestfx.robot=glass
-                        -Dprism.order=sw
-                        -Dprism.text=t2k
-                        -Djava.awt.headless=true
                     </argLine>
-
                 </configuration>
             </plugin>
         </plugins>
