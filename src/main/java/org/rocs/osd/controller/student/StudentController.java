@@ -23,6 +23,7 @@ import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -150,7 +151,8 @@ public class StudentController {
      */
     @FXML
     private void onSearch() {
-        String query = searchField.getText().trim().toLowerCase();
+        String query = searchField.getText().trim()
+                .toLowerCase(Locale.ROOT);
         if (query.isEmpty()) {
             loadDataToTable();
             return;
@@ -161,7 +163,8 @@ public class StudentController {
                 .filter(e -> {
                     String name = e.getStudent().getFirstName()
                             + " " + e.getStudent().getLastName();
-                    return name.toLowerCase().contains(query);
+                    return name.toLowerCase(Locale.ROOT)
+                            .contains(query);
                 })
                 .collect(Collectors.toList());
         studentTable.setItems(FXCollections
