@@ -150,7 +150,6 @@ public class ViewOffenseModalController {
         this.record = pRecord;
         loadRecordInfo();
     }
-    
     /**
      * Loads record information into the UI fields using DAOs for fresh data.
      */
@@ -198,9 +197,15 @@ public class ViewOffenseModalController {
             String lastName = enrollment.getStudent().getLastName();
 
             StringBuilder nameBuilder = new StringBuilder();
-            if (firstName != null) nameBuilder.append(firstName).append(" ");
-            if (middleName != null) nameBuilder.append(middleName).append(" ");
-            if (lastName != null) nameBuilder.append(lastName);
+            if (firstName != null) {
+                nameBuilder.append(firstName).append(" ");
+            }
+            if (middleName != null) {
+                nameBuilder.append(middleName).append(" ");
+            }
+            if (lastName != null) {
+                nameBuilder.append(lastName);
+            }
 
             studentNameField.setText(nameBuilder.toString().trim());
         }
