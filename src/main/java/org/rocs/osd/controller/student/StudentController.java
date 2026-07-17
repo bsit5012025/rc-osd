@@ -1,7 +1,6 @@
 package org.rocs.osd.controller.student;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,6 +24,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Controller for managing student records in the table view.
@@ -167,8 +168,7 @@ public class StudentController {
                             .contains(query);
                 })
                 .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(filtered));
+        studentTable.setItems(observableArrayList(filtered));
     }
 
     /**
@@ -181,8 +181,7 @@ public class StudentController {
                 .sorted(Comparator.comparing(e -> e.getStudent()
                         .getFirstName()))
                 .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(sorted));
+        studentTable.setItems(observableArrayList(sorted));
     }
 
     /**
@@ -197,8 +196,7 @@ public class StudentController {
                                         .getFirstName())
                         .reversed())
                 .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(sorted));
+        studentTable.setItems(observableArrayList(sorted));
     }
 
     /**
@@ -211,8 +209,7 @@ public class StudentController {
                 .sorted(Comparator.comparing(
                         Enrollment::getStudentLevel))
                 .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(sorted));
+        studentTable.setItems(observableArrayList(sorted));
     }
 
     /**
@@ -250,7 +247,7 @@ public class StudentController {
         );
 
         studentTable.setItems(
-                javafx.collections.FXCollections.observableArrayList(
+                observableArrayList(
                         enrollmentFacade.getAllLatestEnrollments()
                 )
         );

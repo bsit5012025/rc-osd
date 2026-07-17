@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
@@ -286,6 +285,11 @@ public class StudentRecordController {
      * Automatically opens file when the user downloads the PDF.
      * */
     public void onDownload() {
+        if (downloadHandler != null) {
+            downloadHandler.run();
+            return;
+        }
+
         FileChooser fileChooser = getFileChooser();
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
 
