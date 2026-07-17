@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,6 +40,8 @@ import org.rocs.osd.model.record.RecordStatus;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.function.Consumer;
+
 /**
  * Controller for editing an existing offense record
  * in the Office of Student Discipline System.
@@ -94,6 +98,16 @@ public class EditOffenseModalController {
     @FXML
     private VBox studentContainer;
     /**
+     * Submit button.
+     */
+    @FXML
+    private Button submitButton;
+    /**
+     * Cancel button.
+     */
+    @FXML
+    private Button cancelButton;
+    /**
      * DAO for student operations.
      */
     private StudendDao studentDao;
@@ -121,21 +135,94 @@ public class EditOffenseModalController {
      *  Reference to the parent (viewOffenseModal) stage.
      */
     private Stage viewOffenseModalStage;
+
+    /**
+     * Static mock for confirmation dialog (for testing).
+     */
+    private static Consumer<Runnable> mockConfirmDialog;
+
+    /**
+     * Sets mock confirmation dialog for testing.
+     *
+     * @param pMock the mock consumer
+     */
+    public static void setMockConfirmDialog(Consumer<Runnable> pMock) {
+        mockConfirmDialog = pMock;
+    }
+
+    /**
+     * Clears mock confirmation dialog.
+     */
+    public static void clearMockConfirmDialog() {
+        mockConfirmDialog = null;
+    }
+
+    /**
+     * Sets the student DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setStudentDao(StudendDao pDao) {
+        this.studentDao = pDao;
+    }
+
+    /**
+     * Sets the offense DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setOffenseDao(OffenseDao pDao) {
+        this.offenseDao = pDao;
+    }
+
+    /**
+     * Sets the enrollment DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setEnrollmentDao(EnrollmentDao pDao) {
+        this.enrollmentDao = pDao;
+    }
+
+    /**
+     * Sets the record facade for dependency injection.
+     *
+     * @param pFacade the facade to use
+     */
+    public void setRecordFacade(RecordFacade pFacade) {
+        this.recordFacade = pFacade;
+    }
+
+    /**
+     * Sets the disciplinary action DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setDisciplinaryActionDao(DisciplinaryActionDao pDao) {
+        this.disciplinaryActionDao = pDao;
+    }
+
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
-     * ".textProperty().addListener((obs, oldVal, newVal)"
-     * to automatically display student full name
-     * (note: did not use newVal because already
-     * a call a query for it).
      */
     public void initialize() {
-        offenseDao = new OffenseDaoImpl();
-        studentDao = new StudentDaoImpl();
-        enrollmentDao = new EnrollmentDaoImpl();
-        RecordDao dao = new RecordDaoImpl();
-        disciplinaryActionDao = new DisciplinaryActionImpl();
-        recordFacade = new RecordFacadeImpl(dao);
+        if (offenseDao == null) {
+            offenseDao = new OffenseDaoImpl();
+        }
+        if (studentDao == null) {
+            studentDao = new StudentDaoImpl();
+        }
+        if (enrollmentDao == null) {
+            enrollmentDao = new EnrollmentDaoImpl();
+        }
+        if (recordFacade == null) {
+            RecordDao dao = new RecordDaoImpl();
+            recordFacade = new RecordFacadeImpl(dao);
+        }
+        if (disciplinaryActionDao == null) {
+            disciplinaryActionDao = new DisciplinaryActionImpl();
+        }
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
@@ -147,6 +234,25 @@ public class EditOffenseModalController {
                     if (!newValue) {
                         autoDisplayStudentName();
                     }
+                });
+
+        disableDateValidation();
+    }
+
+    /**
+     * Disables past dates and future dates in the DatePicker.
+     */
+    void disableDateValidation() {
+        datePicker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (date.isAfter(LocalDate.now())
+                        || date.isBefore(LocalDate.now().minusMonths(2))) {
+                    setDisable(true);
+                }
+            }
         });
     }
 
@@ -162,6 +268,7 @@ public class EditOffenseModalController {
         this.viewOffenseModalStage = pStage;
         loadStudentRecordInfo();
     }
+
     /**
      * Loads student and record details into the UI fields.
      */
@@ -260,7 +367,6 @@ public class EditOffenseModalController {
         }
     }
 
-
     /**
      * Ensures the result label is visible and
      * displays the provided message without causing errors.
@@ -284,15 +390,21 @@ public class EditOffenseModalController {
      */
     @FXML
     void onCancel(ActionEvent event) {
-        showConfirmation(
-                "Are you sure you want ",
-                "to cancel?",
-                () -> {
-                    Stage stage = (Stage) (
-                            (Node) event.getSource()).getScene().getWindow();
-                    stage.close();
-                }
-        );
+        Runnable action = () -> {
+            Stage stage = (Stage) (
+                    (Node) event.getSource()).getScene().getWindow();
+            stage.close();
+        };
+
+        if (mockConfirmDialog != null) {
+            mockConfirmDialog.accept(action);
+        } else {
+            showConfirmation(
+                    "Are you sure you want ",
+                    "to cancel?",
+                    action
+            );
+        }
     }
 
     /**
@@ -320,11 +432,18 @@ public class EditOffenseModalController {
             System.out.println("Fill out all required fields!");
             return;
         }
-        showConfirmation(
-                "Do you want to ",
-                "save changes?",
-                () -> saveUpdatedRecord(event)
-        );
+
+        Runnable action = () -> saveUpdatedRecord(event);
+
+        if (mockConfirmDialog != null) {
+            mockConfirmDialog.accept(action);
+        } else {
+            showConfirmation(
+                    "Do you want to ",
+                    "save changes?",
+                    action
+            );
+        }
     }
 
     /**
@@ -413,4 +532,3 @@ public class EditOffenseModalController {
         }
     }
 }
-
