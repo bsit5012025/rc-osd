@@ -128,7 +128,8 @@ public class OffenseController {
      *
      * @param pFactory the controller factory
      */
-    public static void setControllerFactory(Callback<Class<?>, Object> pFactory) {
+    public static void setControllerFactory(
+            Callback<Class<?>, Object> pFactory) {
         controllerFactory = pFactory;
     }
 
@@ -278,7 +279,9 @@ public class OffenseController {
         String query = searchTextField.getText();
         if (query != null && !query.isBlank()) {
             violationsTable.setItems(FXCollections.observableArrayList(
-                    getRecordFacade().getViolationsByDepartment(currentDepartment, query)));
+                    getRecordFacade()
+                            .getViolationsByDepartment(
+                                    currentDepartment, query)));
         } else {
             loadRecordsOfViolation(currentDepartment);
         }
@@ -338,8 +341,11 @@ public class OffenseController {
         } else {
             currentSchoolYear = (year - 1) + "-" + year;
         }
-        violationsTable.setItems(FXCollections.observableArrayList(getRecordFacade().
-                getViolationsByDepartment(department, currentSchoolYear)));
+        violationsTable.setItems(
+                FXCollections.observableArrayList(
+                        getRecordFacade()
+                                .getViolationsByDepartment(
+                                        department, currentSchoolYear)));
     }
 
     /**
