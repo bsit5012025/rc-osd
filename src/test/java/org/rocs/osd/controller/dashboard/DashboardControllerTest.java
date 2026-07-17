@@ -3,6 +3,7 @@ package org.rocs.osd.controller.dashboard;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
@@ -296,12 +297,18 @@ public class DashboardControllerTest {
         robot.clickOn(".menu-header .sidebarItem");
         Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
+
         assertEquals(70.0, sidebar.getPrefWidth(), 0.1,
                 "Sidebar should collapse to 70px");
 
-        robot.clickOn(".menu-header .sidebarItem");
-        Thread.sleep(1000);
+        robot.interact(() -> {
+            Button toggleBtn = (Button) sidebar.lookup(".menu-header .sidebarItem");
+            if (toggleBtn != null) {
+                toggleBtn.fire();
+            }
+        });
         WaitForAsyncUtils.waitForFxEvents();
+
         assertEquals(200.0, sidebar.getPrefWidth(), 0.1,
                 "Sidebar should expand back to 200px");
     }
