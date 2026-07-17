@@ -101,11 +101,6 @@ public class DashboardControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    @BeforeEach
-    void setup() {
-        setupMockData();
-    }
-
     @AfterEach
     void tearDown() {
         DashboardController.clearStaticControllerFactory();
