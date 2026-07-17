@@ -5,127 +5,156 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
-import org.rocs.osd.data.dao.disciplinary.action.impl.DisciplinaryActionImpl;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
-import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.offense.OffenseDao;
-import org.rocs.osd.data.dao.offense.impl.OffenseDaoImpl;
-import org.rocs.osd.data.dao.record.RecordDao;
-import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
-import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
-import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
 
-import java.sql.Date;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.function.Consumer;
 
 /**
- * Controller for viewing a selected offense record.
- * Allows user to either edit or resolve the record.
+ * Controller for viewing an offense record
+ * in the Office of Student Discipline System.
+ * Handles displaying record details and initiating edit/resolve actions.
  */
 public class ViewOffenseModalController {
 
-    /**
-     * TextField for student ID.
-     */
+    /** Field for student ID display. */
     @FXML
     private TextField studentIdField;
-
-    /**
-     * TextField for student name.
-     */
+    /** Field for student name display. */
     @FXML
     private TextField studentNameField;
-
-    /**
-     * DatePicker for violation date.
-     */
+    /** DatePicker for violation date display. */
     @FXML
     private DatePicker datePicker;
-
-    /**
-     * ComboBox for offense type.
-     */
+    /** Field for offense type display. */
     @FXML
     private TextField offenseTypeField;
-
-    /**
-     * Text field for displaying offense level.
-     */
+    /** Field for offense level display. */
     @FXML
     private TextField offenseLevelField;
-
-    /**
-     * TextField for action.
-     */
+    /** Field for action display. */
     @FXML
     private TextField actionField;
-
-    /**
-     * TextArea for remarks.
-     */
+    /** Area for remarks display. */
     @FXML
     private TextArea remarksField;
+    /** Button to edit the record. */
+    @FXML
+    private Button editButton;
+    /** Button to resolve the record. */
+    @FXML
+    private Button resolveButton;
 
-    /**
-     * Facade for record operations.
-     */
+    /** Facade for record operations. */
     private RecordFacade recordFacade;
-
-    /**
-     * DAO for offense operations.
-     */
+    /** DAO for offense operations. */
     private OffenseDao offenseDao;
-
-    /**
-     * DAO for enrollment operations.
-     */
+    /** DAO for enrollment operations. */
     private EnrollmentDao enrollmentDao;
-
-    /**
-     * DAO for disciplinary actions.
-     */
+    /** DAO for disciplinary actions. */
     private DisciplinaryActionDao disciplinaryActionDao;
 
-    /**
-     * Record being viewed.
-     */
+    /** The record being viewed. */
     private Record record;
 
+    /** Static mock for edit offense modal opener (for testing). */
+    private static Consumer<Record> mockEditOffenseModal;
+    /** Static mock for confirm resolve dialog (for testing). */
+    private static Runnable mockConfirmResolve;
+
     /**
-     * Initializes controller.
+     * Sets mock edit offense modal opener for testing.
+     *
+     * @param pMock the mock consumer
      */
-    @FXML
-    public void initialize() {
-        offenseDao = new OffenseDaoImpl();
-        enrollmentDao = new EnrollmentDaoImpl();
-        RecordDao dao = new RecordDaoImpl();
-        disciplinaryActionDao = new DisciplinaryActionImpl();
-        recordFacade = new RecordFacadeImpl(dao);
+    public static void setMockEditOffenseModal(Consumer<Record> pMock) {
+        mockEditOffenseModal = pMock;
     }
 
     /**
-     * Sets record data and loads it to UI.
+     * Sets mock confirm resolve dialog for testing.
      *
-     * @param pRecord the selected record
+     * @param pMock the mock runnable
+     */
+    public static void setMockConfirmResolve(Runnable pMock) {
+        mockConfirmResolve = pMock;
+    }
+
+    /**
+     * Clears static mocks.
+     */
+    public static void clearMocks() {
+        mockEditOffenseModal = null;
+        mockConfirmResolve = null;
+    }
+
+    /**
+     * Sets the record facade for dependency injection.
+     *
+     * @param pFacade the facade to use
+     */
+    public void setRecordFacade(RecordFacade pFacade) {
+        this.recordFacade = pFacade;
+    }
+
+    /**
+     * Sets the offense DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setOffenseDao(OffenseDao pDao) {
+        this.offenseDao = pDao;
+    }
+
+    /**
+     * Sets the enrollment DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setEnrollmentDao(EnrollmentDao pDao) {
+        this.enrollmentDao = pDao;
+    }
+
+    /**
+     * Sets the disciplinary action DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setDisciplinaryActionDao(DisciplinaryActionDao pDao) {
+        this.disciplinaryActionDao = pDao;
+    }
+
+    /**
+     * Sets the record data to display.
+     *
+     * @param pRecord the record to display
      */
     public void setRecordData(Record pRecord) {
         this.record = pRecord;
-        loadRecordData();
+        loadRecordInfo();
     }
 
     /**
-     * Loads record data into UI fields.
+     * Loads record information into the UI fields.
      */
-    private void loadRecordData() {
+    private void loadRecordInfo() {
+        if (record == null) {
+            return;
+        }
 
         studentIdField.setText(
                 record.getEnrollment().getStudent().getStudentId()
@@ -134,54 +163,48 @@ public class ViewOffenseModalController {
         studentNameField.setText(
                 record.getEnrollment().getStudent().getFirstName()
                         + " "
+                        + record.getEnrollment().getStudent().getMiddleName()
+                        + " "
                         + record.getEnrollment().getStudent().getLastName()
         );
 
-        datePicker.setValue(
-                new Date(record.getDateOfViolation().getTime()).toLocalDate()
-        );
+        datePicker.setValue(LocalDate.parse(
+                String.valueOf(record.getDateOfViolation())));
 
-        offenseTypeField.setText(
-                record.getOffense().getOffense()
-        );
-
-        offenseLevelField.setText(
-                record.getOffense().getType()
-        );
-
-        actionField.setText(
-                record.getAction().getActionName()
-        );
-
+        offenseTypeField.setText(record.getOffense().getOffense());
+        offenseLevelField.setText(record.getOffense().getType());
+        actionField.setText(record.getAction().getActionName());
         remarksField.setText(record.getRemarks());
+        remarksField.setWrapText(true);
     }
 
     /**
-     * Opens edit modal for this record.
+     * Handles edit button click.
      *
-     * @param event button click event
+     * @param event the action event
      */
     @FXML
     void onEdit(ActionEvent event) {
+        if (mockEditOffenseModal != null) {
+            mockEditOffenseModal.accept(record);
+            return;
+        }
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("/view/offense/editOffenseModal.fxml"));
-
             Parent root = loader.load();
 
-            EditOffenseModalController controller =
-                    loader.getController();
+            EditOffenseModalController controller = loader.getController();
+            controller.setRecordData(record,
+                    (Stage) editButton.getScene().getWindow());
 
-            Stage viewOffenseModalStage = (Stage) ((Node) event.getSource())
-                    .getScene().getWindow();
-            controller.setRecordData(record, viewOffenseModalStage);
+            Stage modalStage = new Stage();
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setScene(new Scene(root));
+            modalStage.show();
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-
-            stage.show();
+            ((Stage) editButton.getScene().getWindow()).close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,68 +212,40 @@ public class ViewOffenseModalController {
     }
 
     /**
-     * Resolves the selected record.
+     * Handles resolve button click.
      *
-     * @param event button click event
+     * @param event the action event
      */
     @FXML
     void onResolve(ActionEvent event) {
+        if (mockConfirmResolve != null) {
+            mockConfirmResolve.run();
+            recordFacade.resolveRecord(record);
+            return;
+        }
 
         try {
-            String studentId = studentIdField.getText();
-            String studentName = studentNameField.getText();
-            String offenseName = offenseTypeField.getText();
-            String offenseType = offenseLevelField.getText();
-            String remarks = remarksField.getText();
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/dialogs/confirmation.fxml"));
+            Parent root = loader.load();
+            ConfirmationDialogController controller = loader.getController();
+            controller.setMessage("Are you sure you want to",
+                    "resolve this violation?");
+            controller.setButtonLabels("Yes", "No");
+            controller.setOnConfirm(() -> {
+                recordFacade.resolveRecord(record);
+                ((Stage) resolveButton.getScene().getWindow()).close();
+            });
 
-            if (studentId == null
-                    || studentId.isEmpty()
-                    || studentName == null
-                    || studentName.isEmpty()
-                    || offenseName == null
-                    || offenseType == null
-                    || datePicker.getValue() == null) {
-                System.out.println("Fill out all required fields!");
-                return;
-            }
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
 
-            if (record == null
-                    || record.getEnrollment() == null
-                    || record.getAction() == null
-                    || record.getEnrollment().getStudent() == null) {
-                System.out.println("Record, Enrollment, "
-                        + "Action or student are missing or null!");
-                return;
-            }
-
-            Date dateOfViolation = Date.valueOf(datePicker.getValue());
-
-            long enrollmentID = enrollmentDao.
-                    findEnrollmentIdByStudentId(studentId);
-            record.getEnrollment().setEnrollmentId(enrollmentID);
-
-            long actionId = disciplinaryActionDao.
-                    findActionIdByName(record.getAction().getActionName());
-            record.getAction().setActionId(actionId);
-
-            Offense offenseObj = offenseDao.findByName(offenseName);
-            record.setOffense(offenseObj);
-
-            record.setRemarks(remarks);
-            record.setDateOfViolation(dateOfViolation);
-            record.setStatus(RecordStatus.PENDING);
-
-            boolean status = recordFacade.resolveRecord(record);
-
-            if (status) {
-                System.out.println("Record Resolved");
-
-                Stage stage = (Stage) ((Node) event.getSource())
-                        .getScene().getWindow();
-                stage.close();
-            }
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
