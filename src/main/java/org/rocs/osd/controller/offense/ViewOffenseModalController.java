@@ -17,10 +17,14 @@ import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
+import org.rocs.osd.model.enrollment.Enrollment;
+import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -146,33 +150,75 @@ public class ViewOffenseModalController {
         this.record = pRecord;
         loadRecordInfo();
     }
-
+    
     /**
-     * Loads record information into the UI fields.
+     * Loads record information into the UI fields using DAOs for fresh data.
      */
     private void loadRecordInfo() {
         if (record == null) {
             return;
         }
 
-        studentIdField.setText(
-                record.getEnrollment().getStudent().getStudentId()
-        );
+        Enrollment enrollment = record.getEnrollment();
+        if (enrollment != null && enrollment.getStudent() != null
+                && enrollmentDao != null) {
+            String studentId = enrollment.getStudent().getStudentId();
+            List<Enrollment> freshEnrollments =
+                    enrollmentDao.findEnrollmentsByStudentId(studentId);
+            if (freshEnrollments != null && !freshEnrollments.isEmpty()) {
+                enrollment = freshEnrollments.get(0);
+            }
+        }
 
-        studentNameField.setText(
-                record.getEnrollment().getStudent().getFirstName()
-                        + " "
-                        + record.getEnrollment().getStudent().getMiddleName()
-                        + " "
-                        + record.getEnrollment().getStudent().getLastName()
-        );
+        Offense offense = record.getOffense();
+        if (offense != null && offenseDao != null) {
 
-        datePicker.setValue(LocalDate.parse(
-                String.valueOf(record.getDateOfViolation())));
+            Offense freshOffense = offenseDao.findOffenseById(
+                    String.valueOf(offense.getOffenseId()));
+            if (freshOffense != null && freshOffense.getOffense() != null
+                    && !freshOffense.getOffense().isEmpty()) {
+                offense = freshOffense;
+            }
+        }
 
-        offenseTypeField.setText(record.getOffense().getOffense());
-        offenseLevelField.setText(record.getOffense().getType());
-        actionField.setText(record.getAction().getActionName());
+        DisciplinaryAction action = record.getAction();
+        if (action != null && disciplinaryActionDao != null) {
+            String freshActionName = disciplinaryActionDao.findActionById(
+                    action.getActionId());
+            if (freshActionName != null) {
+                action.setActionName(freshActionName);
+            }
+        }
+
+        if (enrollment != null && enrollment.getStudent() != null) {
+            studentIdField.setText(enrollment.getStudent().getStudentId());
+
+            String firstName = enrollment.getStudent().getFirstName();
+            String middleName = enrollment.getStudent().getMiddleName();
+            String lastName = enrollment.getStudent().getLastName();
+
+            StringBuilder nameBuilder = new StringBuilder();
+            if (firstName != null) nameBuilder.append(firstName).append(" ");
+            if (middleName != null) nameBuilder.append(middleName).append(" ");
+            if (lastName != null) nameBuilder.append(lastName);
+
+            studentNameField.setText(nameBuilder.toString().trim());
+        }
+
+        if (record.getDateOfViolation() != null) {
+            datePicker.setValue(LocalDate.parse(
+                    String.valueOf(record.getDateOfViolation())));
+        }
+
+        if (offense != null) {
+            offenseTypeField.setText(offense.getOffense());
+            offenseLevelField.setText(offense.getType());
+        }
+
+        if (action != null) {
+            actionField.setText(action.getActionName());
+        }
+
         remarksField.setText(record.getRemarks());
         remarksField.setWrapText(true);
     }
