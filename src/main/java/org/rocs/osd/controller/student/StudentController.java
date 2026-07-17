@@ -250,7 +250,7 @@ public class StudentController {
         );
 
         studentTable.setItems(
-                javafx.collections.FXCollections.observableArrayList(
+                FXCollections.observableArrayList(
                         enrollmentFacade.getAllLatestEnrollments()
                 )
         );

@@ -175,8 +175,17 @@ public class AppealCardController {
             arrowButton.setMinSize(30, 30);
             arrowButton.setPrefSize(30, 30);
         }
+        if (commentArea != null) {
+            commentArea.textProperty().addListener((
+                    observable,
+                    oldValue,
+                    newValue) -> {
+                if (newValue != null && newValue.length() > 500) {
+                    commentArea.setText(oldValue);
+                }
+            });
+        }
     }
-
     /**
      * Sets the appeal facade.
      *
@@ -222,6 +231,11 @@ public class AppealCardController {
      */
     @FXML
     public void handleAppealApprove() {
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 500 characters.");
+            return;
+        }
         showConfirmation(
                 "Are you sure you want to",
                 "approve this appeal?",
@@ -250,6 +264,11 @@ public class AppealCardController {
         if (commentArea == null
                 || commentArea.getText().trim().isEmpty()) {
             showError("Please enter remarks before denying.");
+            return;
+        }
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 255 characters.");
             return;
         }
         showConfirmation(
