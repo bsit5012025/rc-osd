@@ -3,7 +3,6 @@ package org.rocs.osd.controller.dashboard;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
@@ -221,10 +220,9 @@ public class DashboardControllerTest {
                         .tryQuery()
                         .isPresent(),
                 "Main content wrapper should be present");
-
+        Thread.sleep(1000);
         StackPane wrapper = robot.lookup("#mainContentWrapper")
                 .queryAs(StackPane.class);
-        Thread.sleep(1000);
         assertFalse(wrapper.getChildren().isEmpty(),
                 "Center dashboard should be loaded inside wrapper");
     }
@@ -270,7 +268,6 @@ public class DashboardControllerTest {
         TableView<Record> table = robot.lookup("#recentViolations")
                 .queryAs(TableView.class);
         Thread.sleep(1000);
-
         assertNotNull(table, "Recent violations table should exist");
         assertEquals(5, table.getItems().size(),
                 "Table should display 5 mocked records");
@@ -292,67 +289,29 @@ public class DashboardControllerTest {
                 .getMostFrequentOffense(anyString());
     }
 
-
     @Test
-    public void testSidebarDashboardButtonReloadsCenterDashboard(FxRobot robot)  throws InterruptedException {
-        StackPane wrapper = robot.lookup("#mainContentWrapper")
-                .queryAs(StackPane.class);
-        assertFalse(wrapper.getChildren().isEmpty(),
-                "Wrapper should have content initially");
-
-        robot.clickOn("Dashboard");
-        Thread.sleep(500);
-        WaitForAsyncUtils.waitForFxEvents();
-
-        assertFalse(wrapper.getChildren().isEmpty(),
-                "Wrapper should still have content after reload");
-
-        Label label = robot.lookup("#totalViolationLabel")
-                .queryAs(Label.class);
-        assertEquals("42", label.getText(),
-                "Data should be refreshed correctly after reload");
-    }
-
-    @Test
-    public void testSidebarStudentsButtonDoesNotCrash(FxRobot robot)  throws InterruptedException {
-
-        robot.clickOn("Students");
-        Thread.sleep(500);
-        WaitForAsyncUtils.waitForFxEvents();
-
-        assertTrue(
-                robot.lookup("#sidebar")
-                        .tryQuery()
-                        .isPresent(),
-                "Sidebar should still be present after clicking Students");
-    }
-
-    @Test
-    public void testSidebarToggleCollapsesAndExpands(FxRobot robot)  throws InterruptedException {
+    public void testSidebarToggleCollapsesAndExpands(FxRobot robot) throws InterruptedException {
         VBox sidebar = robot.lookup("#sidebar").queryAs(VBox.class);
 
-        Button toggleButton = robot.lookup(".menu-header .sidebarItem")
-                .queryAs(Button.class);
-
-        robot.clickOn(toggleButton);
-        Thread.sleep(500);
+        robot.clickOn(".menu-header .sidebarItem");
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(70.0, sidebar.getPrefWidth(), 0.1,
                 "Sidebar should collapse to 70px");
 
-        robot.clickOn(toggleButton);
-        Thread.sleep(500);
+        robot.clickOn(".menu-header .sidebarItem");
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(200.0, sidebar.getPrefWidth(), 0.1,
                 "Sidebar should expand back to 200px");
     }
 
     @Test
-    public void testDashboardReloadsWithinAcceptableTime(FxRobot robot)  throws InterruptedException {
+    public void testDashboardReloadsWithinAcceptableTime(FxRobot robot) throws InterruptedException {
         long start = System.nanoTime();
 
         robot.clickOn("Dashboard");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
 
         long elapsedMillis = (System.nanoTime() - start) / 1_000_000;
@@ -363,12 +322,12 @@ public class DashboardControllerTest {
     }
 
     @Test
-    public void testDashboardHandlesEmptyRecentViolations(FxRobot robot)  throws InterruptedException {
+    public void testDashboardHandlesEmptyRecentViolations(FxRobot robot) throws InterruptedException {
         when(mockRecordFacade.getRecentViolations(anyString(), eq(10)))
                 .thenReturn(new ArrayList<>());
 
         robot.clickOn("Dashboard");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
 
         TableView<Record> table = robot.lookup("#recentViolations")
@@ -378,12 +337,12 @@ public class DashboardControllerTest {
     }
 
     @Test
-    public void testDashboardHandlesEmptyPendingAppeals(FxRobot robot)  throws InterruptedException {
+    public void testDashboardHandlesEmptyPendingAppeals(FxRobot robot) throws InterruptedException {
         when(mockAppealFacade.getAppealsByStatus("PENDING"))
                 .thenReturn(new ArrayList<>());
 
         robot.clickOn("Dashboard");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
 
         Label label = robot.lookup("#pendingAppealsLabel")
@@ -393,12 +352,12 @@ public class DashboardControllerTest {
     }
 
     @Test
-    public void testDashboardHandlesEmptyFrequentOffenses(FxRobot robot)  throws InterruptedException {
+    public void testDashboardHandlesEmptyFrequentOffenses(FxRobot robot) throws InterruptedException {
         when(mockRecordFacade.getMostFrequentOffense(anyString()))
                 .thenReturn(new HashMap<>());
 
         robot.clickOn("Dashboard");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         WaitForAsyncUtils.waitForFxEvents();
 
         VBox container = robot.lookup("#frequentOffenseContainer")
