@@ -87,7 +87,6 @@ public class AddOffenseModalController {
     /** Checkbox for notifying parents/guardian. */
     @FXML
     private CheckBox notifyParentsCheckBox;
-
     /**
      * Label to Show if student is
      * found or there are any unexpected
@@ -95,7 +94,6 @@ public class AddOffenseModalController {
      */
     @FXML
     private Label studentResultLabel;
-
     /**
      * The container that holds
      * studentIdTextField and studentResultLabel,
@@ -104,13 +102,13 @@ public class AddOffenseModalController {
     @FXML
     private VBox studentContainer;
 
-    /** Submit button - aliased for test compatibility. */
+    /** Submit button. */
     @FXML
-    private Button addOffenseSubmitButton;
+    private Button submitButton;
 
-    /** Cancel button - aliased for test compatibility. */
+    /** Cancel button. */
     @FXML
-    private Button OffenseCancelButton;
+    private Button cancelButton;
 
     /** DAO for student operations. */
     private StudendDao studentDao;

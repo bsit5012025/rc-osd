@@ -98,15 +98,15 @@ public class EditOffenseModalController {
     @FXML
     private VBox studentContainer;
     /**
-     * Submit button - aliased for test compatibility.
+     * Submit button.
      */
     @FXML
-    private Button addOffenseSubmitButton;
+    private Button submitButton;
     /**
-     * Cancel button - aliased for test compatibility.
+     * Cancel button.
      */
     @FXML
-    private Button OffenseCancelButton;
+    private Button cancelButton;
     /**
      * DAO for student operations.
      */
@@ -205,10 +205,6 @@ public class EditOffenseModalController {
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
-     * ".textProperty().addListener((obs, oldVal, newVal)"
-     * to automatically display student full name
-     * (note: did not use newVal because already
-     * a call a query for it).
      */
     public void initialize() {
         if (offenseDao == null) {

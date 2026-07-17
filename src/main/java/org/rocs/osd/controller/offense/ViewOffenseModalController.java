@@ -18,7 +18,6 @@ import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.offense.OffenseDao;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.record.Record;
-import org.rocs.osd.model.record.RecordStatus;
 
 import java.io.IOException;
 import java.time.LocalDate;
