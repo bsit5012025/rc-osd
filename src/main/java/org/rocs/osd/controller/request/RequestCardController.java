@@ -215,7 +215,7 @@ public class RequestCardController {
         }
         if (commentArea != null
                 && commentArea.getText().length() > 500) {
-            showError("Remarks cannot exceed 255 characters.");
+            showError("Remarks cannot exceed 500 characters.");
             return;
         }
         showConfirmation(
