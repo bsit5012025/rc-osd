@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.rocs.osd.data.dao.disciplinary.status.DisciplinaryStatusDao;
 import org.rocs.osd.facade.enrollment.EnrollmentFacade;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.model.disciplinary.status.DisciplinaryStatus;
@@ -44,6 +45,7 @@ import static org.mockito.Mockito.when;
 public class StudentControllerTest {
 
     private EnrollmentFacade mockEnrollmentFacade;
+    private DisciplinaryStatusDao mockDisciplinaryStatusDao;
     private RecordFacade mockRecordFacade;
     private org.rocs.osd.data.dao.guardian.GuardianDao mockGuardianDao;
     private Runnable mockDownloadHandler;
@@ -51,6 +53,7 @@ public class StudentControllerTest {
     @Start
     public void start(Stage stage) throws Exception {
         mockEnrollmentFacade = mock(EnrollmentFacade.class);
+        mockDisciplinaryStatusDao = mock(DisciplinaryStatusDao.class);
         mockRecordFacade = mock(RecordFacade.class);
         mockGuardianDao = mock(
                 org.rocs.osd.data.dao.guardian.GuardianDao.class);
@@ -61,11 +64,15 @@ public class StudentControllerTest {
                 controllerClass -> {
                     if (controllerClass
                             == StudentRecordController.class) {
+
                         StudentRecordController c =
                                 new StudentRecordController();
+
                         c.setRecordFacade(mockRecordFacade);
                         c.setGuardianDao(mockGuardianDao);
                         c.setDownloadHandler(mockDownloadHandler);
+                        c.setDisciplinaryStatusDao(mockDisciplinaryStatusDao);
+
                         return c;
                     }
                     try {
@@ -103,8 +110,11 @@ public class StudentControllerTest {
 
     @BeforeEach
     void setup() {
+
         reset(mockEnrollmentFacade, mockRecordFacade,
-                mockGuardianDao, mockDownloadHandler);
+                mockGuardianDao, mockDownloadHandler,
+                mockDisciplinaryStatusDao);
+
         setupMockData();
     }
 
@@ -124,6 +134,58 @@ public class StudentControllerTest {
         enrollments.add(createEnrollment(3L, "S003", "Zara",
                 "Lopez", "Grade 9", "C",
                 "Warning"));
+
+        List<DisciplinaryStatus> statuses = new ArrayList<>();
+
+        DisciplinaryStatus goodStanding = mock(DisciplinaryStatus.class);
+        when(goodStanding.getDisciplinaryStatusId()).thenReturn(1L);
+        when(goodStanding.getStatus())
+                .thenReturn("Good Standing");
+        when(goodStanding.getDescription())
+                .thenReturn("Student has no disciplinary issues " +
+                        "and maintains good behavior.");
+
+        DisciplinaryStatus conductMonitoring = mock(DisciplinaryStatus.class);
+        when(conductMonitoring.getDisciplinaryStatusId()).thenReturn(2L);
+        when(conductMonitoring.getStatus())
+                .thenReturn("Conduct Monitoring");
+        when(conductMonitoring.getDescription())
+                .thenReturn("Student is under observation due " +
+                        "to minor conduct issues.");
+
+        DisciplinaryStatus conductProbation = mock(DisciplinaryStatus.class);
+        when(conductProbation.getDisciplinaryStatusId()).thenReturn(3L);
+        when(conductProbation.getStatus())
+                .thenReturn("Conduct Probation");
+        when(conductProbation.getDescription())
+                .thenReturn("Student is on probation due " +
+                        "to repeated or serious conduct violations.");
+
+        DisciplinaryStatus attendanceMonitoring = mock(DisciplinaryStatus.class);
+        when(attendanceMonitoring.getDisciplinaryStatusId()).thenReturn(4L);
+        when(attendanceMonitoring.getStatus())
+                .thenReturn("Attendance Monitoring");
+        when(attendanceMonitoring.getDescription())
+                .thenReturn("Student is under observation " +
+                        "due to attendance issues.");
+
+        DisciplinaryStatus attendanceProbation = mock(DisciplinaryStatus.class);
+        when(attendanceProbation.getDisciplinaryStatusId()).thenReturn(5L);
+        when(attendanceProbation.getStatus())
+                .thenReturn("Attendance Probation");
+        when(attendanceProbation.getDescription())
+                .thenReturn("Student is on probation due to " +
+                        "repeated attendance violations.");
+
+        statuses.add(goodStanding);
+        statuses.add(conductMonitoring);
+        statuses.add(conductProbation);
+        statuses.add(attendanceMonitoring);
+        statuses.add(attendanceProbation);
+
+        when(mockDisciplinaryStatusDao.getAllDisciplinaryStatus())
+                .thenReturn(statuses);
+
 
         when(mockEnrollmentFacade.getAllLatestEnrollments())
                 .thenReturn(enrollments);

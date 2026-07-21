@@ -177,6 +177,16 @@ public class StudentRecordController {
     }
 
     /**
+     * Sets the disciplinary status DAO used by this controller.
+     *
+     * @param mDisciplinaryStatusDao the disciplinary status DAO to use.
+     */
+    public void setDisciplinaryStatusDao(
+            DisciplinaryStatusDao mDisciplinaryStatusDao) {
+        this.disciplinaryStatusDao = mDisciplinaryStatusDao;
+    }
+
+    /**
      * Sets the record facade.
      *
      * @param facade the facade to use
