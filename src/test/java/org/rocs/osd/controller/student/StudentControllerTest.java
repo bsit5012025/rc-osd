@@ -307,10 +307,10 @@ public class StudentControllerTest {
         ComboBox<String> gradeBox = robot
                 .lookup("#gradeComboBox")
                 .queryAs(ComboBox.class);
-        robot.interact(() -> {
-            gradeBox.getSelectionModel().clearSelection();
-            gradeBox.getSelectionModel().select("Grade 7");
-        });
+        robot.interact(() ->
+                gradeBox.getSelectionModel()
+                        .select("Grade 7")
+        );
         WaitForAsyncUtils.waitForFxEvents();
 
         TableView<Record> historyTable = robot

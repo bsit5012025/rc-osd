@@ -143,7 +143,8 @@ public class StudentRecordController {
      * <p>
      * Controller Class Instance.
      */
-    private StudentController studentController;
+    private StudentController studentController
+            = new StudentController();
     /**
      * Facade for Enrollment.
      */
@@ -331,6 +332,10 @@ public class StudentRecordController {
      */
     private void setOffenseDataByStudentLevel() {
         String studentLevel = gradeComboBox.getValue();
+
+        if (studentLevel == null || studentLevel.isBlank()) {
+            return;
+        }
 
         if (studentLevel.contains("Grade")) {
             studentLevel = studentLevel.replace(" ", "-");
