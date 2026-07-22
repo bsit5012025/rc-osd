@@ -38,50 +38,50 @@
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                     </columnConstraints>
-               <VBox prefWidth="100.0" spacing="15.0">
-                  <children>
-      
-                          <VBox fx:id="studentContainer" spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Student ID:" />
-                              <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
-                        <Label fx:id="studentResultLabel" prefHeight="15.0" prefWidth="288.0" />
-                          </VBox>
-      
-                             <VBox spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Student Name:" />
-                              <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
-                          </VBox>
-      
-                          <VBox spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Date:" />
-                              <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                          </VBox>
-                  </children>
-               </VBox>
-               <VBox prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1">
-                  <children>
-      
-                          <VBox spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Offense type:" />
-                              <ComboBox fx:id="offenseTypeComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                          </VBox>
-      
-                             <VBox spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Level of Offense" />
-                              <TextField fx:id="levelOfOffense" editable="false" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                          </VBox>
-      
-                          <VBox spacing="5.0">
-                              <Label styleClass="lightLabelForTextField" text="Action" />
-                              <ComboBox fx:id="actionComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
-                          </VBox>
-                  </children>
-               </VBox>
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
-                  <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
-               </rowConstraints>
+                    <VBox prefWidth="100.0" spacing="15.0">
+                        <children>
+
+                            <VBox fx:id="studentContainer" spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Student ID:" />
+                                <TextField fx:id="studentIdTextField" styleClass="inputTextFieldOffense" />
+                                <Label fx:id="studentResultLabel" prefHeight="15.0" prefWidth="288.0" />
+                            </VBox>
+
+                            <VBox spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Student Name:" />
+                                <TextField fx:id="studentNameTextField" editable="false" styleClass="inputTextFieldOffense" />
+                            </VBox>
+
+                            <VBox spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Date:" />
+                                <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                            </VBox>
+                        </children>
+                    </VBox>
+                    <VBox prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1">
+                        <children>
+
+                            <VBox spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Offense type:" />
+                                <ComboBox fx:id="offenseTypeComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                            </VBox>
+
+                            <VBox spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Level of Offense" />
+                                <TextField fx:id="levelOfOffense" editable="false" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                            </VBox>
+
+                            <VBox spacing="5.0">
+                                <Label styleClass="lightLabelForTextField" text="Action" />
+                                <ComboBox fx:id="actionComboBox" maxWidth="Infinity" styleClass="inputTextFieldOffense" />
+                            </VBox>
+                        </children>
+                    </VBox>
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                        <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                    </rowConstraints>
                 </GridPane>
 
                 <VBox spacing="5.0">
@@ -92,8 +92,8 @@
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <CheckBox fx:id="notifyParentsCheckBox" text="Notify Parents" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="OffenseCancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" />
-                    <Button fx:id="addOffenseSubmitButton" onAction="#onSubmit" styleClass="submitOffenseButton" text="Submit" />
+                    <Button fx:id="cancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" />
+                    <Button fx:id="submitButton" onAction="#onSubmit" styleClass="submitOffenseButton" text="Submit" />
                     <padding>
                         <Insets top="10.0" />
                     </padding>

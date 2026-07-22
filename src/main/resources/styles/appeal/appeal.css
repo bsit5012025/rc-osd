@@ -157,6 +157,8 @@
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 10;
     -fx-cursor: hand;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
 }
 
 .requestsScrollPane {

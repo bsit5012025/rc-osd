@@ -15,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -44,6 +45,7 @@ import static org.rocs.osd.controller.sms.SmsService.formatPhone;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 /**
  * Controller for the "Add Offense"
@@ -100,6 +102,14 @@ public class AddOffenseModalController {
     @FXML
     private VBox studentContainer;
 
+    /** Submit button. */
+    @FXML
+    private Button submitButton;
+
+    /** Cancel button. */
+    @FXML
+    private Button cancelButton;
+
     /** DAO for student operations. */
     private StudendDao studentDao;
 
@@ -119,17 +129,104 @@ public class AddOffenseModalController {
     private GuardianFacade guardianFacade;
 
     /**
+     * Static mock for confirmation dialog (for testing).
+     */
+    private static Consumer<Runnable> mockConfirmDialog;
+
+    /**
+     * Sets mock confirmation dialog for testing.
+     *
+     * @param pMock the mock consumer
+     */
+    public static void setMockConfirmDialog(Consumer<Runnable> pMock) {
+        mockConfirmDialog = pMock;
+    }
+
+    /**
+     * Clears mock confirmation dialog.
+     */
+    public static void clearMockConfirmDialog() {
+        mockConfirmDialog = null;
+    }
+
+    /**
+     * Sets the student DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setStudentDao(StudendDao pDao) {
+        this.studentDao = pDao;
+    }
+
+    /**
+     * Sets the offense DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setOffenseDao(OffenseDao pDao) {
+        this.offenseDao = pDao;
+    }
+
+    /**
+     * Sets the record facade for dependency injection.
+     *
+     * @param pFacade the facade to use
+     */
+    public void setRecordFacade(RecordFacade pFacade) {
+        this.recordFacade = pFacade;
+    }
+
+    /**
+     * Sets the disciplinary action DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setDisciplinaryActionDao(DisciplinaryActionDao pDao) {
+        this.disciplinaryActionDao = pDao;
+    }
+
+    /**
+     * Sets the enrollment DAO for dependency injection.
+     *
+     * @param pDao the DAO to use
+     */
+    public void setEnrollmentDao(EnrollmentDao pDao) {
+        this.enrollmentDao = pDao;
+    }
+
+    /**
+     * Sets the guardian facade for dependency injection.
+     *
+     * @param pFacade the facade to use
+     */
+    public void setGuardianFacade(GuardianFacade pFacade) {
+        this.guardianFacade = pFacade;
+    }
+
+    /**
      * Initializes the controller, sets up DAOs and Facades, and
      * triggers initial data loading.
      */
     public void initialize() {
-        offenseDao = new OffenseDaoImpl();
-        studentDao = new StudentDaoImpl();
-        RecordDao dao = new RecordDaoImpl();
-        disciplinaryActionDao = new DisciplinaryActionImpl();
-        recordFacade = new RecordFacadeImpl(dao);
-        enrollmentDao = new EnrollmentDaoImpl();
-        guardianFacade = new GuardianFacadeImpl();
+        if (offenseDao == null) {
+            offenseDao = new OffenseDaoImpl();
+        }
+        if (studentDao == null) {
+            studentDao = new StudentDaoImpl();
+        }
+        if (recordFacade == null) {
+            RecordDao dao = new RecordDaoImpl();
+            recordFacade = new RecordFacadeImpl(dao);
+        }
+        if (disciplinaryActionDao == null) {
+            disciplinaryActionDao = new DisciplinaryActionImpl();
+        }
+        if (enrollmentDao == null) {
+            enrollmentDao = new EnrollmentDaoImpl();
+        }
+        if (guardianFacade == null) {
+            guardianFacade = new GuardianFacadeImpl();
+        }
 
         loadComboBoxData();
         autoSelectLevelOfOffense();
@@ -150,7 +247,7 @@ public class AddOffenseModalController {
      * Loads all offense names and disciplinary actions from the database
      * into their respective ComboBoxes.
      */
-    public void loadComboBoxData() {
+    void loadComboBoxData() {
         try {
             ObservableList<String>
                     offenseList = FXCollections.observableArrayList(
@@ -170,7 +267,7 @@ public class AddOffenseModalController {
      * Automatically selects the level of
      * offense based on the offense type chosen by the user.
      */
-    public void autoSelectLevelOfOffense() {
+    void autoSelectLevelOfOffense() {
         offenseTypeComboBox.setOnAction(event -> {
             String selected = offenseTypeComboBox.getValue();
             if (selected != null) {
@@ -185,7 +282,7 @@ public class AddOffenseModalController {
     /**
      * Displays the student name based on the entered student ID.
      */
-    private void autoDisplayStudentName() {
+    void autoDisplayStudentName() {
         try {
             String studentId = studentIdTextField.getText();
 
@@ -227,7 +324,7 @@ public class AddOffenseModalController {
      * @param result String Message to display based on
      *              the action performed.
      */
-    private void showStudentResult(String result) {
+    void showStudentResult(String result) {
 
         if (!studentContainer.getChildren().contains(studentResultLabel)) {
             studentContainer.getChildren().add(studentResultLabel);
@@ -258,8 +355,8 @@ public class AddOffenseModalController {
         showConfirmation(
                 "Are you sure you want to",
                 "add this violation?",
-                "Submit", // Confirm Button
-                "Cancel", // Cancel Button
+                "Submit",
+                "Cancel",
                 this::saveOffenseRecord
         );
     }
@@ -268,7 +365,7 @@ public class AddOffenseModalController {
      * Performs the actual database save operation for the offense record.
      * Executes after the user confirms the action in the dialog.
      */
-    private void saveOffenseRecord() {
+    void saveOffenseRecord() {
         try {
             String sId = studentIdTextField.getText();
             String sName = studentNameTextField.getText();
@@ -308,8 +405,8 @@ public class AddOffenseModalController {
      * @param studentName The full name of the student.
      * @param offenseType The name of the offense committed.
      */
-    private void handleSmsNotification(String studentId,
-                                       String studentName, String offenseType) {
+    void handleSmsNotification(String studentId,
+                               String studentName, String offenseType) {
         try {
             var studentGuardians = guardianFacade
                     .getGuardianByStudentId(studentId);
@@ -352,9 +449,13 @@ public class AddOffenseModalController {
      * @param cancelLabel  The text for the cancel button.
      * @param action       The logic to execute if the user confirms.
      */
-    private void showConfirmation(
+    void showConfirmation(
             String line1, String line2, String confirmLabel,
             String cancelLabel, Runnable action) {
+        if (mockConfirmDialog != null) {
+            mockConfirmDialog.accept(action);
+            return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/view/dialogs/confirmation.fxml"));
@@ -397,8 +498,10 @@ public class AddOffenseModalController {
         );
     }
 
-    private void disableDateValidation() {
-
+    /**
+     * Disables past dates and dates older than 2 months in the DatePicker.
+     */
+    void disableDateValidation() {
         datePicker.setDayCellFactory(dp -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {

@@ -91,8 +91,8 @@
 
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <Region HBox.hgrow="ALWAYS" />
-               <Button fx:id="OffenseCancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" />
-               <Button fx:id="addOffenseSubmitButton" onAction="#onSubmit" styleClass="submitOffenseButton" text="Save" />
+               <Button fx:id="cancelButton" onAction="#onCancel" styleClass="cancelButton" text="Cancel" />
+               <Button fx:id="submitButton" onAction="#onSubmit" styleClass="submitOffenseButton" text="Save" />
                <padding><Insets top="10.0" /></padding>
             </HBox>
 

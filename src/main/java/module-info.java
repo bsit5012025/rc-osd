@@ -19,5 +19,6 @@ module org.rocs.osd {
 
 
     exports org.rocs.osd;
+    exports org.rocs.osd.data.dto.student.report;
 }
 
