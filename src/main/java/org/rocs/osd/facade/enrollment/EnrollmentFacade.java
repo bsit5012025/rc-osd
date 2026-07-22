@@ -18,6 +18,15 @@ public interface EnrollmentFacade {
     List<Enrollment> getAllLatestEnrollments();
 
     /**
+     * Retrieves the latest enrollment record of search students.
+     *
+     * @param studentInfo The id, name, year, or
+     *                   section of the students.
+     * @return a list of Enrollment objects representing.
+     */
+    List<Enrollment> getLatestEnrollmentByStudentInfo(String studentInfo);
+
+    /**
      * Retrieves all enrollment records associated with a specific student.
      * @param studentId the unique ID of the student.
      * @return a List of Enrollment objects for the given student.

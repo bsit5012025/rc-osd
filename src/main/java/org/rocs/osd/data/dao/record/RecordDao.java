@@ -58,6 +58,18 @@ public interface RecordDao {
             Department department, String schoolYear);
 
     /**
+     * Get Students records on by School Year
+     * and Student name.
+     *
+     * @param department the department to filter records.
+     * @param schoolYear the school year to filter records.
+     * @param studentInfo the student info to filter records.
+     * @return a list of records matching the criteria.
+     */
+    List<Record> findRecordListByDepartmentAndStudent(
+            Department department, String schoolYear, String studentInfo);
+
+    /**
      * Counts the total number of violations for a given school year.
      * @param schoolYear the school year to count violations.
      * @return the total number of violations.

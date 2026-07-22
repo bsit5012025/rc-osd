@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -216,6 +217,28 @@ public class StudentController {
     }
 
     /**
+     * Handles the student search button action.
+     */
+    @FXML
+    public void searchStudentInfo() {
+        searchStudents();
+    }
+
+    /**
+     * Searches for students info on the entered search criteria
+     * and updates the table with the latest students.
+     */
+    private void searchStudents() {
+        studentTable.setItems(
+                FXCollections.observableArrayList(
+                        enrollmentFacade.getLatestEnrollmentByStudentInfo(
+                                searchField.getText()
+                        )
+                )
+        );
+    }
+
+    /**
      * Loads student data into the table.
      * Sets cell factories and populates the table.
      */
@@ -225,6 +248,11 @@ public class StudentController {
                         cellData.getValue()
                                 .getStudent()
                                 .getStudentId()
+                )
+        );
+        studentTable.setItems(
+               FXCollections.observableArrayList(
+                        enrollmentFacade.getAllLatestEnrollments()
                 )
         );
 

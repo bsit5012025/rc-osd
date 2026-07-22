@@ -166,6 +166,24 @@ class RecordFacadeImplTest
         verify(recordDao).findRecordListByDepartment(department, "2024-2025");
     }
     @Test
+    void testViolationsByDepartmentAndStudentName() {
+        Department department = Department.COLLEGE;
+
+        List<Record> records = new ArrayList<>();
+        records.add(new Record());
+        records.add(new Record());
+
+        when(recordDao.findRecordListByDepartmentAndStudent(
+                Department.COLLEGE, "2024-2025", "carl justine cain")).
+                thenReturn(records);
+        List<Record> result = recordFacade.getViolationsByDepartmentAndStudentName(
+                Department.COLLEGE, "2024-2025", "carl justine cain");
+
+        assertEquals(2, result.size());
+        verify(recordDao).findRecordListByDepartmentAndStudent(
+                department, "2024-2025", "carl justine cain");
+    }
+    @Test
     void testGetRecordByStudentID(){
         List<Record> records = new ArrayList<>();
 

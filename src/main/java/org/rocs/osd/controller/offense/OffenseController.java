@@ -83,7 +83,7 @@ public class OffenseController {
     /**
      * Currently selected department.
      */
-    private Department currentDepartment = Department.JHS;
+    private Department currentdDepartment = Department.JHS;
     /**
      * Flag to prevent duplicate modal opens.
      */
@@ -100,6 +100,7 @@ public class OffenseController {
      * Static mock for view offense modal opener (for testing).
      */
     private static Consumer<Record> mockViewOffenseModal;
+
 
     /**
      * Sets the record facade for dependency injection.
@@ -257,34 +258,34 @@ public class OffenseController {
             recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
         }
 
+        searchTextField.setOnAction(e ->
+                searchForStudentViolation());
+
         loadDataToTable();
         selectStudentRecord();
-        loadRecordsOfViolation(Department.JHS);
-        setupSearch();
+        currentdDepartment = Department.JHS;
+        loadRecordsOfViolation();
     }
 
     /**
-     * Sets up search functionality.
+     * Used for searching student names for
+     * their related offenses.
      */
-    private void setupSearch() {
-        if (searchTextField != null) {
-            searchTextField.setOnAction(e -> performSearch());
-        }
-    }
-
-    /**
-     * Performs search based on search field text.
-     */
-    private void performSearch() {
-        String query = searchTextField.getText();
-        if (query != null && !query.isBlank()) {
-            violationsTable.setItems(FXCollections.observableArrayList(
-                    getRecordFacade()
-                            .getViolationsByDepartment(
-                                    currentDepartment, query)));
+    private void searchForStudentViolation() {
+        LocalDate now = LocalDate.now();
+        String currentSchoolYear;
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        if (month >= 6) {
+            currentSchoolYear = year + "-" + (year + 1);
         } else {
-            loadRecordsOfViolation(currentDepartment);
+            currentSchoolYear = (year - 1) + "-" + year;
         }
+
+        violationsTable.setItems(FXCollections.observableArrayList(recordFacade.
+                getViolationsByDepartmentAndStudentName(
+                        currentdDepartment, currentSchoolYear,
+                        searchTextField.getText())));
     }
 
     /**
@@ -327,11 +328,8 @@ public class OffenseController {
 
     /**
      * Loads violations filtered by department and school year.
-     *
-     * @param department the selected department.
      */
-    private void loadRecordsOfViolation(Department department) {
-        currentDepartment = department;
+    private void loadRecordsOfViolation() {
         LocalDate now = LocalDate.now();
         String currentSchoolYear;
         int year = now.getYear();
@@ -343,21 +341,19 @@ public class OffenseController {
         }
         violationsTable.setItems(
                 FXCollections.observableArrayList(
-                        getRecordFacade()
-                                .getViolationsByDepartment(
-                                        department, currentSchoolYear)));
+                        getRecordFacade().getViolationsByDepartment(
+                                currentdDepartment, currentSchoolYear)));
     }
-
     /**
      * Handles row click to open edit modal.
      */
     private void selectStudentRecord() {
         violationsTable.setOnMouseClicked(event -> {
-            Record record = violationsTable.
-                    getSelectionModel().getSelectedItem();
-            if (record != null) {
-                onLoadViewOffenseModal(record);
-            }
+                Record record = violationsTable.
+                getSelectionModel().getSelectedItem();
+                if (record != null) {
+                    onLoadViewOffenseModal(record);
+                }
         });
     }
 
@@ -366,7 +362,8 @@ public class OffenseController {
      */
     @FXML
     void onLoadJuniorHS() {
-        loadRecordsOfViolation(Department.JHS);
+        currentdDepartment = Department.JHS;
+        loadRecordsOfViolation();
         departmentLabel.setText("Junior HS Violations");
         refreshRecord();
     }
@@ -376,7 +373,8 @@ public class OffenseController {
      */
     @FXML
     void onLoadSeniorHS() {
-        loadRecordsOfViolation(Department.SHS);
+        currentdDepartment = Department.SHS;
+        loadRecordsOfViolation();
         departmentLabel.setText("Senior HS Violations");
     }
 
@@ -385,14 +383,24 @@ public class OffenseController {
      */
     @FXML
     void onLoadCollege() {
-        loadRecordsOfViolation(Department.COLLEGE);
+        currentdDepartment = Department.COLLEGE;
+        loadRecordsOfViolation();
         departmentLabel.setText("College Violations");
+    }
+
+    /**
+     * Handles action for search button.
+     */
+    @FXML
+    void searchStudent() {
+        searchForStudentViolation();
     }
 
     /**
      * Refreshes the violation table.
      */
     public void refreshRecord() {
-        loadRecordsOfViolation(currentDepartment);
+        currentdDepartment = Department.JHS;
+        loadRecordsOfViolation();
     }
 }

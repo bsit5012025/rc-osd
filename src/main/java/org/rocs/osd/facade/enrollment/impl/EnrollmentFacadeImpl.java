@@ -37,6 +37,19 @@ public class EnrollmentFacadeImpl implements EnrollmentFacade {
     }
 
     /**
+     * Retrieves the latest enrollment record of search students.
+     *
+     * @param studentInfo The id, name, year, or
+     *                   section of the students.
+     * @return a list of Enrollment objects representing.
+     */
+    @Override
+    public List<Enrollment> getLatestEnrollmentByStudentInfo(
+            String studentInfo) {
+        return enrollmentDao.findLatestEnrollmentsByStudentInfo(studentInfo);
+    }
+
+    /**
      * Retrieves all enrollment records associated with a specific student.
      *
      * @param studentId the unique ID of the student.
