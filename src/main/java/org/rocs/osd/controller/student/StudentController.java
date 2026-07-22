@@ -229,7 +229,6 @@ public class StudentController {
      * Sets cell factories and populates the table.
      */
     public void loadDataToTable() {
-
         studentIdColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
                         cellData.getValue()
@@ -238,7 +237,6 @@ public class StudentController {
                 )
         );
 
-        // Displays student full name
         studentNameColumn.setCellValueFactory(cellData -> {
             var student = cellData.getValue().getStudent();
             return new SimpleStringProperty(
@@ -261,9 +259,9 @@ public class StudentController {
         );
 
         studentTable.setItems(
-               FXCollections.observableArrayList(
+                FXCollections.observableArrayList(
                         enrollmentFacade.getAllLatestEnrollments()
-               )
+                )
         );
     }
 
