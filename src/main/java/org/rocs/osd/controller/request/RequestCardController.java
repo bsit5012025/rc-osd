@@ -118,6 +118,16 @@ public class RequestCardController {
         if (popupBox != null) {
             popupBox.setVisible(false);
         }
+        if (commentArea != null) {
+            commentArea.textProperty().addListener((
+                    observable,
+                    oldValue,
+                    newValue) -> {
+                if (newValue != null && newValue.length() > 500) {
+                    commentArea.setText(oldValue);
+                }
+            });
+        }
 
         RequestDao requestDao = new RequestDaoImpl();
         requestFacade = new RequestFacadeImpl(requestDao);
@@ -163,6 +173,11 @@ public class RequestCardController {
      */
     @FXML
     public void onApprove() {
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 500 characters.");
+            return;
+        }
         showConfirmation(
                 "Are you sure you want to",
                 "approve this request?",
@@ -198,7 +213,11 @@ public class RequestCardController {
             showError("Please enter remarks before denying.");
             return;
         }
-
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 500 characters.");
+            return;
+        }
         showConfirmation(
                 "Are you sure you want to",
                 "deny this request?",

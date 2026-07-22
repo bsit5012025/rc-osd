@@ -20,5 +20,6 @@ module org.rocs.osd {
     opens org.rocs.osd.data.dto.student.report to commons.beanutils;
 
     exports org.rocs.osd;
+    exports org.rocs.osd.data.dto.student.report;
 }
 
