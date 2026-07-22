@@ -6,8 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
@@ -24,6 +24,7 @@ import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
 import org.rocs.osd.model.record.Record;
 
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -280,103 +281,84 @@ public class StudentRecordController {
     }
 
     /**
-     * Downloads the selected student data.
-     */
+     * Downloads the selected student data to desired directory.
+     * Automatically opens file when the user downloads the PDF.
+     * */
     public void onDownload() {
         if (downloadHandler != null) {
             downloadHandler.run();
             return;
         }
-        FileChooser fileChooser = getFileChooser();
-        new FileChooser.ExtensionFilter(
-                "PDF Files", "*.pdf");
 
-        Stage stage = (Stage) fullNameTextField
-                .getScene().getWindow();
-        java.io.File outputFile = fileChooser
-                .showSaveDialog(stage);
+        FileChooser fileChooser = getFileChooser();
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
+
+        String downloads = System.getProperty("user.home")
+                + File.separator + "Downloads";
+        File downloadDir = new File(downloads);
+
+        if (downloadDir.exists()) {
+            fileChooser.setInitialDirectory(downloadDir);
+        }
+
+        Stage stage = (Stage) fullNameTextField.getScene().getWindow();
+        File outputFile = fileChooser.showSaveDialog(stage);
 
         if (outputFile != null) {
-            try (InputStream reportStream = getClass()
-                    .getResourceAsStream(
-                            "/reports/StudentReport.jasper")) {
+            try (InputStream reportStream = getClass().getResourceAsStream(
+                    "/reports/StudentReport.jasper")) {
 
-                List<Record> records = getRecordFacade()
-                        .getRecordByStudentId(
-                                enrollment.getStudent()
-                                        .getStudentId());
+                List<Record> records = recordFacade.getRecordByStudentId(
+                        enrollment.getStudent().getStudentId());
 
-                Map<String, Object> parameters =
-                        new HashMap<>();
-                parameters.put("studentName",
-                        fullNameTextField.getText());
-                parameters.put("grade",
-                        gradeComboBox.getValue());
-                parameters.put("section",
-                        sectionTextField.getText());
-                parameters.put("academicYear",
-                        academicYearTextField.getText());
-                parameters.put("studentAddress",
-                        addressTextField.getText());
-                parameters.put("guardianName",
-                        guardianTextField.getText());
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("studentName", fullNameTextField.getText());
+                parameters.put("grade", gradeComboBox.getValue());
+                parameters.put("section", sectionTextField.getText());
+                parameters.put("academicYear", academicYearTextField.getText());
+                parameters.put("studentAddress", addressTextField.getText());
+                parameters.put("guardianName", guardianTextField.getText());
                 parameters.put("contactNumber",
                         contactNumberTextField.getText());
-                parameters.put("guardianAddress",
-                        addressTextField.getText());
-                parameters.put("status",
-                        statusComboBox.getValue());
+                parameters.put("guardianAddress", addressTextField.getText());
+                parameters.put("status", statusComboBox.getValue());
                 parameters.put("internCheckBox",
                         internCheckBox.isSelected() ? "X" : "");
                 parameters.put("externCheckBox",
                         externCheckBox.isSelected() ? "X" : "");
 
-                try (InputStream logo = getClass()
-                        .getResourceAsStream(
-                                "/reports/logo.png")) {
+                try (InputStream logo = getClass().getResourceAsStream(
+                        "/reports/logo.png")) {
                     if (logo != null) {
                         parameters.put("logoStream", logo);
                     }
 
-                    List<StudentReportDTO> tableData =
-                            new ArrayList<>();
+                    List<StudentReportDTO> tableData = new ArrayList<>();
                     for (Record record : records) {
-                        StudentReportDTO row =
-                                new StudentReportDTO();
-                        row.setOffenseType(
-                                record.getOffense()
-                                        .getOffense());
-                        row.setLevelOfOffense(
-                                record.getOffense()
-                                        .getType());
-                        row.setDate(record.getDateOfViolation()
-                                .toString());
+                        StudentReportDTO row = new StudentReportDTO();
+                        row.setOffenseType(record.getOffense().getOffense());
+                        row.setLevelOfOffense(record.getOffense().getType());
+                        row.setDate(record.getDateOfViolation().toString());
                         tableData.add(row);
                     }
 
                     net.sf.jasperreports.engine.data.
                             JRBeanCollectionDataSource dataSource =
                             new net.sf.jasperreports.engine.data.
-                                    JRBeanCollectionDataSource(
-                                    tableData);
+                                    JRBeanCollectionDataSource(tableData);
 
-                    net.sf.jasperreports.engine.JasperPrint
-                            jasperPrint =
+                    net.sf.jasperreports.engine.JasperPrint jasperPrint =
                             net.sf.jasperreports.
-                                    engine.JasperFillManager
-                                    .fillReport(
-                                            reportStream, parameters,
-                                            dataSource);
+                                    engine.JasperFillManager.fillReport(
+                                    reportStream, parameters, dataSource);
 
-                    net.sf.jasperreports.engine.
-                            JasperExportManager.
+                    net.sf.jasperreports.engine.JasperExportManager.
                             exportReportToPdfFile(jasperPrint,
-                                    outputFile.getAbsolutePath()
-                            );
+                            outputFile.getAbsolutePath()
+                    );
 
                     if (java.awt.Desktop.isDesktopSupported()) {
-                        java.awt.Desktop.getDesktop()
-                                .open(outputFile);
+                        java.awt.Desktop.getDesktop().open(outputFile);
                     }
                 }
             } catch (Exception e) {
