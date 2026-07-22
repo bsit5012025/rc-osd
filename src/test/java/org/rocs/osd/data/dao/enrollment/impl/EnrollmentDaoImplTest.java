@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rocs.osd.data.connection.ConnectionHelper;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
+import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.sql.Connection;
@@ -121,5 +122,46 @@ class EnrollmentDaoImplTest {
         assertEquals("JHS-0002", second.getStudent().getStudentId());
         assertEquals("Maria", second.getStudent().getFirstName());
         assertEquals("Santos", second.getStudent().getLastName());
+    }
+
+    @Test
+    void testFindEnrollmentsByStudentLevelAndName() throws SQLException{
+        when(this.preparedStatement.executeQuery()).thenReturn(this.resultSet);
+        when(this.resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(this.resultSet.getLong("enrollmentID")).thenReturn(1L);
+        when(this.resultSet.getString("studentLevel")).thenReturn("Grade-8");
+        when(this.resultSet.getString("section")).thenReturn("St. Hannibal");
+        when(this.resultSet.getString("department")).thenReturn("JHS");
+        when(this.resultSet.getString("schoolYear")).thenReturn("2024-2025");
+
+        when(this.resultSet.getString("studentID")).thenReturn("JHS-0001");
+        when(this.resultSet.getLong("personID")).thenReturn(1L);
+        when(this.resultSet.getString("address")).thenReturn("Address1");
+        when(this.resultSet.getString("firstName")).thenReturn("Juan");
+        when(this.resultSet.getString("lastName")).thenReturn("Dela Cruz");
+        when(this.resultSet.getString("middleName")).thenReturn("A");
+        when(this.resultSet.getString("studentType")).thenReturn("Intern");
+        Enrollment result = enrollmentDao.findEnrollmentsByStudentLevelAndName(
+                "Grade-8",
+                "Juan",
+                "A",
+                "Dela Cruz"
+                );
+
+        assertNotNull(result);
+
+        assertEquals(1L, result.getEnrollmentId());
+        assertEquals("Grade-8", result.getStudentLevel());
+        assertEquals("St. Hannibal", result.getSection());
+        assertEquals(Department.JHS, result.getDepartment());
+        assertEquals("2024-2025", result.getSchoolYear());
+        assertEquals("JHS-0001", result.getStudent().getStudentId());
+        assertEquals(1L, result.getStudent().getPersonID());
+        assertEquals("Address1", result.getStudent().getAddress());
+        assertEquals("Juan", result.getStudent().getFirstName());
+        assertEquals("A", result.getStudent().getMiddleName());
+        assertEquals("Dela Cruz", result.getStudent().getLastName());
+        assertEquals("Intern", result.getStudent().getStudentType());
     }
 }

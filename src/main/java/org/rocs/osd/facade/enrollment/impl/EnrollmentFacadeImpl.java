@@ -64,4 +64,62 @@ public class EnrollmentFacadeImpl implements EnrollmentFacade {
         return enrollments.get(0);
     }
 
+    /**
+     * Retrieves the enrollment information of a student based on the
+     * specified student level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return the matching enrollment, if not return null.
+     */
+    @Override
+    public Enrollment getEnrollmentsByStudentLevelAndName(
+            String studentLevel,
+            String firstName,
+            String middleName,
+            String lastName
+    ) {
+        if (studentLevel == null || studentLevel.isEmpty()
+                || firstName == null || firstName.isEmpty()
+                || middleName == null || middleName.isEmpty()
+                || lastName == null || lastName.isEmpty()
+        ) {
+            return null;
+        }
+
+        return enrollmentDao.findEnrollmentsByStudentLevelAndName(
+                studentLevel,
+                firstName,
+                middleName,
+                lastName
+        );
+    }
+
+    /**
+     * Updates the disciplinary status of a student's enrollment for a specific
+     * school year after validating the provided input.
+     *
+     * @param statusID the disciplinary status identifier.
+     * @param studentID the unique identifier of the student.
+     * @param schoolYear the school year of the student's enrollment.
+     * @return return true if successfully query and false if not.
+     */
+    @Override
+    public boolean setDisciplinaryStatusID(
+            long statusID, String studentID, String schoolYear)  {
+        if (statusID < 1 || statusID > 5) {
+            return false;
+        }
+        if (studentID == null || studentID.isBlank()) {
+            return false;
+        }
+        if (schoolYear == null || schoolYear.isBlank()) {
+            return false;
+        }
+
+        return enrollmentDao.setDisciplinaryStatusID(
+                statusID, studentID, schoolYear);
+    }
 }
