@@ -70,7 +70,7 @@
 
          <TableView fx:id="violationsTable" styleClass="custom-table" VBox.vgrow="ALWAYS">
             <columns>
-               <TableColumn fx:id="studentIdColumn" text="Student_ID" />
+               <TableColumn fx:id="studentIdColumn" text="Student ID" />
                <TableColumn fx:id="studentNameColumn" text="Student Name" />
                <TableColumn fx:id="offenseLevelColumn" text="Level of Offense" />
                <TableColumn fx:id="offenseTypeColumn" text="Offense Type" />

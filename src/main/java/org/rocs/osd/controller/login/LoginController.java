@@ -226,4 +226,7 @@ public class LoginController {
             System.err.println("Could not load Error Popup: " + e.getMessage());
         }
     }
+
+    public void handleLogout(ActionEvent actionEvent) {
+    }
 }
