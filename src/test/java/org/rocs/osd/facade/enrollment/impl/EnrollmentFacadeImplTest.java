@@ -67,4 +67,30 @@ class EnrollmentFacadeImplTest {
         verify(enrollmentDao).findEnrollmentsByStudentId("JHS-0001");
     }
 
+    @Test
+    void testGetEnrollmentsByStudentLevelAndName() {
+        Enrollment enrollment = new Enrollment();
+
+        when(enrollmentDao.findEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        )).thenReturn(enrollment);
+
+        Enrollment result = enrollmentFacade.getEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        );
+        assertEquals(enrollment, result);
+        verify(enrollmentDao).findEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        );
+    }
+
 }

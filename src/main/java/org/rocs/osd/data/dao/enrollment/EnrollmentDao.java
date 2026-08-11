@@ -30,4 +30,34 @@ public interface EnrollmentDao {
      * the most recent enrollment of each student.
      */
     List<Enrollment> findAllLatestEnrollments();
+
+    /**
+     * Retrieves the enrollment information of a student based on the
+     * specified student Grade level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return the Matching enrollment, if
+     *         no matching enrollment is found return null.
+     */
+    Enrollment findEnrollmentsByStudentLevelAndName(
+            String studentLevel,
+            String firstName,
+            String middleName,
+            String lastName
+    );
+
+    /**
+     * Updates the disciplinary status of a
+     * student's enrollment record in the database.
+     *
+     * @param statusID the new disciplinary status ID to be assigned.
+     * @param studentID the unique identifier of the student.
+     * @param schoolYear the school year of the enrollment record to update.
+     * @return return true if query successfully update's, false if not.
+     */
+    boolean setDisciplinaryStatusID(
+            long statusID, String studentID, String schoolYear);
 }

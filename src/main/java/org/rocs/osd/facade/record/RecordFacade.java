@@ -111,4 +111,21 @@ public interface RecordFacade {
      * @return record of student.
      * */
     List<Record> getRecentViolations(String schoolYear, int limit);
+
+    /**
+     * Retrieves all disciplinary records for a student based on their
+     * student level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching records, or an empty
+     *         list if any parameter is null, empty, or
+     *         if no matching records are found.
+     */
+    List<Record> getRecordByStudentLevel(String studentLevel,
+                                          String firstName,
+                                          String middleName,
+                                          String lastName);
 }
