@@ -6,19 +6,32 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.rocs.osd.data.dao.disciplinary.status.DisciplinaryStatusDao;
+import org.rocs.osd.data.dao.disciplinary.status.impl.DisciplinaryStatusDaoImpl;
+import org.rocs.osd.data.dao.enrollment.impl.EnrollmentDaoImpl;
 import org.rocs.osd.data.dao.guardian.GuardianDao;
 import org.rocs.osd.data.dao.guardian.impl.GuardianDaoImpl;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.data.dto.student.report.StudentReportDTO;
+import org.rocs.osd.facade.enrollment.EnrollmentFacade;
+import org.rocs.osd.facade.enrollment.impl.EnrollmentFacadeImpl;
 import org.rocs.osd.facade.record.RecordFacade;
 import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
+import org.rocs.osd.model.disciplinary.status.DisciplinaryStatus;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.person.guardian.Guardian;
 import org.rocs.osd.model.person.student.guardian.StudentGuardian;
@@ -67,7 +80,15 @@ public class StudentRecordController {
     /** Check box for extern. */
     @FXML
     private CheckBox externCheckBox;
-    /** Table for history offense. */
+    /**
+     * Checkbox for saving current
+     * selected value on statusComboBox.
+     */
+    @FXML
+    private CheckBox statusSave;
+    /**
+     * Table for history offense.
+     */
     @FXML
     private TableView<Record> offenseHistoryTable;
     /** Table column of offense type. */
@@ -89,12 +110,45 @@ public class StudentRecordController {
     private Runnable downloadHandler;
 
     /**
+     * Gets the guardian DAO, creating default if not set.
+     * <p>
+     * Controller Class Instance.
+     */
+    private StudentController studentController
+            = new StudentController();
+    /**
+     * Facade for Enrollment.
+     */
+    private EnrollmentFacade enrollmentFacade =
+            new EnrollmentFacadeImpl(new EnrollmentDaoImpl());
+    /**
+     * Gets the record facade, creating default if not set.
+     * DAO for Disciplinary DAO.
+     */
+    private DisciplinaryStatusDao disciplinaryStatusDao =
+            new DisciplinaryStatusDaoImpl();
+    /**
+     * Stores the disciplinary statuses returned by the query.
+     */
+    private List<DisciplinaryStatus> arrayStatus;
+
+    /**
      * Sets the guardian DAO.
      *
      * @param dao the DAO to use
      */
     public void setGuardianDao(GuardianDao dao) {
         this.guardianDao = dao;
+    }
+
+    /**
+     * Sets the disciplinary status DAO used by this controller.
+     *
+     * @param mDisciplinaryStatusDao the disciplinary status DAO to use.
+     */
+    public void setDisciplinaryStatusDao(
+            DisciplinaryStatusDao mDisciplinaryStatusDao) {
+        this.disciplinaryStatusDao = mDisciplinaryStatusDao;
     }
 
     /**
@@ -116,9 +170,11 @@ public class StudentRecordController {
     }
 
     /**
-     * Gets the guardian DAO, creating default if not set.
+     * If the instance has not been initialized,
+     * it creates a new GuardianDaoImpl
+     * with a GuardianDaoImpl dependency before returning it.
      *
-     * @return the guardian DAO
+     * @return guardianDao
      */
     private GuardianDao getGuardianDao() {
         if (guardianDao == null) {
@@ -128,33 +184,17 @@ public class StudentRecordController {
     }
 
     /**
-     * Gets the record facade, creating default if not set.
+     * If the instance has not been initialized,
+     * it creates a new RecordFacadeImpl
+     * with a RecordDaoImpl dependency before returning it.
      *
-     * @return the record facade
+     * @return recordFacade instance used to access student records.
      */
     private RecordFacade getRecordFacade() {
         if (recordFacade == null) {
             recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
         }
         return recordFacade;
-    }
-
-    /**
-     * Initializes the controller.
-     */
-    @FXML
-    public void initialize() {
-        if (gradeComboBox != null) {
-            gradeComboBox.setOnAction(e -> onGradeSelected());
-        }
-    }
-
-    /**
-     * Handles grade selection to filter offense history.
-     */
-    @FXML
-    public void onGradeSelected() {
-        loadOffenseHistory();
     }
 
     /**
@@ -165,7 +205,19 @@ public class StudentRecordController {
     public void setStudentData(Enrollment studentEnrollment) {
         this.enrollment = studentEnrollment;
         loadData();
-        loadOffenseHistory();
+        setOffenseData();
+    }
+
+    /**
+     * Sets the StudentController instance to activate
+     * the refresh method for the table view.
+     *
+     * @param pstudentController the StudentController
+     *                           instance to be used.
+     */
+    public void setStudentController(
+            StudentController pstudentController) {
+        studentController = pstudentController;
     }
 
     /**
@@ -180,6 +232,9 @@ public class StudentRecordController {
                         + enrollment.getStudent().getLastName()
         );
         gradeComboBox.setValue(enrollment.getStudentLevel());
+        gradeComboBox.setOnAction(event -> {
+            setOffenseDataByStudentLevel();
+        });
         sectionTextField.setText(enrollment.getSection());
         academicYearTextField.setText(enrollment.getSchoolYear());
         addressTextField.setText(
@@ -207,6 +262,14 @@ public class StudentRecordController {
                 enrollment.getDisciplinaryStatus()
                         .getStatus());
 
+        arrayStatus = disciplinaryStatusDao.getAllDisciplinaryStatus();
+
+        if (statusComboBox.getItems().isEmpty()) {
+            for (DisciplinaryStatus status : arrayStatus) {
+                statusComboBox.getItems().add(status.getStatus());
+            }
+        }
+
         internCheckBox.setMouseTransparent(true);
         externCheckBox.setMouseTransparent(true);
 
@@ -219,16 +282,88 @@ public class StudentRecordController {
         }
     }
 
+
+    /**
+     * Updates the selected disciplinary status for a student's enrollment
+     * in the specified school year.
+     *
+     * @param statusID   the ID of the disciplinary status to assign.
+     * @param studentID  the unique identifier of the student.
+     * @param schoolYear the school year of the student's enrollment
+     */
+    private void selectedStatus(long statusID,
+                                String studentID,
+                                String schoolYear) {
+        enrollmentFacade.setDisciplinaryStatusID(
+                statusID, studentID, schoolYear
+        );
+    }
+
+    /**
+     * Triggered when the user selects a student's grade level.
+     * Displays the student's offenses for the selected grade level.
+     * If the student was not enrolled during that school year,
+     * the student's information is displayed accordingly.
+     */
+    private void setOffenseDataByStudentLevel() {
+        String studentLevel = gradeComboBox.getValue();
+
+        if (studentLevel == null || studentLevel.isBlank()) {
+            return;
+        }
+
+        if (studentLevel.contains("Grade")) {
+            studentLevel = studentLevel.replace(" ", "-");
+        }
+
+        Enrollment studentInfo = enrollmentFacade.
+                getEnrollmentsByStudentLevelAndName(
+                        studentLevel,
+                        enrollment.getStudent().getFirstName(),
+                        enrollment.getStudent().getMiddleName(),
+                        enrollment.getStudent().getLastName()
+                );
+
+        if (studentInfo == null) {
+            offenseHistoryTable.getItems().clear();
+            statusComboBox.setValue("");
+            academicYearTextField.setText("");
+            sectionTextField.setText("");
+            return;
+        }
+
+        enrollment = studentInfo;
+        loadData();
+
+        List<Record> records =
+                recordFacade.getRecordByStudentLevel(
+                        studentLevel,
+                        enrollment.getStudent().getFirstName(),
+                        enrollment.getStudent().getMiddleName(),
+                        enrollment.getStudent().getLastName()
+                );
+        loadOffenseHistory(records);
+    }
+
     /**
      * Loads offense history into the table.
      */
-    public void loadOffenseHistory() {
-        String studentId = enrollment.getStudent()
-                .getStudentId();
+    private void setOffenseData() {
+        String studentId = enrollment.getStudent().getStudentId();
 
         List<Record> records =
                 getRecordFacade().getRecordByStudentId(
                         studentId);
+        recordFacade.getRecordByStudentId(studentId);
+        loadOffenseHistory(records);
+    }
+
+    /**
+     * Loads offense history into the table.
+     *
+     * @param records For usability.
+     */
+    public void loadOffenseHistory(List<Record> records) {
 
         offenseTypeColumn.setCellValueFactory(cell ->
                 new SimpleStringProperty(
@@ -254,7 +389,10 @@ public class StudentRecordController {
     }
 
     /**
-     * File chooser for the onDownload.
+     * File chooser for the onDownload. Filename format
+     * is (StudentID_Surname_Discipline_Report) as a PDF.
+     * User can freely type the filename and displays
+     * available file types. (Only PDF)
      *
      * @return fileChooser
      */
@@ -291,7 +429,7 @@ public class StudentRecordController {
         }
 
         FileChooser fileChooser = getFileChooser();
-                new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
+        new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
 
         String downloads = System.getProperty("user.home")
                 + File.separator + "Downloads";
@@ -308,8 +446,8 @@ public class StudentRecordController {
             try (InputStream reportStream = getClass().getResourceAsStream(
                     "/reports/StudentReport.jasper")) {
 
-                List<Record> records = recordFacade.getRecordByStudentId(
-                        enrollment.getStudent().getStudentId());
+                List<Record> currentRecord =
+                        new ArrayList<>(offenseHistoryTable.getItems());
 
                 Map<String, Object> parameters = new HashMap<>();
                 parameters.put("studentName", fullNameTextField.getText());
@@ -321,7 +459,16 @@ public class StudentRecordController {
                 parameters.put("contactNumber",
                         contactNumberTextField.getText());
                 parameters.put("guardianAddress", addressTextField.getText());
-                parameters.put("status", statusComboBox.getValue());
+
+                String status = "";
+                if (statusSave.isSelected()) {
+                    status = statusComboBox.getValue();
+                } else {
+                    status = enrollment.getDisciplinaryStatus()
+                            .getStatus();
+                }
+                parameters.put("status", status);
+
                 parameters.put("internCheckBox",
                         internCheckBox.isSelected() ? "X" : "");
                 parameters.put("externCheckBox",
@@ -334,39 +481,46 @@ public class StudentRecordController {
                     }
 
                     List<StudentReportDTO> tableData = new ArrayList<>();
-                    for (Record record : records) {
-                        StudentReportDTO row = new StudentReportDTO();
-                        row.setOffenseType(record.getOffense().getOffense());
-                        row.setLevelOfOffense(record.getOffense().getType());
-                        row.setDate(record.getDateOfViolation().toString());
+                    for (Record record : currentRecord) {
+                        StudentReportDTO row =
+                                new StudentReportDTO();
+                        row.setOffenseType(
+                                record.getOffense()
+                                        .getOffense());
+                        row.setLevelOfOffense(
+                                record.getOffense()
+                                        .getType());
+                        row.setDate(record.getDateOfViolation()
+                                .toString());
                         tableData.add(row);
                     }
 
-                    net.sf.jasperreports.engine.data.
-                            JRBeanCollectionDataSource dataSource =
-                            new net.sf.jasperreports.engine.data.
-                                    JRBeanCollectionDataSource(tableData);
+                    JRDataSource dataSource;
 
-                    net.sf.jasperreports.engine.JasperPrint jasperPrint =
-                            net.sf.jasperreports.
-                                    engine.JasperFillManager.fillReport(
-                                    reportStream, parameters, dataSource);
+                    if (tableData.isEmpty()) {
+                        dataSource = new JREmptyDataSource(1);
+                    } else {
+                        dataSource = new JRBeanCollectionDataSource(tableData);
+                    }
 
-                    net.sf.jasperreports.engine.JasperExportManager.
-                            exportReportToPdfFile(jasperPrint,
-                            outputFile.getAbsolutePath()
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(
+                            reportStream, parameters, dataSource
+                    );
+
+                    JasperExportManager.exportReportToPdfFile(
+                            jasperPrint, outputFile .getAbsolutePath()
                     );
 
                     if (java.awt.Desktop.isDesktopSupported()) {
-                        java.awt.Desktop.getDesktop().open(outputFile);
+                        java.awt.Desktop.getDesktop() .open(outputFile);
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         }
     }
+
 
     /**
      * Closes the current window.
@@ -374,8 +528,29 @@ public class StudentRecordController {
      * @param event the action event
      */
     public void onCancel(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource())
-                .getScene().getWindow();
+        if (statusSave.isSelected()) {
+
+            for (DisciplinaryStatus status
+                    : arrayStatus) {
+
+                if (statusComboBox.getValue().
+                        equals(status.getStatus())) {
+
+                    selectedStatus(
+                            status.getDisciplinaryStatusId(),
+                            enrollment.getStudent().getStudentId(),
+                            enrollment.getSchoolYear());
+
+                } else if (arrayStatus == null) {
+                    break;
+                }
+            }
+
+            studentController.refreshTable();
+        }
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
 }

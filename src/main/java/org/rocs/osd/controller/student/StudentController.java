@@ -24,7 +24,6 @@ import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -101,7 +100,7 @@ public class StudentController {
             );
         }
         if (searchField != null) {
-            searchField.setOnAction(e -> onSearch());
+            searchField.setOnAction(e -> searchStudents());
         }
         wireSortHandlers();
         loadDataToTable();
@@ -109,6 +108,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Wires sort menu item handlers by looking up the MenuButton
      * in the scene graph.
      */
@@ -127,6 +129,13 @@ public class StudentController {
         }
     }
 
+    /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.).
+     *
+     * @param scene ge the scene for the handler
+     */
     private void doWireSortHandlers(Scene scene) {
         scene.getRoot().lookupAll(".menu-button").stream()
                 .filter(node -> node instanceof MenuButton)
@@ -148,31 +157,9 @@ public class StudentController {
     }
 
     /**
-     * Handles search action.
-     */
-    @FXML
-    private void onSearch() {
-        String query = searchField.getText().trim()
-                .toLowerCase(Locale.ROOT);
-        if (query.isEmpty()) {
-            loadDataToTable();
-            return;
-        }
-        List<Enrollment> all = enrollmentFacade
-                .getAllLatestEnrollments();
-        List<Enrollment> filtered = all.stream()
-                .filter(e -> {
-                    String name = e.getStudent().getFirstName()
-                            + " " + e.getStudent().getLastName();
-                    return name.toLowerCase(Locale.ROOT)
-                            .contains(query);
-                })
-                .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(filtered));
-    }
-
-    /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by name A-Z.
      */
     @FXML
@@ -187,6 +174,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by name Z-A.
      */
     @FXML
@@ -203,6 +193,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by year level ascending.
      */
     @FXML
@@ -214,6 +207,15 @@ public class StudentController {
                 .collect(Collectors.toList());
         studentTable.setItems(FXCollections
                 .observableArrayList(sorted));
+    }
+
+    /**
+     * A method to update the table view
+     * and its contents.
+     */
+    public void refreshTable() {
+        loadDataToTable();
+        selectStudentRecord();
     }
 
     /**
@@ -251,7 +253,7 @@ public class StudentController {
                 )
         );
         studentTable.setItems(
-               FXCollections.observableArrayList(
+                FXCollections.observableArrayList(
                         enrollmentFacade.getAllLatestEnrollments()
                 )
         );
