@@ -26,9 +26,9 @@
          </padding>
 
          <HBox alignment="BOTTOM_LEFT">
-            <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Junior HS" onAction="#onLoadJuniorHS"/>
-            <Button mnemonicParsing="false" styleClass="offenseTabButton" text="Senior High" onAction="#onLoadSeniorHS"/>
-            <Button mnemonicParsing="false" styleClass="offenseTabButton" text="College" onAction="#onLoadCollege"/>
+            <Button mnemonicParsing="false" onAction="#onLoadJuniorHS" styleClass="offenseTabButton" text="Junior HS" />
+            <Button mnemonicParsing="false" onAction="#onLoadSeniorHS" styleClass="offenseTabButton" text="Senior High" />
+            <Button mnemonicParsing="false" onAction="#onLoadCollege" styleClass="offenseTabButton" text="College" />
          </HBox>
 
          <Region HBox.hgrow="ALWAYS" />
@@ -51,11 +51,11 @@
             <padding>
                <Insets left="20.0" right="20.0" />
             </padding>
-            <Label  fx:id="departmentLabel" styleClass="labelTitle" text="Junior HS Violations" />
+            <Label fx:id="departmentLabel" styleClass="labelTitle" text="Junior HS Violations" />
             <Region HBox.hgrow="ALWAYS" />
 
             <HBox alignment="CENTER_LEFT" maxHeight="35.0" maxWidth="250.0" styleClass="staticSearchContainer">
-               <Button mnemonicParsing="false" styleClass="searchIconBtn">
+               <Button mnemonicParsing="false" onAction="#searchStudent" styleClass="searchIconBtn">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                         <image>

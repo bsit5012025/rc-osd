@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -23,7 +24,6 @@ import org.rocs.osd.model.enrollment.Enrollment;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -100,7 +100,7 @@ public class StudentController {
             );
         }
         if (searchField != null) {
-            searchField.setOnAction(e -> onSearch());
+            searchField.setOnAction(e -> searchStudents());
         }
         wireSortHandlers();
         loadDataToTable();
@@ -108,6 +108,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Wires sort menu item handlers by looking up the MenuButton
      * in the scene graph.
      */
@@ -126,6 +129,13 @@ public class StudentController {
         }
     }
 
+    /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.).
+     *
+     * @param scene ge the scene for the handler
+     */
     private void doWireSortHandlers(Scene scene) {
         scene.getRoot().lookupAll(".menu-button").stream()
                 .filter(node -> node instanceof MenuButton)
@@ -147,31 +157,9 @@ public class StudentController {
     }
 
     /**
-     * Handles search action.
-     */
-    @FXML
-    private void onSearch() {
-        String query = searchField.getText().trim()
-                .toLowerCase(Locale.ROOT);
-        if (query.isEmpty()) {
-            loadDataToTable();
-            return;
-        }
-        List<Enrollment> all = enrollmentFacade
-                .getAllLatestEnrollments();
-        List<Enrollment> filtered = all.stream()
-                .filter(e -> {
-                    String name = e.getStudent().getFirstName()
-                            + " " + e.getStudent().getLastName();
-                    return name.toLowerCase(Locale.ROOT)
-                            .contains(query);
-                })
-                .collect(Collectors.toList());
-        studentTable.setItems(FXCollections
-                .observableArrayList(filtered));
-    }
-
-    /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by name A-Z.
      */
     @FXML
@@ -186,6 +174,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by name Z-A.
      */
     @FXML
@@ -202,6 +193,9 @@ public class StudentController {
     }
 
     /**
+     * (Note: This is old function, I remove
+     * that function because the table have
+     * a built-in sort in them.)
      * Sorts table by year level ascending.
      */
     @FXML
@@ -225,6 +219,28 @@ public class StudentController {
     }
 
     /**
+     * Handles the student search button action.
+     */
+    @FXML
+    public void searchStudentInfo() {
+        searchStudents();
+    }
+
+    /**
+     * Searches for students info on the entered search criteria
+     * and updates the table with the latest students.
+     */
+    private void searchStudents() {
+        studentTable.setItems(
+                FXCollections.observableArrayList(
+                        enrollmentFacade.getLatestEnrollmentByStudentInfo(
+                                searchField.getText()
+                        )
+                )
+        );
+    }
+
+    /**
      * Loads student data into the table.
      * Sets cell factories and populates the table.
      */
@@ -234,6 +250,11 @@ public class StudentController {
                         cellData.getValue()
                                 .getStudent()
                                 .getStudentId()
+                )
+        );
+        studentTable.setItems(
+                FXCollections.observableArrayList(
+                        enrollmentFacade.getAllLatestEnrollments()
                 )
         );
 

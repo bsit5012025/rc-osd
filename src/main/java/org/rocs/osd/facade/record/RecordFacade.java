@@ -89,12 +89,24 @@ public interface RecordFacade {
     /**
      * Retrieves student records filtered by department and school year.
      *
-     * @param department the department to filter by
-     * @param schoolYear the school year to filter by
-     * @return list of records matching the criteria
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @return list of records matching the criteria.
      */
     List<Record> getViolationsByDepartment(Department department,
                 String schoolYear);
+
+    /**
+     * Retrieves student records filtered by department and school year
+     * and Name.
+     *
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @param studentName the Students Name to filter by.
+     * @return list of records matching the criteria.
+     */
+    List<Record> getViolationsByDepartmentAndStudentName(
+            Department department, String schoolYear, String studentName);
 
     /**
      * Retrieves student record using student ID.

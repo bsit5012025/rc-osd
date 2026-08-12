@@ -32,6 +32,15 @@ public interface EnrollmentDao {
     List<Enrollment> findAllLatestEnrollments();
 
     /**
+     * Retrieves the latest enrollment record of search students.
+     *
+     * @param studentInfo The id, name, year, or
+     *                    section of the students.
+     * @return a list of Enrollment objects representing.
+     */
+    List<Enrollment> findLatestEnrollmentsByStudentInfo(String studentInfo);
+
+    /**
      * Retrieves the enrollment information of a student based on the
      * specified student Grade level and full name.
      *

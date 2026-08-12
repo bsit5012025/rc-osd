@@ -42,6 +42,20 @@ class EnrollmentFacadeImplTest {
     }
 
     @Test
+    void testGetLatestEnrollmentByStudentInfo () {
+        List<Enrollment> list = new ArrayList<>();
+        list.add(new Enrollment());
+        list.add(new Enrollment());
+
+        when(enrollmentDao.findLatestEnrollmentsByStudentInfo("Josh")).thenReturn(list);
+        List<Enrollment> result = enrollmentFacade.
+                getLatestEnrollmentByStudentInfo("Josh");
+        assertEquals(2, result.size());
+        verify(enrollmentDao).
+                findLatestEnrollmentsByStudentInfo("Josh");
+    }
+
+    @Test
     void testGetEnrollmentsByStudentId() {
         List<Enrollment> list = new ArrayList<>();
         list.add(new Enrollment());
