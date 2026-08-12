@@ -83,7 +83,7 @@ public class OffenseController {
     /**
      * Currently selected department.
      */
-    private Department currentdDepartment = Department.JHS;
+    private Department currentDepartment = Department.JHS;
     /**
      * Flag to prevent duplicate modal opens.
      */
@@ -261,9 +261,9 @@ public class OffenseController {
         searchTextField.setOnAction(e ->
                 searchForStudentViolation());
 
+        currentDepartment = Department.JHS;
         loadDataToTable();
         selectStudentRecord();
-        currentdDepartment = Department.JHS;
         loadRecordsOfViolation();
     }
 
@@ -284,7 +284,7 @@ public class OffenseController {
 
         violationsTable.setItems(FXCollections.observableArrayList(recordFacade.
                 getViolationsByDepartmentAndStudentName(
-                        currentdDepartment, currentSchoolYear,
+                        currentDepartment, currentSchoolYear,
                         searchTextField.getText())));
     }
 
@@ -342,7 +342,7 @@ public class OffenseController {
         violationsTable.setItems(
                 FXCollections.observableArrayList(
                         getRecordFacade().getViolationsByDepartment(
-                                currentdDepartment, currentSchoolYear)));
+                                currentDepartment, currentSchoolYear)));
     }
     /**
      * Handles row click to open edit modal.
@@ -362,10 +362,10 @@ public class OffenseController {
      */
     @FXML
     void onLoadJuniorHS() {
-        currentdDepartment = Department.JHS;
+        currentDepartment = Department.JHS;
+        searchTextField.clear();
         loadRecordsOfViolation();
         departmentLabel.setText("Junior HS Violations");
-        refreshRecord();
     }
 
     /**
@@ -373,7 +373,8 @@ public class OffenseController {
      */
     @FXML
     void onLoadSeniorHS() {
-        currentdDepartment = Department.SHS;
+        currentDepartment = Department.SHS;
+        searchTextField.clear();
         loadRecordsOfViolation();
         departmentLabel.setText("Senior HS Violations");
     }
@@ -383,7 +384,8 @@ public class OffenseController {
      */
     @FXML
     void onLoadCollege() {
-        currentdDepartment = Department.COLLEGE;
+        currentDepartment = Department.COLLEGE;
+        searchTextField.clear();
         loadRecordsOfViolation();
         departmentLabel.setText("College Violations");
     }
@@ -400,7 +402,6 @@ public class OffenseController {
      * Refreshes the violation table.
      */
     public void refreshRecord() {
-        currentdDepartment = Department.JHS;
         loadRecordsOfViolation();
     }
 }

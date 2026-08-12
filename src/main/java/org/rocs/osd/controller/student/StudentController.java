@@ -322,6 +322,7 @@ public class StudentController {
             StudentRecordController studentRecordController
                     = loader.getController();
             studentRecordController.setStudentData(enrollment);
+            studentRecordController.setStudentController(this);
 
             Stage studentStage = new Stage();
 

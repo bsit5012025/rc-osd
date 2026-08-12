@@ -393,28 +393,26 @@ public class RecordDaoImpl implements RecordDao {
                                  + "ON emp.personID = ep.personID "
                                  + "WHERE e.department = ? "
                                  + "AND e.schoolYear = ? "
-                                 + "AND ( "
-                                 + "    LOWER( "
+                                 + "AND LOWER( "
                                  + "    COALESCE(sp.firstName, '') || ' ' || "
                                  + "    COALESCE(sp.middleName, '') || ' ' || "
-                                 + "    COALESCE(sp.lastName, '') "
-                                 + "    ) LIKE LOWER('%' || ? || '%') "
-                                 + "    OR LOWER( "
-                                 + "        sp.firstName || ' ' || sp.lastName "
-                                 + "    ) LIKE LOWER('%' || ? || '%') "
-                                 + "    OR LOWER("
-                                 + "      e.studentID"
-                                 + "    ) LIKE LOWER('%' || ? || '%') "
-                                 + ") "
+                                 + "    COALESCE(sp.lastName, '') || ' ' || "
+                                 + "    COALESCE(e.studentID, '') || ' ' || "
+                                 + "    COALESCE(o.type, '') || ' ' || "
+                                 + "    COALESCE(o.offense, '') || ' ' || "
+                                 + "    COALESCE(TO_CHAR(r.dateOfViolation, "
+                                 + "    'YYYY-MM-DD'), '') "
+                                 + "    || ' ' || "
+                                 + "    COALESCE(r.status, '') "
+                                 + ") LIKE LOWER('%' || ? || '%') "
                                  + "ORDER BY r.dateOfViolation DESC"
                  )) {
 
                 String search = studentInfo.trim();
+
                 statement.setString(1, department.name());
                 statement.setString(2, schoolYear);
                 statement.setString(3, search);
-                statement.setString(4, search);
-                statement.setString(5, search);
                 try (ResultSet rs = statement.executeQuery()) {
 
                     while (rs.next()) {
