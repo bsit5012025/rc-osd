@@ -49,6 +49,22 @@ public interface RecordDao {
     boolean updateRecord(Record record);
 
     /**
+     * Finds the action ID associated with the given action name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID, or 0 if no matching action is found
+     */
+    long findActionIdByName(String actionName);
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID, or 0 if no matching offense is found
+     */
+    long findOffenseIdByName(String offenseName);
+
+    /**
      * Retrieves all records for a specific department and school year.
      * @param department the department to filter records.
      * @param schoolYear the school year to filter records.

@@ -124,6 +124,28 @@ public class RecordFacadeImpl implements RecordFacade {
     }
 
     /**
+     * Finds the ID of a disciplinary action by its name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID
+     */
+    @Override
+    public long findActionIdByName(String actionName) {
+        return recordDao.findActionIdByName(actionName);
+    }
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID
+     */
+    @Override
+    public long findOffenseIdByName(String offenseName) {
+        return recordDao.findOffenseIdByName(offenseName);
+    }
+
+    /**
      * Returns the most frequent offenses for a given
      * school year as percentages.
      *
@@ -245,7 +267,8 @@ public class RecordFacadeImpl implements RecordFacade {
             return new ArrayList<>();
         }
 
-        return recordDao.findRecordByStudentLevel(studentLevel,
+        return recordDao.findRecordByStudentLevel(
+                studentLevel,
                 firstName,
                 middleName,
                 lastName

@@ -132,11 +132,6 @@ public class EditOffenseModalController {
      */
     private Record record;
     /**
-     *  Reference to the parent (viewOffenseModal) stage.
-     */
-    private Stage viewOffenseModalStage;
-
-    /**
      * Static mock for confirmation dialog (for testing).
      */
     private static Consumer<Runnable> mockConfirmDialog;
@@ -265,7 +260,6 @@ public class EditOffenseModalController {
      */
     public void setRecordData(Record pRecord, Stage pStage) {
         this.record = pRecord;
-        this.viewOffenseModalStage = pStage;
         loadStudentRecordInfo();
     }
 
@@ -493,9 +487,6 @@ public class EditOffenseModalController {
                 Stage stage = (Stage) (
                         (Node) event.getSource()).getScene().getWindow();
                 stage.close();
-                if (viewOffenseModalStage != null) {
-                    viewOffenseModalStage.close();
-                }
             }
 
         } catch (Exception e) {

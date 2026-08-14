@@ -16,7 +16,9 @@ import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.data.dao.disciplinary.action.DisciplinaryActionDao;
 import org.rocs.osd.data.dao.enrollment.EnrollmentDao;
 import org.rocs.osd.data.dao.offense.OffenseDao;
+import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.facade.record.impl.RecordFacadeImpl;
 import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
@@ -78,6 +80,14 @@ public class ViewOffenseModalController {
     private static Consumer<Record> mockEditOffenseModal;
     /** Static mock for confirm resolve dialog (for testing). */
     private static Runnable mockConfirmResolve;
+
+    /** first code to run when the class is initializing. */
+    @FXML
+    public void initialize() {
+        if (recordFacade == null) {
+            recordFacade = new RecordFacadeImpl(new RecordDaoImpl());
+        }
+    }
 
     /**
      * Sets mock edit offense modal opener for testing.
@@ -241,20 +251,27 @@ public class ViewOffenseModalController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("/view/offense/editOffenseModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/view/offense/editOffenseModal.fxml"));
+
             Parent root = loader.load();
 
-            EditOffenseModalController controller = loader.getController();
-            controller.setRecordData(record,
-                    (Stage) editButton.getScene().getWindow());
+            EditOffenseModalController controller =
+                    loader.getController();
 
-            Stage modalStage = new Stage();
-            modalStage.initModality(Modality.APPLICATION_MODAL);
-            modalStage.setScene(new Scene(root));
-            modalStage.show();
+            Stage viewStage =
+                    (Stage) editButton.getScene().getWindow();
 
-            ((Stage) editButton.getScene().getWindow()).close();
+            controller.setRecordData(record, viewStage);
+
+            Stage editStage = new Stage();
+            editStage.initModality(Modality.APPLICATION_MODAL);
+            editStage.setScene(new Scene(root));
+
+            editStage.showAndWait();
+
+            viewStage.close();
 
         } catch (Exception e) {
             e.printStackTrace();

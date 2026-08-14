@@ -114,23 +114,34 @@ public class StudentRecordController {
      * <p>
      * Controller Class Instance.
      */
-    private StudentController studentController
-            = new StudentController();
+    private StudentController studentController;
+
     /**
      * Facade for Enrollment.
      */
-    private EnrollmentFacade enrollmentFacade =
-            new EnrollmentFacadeImpl(new EnrollmentDaoImpl());
+    private EnrollmentFacade enrollmentFacade;
     /**
      * Gets the record facade, creating default if not set.
      * DAO for Disciplinary DAO.
      */
-    private DisciplinaryStatusDao disciplinaryStatusDao =
-            new DisciplinaryStatusDaoImpl();
+    private DisciplinaryStatusDao disciplinaryStatusDao;
     /**
      * Stores the disciplinary statuses returned by the query.
      */
     private List<DisciplinaryStatus> arrayStatus;
+
+    /** first code to run when the class is initializing. */
+    @FXML
+    public void initialize() {
+        enrollmentFacade =
+                new EnrollmentFacadeImpl(new EnrollmentDaoImpl());
+        disciplinaryStatusDao =
+                new DisciplinaryStatusDaoImpl();
+
+        gradeComboBox.setOnAction(event -> {
+            setOffenseDataByStudentLevel();
+        });
+    }
 
     /**
      * Sets the guardian DAO.
@@ -224,6 +235,10 @@ public class StudentRecordController {
      * Loads student information into UI components.
      */
     public void loadData() {
+        if (enrollment == null) {
+            return;
+        }
+
         fullNameTextField.setText(
                 enrollment.getStudent().getFirstName()
                         + " "
@@ -231,42 +246,70 @@ public class StudentRecordController {
                         + " "
                         + enrollment.getStudent().getLastName()
         );
-        gradeComboBox.setValue(enrollment.getStudentLevel());
-        gradeComboBox.setOnAction(event -> {
-            setOffenseDataByStudentLevel();
-        });
-        sectionTextField.setText(enrollment.getSection());
-        academicYearTextField.setText(enrollment.getSchoolYear());
-        addressTextField.setText(
-                enrollment.getStudent().getAddress());
 
-        String studentType = enrollment.getStudent()
-                .getStudentType();
-        String studentId = enrollment.getStudent()
-                .getStudentId();
+        gradeComboBox.setValue(
+                toDisplayGradeLevel(enrollment.getStudentLevel())
+        );
+
+        sectionTextField.setText(
+                enrollment.getSection()
+        );
+
+        academicYearTextField.setText(
+                enrollment.getSchoolYear()
+        );
+
+        addressTextField.setText(
+                enrollment.getStudent().getAddress()
+        );
+
+        String studentType =
+                enrollment.getStudent().getStudentType();
+
+        String studentId =
+                enrollment.getStudent().getStudentId();
 
         List<StudentGuardian> guardian =
                 getGuardianDao().findGuardianByStudentId(
-                        studentId);
+                        studentId
+                );
 
-        Guardian primaryGuardian =
-                guardian.get(0).getGuardian();
+        if (guardian != null && !guardian.isEmpty()) {
+            Guardian primaryGuardian =
+                    guardian.get(0).getGuardian();
 
-        guardianTextField.setText(primaryGuardian
-                .getFirstName()
-                + " "
-                + primaryGuardian.getLastName());
-        contactNumberTextField.setText(
-                primaryGuardian.getContactNumber());
-        statusComboBox.setValue(
-                enrollment.getDisciplinaryStatus()
-                        .getStatus());
+            guardianTextField.setText(
+                    primaryGuardian.getFirstName()
+                            + " "
+                            + primaryGuardian.getLastName()
+            );
 
-        arrayStatus = disciplinaryStatusDao.getAllDisciplinaryStatus();
+            contactNumberTextField.setText(
+                    primaryGuardian.getContactNumber()
+            );
+        } else {
+            guardianTextField.clear();
+            contactNumberTextField.clear();
+        }
 
-        if (statusComboBox.getItems().isEmpty()) {
+        if (enrollment.getDisciplinaryStatus() != null) {
+            statusComboBox.setValue(
+                    enrollment.getDisciplinaryStatus().getStatus()
+            );
+        } else {
+            statusComboBox.setValue("");
+        }
+
+        arrayStatus =
+                disciplinaryStatusDao.getAllDisciplinaryStatus();
+
+        if (statusComboBox.getItems().isEmpty()
+                && arrayStatus != null) {
+
             for (DisciplinaryStatus status : arrayStatus) {
-                statusComboBox.getItems().add(status.getStatus());
+                statusComboBox.getItems().add(
+                        status.getStatus()
+                );
             }
         }
 
@@ -276,9 +319,13 @@ public class StudentRecordController {
         if ("Intern".equalsIgnoreCase(studentType)) {
             internCheckBox.setSelected(true);
             externCheckBox.setSelected(false);
+
         } else if ("Extern".equalsIgnoreCase(studentType)) {
             internCheckBox.setSelected(false);
             externCheckBox.setSelected(true);
+        } else {
+            internCheckBox.setSelected(false);
+            externCheckBox.setSelected(false);
         }
     }
 
@@ -306,23 +353,21 @@ public class StudentRecordController {
      * the student's information is displayed accordingly.
      */
     private void setOffenseDataByStudentLevel() {
-        String studentLevel = gradeComboBox.getValue();
 
-        if (studentLevel == null || studentLevel.isBlank()) {
+        if (gradeComboBox == null
+                || gradeComboBox.getValue().isBlank()
+                || enrollment == null) {
             return;
         }
 
-        if (studentLevel.contains("Grade")) {
-            studentLevel = studentLevel.replace(" ", "-");
-        }
-
-        Enrollment studentInfo = enrollmentFacade.
-                getEnrollmentsByStudentLevelAndName(
-                        studentLevel,
-                        enrollment.getStudent().getFirstName(),
-                        enrollment.getStudent().getMiddleName(),
-                        enrollment.getStudent().getLastName()
-                );
+        Enrollment studentInfo =
+                enrollmentFacade
+                        .getEnrollmentsByStudentLevelAndName(
+                                toDatabaseGradeLevel(gradeComboBox.getValue()),
+                                enrollment.getStudent().getFirstName(),
+                                enrollment.getStudent().getMiddleName(),
+                                enrollment.getStudent().getLastName()
+                        );
 
         if (studentInfo == null) {
             offenseHistoryTable.getItems().clear();
@@ -334,29 +379,49 @@ public class StudentRecordController {
 
         enrollment = studentInfo;
         loadData();
-
-        List<Record> records =
-                recordFacade.getRecordByStudentLevel(
-                        studentLevel,
-                        enrollment.getStudent().getFirstName(),
-                        enrollment.getStudent().getMiddleName(),
-                        enrollment.getStudent().getLastName()
-                );
-        loadOffenseHistory(records);
+        setOffenseData();
     }
 
     /**
      * Loads offense history into the table.
      */
     private void setOffenseData() {
-        String studentId = enrollment.getStudent().getStudentId();
 
         List<Record> records =
-                getRecordFacade().getRecordByStudentId(
-                        studentId);
-        recordFacade.getRecordByStudentId(studentId);
+                getRecordFacade().getRecordByStudentLevel(
+                        toDatabaseGradeLevel(gradeComboBox.getValue()),
+                        enrollment.getStudent().getFirstName(),
+                        enrollment.getStudent().getMiddleName(),
+                        enrollment.getStudent().getLastName()
+                );
+        System.out.println(toDatabaseGradeLevel(gradeComboBox.getValue()));
         loadOffenseHistory(records);
     }
+
+    private String toDatabaseGradeLevel(String studentLevel) {
+        if (studentLevel == null) {
+            return null;
+        }
+
+        if (studentLevel.contains("Grade")) {
+           studentLevel = studentLevel.replace(" ", "-");
+        }
+
+        return studentLevel;
+    }
+
+    private String toDisplayGradeLevel(String studentLevel) {
+        if (studentLevel == null) {
+            return null;
+        }
+
+        if (studentLevel.contains("Grade")) {
+            studentLevel = studentLevel.replace("-", " ");
+        }
+
+        return studentLevel;
+    }
+
 
     /**
      * Loads offense history into the table.
@@ -528,7 +593,10 @@ public class StudentRecordController {
      * @param event the action event
      */
     public void onCancel(ActionEvent event) {
-        if (statusSave.isSelected()) {
+        if (statusSave.isSelected()
+                && arrayStatus != null
+                && statusComboBox.getValue() != null
+                && enrollment != null) {
 
             for (DisciplinaryStatus status
                     : arrayStatus) {
@@ -541,12 +609,13 @@ public class StudentRecordController {
                             enrollment.getStudent().getStudentId(),
                             enrollment.getSchoolYear());
 
-                } else if (arrayStatus == null) {
                     break;
                 }
             }
 
-            studentController.refreshTable();
+            if (studentController != null) {
+                studentController.refreshTable();
+            }
         }
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
