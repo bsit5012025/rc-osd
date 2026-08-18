@@ -67,7 +67,16 @@ public class RequestDaoImpl implements RequestDao {
     public List<Request> findAllRequestsByStatus(RequestStatus status) {
         List<Request> requestList = new ArrayList<>();
 
-        String sql = "SELECT * FROM REQUEST WHERE status = ?";
+        String sql = "SELECT "
+                + "requestID, "
+                + "employeeID, "
+                + "details, "
+                + "type, "
+                + "message, "
+                + "dateProcessed, "
+                + "remarks, "
+                + "status "
+                + " FROM REQUEST WHERE status = ?";
 
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
