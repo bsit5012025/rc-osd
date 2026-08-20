@@ -243,6 +243,74 @@ public class RecordDaoImpl implements RecordDao {
     }
 
     /**
+     * Finds the action ID associated with the given action name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID, or 0 if no matching action is found
+     */
+    @Override
+    public long findActionIdByName(String actionName) {
+        String sql =
+                " SELECT actionID"
+                        + " FROM disciplinaryAction"
+                        + " WHERE action = ?";
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, actionName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("actionID");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "SQL Exception (findActionIdByName): "
+                            + e.getMessage()
+            );
+        }
+        return -1;
+    }
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID, or 0 if no matching offense is found
+     */
+    @Override
+    public long findOffenseIdByName(String offenseName) {
+        String sql = """
+        SELECT offenseID
+        FROM offense
+        WHERE offense = ?
+        """;
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, offenseName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("offenseID");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "SQL Exception (findOffenseIdByName): "
+                            + e.getMessage()
+            );
+        }
+
+        return 0;
+    }
+
+    /**
      * Get Students User on by School Year
      * (Mostly this current School Year).
      *
