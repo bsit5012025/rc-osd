@@ -15,6 +15,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
+import org.rocs.osd.model.offense.Offense;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.data.dao.record.impl.RecordDaoImpl;
 import org.rocs.osd.facade.record.RecordFacade;
@@ -100,7 +102,6 @@ public class OffenseController {
      * Static mock for view offense modal opener (for testing).
      */
     private static Consumer<Record> mockViewOffenseModal;
-
 
     /**
      * Sets the record facade for dependency injection.
@@ -236,6 +237,7 @@ public class OffenseController {
             ViewOffenseModalController controller = loader.getController();
             controller.setRecordData(record);
 
+
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setScene(new Scene(root));
@@ -349,11 +351,33 @@ public class OffenseController {
      */
     private void selectStudentRecord() {
         violationsTable.setOnMouseClicked(event -> {
-                Record record = violationsTable.
-                getSelectionModel().getSelectedItem();
-                if (record != null) {
-                    onLoadViewOffenseModal(record);
-                }
+            Record record = violationsTable
+                    .getSelectionModel()
+                    .getSelectedItem();
+
+            if (record != null) {
+                DisciplinaryAction action = new DisciplinaryAction();
+                Offense offense = new Offense();
+
+                action.setActionName(record.getAction().getActionName());
+                action.setActionId(
+                        recordFacade.findActionIdByName(
+                                record.getAction().getActionName()
+                        )
+                );
+
+                offense.setOffense(record.getOffense().getOffense());
+                offense.setType(record.getOffense().getType());
+                offense.setOffenseId(
+                        recordFacade.findOffenseIdByName(
+                                record.getOffense().getOffense()
+                        )
+                );
+
+                record.setAction(action);
+                record.setOffense(offense);
+                onLoadViewOffenseModal(record);
+            }
         });
     }
 

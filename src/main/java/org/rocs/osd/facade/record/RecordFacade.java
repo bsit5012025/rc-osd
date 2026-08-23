@@ -64,6 +64,22 @@ public interface RecordFacade {
     boolean resolveRecord(Record record);
 
     /**
+     * Finds the ID of a disciplinary action by its name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID
+     */
+    long findActionIdByName(String actionName);
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID
+     */
+    long findOffenseIdByName(String offenseName);
+
+    /**
      * Retrieves the most frequent offenses for a school year as percentages.
      *
      * @param schoolYear the school year to analyze
