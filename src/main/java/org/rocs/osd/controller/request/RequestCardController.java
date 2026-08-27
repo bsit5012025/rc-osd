@@ -28,8 +28,7 @@ import org.rocs.osd.model.request.RequestStatus;
 
 /**
  * Controller for handling request card UI behavior.
- * Manages rendering request context data
- * and verification validation actions.
+ * This handles displaying request information.
  */
 public class RequestCardController {
 
@@ -37,50 +36,43 @@ public class RequestCardController {
     @FXML
     private VBox cardRoot;
 
-    /** Label displaying the department name. */
+    /** Label displaying department. */
     @FXML
     private Label deptLabel;
 
-    /** Label displaying the requester's full name. */
+    /** Label displaying name. */
     @FXML
     private Label nameLabel;
 
-    /** Label displaying the specific type of request. */
+    /** Label displaying request type. */
     @FXML
     private Label typeLabel;
 
-    /** Label displaying the stated
-     * reason for the request. */
+    /** Label displaying reason. */
     @FXML
     private Label reasonLabel;
 
-    /** Container section that holds fields
-     * revealed upon expansion. */
+    /** Expanded section container. */
     @FXML
     private VBox expandedSection;
 
-    /** Action bar container holding the
-     * approved and deny buttons. */
+    /** Action bar container. */
     @FXML
     private HBox actionBar;
 
-    /** Graphical arrow icon used to
-     * toggle the card's expanded state. */
+    /** Arrow icon for expand/collapse. */
     @FXML
     private ImageView arrowIcon;
 
-    /** Container box used to overlay or
-     * display transient action popups. */
+    /** Popup container. */
     @FXML
     private VBox popupBox;
 
-    /** Label text displayed inside the
-     * action status popup box. */
+    /** Popup message label. */
     @FXML
     private Label popupLabel;
 
-    /** Input text area designated for
-     * typing processing comments or remarks. */
+    /** Text area for comments. */
     @FXML
     private TextArea commentArea;
 
@@ -93,33 +85,32 @@ public class RequestCardController {
     @FXML
     private Label inlineErrorText;
 
-    /** The callback executed when an action finishes. */
+    /** Callback after action completion. */
     private Runnable onActionComplete;
 
-    /** Tracks whether the card is expanded or collapsed. */
+    /** Flag indicating expanded state. */
     private boolean isExpanded = false;
 
-    /** Facade instance for managing request database actions. */
+    /** Request facade instance. */
     private RequestFacade requestFacade;
 
-    /** Unique identification number for this request. */
+    /** ID of the request card. */
     private long cardId;
 
     /** Timer used to automatically dismiss the error banner. */
     private PauseTransition errorHideDelay;
 
     /**
-     * Sets the callback executed when an action finishes.
+     * Sets the callback after an action is completed.
      *
-     * @param callback the action completion callback
+     * @param callback the callback to execute
      */
     public void setOnActionComplete(Runnable callback) {
         this.onActionComplete = callback;
     }
 
     /**
-     * Initializes the request card controller
-     * and its default layout visibility states.
+     * Initializes the controller.
      */
     @FXML
     public void initialize() {
@@ -127,6 +118,7 @@ public class RequestCardController {
             expandedSection.setVisible(false);
             expandedSection.setManaged(false);
         }
+
         if (actionBar != null) {
             actionBar.setVisible(false);
             actionBar.setManaged(false);
@@ -134,73 +126,121 @@ public class RequestCardController {
         if (popupBox != null) {
             popupBox.setVisible(false);
         }
+        if (commentArea != null) {
+            commentArea.textProperty().addListener((
+                    observable,
+                    oldValue,
+                    newValue) -> {
+                if (newValue != null && newValue.length() > 500) {
+                    commentArea.setText(oldValue);
+                }
+            });
+        }
 
         RequestDao requestDao = new RequestDaoImpl();
         requestFacade = new RequestFacadeImpl(requestDao);
     }
 
     /**
-     * Sets up the contextual student information
-     * text to display in the card layout.
+     * Sets the data for the request card.
      *
-     * @param pDept     the department code text
-     * @param pName     the name of the student requester
-     * @param pType     the type of request being handled
-     * @param pReason   the text explaining the reason for the request
-     * @param requestId the unique database identity row tracking key
+     * @param pDept department name
+     * @param pName requester name
+     * @param pType request type
+     * @param pReason request reason
+     * @param requestId request ID
      */
-    public void setData(String pDept, String pName,
-                        String pType, String pReason,
-                        long requestId) {
+    public void setData(
+            String pDept,
+            String pName,
+            String pType,
+            String pReason,
+            long requestId) {
+
         if (deptLabel != null) {
             deptLabel.setText(pDept);
         }
+
         if (nameLabel != null) {
             nameLabel.setText(pName);
         }
+
         if (typeLabel != null) {
             typeLabel.setText(pType);
         }
+
         if (reasonLabel != null) {
             reasonLabel.setText(pReason);
         }
+
         cardId = requestId;
     }
 
     /**
-     * Triggered when the user clicks the Approve button.
-     * Prompts for confirmation and updates
-     * the database tracking status.
+     * Handles approve action.
      */
     @FXML
     public void onApprove() {
-        showConfirmation("Are you sure you want to",
-                "approve this request?", "Approve",
-                "Cancel", () -> {
-            String remarks = null;
-            if (commentArea != null && !commentArea.getText(
-            ).trim().isEmpty()) {
-                remarks = commentArea.getText();
-            }
-            requestFacade.updateRequestStatus(cardId, remarks,
-                    RequestStatus.APPROVED);
-            showPopupAndRemoveCard("Request approved!");
-        });
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 500 characters.");
+            return;
+        }
+        showConfirmation(
+                "Are you sure you want to",
+                "approve this request?",
+                "Approve",
+                "Cancel",
+                () -> {
+                    String remarks = null;
+
+                    if (commentArea != null
+                            && !commentArea.getText().trim().isEmpty()) {
+                        remarks = commentArea.getText();
+                    }
+
+                    requestFacade.updateRequestStatus(
+                            cardId,
+                            remarks,
+                            RequestStatus.APPROVED
+                    );
+
+                    showPopupAndRemoveCard("Request approved!");
+                }
+        );
     }
 
     /**
-     * Triggered when the user clicks the Deny button.
-     * Validates that remarks are provided
-     * before allowing submission.
+     * Handles deny action.
      */
     @FXML
     public void onDeny() {
-        if (commentArea == null || commentArea.getText(
+        if (commentArea == null
+                || commentArea.getText().trim().isEmpty()) {
 
-        ).trim().isEmpty()) {
             showError("Please enter remarks before denying.");
             return;
         }
+        if (commentArea != null
+                && commentArea.getText().length() > 500) {
+            showError("Remarks cannot exceed 500 characters.");
+            return;
+        }
+        showConfirmation(
+                "Are you sure you want to",
+                "deny this request?",
+                "Deny",
+                "Cancel",
+                () -> {
+                    requestFacade.updateRequestStatus(
+                            cardId,
+                            commentArea.getText(),
+                            RequestStatus.DENIED
+                    );
+
+                    showPopupAndRemoveCard("Request denied!");
+                }
+        );
 
         showConfirmation("Are you sure you want to",
                 "deny this request?", "Deny",
@@ -239,30 +279,42 @@ public class RequestCardController {
     }
 
     /**
-     * Opens a modal popup to confirm important administrative actions.
+     * Displays confirmation dialog.
      *
-     * @param l1         first row string label description
-     * @param l2         second row string label description
-     * @param confirmTxt label configuration for confirmation button
-     * @param cancelTxt  label configuration for closing button
-     * @param action     the code logic sequence execution
-     *                   route mapping callback
+     * @param l1 first line
+     * @param l2 second line
+     * @param confirmTxt confirm button text
+     * @param cancelTxt cancel button text
+     * @param action action to execute
      */
-    private void showConfirmation(String l1, String l2,
-                                  String confirmTxt, String cancelTxt,
-                                  Runnable action) {
+    private void showConfirmation(
+            String l1,
+            String l2,
+            String confirmTxt,
+            String cancelTxt,
+            Runnable action) {
+
         try {
-            String path = "/view/dialogs/confirmation.fxml";
+            String path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
             URL resource = getClass().getResource(path);
+
             if (resource == null) {
-                path = "/org/rocs/osd/view/dialogs/confirmation.fxml";
+                path = "/view/dialogs/confirmation.fxml";
                 resource = getClass().getResource(path);
+            }
+
+            if (resource == null) {
+                throw new IllegalStateException(
+                        "FXML file not found at " + path
+                );
             }
 
             FXMLLoader loader = new FXMLLoader(resource);
             StackPane popupRoot = loader.load();
 
-            ConfirmationDialogController controller = loader.getController();
+            ConfirmationDialogController controller =
+                    loader.getController();
+
             if (controller != null) {
                 controller.setMessage(l1, l2);
                 controller.setButtonLabels(confirmTxt, cancelTxt);
@@ -275,35 +327,41 @@ public class RequestCardController {
             stage.setScene(new Scene(popupRoot));
             stage.showAndWait();
 
-        } catch (IOException e) {
+        } catch (IOException | IllegalStateException e) {
+            System.err.println("Popup Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * Renders a success box popover feedback
-     * tracking state, then unlinks card elements.
+     * Shows success popup and removes card.
      *
-     * @param message completion text notice description to display
+     * @param message message to display
      */
     private void showPopupAndRemoveCard(String message) {
         if (popupLabel != null) {
             popupLabel.setText(message);
         }
+
         if (popupBox != null) {
             popupBox.setVisible(true);
         }
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+        PauseTransition delay =
+                new PauseTransition(Duration.seconds(1.5));
+
         delay.setOnFinished(e -> {
             if (onActionComplete != null) {
                 onActionComplete.run();
             }
-            if (cardRoot != null && cardRoot.getParent() instanceof Pane) {
-                Pane parent = (Pane) cardRoot.getParent();
+
+            if (cardRoot != null
+                    && cardRoot.getParent() instanceof Pane parent) {
+
                 parent.getChildren().remove(cardRoot);
             }
         });
+
         delay.play();
     }
 
@@ -314,20 +372,22 @@ public class RequestCardController {
     @FXML
     public void toggleExpansion() {
         isExpanded = !isExpanded;
+
         if (expandedSection != null) {
             expandedSection.setVisible(isExpanded);
             expandedSection.setManaged(isExpanded);
         }
+
         if (actionBar != null) {
             actionBar.setVisible(isExpanded);
             actionBar.setManaged(isExpanded);
         }
+
         updateIcon();
     }
 
     /**
-     * Swaps navigation button directional images
-     * to coordinate with expanded states.
+     * Updates arrow icon based on state.
      */
     private void updateIcon() {
         if (arrowIcon == null) {
@@ -341,6 +401,7 @@ public class RequestCardController {
 
         try {
             URL url = getClass().getResource(imgPath);
+
             if (url != null) {
                 arrowIcon.setImage(new Image(url.toExternalForm()));
             }

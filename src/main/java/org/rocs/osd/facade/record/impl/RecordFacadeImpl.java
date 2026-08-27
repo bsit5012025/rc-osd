@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * Facade implementation for managing student records in the
@@ -123,6 +124,28 @@ public class RecordFacadeImpl implements RecordFacade {
     }
 
     /**
+     * Finds the ID of a disciplinary action by its name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID
+     */
+    @Override
+    public long findActionIdByName(String actionName) {
+        return recordDao.findActionIdByName(actionName);
+    }
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID
+     */
+    @Override
+    public long findOffenseIdByName(String offenseName) {
+        return recordDao.findOffenseIdByName(offenseName);
+    }
+
+    /**
      * Returns the most frequent offenses for a given
      * school year as percentages.
      *
@@ -191,6 +214,23 @@ public class RecordFacadeImpl implements RecordFacade {
         return recordDao.findRecordListByDepartment(department, schoolYear);
     }
 
+    /**
+     * Retrieves student records filtered by department, school year
+     * and Student Name.
+     *
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @param studentName the Students Name to filter by.
+     * @return list of records matching the criteria.
+     */
+    @Override
+    public List<Record> getViolationsByDepartmentAndStudentName(
+            Department department, String schoolYear, String studentName) {
+        return recordDao.findRecordListByDepartmentAndStudent(
+                department, schoolYear, studentName);
+    }
+
+
     @Override
     public List<Record> getRecordByStudentId(String studentId) {
         return recordDao.findRecordByStudentId(studentId);
@@ -200,5 +240,38 @@ public class RecordFacadeImpl implements RecordFacade {
     public List<Record> getRecentViolations(String schoolYear, int limit) {
         List<Record> records = recordDao.findAllBySchoolYear(schoolYear);
         return records.stream().limit(10).toList();
+    }
+
+    /**
+     * Retrieves all disciplinary records for a student based on their
+     * student level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching records, or an empty
+     *         list if any parameter is null, empty, or
+     *         if no matching records are found.
+     */
+    @Override
+    public List<Record> getRecordByStudentLevel(String studentLevel,
+                                                 String firstName,
+                                                 String middleName,
+                                                 String lastName) {
+        if (studentLevel == null || studentLevel.isEmpty()
+                || firstName == null || firstName.isEmpty()
+                || middleName == null || middleName.isEmpty()
+                || lastName == null || lastName.isEmpty()
+        ) {
+            return new ArrayList<>();
+        }
+
+        return recordDao.findRecordByStudentLevel(
+                studentLevel,
+                firstName,
+                middleName,
+                lastName
+        );
     }
 }

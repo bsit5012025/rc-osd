@@ -242,6 +242,82 @@ public class RecordDaoImpl implements RecordDao {
         }
     }
 
+    /**
+     * Finds the action ID associated with the given action name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID, or 0 if no matching action is found
+     */
+    @Override
+    public long findActionIdByName(String actionName) {
+        String sql =
+                " SELECT actionID"
+                        + " FROM disciplinaryAction"
+                        + " WHERE action = ?";
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, actionName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("actionID");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "SQL Exception (findActionIdByName): "
+                            + e.getMessage()
+            );
+        }
+        return -1;
+    }
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID, or 0 if no matching offense is found
+     */
+    @Override
+    public long findOffenseIdByName(String offenseName) {
+        String sql = """
+        SELECT offenseID
+        FROM offense
+        WHERE offense = ?
+        """;
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, offenseName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("offenseID");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "SQL Exception (findOffenseIdByName): "
+                            + e.getMessage()
+            );
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get Students User on by School Year
+     * (Mostly this current School Year).
+     *
+     * @param department the department to filter records.
+     * @param schoolYear the school year to filter records.
+     * @return a list of records matching the criteria.
+     */
     @Override
     public List<Record> findRecordListByDepartment(
             Department department, String schoolYear) {
@@ -329,6 +405,139 @@ public class RecordDaoImpl implements RecordDao {
             throw new RuntimeException(e);
         }
         return records;
+    }
+
+    /**
+     *  Get Students records on by School Year
+     *  and Student name.
+     *  (Mostly this current School Year).
+     *
+     * @param department the department to filter records.
+     * @param schoolYear the school year to filter records.
+     * @param studentInfo the Student info to filter records.
+     * @return a list of records matching the criteria.
+     */
+    @Override
+    public List<Record> findRecordListByDepartmentAndStudent(
+            Department department, String schoolYear, String studentInfo) {
+            List<Record> records = new ArrayList<>();
+            try (Connection con = ConnectionHelper.getConnection();
+                 PreparedStatement statement = con.prepareStatement(
+                         "SELECT "
+                                 + "r.recordID, "
+                                 + "r.dateOfViolation, "
+                                 + "r.dateOfResolution, "
+                                 + "r.remarks, "
+                                 + "r.status, "
+                                 + "e.enrollmentID, "
+                                 + "e.studentID, "
+                                 + "e.schoolYear, "
+                                 + "e.studentLevel, "
+                                 + "e.section, "
+                                 + "e.department, "
+                                 + "sp.firstName, "
+                                 + "sp.middleName, "
+                                 + "sp.lastName, "
+                                 + "o.offense, "
+                                 + "o.type, "
+                                 + "emp.employeeID, "
+                                 + "ep.firstName AS empFirstName, "
+                                 + "ep.lastName AS empLastName, "
+                                 + "da.action "
+                                 + "FROM record r "
+                                 + "JOIN enrollment e "
+                                 + "ON r.enrollmentID = e.enrollmentID "
+                                 + "JOIN offense o "
+                                 + "ON r.offenseID = o.offenseID "
+                                 + "JOIN disciplinaryAction da "
+                                 + "ON r.actionID = da.actionID "
+                                 + "JOIN student s "
+                                 + "ON e.studentID = s.studentID "
+                                 + "JOIN person sp "
+                                 + "ON s.personID = sp.personID "
+                                 + "JOIN employee emp "
+                                 + "ON r.employeeID = emp.employeeID "
+                                 + "JOIN person ep "
+                                 + "ON emp.personID = ep.personID "
+                                 + "WHERE e.department = ? "
+                                 + "AND e.schoolYear = ? "
+                                 + "AND LOWER( "
+                                 + "    COALESCE(sp.firstName, '') || ' ' || "
+                                 + "    COALESCE(sp.middleName, '') || ' ' || "
+                                 + "    COALESCE(sp.lastName, '') || ' ' || "
+                                 + "    COALESCE(e.studentID, '') || ' ' || "
+                                 + "    COALESCE(o.type, '') || ' ' || "
+                                 + "    COALESCE(o.offense, '') || ' ' || "
+                                 + "    COALESCE(TO_CHAR(r.dateOfViolation, "
+                                 + "    'YYYY-MM-DD'), '') "
+                                 + "    || ' ' || "
+                                 + "    COALESCE(r.status, '') "
+                                 + ") LIKE LOWER('%' || ? || '%') "
+                                 + "ORDER BY r.dateOfViolation DESC"
+                 )) {
+
+                String search = studentInfo.trim();
+
+                statement.setString(1, department.name());
+                statement.setString(2, schoolYear);
+                statement.setString(3, search);
+                try (ResultSet rs = statement.executeQuery()) {
+
+                    while (rs.next()) {
+                        Record record = new Record();
+                        record.setRecordId(rs.getLong(
+                                "recordID"));
+                        record.setDateOfViolation(rs.getDate(
+                                "dateOfViolation"));
+                        record.setDateOfResolution(rs.getDate(
+                                "dateOfResolution"));
+                        record.setRemarks(rs.getString(
+                                "remarks"));
+                        record.setStatus(RecordStatus.valueOf(rs.getString(
+                                "status")));
+
+                        Student student = new Student();
+                        student.setStudentId(rs.getString("studentID"));
+                        student.setFirstName(rs.getString("firstName"));
+                        student.setMiddleName(rs.getString("middleName"));
+                        student.setLastName(rs.getString("lastName"));
+
+                        Enrollment enrollment = new Enrollment();
+                        enrollment.setEnrollmentId(rs.getLong(
+                                "enrollmentID"));
+                        enrollment.setStudent(student);
+                        enrollment.setSchoolYear(rs.getString(
+                                "schoolYear"));
+                        enrollment.setStudentLevel(rs.getString(
+                                "studentLevel"));
+                        enrollment.setSection(rs.getString("section"));
+                        enrollment.setDepartment(
+                                Department.valueOf(rs.getString("department")));
+
+                        record.setEnrollment(enrollment);
+
+                        Offense offense = new Offense();
+                        offense.setOffense(rs.getString("offense"));
+                        offense.setType(rs.getString("type"));
+                        record.setOffense(offense);
+
+                        Employee employee = new Employee();
+                        employee.setEmployeeId(rs.getString("employeeID"));
+                        employee.setFirstName(rs.getString("empFirstName"));
+                        employee.setLastName(rs.getString("empLastName"));
+                        record.setEmployee(employee);
+
+                        DisciplinaryAction action = new DisciplinaryAction();
+                        action.setActionName(rs.getString("action"));
+                        record.setAction(action);
+
+                        records.add(record);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return records;
     }
 
     @Override
@@ -492,4 +701,112 @@ public class RecordDaoImpl implements RecordDao {
 
     }
 
+    /**
+     * Retrieves all records that match the specified student
+     * level and student's full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching disciplinary records.
+     */
+    @Override
+    public List<Record> findRecordByStudentLevel(String studentLevel,
+                                                 String firstName,
+                                                 String middleName,
+                                                 String lastName) {
+        List<Record> records = new ArrayList<>();
+
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement statement = con.prepareStatement(
+                     "SELECT r.recordID, "
+                             + "r.dateOfViolation, "
+                             + "r.dateOfResolution, "
+                             + "r.remarks, "
+                             + "r.status, "
+                             + "e.enrollmentID, "
+                             + "e.schoolYear, "
+                             + "e.studentLevel, "
+                             + "e.section, "
+                             + "s.studentID, "
+                             + "p.firstName, "
+                             + "p.middleName, "
+                             + "p.lastName, "
+                             + "o.offense, "
+                             + "o.type, "
+                             + "da.action "
+                             + "FROM record r "
+                             + "JOIN enrollment e "
+                             + "ON r.enrollmentID = e.enrollmentID "
+                             + "JOIN student s "
+                             + "ON e.studentID = s.studentID "
+                             + "JOIN person p "
+                             + "ON s.personID = p.personID "
+                             + "JOIN offense o "
+                             + "ON r.offenseID = o.offenseID "
+                             + "JOIN disciplinaryAction da "
+                             + "ON r.actionID = da.actionID "
+                             + "WHERE e.studentLevel = ? "
+                             + "AND p.firstName = ? "
+                             + "AND p.middleName = ? "
+                             + "AND p.lastName = ? "
+                             + "ORDER BY r.dateOfViolation DESC"
+             )) {
+            statement.setString(1, studentLevel);
+            statement.setString(2, firstName);
+            statement.setString(3, middleName);
+            statement.setString(4, lastName);
+            try (ResultSet result = statement.executeQuery()) {
+
+                while (result.next()) {
+                    Record record = new Record();
+
+                    record.setRecordId(result.getLong("recordID"));
+                    record.setDateOfViolation(result.getDate(
+                            "dateOfViolation"));
+                    record.setDateOfResolution(
+                            result.getDate("dateOfResolution"));
+                    record.setRemarks(
+                            result.getString("remarks"));
+                    record.setStatus(
+                            RecordStatus.valueOf(result.getString("status")));
+
+                    Student student = new Student();
+                    student.setStudentId(result.getString("studentID"));
+                    student.setFirstName(result.getString("firstName"));
+                    student.setMiddleName(result.getString("middleName"));
+                    student.setLastName(result.getString("lastName"));
+
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setEnrollmentId(result.getLong("enrollmentID"));
+                    enrollment.setSchoolYear(result.getString("schoolYear"));
+                    enrollment.setStudentLevel(result.getString(
+                            "studentLevel"));
+                    enrollment.setSection(result.getString("section"));
+                    enrollment.setStudent(student);
+                    record.setEnrollment(enrollment);
+
+                    Offense offense = new Offense();
+                    offense.setOffense(result.getString("offense"));
+                    offense.setType(
+                            result.getString("type"));
+
+                    record.setOffense(offense);
+
+
+                    DisciplinaryAction disciplinaryAction
+                            = new DisciplinaryAction();
+                    disciplinaryAction.setActionName(result.getString(
+                            "action"));
+                    record.setAction(disciplinaryAction);
+                    records.add(record);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return records;
+
+    }
 }

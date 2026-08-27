@@ -37,11 +37,13 @@
             <HBox styleClass="button-group">
 
                 <Button fx:id="cancelButton"
+                        id="cancelButton"
                         text="Cancel"
                         onAction="#handleCancel"
                         styleClass="confirm-button"/>
 
                 <Button fx:id="confirmButton"
+                        id="confirmButton"
                         text="Confirm"
                         onAction="#handleConfirm"
                         styleClass="confirm-button"/>

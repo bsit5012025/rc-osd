@@ -42,6 +42,20 @@ class EnrollmentFacadeImplTest {
     }
 
     @Test
+    void testGetLatestEnrollmentByStudentInfo () {
+        List<Enrollment> list = new ArrayList<>();
+        list.add(new Enrollment());
+        list.add(new Enrollment());
+
+        when(enrollmentDao.findLatestEnrollmentsByStudentInfo("Josh")).thenReturn(list);
+        List<Enrollment> result = enrollmentFacade.
+                getLatestEnrollmentByStudentInfo("Josh");
+        assertEquals(2, result.size());
+        verify(enrollmentDao).
+                findLatestEnrollmentsByStudentInfo("Josh");
+    }
+
+    @Test
     void testGetEnrollmentsByStudentId() {
         List<Enrollment> list = new ArrayList<>();
         list.add(new Enrollment());
@@ -65,6 +79,32 @@ class EnrollmentFacadeImplTest {
         Enrollment result = enrollmentFacade.getLatestEnrollmentByStudentId("JHS-0001");
         assertEquals(enrollment1, result);
         verify(enrollmentDao).findEnrollmentsByStudentId("JHS-0001");
+    }
+
+    @Test
+    void testGetEnrollmentsByStudentLevelAndName() {
+        Enrollment enrollment = new Enrollment();
+
+        when(enrollmentDao.findEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        )).thenReturn(enrollment);
+
+        Enrollment result = enrollmentFacade.getEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        );
+        assertEquals(enrollment, result);
+        verify(enrollmentDao).findEnrollmentsByStudentLevelAndName(
+                "1st Year",
+                "Carl",
+                "A",
+                "Cain"
+        );
     }
 
 }

@@ -18,6 +18,15 @@ public interface EnrollmentFacade {
     List<Enrollment> getAllLatestEnrollments();
 
     /**
+     * Retrieves the latest enrollment record of search students.
+     *
+     * @param studentInfo The id, name, year, or
+     *                   section of the students.
+     * @return a list of Enrollment objects representing.
+     */
+    List<Enrollment> getLatestEnrollmentByStudentInfo(String studentInfo);
+
+    /**
      * Retrieves all enrollment records associated with a specific student.
      * @param studentId the unique ID of the student.
      * @return a List of Enrollment objects for the given student.
@@ -32,4 +41,32 @@ public interface EnrollmentFacade {
      */
     Enrollment getLatestEnrollmentByStudentId(String studentId);
 
+    /**
+     * Retrieves the enrollment information of a student based on the
+     * specified student level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return the matching enrollment, if not return null.
+     */
+    Enrollment getEnrollmentsByStudentLevelAndName(
+            String studentLevel,
+            String firstName,
+            String middleName,
+            String lastName
+    );
+
+    /**
+     * Updates the disciplinary status of a student's enrollment for a specific
+     * school year after validating the provided input.
+     *
+     * @param statusID the disciplinary status identifier.
+     * @param studentID the unique identifier of the student.
+     * @param schoolYear the school year of the student's enrollment.
+     * @return return true if successfully query and false if not.
+     */
+    boolean setDisciplinaryStatusID(
+            long statusID, String studentID, String schoolYear);
 }

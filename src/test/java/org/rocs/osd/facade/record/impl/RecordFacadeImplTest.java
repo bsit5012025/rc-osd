@@ -11,6 +11,7 @@ import org.rocs.osd.model.department.Department;
 import org.rocs.osd.model.disciplinary.action.DisciplinaryAction;
 import org.rocs.osd.model.enrollment.Enrollment;
 import org.rocs.osd.model.offense.Offense;
+import org.rocs.osd.model.person.Person;
 import org.rocs.osd.model.person.employee.Employee;
 import org.rocs.osd.model.record.Record;
 import org.rocs.osd.model.record.RecordStatus;
@@ -166,6 +167,24 @@ class RecordFacadeImplTest
         verify(recordDao).findRecordListByDepartment(department, "2024-2025");
     }
     @Test
+    void testViolationsByDepartmentAndStudentName() {
+        Department department = Department.COLLEGE;
+
+        List<Record> records = new ArrayList<>();
+        records.add(new Record());
+        records.add(new Record());
+
+        when(recordDao.findRecordListByDepartmentAndStudent(
+                Department.COLLEGE, "2024-2025", "carl justine cain")).
+                thenReturn(records);
+        List<Record> result = recordFacade.getViolationsByDepartmentAndStudentName(
+                Department.COLLEGE, "2024-2025", "carl justine cain");
+
+        assertEquals(2, result.size());
+        verify(recordDao).findRecordListByDepartmentAndStudent(
+                department, "2024-2025", "carl justine cain");
+    }
+    @Test
     void testGetRecordByStudentID(){
         List<Record> records = new ArrayList<>();
 
@@ -186,5 +205,25 @@ class RecordFacadeImplTest
 
         assertEquals(10, result.size());
         assertEquals(records.subList(0, 10), result);
+    }
+
+    @Test
+    void testGetRecordByStudentLevel() {
+        List<Record> records = new ArrayList<>();
+
+        when(recordDao.findRecordByStudentLevel(
+                "1st Year",
+                "carl",
+                "D",
+                "Cain"
+        )).thenReturn(records);
+        List<Record> result = recordFacade.getRecordByStudentLevel(
+                "1st Year",
+                "carl",
+                "D",
+                "Cain"
+                );
+
+        assertEquals(records, result);
     }
 }

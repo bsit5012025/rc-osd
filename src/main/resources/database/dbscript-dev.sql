@@ -330,11 +330,9 @@ INSERT INTO offense (offense, type, description) VALUES ('Use/Possession of Alco
 INSERT INTO offense (offense, type, description) VALUES ('Use/Possession of Drugs', 'Major Offense', 'Student is in possession of or is using illegal drugs');
 INSERT INTO offense (offense, type, description) VALUES ('Use/Possession of Tobacco', 'Major Offense', 'Student is in possession of or is using tobacco');
 INSERT INTO offense (offense, type, description) VALUES ('Use/Possession of Weapons', 'Major Offense', 'Student is in possession of knives or gun or other object readily capable of causing bodily harm');
-INSERT INTO offense (offense, type, description) VALUES ('Use/Possession of Drugs', 'Major Offense', 'Student is in possession of or is using illegal drugs');
 INSERT INTO offense (offense, type, description) VALUES ('Disrespect', 'Minor Offense', 'Student engages in brief or low-intensity failure to respond to adult requests');
 INSERT INTO offense (offense, type, description) VALUES ('Dress Code', 'Minor Offense', 'Student wears clothing that not within the dress code guidelines');
 INSERT INTO offense (offense, type, description) VALUES ('Inappropriate Language', 'Minor Offense', 'Student engages in low-intensity instance of appropriate language');
-INSERT INTO offense (offense, type, description) VALUES ('Dress Code', 'Minor Offense', 'Student wears clothing that not within the dress code guidelines');
 
 INSERT INTO disciplinaryAction (actionID, action, description) VALUES (1, 'Community Service', 'A service component where the student spends time serving in the community meeting actual needs');
 INSERT INTO disciplinaryAction (actionID, action, description) VALUES (2, 'Probation', 'a warning status given to a student whose academic performance or behavior falls below the institutions standards');
@@ -576,7 +574,12 @@ INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, action
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (74, 'EMP-003', 3, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Stealing money', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (137, 'EMP-003', 7, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'The guard saw the student trying to sneak out of the school', 'PENDING');
 INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (133, 'EMP-003', 3, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Stealing money', 'PENDING');
-INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (80, 'EMP-003', 17, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Not wearing proper uniform', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (4, 'EMP-003', 17, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 2, TO_DATE('2024-10-20', 'YYYY-MM-DD'), 'Not wearing proper uniform', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (4, 'EMP-003', 17, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 2, TO_DATE('2024-05-15', 'YYYY-MM-DD'), 'Heard cursing', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (5, 'EMP-003', 3, TO_DATE('2024-01-21', 'YYYY-MM-DD'), 2, TO_DATE('2024-06-17', 'YYYY-MM-DD'), 'Stealing money', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (5, 'EMP-003', 8, TO_DATE('2024-11-09', 'YYYY-MM-DD'), 2, TO_DATE('2024-07-18', 'YYYY-MM-DD'), 'Always late to class', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (6, 'EMP-003', 3, TO_DATE('2024-02-03', 'YYYY-MM-DD'), 2, TO_DATE('2024-10-21', 'YYYY-MM-DD'), 'Stealing money', 'PENDING');
+INSERT INTO record (enrollmentID, employeeID, offenseID, dateOfViolation, actionID, dateOfResolution, remarks, status) VALUES (6, 'EMP-003', 17, TO_DATE('2024-01-25', 'YYYY-MM-DD'), 2, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 'Not wearing proper uniform', 'PENDING');
 
 INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (15, 1, 'I swear not to be late to class again', TO_DATE('2025-07-29','YYYY-MM-DD'), 'PENDING');
 INSERT INTO appeal (recordID, enrollmentID, message, dateFiled, status) VALUES (18, 4, 'I did not punch my classmate', TO_DATE('2025-07-29','YYYY-MM-DD'), 'PENDING');

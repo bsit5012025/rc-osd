@@ -40,6 +40,20 @@ public class ConfirmationDialogController {
     private Runnable onConfirmAction;
 
     /**
+     * Initializes the dialog controller.
+     * Ensures button IDs are explicitly set for reliable scene graph lookup.
+     */
+    @FXML
+    public void initialize() {
+        if (confirmButton != null) {
+            confirmButton.setId("confirmButton");
+        }
+        if (cancelButton != null) {
+            cancelButton.setId("cancelButton");
+        }
+    }
+
+    /**
      * Configures the text displayed in the dialog's message labels.
      *
      * @param line1 The primary message text.

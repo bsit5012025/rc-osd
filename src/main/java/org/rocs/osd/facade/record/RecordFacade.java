@@ -64,6 +64,22 @@ public interface RecordFacade {
     boolean resolveRecord(Record record);
 
     /**
+     * Finds the ID of a disciplinary action by its name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID
+     */
+    long findActionIdByName(String actionName);
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID
+     */
+    long findOffenseIdByName(String offenseName);
+
+    /**
      * Retrieves the most frequent offenses for a school year as percentages.
      *
      * @param schoolYear the school year to analyze
@@ -89,12 +105,24 @@ public interface RecordFacade {
     /**
      * Retrieves student records filtered by department and school year.
      *
-     * @param department the department to filter by
-     * @param schoolYear the school year to filter by
-     * @return list of records matching the criteria
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @return list of records matching the criteria.
      */
     List<Record> getViolationsByDepartment(Department department,
                 String schoolYear);
+
+    /**
+     * Retrieves student records filtered by department and school year
+     * and Name.
+     *
+     * @param department the department to filter by.
+     * @param schoolYear the school year to filter by.
+     * @param studentName the Students Name to filter by.
+     * @return list of records matching the criteria.
+     */
+    List<Record> getViolationsByDepartmentAndStudentName(
+            Department department, String schoolYear, String studentName);
 
     /**
      * Retrieves student record using student ID.
@@ -111,4 +139,21 @@ public interface RecordFacade {
      * @return record of student.
      * */
     List<Record> getRecentViolations(String schoolYear, int limit);
+
+    /**
+     * Retrieves all disciplinary records for a student based on their
+     * student level and full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching records, or an empty
+     *         list if any parameter is null, empty, or
+     *         if no matching records are found.
+     */
+    List<Record> getRecordByStudentLevel(String studentLevel,
+                                          String firstName,
+                                          String middleName,
+                                          String lastName);
 }

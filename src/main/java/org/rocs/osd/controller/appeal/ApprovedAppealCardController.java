@@ -101,26 +101,26 @@ public class ApprovedAppealCardController {
             return;
         }
 
-            Enrollment e = appeal.getEnrollment();
-            Record r = appeal.getRecord();
-            Student s = e.getStudent();
+        Enrollment e = appeal.getEnrollment();
+        Record r = appeal.getRecord();
+        Student s = e.getStudent();
 
-            if (studentIdLabel != null) {
-                studentIdLabel.setText(s.getStudentId());
-            }
-            if (studentNameLabel != null) {
-                studentNameLabel.setText(
-                        s.getFirstName() + " " + s.getLastName()
-                );
-            }
-            if (offenseLabel != null) {
-                offenseLabel.setText(r.getRemarks());
-            }
-            if (reasonLabel != null) {
-                reasonLabel.setText(appeal.getMessage());
-            }
-            if (commentArea != null) {
-                commentArea.setText(appeal.getRemarks());
-            }
+        if (studentIdLabel != null) {
+            studentIdLabel.setText(s.getStudentId());
+        }
+        if (studentNameLabel != null) {
+            studentNameLabel.setText(
+                    s.getFirstName() + " " + s.getLastName()
+            );
+        }
+        if (offenseLabel != null) {
+            offenseLabel.setText(r.getRemarks());
+        }
+        if (reasonLabel != null) {
+            reasonLabel.setText(appeal.getMessage());
+        }
+        if (commentArea != null) {
+            commentArea.setText(appeal.getRemarks());
         }
     }
+}

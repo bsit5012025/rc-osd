@@ -49,6 +49,22 @@ public interface RecordDao {
     boolean updateRecord(Record record);
 
     /**
+     * Finds the action ID associated with the given action name.
+     *
+     * @param actionName the name of the disciplinary action
+     * @return the action ID, or 0 if no matching action is found
+     */
+    long findActionIdByName(String actionName);
+
+    /**
+     * Finds the offense ID associated with the given offense name.
+     *
+     * @param offenseName the name of the offense
+     * @return the offense ID, or 0 if no matching offense is found
+     */
+    long findOffenseIdByName(String offenseName);
+
+    /**
      * Retrieves all records for a specific department and school year.
      * @param department the department to filter records.
      * @param schoolYear the school year to filter records.
@@ -56,6 +72,18 @@ public interface RecordDao {
      */
     List<Record> findRecordListByDepartment(
             Department department, String schoolYear);
+
+    /**
+     * Get Students records on by School Year
+     * and Student name.
+     *
+     * @param department the department to filter records.
+     * @param schoolYear the school year to filter records.
+     * @param studentInfo the student info to filter records.
+     * @return a list of records matching the criteria.
+     */
+    List<Record> findRecordListByDepartmentAndStudent(
+            Department department, String schoolYear, String studentInfo);
 
     /**
      * Counts the total number of violations for a given school year.
@@ -82,5 +110,20 @@ public interface RecordDao {
      * @return a list record of students.
      */
     List<Record> findRecordByStudentId(String studentId);
+
+    /**
+     * Retrieves all records that match the specified student
+     * level and student's full name.
+     *
+     * @param studentLevel the student's Grade level.
+     * @param firstName the student's first name.
+     * @param middleName the student's middle name.
+     * @param lastName the student's last name.
+     * @return a list of matching disciplinary records.
+     */
+    List<Record> findRecordByStudentLevel(String studentLevel,
+                                          String firstName,
+                                          String middleName,
+                                          String lastName);
 
 }
