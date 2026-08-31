@@ -59,4 +59,14 @@ public class LoginFacadeImpl implements LoginFacade {
         }
         return loginDao.findLoginByUsername(username);
     }
+
+    /**
+     * Logs out the user.
+     *
+     * @return true if logout was successfully processed.
+     */
+    @Override
+    public boolean logout() {
+        return true;
+    }
 }
