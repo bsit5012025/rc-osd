@@ -76,9 +76,14 @@ public class RequestCardController {
     @FXML
     private TextArea commentArea;
 
-    /** Error message label. */
+    /** Layout container hosting the inline error strip view. */
     @FXML
-    private Label errorLabel;
+    private HBox errorBannerContainer;
+
+    /** Text element used to present inline
+     * validation error messages directly. */
+    @FXML
+    private Label inlineErrorText;
 
     /** Callback after action completion. */
     private Runnable onActionComplete;
@@ -91,6 +96,9 @@ public class RequestCardController {
 
     /** ID of the request card. */
     private long cardId;
+
+    /** Timer used to automatically dismiss the error banner. */
+    private PauseTransition errorHideDelay;
 
     /**
      * Sets the callback after an action is completed.
@@ -233,6 +241,41 @@ public class RequestCardController {
                     showPopupAndRemoveCard("Request denied!");
                 }
         );
+
+        showConfirmation("Are you sure you want to",
+                "deny this request?", "Deny",
+                "Cancel", () -> {
+            requestFacade.updateRequestStatus(cardId,
+                    commentArea.getText(), RequestStatus.DENIED);
+            showPopupAndRemoveCard("Request denied!");
+        });
+    }
+
+    /**
+     * Displays a temporary warning bar
+     * directly inside the card view container.
+     *
+     * @param message the warning alert string text to show
+     */
+    private void showError(String message) {
+        if (errorBannerContainer == null || inlineErrorText == null) {
+            return;
+        }
+
+        if (errorHideDelay != null) {
+            errorHideDelay.stop();
+        }
+
+        inlineErrorText.setText(message);
+        errorBannerContainer.setVisible(true);
+        errorBannerContainer.setManaged(true);
+
+        errorHideDelay = new PauseTransition(Duration.seconds(3));
+        errorHideDelay.setOnFinished(e -> {
+            errorBannerContainer.setVisible(false);
+            errorBannerContainer.setManaged(false);
+        });
+        errorHideDelay.play();
     }
 
     /**
@@ -323,30 +366,8 @@ public class RequestCardController {
     }
 
     /**
-     * Displays error message temporarily.
-     *
-     * @param message error message
-     */
-    private void showError(String message) {
-        if (errorLabel != null) {
-            errorLabel.setText(message);
-            errorLabel.setVisible(true);
-        }
-
-        PauseTransition delay =
-                new PauseTransition(Duration.seconds(3));
-
-        delay.setOnFinished(e -> {
-            if (errorLabel != null) {
-                errorLabel.setVisible(false);
-            }
-        });
-
-        delay.play();
-    }
-
-    /**
-     * Toggles expansion of the card.
+     * Expands or collapses the extra content
+     * fields inside the layout view card window.
      */
     @FXML
     public void toggleExpansion() {
@@ -373,19 +394,16 @@ public class RequestCardController {
             return;
         }
 
-        String imgPath = isExpanded
-                ? "/assets/downButton.png"
-                : "/assets/rightButton.png";
+        String imgPath = "/assets/rightButton.png";
+        if (isExpanded) {
+            imgPath = "/assets/downButton.png";
+        }
 
         try {
             URL url = getClass().getResource(imgPath);
 
             if (url != null) {
-                arrowIcon.setImage(
-                        new Image(url.toExternalForm())
-                );
-            } else {
-                System.err.println("Image resource not found: " + imgPath);
+                arrowIcon.setImage(new Image(url.toExternalForm()));
             }
         } catch (Exception e) {
             e.printStackTrace();

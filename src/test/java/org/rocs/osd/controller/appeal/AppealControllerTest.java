@@ -193,7 +193,7 @@ public class AppealControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         verify(mockAppealFacade, never()).denyAppeal(anyLong(), anyString());
         assertEquals("Please enter remarks before denying.",
-                robot.lookup("#errorLabel").queryAs(Label.class).getText());
+                robot.lookup("#inlineErrorText").queryAs(Label.class).getText());
     }
 
     @Test

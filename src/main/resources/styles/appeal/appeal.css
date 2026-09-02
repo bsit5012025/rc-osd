@@ -94,6 +94,24 @@
     -fx-border-color: navy;
 }
 
+/* =========================================================================
+   UPDATED INLINE ERROR BAR DESIGN (Matches flat red strip under comment area)
+   ========================================================================= */
+.inlineErrorBar {
+    -fx-background-color: #ff9494; /* Soft pastel solid red background */
+    -fx-border-color: #ff3333;     /* Sharp red container border bounds */
+    -fx-border-width: 1px;
+    -fx-padding: 6px 12px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.inlineErrorLabel {
+    -fx-text-fill: #1a1a1a;        /* Darker gray/black clear text color */
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+}
+
 .actionBarContainer {
     -fx-padding: 10 0 0 0;
 }
@@ -183,6 +201,12 @@
 
 .readOnlyArea:focused {
     -fx-border-color: #DCDCDC;
+}
+
+.popupBox {
+    -fx-background-color: #DDE1EB;
+    -fx-padding: 10;
+    -fx-background-radius: 8;
 }
 
 .errorLabel {

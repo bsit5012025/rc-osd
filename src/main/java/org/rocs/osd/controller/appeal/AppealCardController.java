@@ -1,5 +1,6 @@
 package org.rocs.osd.controller.appeal;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.rocs.osd.controller.dialog.ConfirmationDialogController;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.appeal.impl.AppealFacadeImpl;
@@ -135,7 +137,10 @@ public class AppealCardController {
     private Label popupLabel;
     /** The error label. */
     @FXML
-    private Label errorLabel;
+    private Label inlineErrorText;
+    /** Container for the inlineErrorText. */
+    @FXML
+    private HBox errorBannerContainer;
     /** The arrow button. */
     @FXML
     private Button arrowButton;
@@ -148,6 +153,8 @@ public class AppealCardController {
     private boolean isExpanded = false;
     /** The appeal facade. */
     private AppealFacade appealFacade;
+    /** Timer used to automatically dismiss the error banner. */
+    private PauseTransition errorHideDelay;
 
     /**
      * Initializes the controller.
@@ -166,10 +173,12 @@ public class AppealCardController {
             popupBox.setVisible(false);
             popupBox.setManaged(false);
         }
-        if (errorLabel != null) {
-            errorLabel.setText("");
-            errorLabel.setVisible(false);
-            errorLabel.setManaged(false);
+        if (errorBannerContainer != null) {
+            errorBannerContainer.setVisible(false);
+            errorBannerContainer.setManaged(false);
+        }
+        if (inlineErrorText != null) {
+            inlineErrorText.setText("");
         }
         if (arrowButton != null) {
             arrowButton.setMinSize(30, 30);
@@ -180,12 +189,14 @@ public class AppealCardController {
                     observable,
                     oldValue,
                     newValue) -> {
+
                 if (newValue != null && newValue.length() > 500) {
                     commentArea.setText(oldValue);
                 }
             });
         }
     }
+
     /**
      * Sets the appeal facade.
      *
@@ -286,6 +297,7 @@ public class AppealCardController {
                     /* cancel - do nothing */
                 }
         );
+
     }
 
     /**
@@ -331,27 +343,32 @@ public class AppealCardController {
      * @param msg the error message
      */
     private void showError(String msg) {
-        if (errorLabel == null) {
+        if (errorBannerContainer == null
+                || inlineErrorText == null) {
             return;
         }
-        errorLabel.setText(msg);
-        errorLabel.setVisible(true);
-        errorLabel.setManaged(true);
-        errorLabel.applyCss();
-        errorLabel.layout();
-        javafx.scene.Parent parent = errorLabel.getParent();
-        while (parent != null) {
-            parent.requestLayout();
-            parent.applyCss();
-            parent.layout();
-            if (parent.getScene() != null) {
-                parent.getScene().getRoot().applyCss();
-                parent.getScene().getRoot().layout();
-                break;
-            }
-            parent = parent.getParent();
+
+        if (errorHideDelay != null) {
+            errorHideDelay.stop();
         }
+
+        inlineErrorText.setText(msg);
+
+        errorBannerContainer.setManaged(true);
+        errorBannerContainer.setVisible(true);
+
+        errorBannerContainer.requestLayout();
+
+        errorHideDelay = new PauseTransition(Duration.seconds(3));
+
+        errorHideDelay.setOnFinished(e -> {
+            errorBannerContainer.setVisible(false);
+            errorBannerContainer.setManaged(false);
+        });
+
+        errorHideDelay.play();
     }
+
 
     /**
      * Loads appeal data into labels.

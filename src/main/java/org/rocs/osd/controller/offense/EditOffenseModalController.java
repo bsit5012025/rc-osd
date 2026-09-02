@@ -135,6 +135,10 @@ public class EditOffenseModalController {
      * Static mock for confirmation dialog (for testing).
      */
     private static Consumer<Runnable> mockConfirmDialog;
+    /**
+     * Static mock for viewOffenseModalStage (for testing).
+     */
+    private Stage viewOffenseModalStage;
 
     /**
      * Sets mock confirmation dialog for testing.
@@ -200,6 +204,10 @@ public class EditOffenseModalController {
     /**
      * Initializes the controller.
      * Sets up dependencies and loads initial data.
+     * ".textProperty().addListener((obs, oldVal, newVal)"
+     * to automatically display student full name
+     * (note: did not use newVal because already
+     * a call a query for it).
      */
     public void initialize() {
         if (offenseDao == null) {
@@ -260,9 +268,9 @@ public class EditOffenseModalController {
      */
     public void setRecordData(Record pRecord, Stage pStage) {
         this.record = pRecord;
+        this.viewOffenseModalStage = pStage;
         loadStudentRecordInfo();
     }
-
     /**
      * Loads student and record details into the UI fields.
      */
@@ -487,6 +495,9 @@ public class EditOffenseModalController {
                 Stage stage = (Stage) (
                         (Node) event.getSource()).getScene().getWindow();
                 stage.close();
+                if (viewOffenseModalStage != null) {
+                    viewOffenseModalStage.close();
+                }
             }
 
         } catch (Exception e) {
@@ -523,3 +534,4 @@ public class EditOffenseModalController {
         }
     }
 }
+

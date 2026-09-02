@@ -37,7 +37,10 @@
                 <VBox spacing="2" styleClass="commentContainer">
                     <Label styleClass="boldLabel" text="Comment:" />
                     <TextArea fx:id="commentArea" prefHeight="50.0" promptText="Enter comment..." styleClass="commentTextArea" wrapText="true" />
-                    <Label fx:id="errorLabel" text="Error here" visible="false" managed="false" styleClass="errorLabel" />
+
+                    <HBox fx:id="errorBannerContainer" managed="false" visible="false" styleClass="inlineErrorBar" alignment="CENTER_LEFT" spacing="10">
+                        <Label fx:id="inlineErrorText" styleClass="inlineErrorLabel" wrapText="true" />
+                    </HBox>
                 </VBox>
 
                 <HBox fx:id="actionBar" alignment="CENTER_RIGHT" styleClass="actionBarContainer">
