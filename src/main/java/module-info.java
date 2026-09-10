@@ -8,6 +8,7 @@ module org.rocs.osd {
     requires jasperreports;
     requires commons.beanutils;
     requires java.desktop;
+    requires jbcrypt;
 
     opens org.rocs.osd.controller.login to javafx.fxml;
     opens org.rocs.osd.controller.dashboard to javafx.fxml;

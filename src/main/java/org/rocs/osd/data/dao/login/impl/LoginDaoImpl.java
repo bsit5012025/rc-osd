@@ -76,7 +76,9 @@ public class LoginDaoImpl implements LoginDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(
+                    "Database error while looking up user \"" + username
+                            + "\": " + e.getMessage(), e);
         }
 
         return login;
