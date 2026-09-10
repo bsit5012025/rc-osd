@@ -39,7 +39,7 @@ public class LoginFacadeImpl implements LoginFacade {
             return false;
         }
 
-        if (!inputUserName.equals("prefect")) {
+        if (!"prefect".equals(inputUserName)) {
             return false;
         }
 

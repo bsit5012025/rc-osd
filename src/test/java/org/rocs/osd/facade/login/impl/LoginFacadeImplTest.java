@@ -29,31 +29,31 @@ class LoginFacadeImplTest
         Person person = new Person();
 
         loginFacade = new LoginFacadeImpl(loginDao);
-        login = new Login(1, "user","1234", person);
+        login = new Login(1, "prefect",
+                "$2b$10$T8VCsavGpS/.Wz/cfDVjHuM4bfnVAUuCnSRXzST2bAPdoRJNVujF.",
+                person);
     }
 
     @Test
     void testLogin()
     {
-        when(loginDao.findLoginByUsername("user")).thenReturn(login);
+        when(loginDao.findLoginByUsername("prefect")).thenReturn(login);
 
-        boolean result = loginFacade.login("user", "1234");
+        boolean result = loginFacade.login("prefect", "1234");
 
         assertTrue(result);
-        verify(loginDao, times(1)).findLoginByUsername("user");
+        verify(loginDao, times(1)).findLoginByUsername("prefect");
     }
 
     @Test
     void testLoginInvalidPassword() {
-        when(loginDao.findLoginByUsername("user")).thenReturn(login);
+        when(loginDao.findLoginByUsername("prefect")).thenReturn(login);
 
-        assertFalse(loginFacade.login("user", "wrong"));
+        assertFalse(loginFacade.login("prefect", "wrong"));
     }
 
     @Test
     void testLoginNonexistentUser() {
-        when(loginDao.findLoginByUsername("unknown")).thenReturn(null);
-
         assertFalse(loginFacade.login("unknown", "1234"));
     }
 
