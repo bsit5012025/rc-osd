@@ -15,6 +15,7 @@ import org.rocs.osd.controller.dashboard.DashboardController;
 import org.rocs.osd.facade.appeal.AppealFacade;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.facade.record.RecordFacade;
+import org.rocs.osd.model.login.Login;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -95,16 +96,27 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testValidLoginInput(FxRobot robot) throws InterruptedException {
-        when(mockLoginFacade.login("admin", "admin")).thenReturn(true);
+    public void testValidLoginInput(FxRobot robot) {
+        Login mockLogin = Mockito.mock(Login.class);
 
-        robot.clickOn("#username").write("admin");
-        robot.clickOn("#password").write("admin");
-        Thread.sleep(500);
+        when(mockLoginFacade.login("prefect", "1234"))
+                .thenReturn(true);
+
+        when(mockLoginFacade.getByUsername("prefect"))
+                .thenReturn(mockLogin);
+
+        robot.clickOn("#username").write("prefect");
+        robot.clickOn("#password").write("1234");
 
         robot.clickOn("#loginButton");
-        verifyThat(".root", NodeMatchers.isVisible());
+
+        Mockito.verify(mockLoginFacade)
+                .login("prefect", "1234");
+
+        Mockito.verify(mockLoginFacade)
+                .getByUsername("prefect");
     }
+
 
     @Test
     public void testEmptyFields(FxRobot robot) {
@@ -125,7 +137,7 @@ public class LoginControllerTest {
 
     @Test
     public void testTogglePasswordVisibility(FxRobot robot) throws InterruptedException {
-        robot.clickOn("#password").write("admin");
+        robot.clickOn("#password").write("1234");
         Thread.sleep(500);
 
         robot.clickOn("#togglePasswordButton");
