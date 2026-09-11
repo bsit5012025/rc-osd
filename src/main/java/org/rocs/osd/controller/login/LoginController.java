@@ -119,7 +119,9 @@ public class LoginController {
         }
 
         String user = usernameTextField.getText();
-        String pass = passwordField.getText();
+        String pass = (passwordField != null && passwordField.isVisible())
+                ? passwordField.getText()
+                : passwordTextField.getText();
 
         if (user == null || user.isBlank() || pass == null || pass.isBlank()) {
             showErrorPopup("Enter both username and password!");
@@ -138,6 +140,7 @@ public class LoginController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            showErrorPopup("Login failed: " + e.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package org.rocs.osd.facade.login.impl;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.rocs.osd.data.dao.login.LoginDao;
 import org.rocs.osd.facade.login.LoginFacade;
 import org.rocs.osd.model.login.Login;
@@ -38,9 +39,28 @@ public class LoginFacadeImpl implements LoginFacade {
             return false;
         }
 
+        if (!"prefect".equals(inputUserName)) {
+            return false;
+        }
+
         Login login = loginDao.findLoginByUsername(inputUserName);
 
-        return login != null && inputPassword.equals(login.getPassword());
+        if (login == null || login.getPassword() == null
+                || login.getPassword().isBlank()) {
+            return false;
+        }
+
+        String storedHash = login.getPassword();
+
+        if (storedHash.startsWith("$2b$") || storedHash.startsWith("$2y$")) {
+            storedHash = "$2a$" + storedHash.substring(4);
+        }
+
+        try {
+            return BCrypt.checkpw(inputPassword, storedHash);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
     /**
      * Retrieves a Login object by username.

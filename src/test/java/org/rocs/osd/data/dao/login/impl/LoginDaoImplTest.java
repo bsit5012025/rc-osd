@@ -55,7 +55,7 @@ public class LoginDaoImplTest {
         when(resultSet.next()).thenReturn(true).thenReturn(false);
 
         when(resultSet.getLong("id")).thenReturn(Long.valueOf(1));
-        when(resultSet.getString("username")).thenReturn("test");
+        when(resultSet.getString("username")).thenReturn("prefect");
         when(resultSet.getString("password")).thenReturn("1234");
         when(resultSet.getLong("personID")).thenReturn(Long.valueOf(2));
         when(resultSet.getString("lastname")).thenReturn("LName");
@@ -66,12 +66,12 @@ public class LoginDaoImplTest {
         when(resultSet.getString("employeeRole")).thenReturn("ADMIN");
 
         LoginDao dao = new LoginDaoImpl();
-        Login login = dao.findLoginByUsername("test");
+        Login login = dao.findLoginByUsername("prefect");
         Person person = login.getPerson();
 
         assertNotNull(login);
         assertEquals(Long.valueOf(1), login.getId());
-        assertEquals("test", login.getUsername());
+        assertEquals("prefect", login.getUsername());
         assertEquals("1234", login.getPassword());
         assertEquals(Long.valueOf(2), person.getPersonID());
         assertEquals("LName", person.getLastName());
@@ -79,7 +79,7 @@ public class LoginDaoImplTest {
         assertEquals("MName", person.getMiddleName());
 
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(preparedStatement, times(1)).setString(1, "test");
+        verify(preparedStatement, times(1)).setString(1, "prefect");
         verify(preparedStatement, times(1)).executeQuery();
     }
 
