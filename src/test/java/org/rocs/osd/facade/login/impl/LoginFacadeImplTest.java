@@ -64,4 +64,20 @@ class LoginFacadeImplTest
         assertFalse(loginFacade.login("", ""));
         assertFalse(loginFacade.login(null, null));
     }
+
+    @Test
+    void changePassword_ShouldReturnTrue_WhenPasswordAndOtpAreValid() {
+        when(loginDao.changePassword(anyString()))
+                .thenReturn(true);
+
+        boolean result = loginFacade.changePassword(
+                "NewPassword123",
+                "ABC123",
+                "ABC123"
+        );
+
+        assertTrue(result);
+        verify(loginDao).changePassword(anyString());
+    }
+
 }

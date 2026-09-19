@@ -79,4 +79,47 @@ public class LoginFacadeImpl implements LoginFacade {
         }
         return loginDao.findLoginByUsername(username);
     }
+
+    /**
+     * Changes the user's password after validating the new password
+     * and verifying the entered OTP.
+     * The method returns false if the new password is blank
+     * or if the entered OTP does not match the generated OTP.
+     * If both validations are successful, the new password is passed
+     * to the login DAO for updating.
+     *
+     * @param changePassword the new password to be set
+     * @param generatedOtp the OTP generated for password verification
+     * @param enteredOtp the OTP entered by the user
+     * @return true if the password and OTP are valid and the
+     *         password change is processed. false otherwise
+     */
+    @Override
+    public boolean changePassword(String changePassword,
+                                  String generatedOtp,
+                                  String enteredOtp
+    ) {
+        if (changePassword.isBlank()
+                || generatedOtp.isBlank()
+                || enteredOtp.isBlank()
+        ) {
+            return false;
+        }
+
+        if (!generatedOtp.equals(enteredOtp)) {
+            return false;
+        }
+
+        String hashedPassword = BCrypt.hashpw(
+                changePassword,
+                BCrypt.gensalt(12)
+        );
+
+        boolean queryStatus = loginDao.changePassword(hashedPassword);
+        if (!queryStatus) {
+            return false;
+        }
+
+        return true;
+    }
 }
