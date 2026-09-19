@@ -64,7 +64,6 @@ public class LoginController {
      */
     @FXML
     private javafx.scene.control.Button togglePasswordButton;
-
     /**
      * Facade used to retrieve login data from backend.
      */
@@ -141,6 +140,40 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
             showErrorPopup("Login failed: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Opens the change password view and replaces the current scene
+     * while preserving the current window dimensions.
+     * note: suppress warning because of false positive pmd error.
+     *
+     * @param event action event triggered by the change password action
+     */
+    @FXML
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void onLoadChangePasswordModal(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/login/changePassword.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage)
+                    ((Node) event.getSource()).getScene().getWindow();
+
+            double currentWidth = currentStage.getWidth();
+            double currentHeight = currentStage.getHeight();
+
+            Scene scene = new Scene(root, currentWidth, currentHeight);
+
+            currentStage.setScene(scene);
+
+            currentStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

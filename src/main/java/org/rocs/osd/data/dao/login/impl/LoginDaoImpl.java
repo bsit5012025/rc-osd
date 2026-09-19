@@ -83,4 +83,33 @@ public class LoginDaoImpl implements LoginDao {
 
         return login;
     }
+
+    /**
+     * Changes the password of the "prefect" user.
+     *  The new password is passed as a parameter to a prepared statement
+     *  and saved to the login table. Returns true if the update
+     *  executes successfully, or false if a database error occurs.
+     *
+     * @param newPassword new Password.
+     * @return true if successful.
+     */
+    @Override
+    public boolean changePassword(String newPassword) {
+        try (Connection conn = ConnectionHelper.getConnection();
+             PreparedStatement statement = conn.prepareStatement(
+                     "UPDATE login "
+                             + "SET password = ? "
+                             + "WHERE username = 'prefect'"
+             )) {
+
+            statement.setString(1, newPassword);
+            statement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

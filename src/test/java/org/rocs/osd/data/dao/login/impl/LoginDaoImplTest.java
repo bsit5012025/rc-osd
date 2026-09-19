@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginDaoImplTest {
@@ -82,5 +83,15 @@ public class LoginDaoImplTest {
         verify(preparedStatement, times(1)).setString(1, "prefect");
         verify(preparedStatement, times(1)).executeQuery();
     }
+
+    @Test
+    void changePassword_ShouldReturnTrue_WhenUpdateIsSuccessful() {
+        LoginDao loginDao = new LoginDaoImpl();
+
+        boolean result = loginDao.changePassword("NewPassword123");
+
+        assertTrue(result);
+    }
+
 
 }

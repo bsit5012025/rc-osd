@@ -17,4 +17,15 @@ public interface LoginDao {
      * information.
      */
     Login findLoginByUsername(String username);
+
+    /**
+     * Changes the password of the "prefect" user.
+     *  The new password is passed as a parameter to a prepared statement
+     *  and saved to the login table. Returns true if the update
+     *  executes successfully, or false if a database error occurs.
+     *
+     * @param newPassword new Password.
+     * @return true if successful.
+     */
+    boolean changePassword(String newPassword);
 }

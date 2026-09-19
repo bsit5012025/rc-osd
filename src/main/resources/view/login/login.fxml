@@ -57,7 +57,7 @@
                 </VBox>
 
                 <HBox styleClass="forgotBox">
-                    <Hyperlink text="Forgot Password?" styleClass="forgotText"/>
+                    <Hyperlink text="Forgot Password?" onAction="#onLoadChangePasswordModal" styleClass="forgotText"/>
                 </HBox>
 
             </VBox>
