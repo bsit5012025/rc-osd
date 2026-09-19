@@ -93,11 +93,6 @@ public class ChangePasswordController {
     private final SecureRandom r = new SecureRandom();
 
     /**
-     * DAO used to access login-related data.
-     */
-    private LoginDao loginDao;
-
-    /**
      * Facade used to handle login-related operations.
      */
     private LoginFacade loginFacade;
@@ -129,7 +124,7 @@ public class ChangePasswordController {
     @FXML
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void initialize() {
-        loginDao = new LoginDaoImpl();
+        LoginDao loginDao = new LoginDaoImpl();
         loginFacade = new LoginFacadeImpl(loginDao);
     }
 

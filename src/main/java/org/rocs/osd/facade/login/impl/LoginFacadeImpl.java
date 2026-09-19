@@ -115,11 +115,6 @@ public class LoginFacadeImpl implements LoginFacade {
                 BCrypt.gensalt(12)
         );
 
-        boolean queryStatus = loginDao.changePassword(hashedPassword);
-        if (!queryStatus) {
-            return false;
-        }
-
-        return true;
+        return loginDao.changePassword(hashedPassword);
     }
 }
