@@ -256,9 +256,9 @@ public class RecordFacadeImpl implements RecordFacade {
      */
     @Override
     public List<Record> getRecordByStudentLevel(String studentLevel,
-                                                 String firstName,
-                                                 String middleName,
-                                                 String lastName) {
+                                                String firstName,
+                                                String middleName,
+                                                String lastName) {
         if (studentLevel == null || studentLevel.isEmpty()
                 || firstName == null || firstName.isEmpty()
                 || middleName == null || middleName.isEmpty()
