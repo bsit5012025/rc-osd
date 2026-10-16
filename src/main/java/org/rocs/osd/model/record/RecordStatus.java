@@ -11,9 +11,12 @@ public enum RecordStatus {
     /** Record is newly created and awaiting action or review. */
     PENDING,
 
-    /** Record has been addressed and resolved. */
-    RESOLVED,
+    /** An appeal has been filed against this record and is under review. */
+    PROCESSING,
 
-    /** Record has been appealed by the student. */
-    APPEALED
+    /** The appeal against this record was approved. */
+    APPROVED,
+
+    /** Record has been addressed and resolved (including a denied appeal). */
+    RESOLVED
 }
